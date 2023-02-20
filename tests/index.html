@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>WebSocketpp chat example</title>
+        <meta name="author"    value="vlotoshko@gmail.com" />
+        <meta name="licsense"  value="MIT" />
+        <meta name="robots"    value="none" />
+        <style>
+            * { margin: 5px; }
+            .container {
+              display: inline-block;
+            }
+            .box {
+              border: 1px solid gray;
+            }
+        </style>
+    </head>
+    <body>
+        <h3>Simple websocket chat v0.0.1</h3>
+        <div class="container">
+            <div>Common chat</div>
+            <div><textarea readonly id="output_common" cols="70" rows="20"></textarea></div>
+            <div>Private chat</div>
+            <div><textarea readonly id="output_private" cols="70" rows="10"></textarea></div>
+        </div>
+        <div class="container">
+            <div>Users</div>
+            <textarea readonly cols="30" rows="33"></textarea>
+        </div>
+
+        <div>Type message:</div>
+        <div class="container">
+            <input type="text" name="input_message" id="input_message" size="70"/>
+        </div>
+
+        <div class="container">
+            <input type="button" name="inpuBtn" id="inputBtn" value="Send message"/>
+        </div>
+
+        <div></div>
+        <div class="container">
+            <div>Server messages</div>
+        </div>
+        <div class="container">
+            <input type="button" name="clearBtn" id="clearBtn" value="Clear"/>
+        </div>
+            <div id="server_messages"></div>
+
+        <script type="text/javascript">
+            var PORT = 9000;
+            var ws = new WebSocket("ws://localhost:" + PORT);
+            var input_message = document.getElementById("input_message");
+            var inputBtn = document.getElementById("inputBtn");
+            var clearBtn = document.getElementById("clearBtn");
+            var server_messages = document.getElementById("server_messages");
+
+            inputBtn.onclick = function(evt){
+                sendMessage();
+            };
+
+            clearBtn.onclick = function(evt){
+                clearServerMessages();
+            };
+
+            input_message.onkeypress = function(evt) {
+                var code = evt.keyCode ? evt.keyCode : evt.which;
+                if( code == 13 )
+                    sendMessage();
+            };
+
+            ws.onmessage = function(evt) {
+                addMessage(evt.data);
+            };
+
+            ws.onerror = function( evt ) {
+                addMessage('<i>Server error :(</i>');
+            };
+
+            ws.onopen = function( evt ) {
+                addMessage('<i>Connected</i>');
+            };
+
+            ws.onclose = function( evt ) {
+                addMessage('<i>Disconnected</i>');
+            };
+
+            function sendMessage() {
+                ws.send(input_message.value);
+                input_message.value = '';
+            }
+
+            function clearServerMessages() {
+                server_messages.innerHTML = '';
+            }
+
+            function addMessage(msg) {
+                server_messages.innerHTML += msg + '<br/>';
+            }
+        </script>
+    </body>
+</html>
+

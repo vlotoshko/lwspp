@@ -1,0 +1,27 @@
+set(TESTS_TARGET_SRC_FILES
+    framework/catch.hpp
+    framework/fakeit.hpp
+    main.cpp
+
+    TestServerContextBuilder.cpp
+)
+
+add_executable(${PROJECT_NAME}-tests ${TESTS_TARGET_SRC_FILES})
+
+target_include_directories(${PROJECT_NAME}-tests PRIVATE
+    ${PROJECT_SOURCE_DIR}/include
+    ${PROJECT_SOURCE_DIR}/src
+)
+
+target_link_libraries(${PROJECT_NAME}-tests
+    websocketpp-client
+    websocketpp-server
+)
+
+set_target_properties(${PROJECT_NAME}-tests PROPERTIES
+    CXX_STANDARD 17
+    CXX_STANDARD_REQUIRED ON
+    CXX_EXTENSIONS OFF
+    LINKER_LANGUAGE CXX
+)
+
