@@ -34,6 +34,7 @@ public:
     virtual void onDisconnect(SessionId) noexcept = 0;
 
     virtual void onError(SessionId, const std::string& errorMessage) noexcept = 0;
+    virtual void onWarning(SessionId, const std::string& errorMessage) noexcept = 0;
 
     // The setMessageSender method is used by server fatory to set the message sender
     // for the IEventHandler. The user's implementations of the IEventHandler can use the

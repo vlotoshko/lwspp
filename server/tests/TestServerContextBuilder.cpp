@@ -46,6 +46,8 @@ public:
     {}
     void onError(srv::SessionId, const std::string&) noexcept override
     {}
+    void onWarning(srv::SessionId, const std::string&) noexcept override
+    {}
     void setMessageSender(srv::IMessageSenderPtr) override
     {}
 };

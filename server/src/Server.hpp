@@ -7,7 +7,6 @@
 
 #include "websocketpp/server/IServer.hpp"
 #include "LwsAdapter/LwsContext.hpp"
-#include "ServerContext.hpp"
 #include "TypesFwd.hpp"
 
 namespace wspp::srv
@@ -34,8 +33,6 @@ private:
     void stop_();
 
 private:
-    ISessionsPtr _sessions;
-    ICallbackContextPtr _callbackContext;
     LwsContext _lwsContext;
 };
 

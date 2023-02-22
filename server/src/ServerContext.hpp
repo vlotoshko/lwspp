@@ -10,8 +10,6 @@
 
 #include "websocketpp/server/ServerVersions.hpp"
 #include "websocketpp/server/TypesFwd.hpp"
-//#include "LwsAdapter/LwsTypesFwd.hpp"
-//#include "CallbackContext.hpp"
 #include "Consts.hpp"
 #include "IServerContext.hpp"
 
@@ -31,11 +29,7 @@ public:
     Port port = UNDEFINED_PORT;
     IEventHandlerPtr eventHandler;
 
-//    LwsProtocols protocols;
-//    CallbackContext callbackContext;
-
     std::string protocolName = "/";
-//    int loglevel = 0;
 };
 
 } // namespace wspp::srv

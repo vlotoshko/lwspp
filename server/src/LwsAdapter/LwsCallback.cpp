@@ -6,11 +6,11 @@
 #include <iostream>
 
 #include "websocketpp/server/IEventHandler.hpp"
+#include "LwsAdapter/ILwsCallbackContext.hpp"
+#include "LwsAdapter/ILwsSessions.hpp"
 #include "LwsAdapter/LwsCallback.hpp"
+#include "LwsAdapter/LwsSession.hpp"
 #include "Consts.hpp"
-#include "ICallbackContext.hpp"
-#include "ISession.hpp"
-#include "ISessions.hpp"
 
 namespace wspp::srv
 {
@@ -19,10 +19,10 @@ namespace
 
 std::array<unsigned char, LWS_PRE + MAX_MESSAGE_SIZE> msg;
 
-auto getCallbackContext(lws* wsInstance) -> ICallbackContext&
+auto getCallbackContext(lws* wsInstance) -> ILwsCallbackContext&
 {
     void* contextData = lws_context_user(lws_get_context(wsInstance));
-    return *(reinterpret_cast<ICallbackContext *>(contextData));
+    return *(reinterpret_cast<ILwsCallbackContext *>(contextData));
 }
 
 auto getSessionId(lws* wsInstance) -> SessionId
@@ -95,32 +95,33 @@ auto lwsCallback_v1(
         lws* wsInstance,
         lws_callback_reasons reason,
         void* /*userData*/,
-        void* /*poniter*/,
+        void* /*pointer*/,
         size_t /*length*/)
 -> int
 {
     std::cout << "LwsCallback reason: " << reasonToString(reason) << std:: endl;
     auto& callbackContext = getCallbackContext(wsInstance);
     auto eventHandler = callbackContext.getEventHandler();
-    auto sessions = callbackContext.getSessions();
     auto sessionId = getSessionId(wsInstance);
 
     switch(reason)
     {
     case LWS_CALLBACK_ESTABLISHED:
     {
-        sessions->add(sessionId);
+        auto sessions = callbackContext.getSessions();
+        sessions->add(std::make_shared<LwsSession>(sessionId, wsInstance));
         eventHandler->onConnect(sessionId);
-        lws_callback_on_writable(wsInstance);
+//        lws_callback_on_writable(wsInstance);
         break;
     }
     case LWS_CALLBACK_SERVER_WRITEABLE:
     {
+        auto sessions = callbackContext.getSessions();
         if (auto session = sessions->get(sessionId))
         {
-            auto messages = session->getMessages();
+            auto& messages = session->getMessages();
 
-            if (!messages.empty() && !callbackContext.isServerStopped())
+            if (!messages.empty() && !callbackContext.isStopping())
             {
                 auto& message = messages.front();
                 if (sendMessage(wsInstance, message))
@@ -141,18 +142,17 @@ auto lwsCallback_v1(
         {
             // TODO: waring - session not found
         }
-
         break;
     }
-
     case LWS_CALLBACK_RECEIVE:
         break;
-
     case LWS_CALLBACK_CLOSED:
+    {
+        auto sessions = callbackContext.getSessions();
         sessions->remove(sessionId);
         eventHandler->onDisconnect(sessionId);
         break;
-
+    }
     default:
         break;
     }

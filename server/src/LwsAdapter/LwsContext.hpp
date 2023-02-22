@@ -5,19 +5,32 @@
 
 #pragma once
 
-#include "LwsAdapter/LwsDataHolder.hpp"
+#include "websocketpp/server/Types.hpp"
 #include "LwsAdapter/LwsTypesFwd.hpp"
 #include "TypesFwd.hpp"
 
 namespace wspp::srv
 {
 
-struct LwsContext
+class LwsContext
 {
-    explicit LwsContext(const ServerContext&, ICallbackContext&);
+public:
+    explicit LwsContext(const ServerContext&);
 
-    LwsDataHolder dataHolder;
-    LowLevelContext lowLeveContext;
+    // NOTE: the 'startListening' method blocks the thread
+    void startListening();
+    void stopListening();
+
+    auto getPort() const -> Port;
+
+private:
+    ILwsSessionsPtr _sessions;
+    ILwsCallbackContextPtr _callbackContext;
+
+    LwsDataHolderPtr _dataHolder;
+    LowLevelContextPtr _lowLevelContext;
+
+    bool _stopListening = false;
 };
 
 } // namespace wspp::srv

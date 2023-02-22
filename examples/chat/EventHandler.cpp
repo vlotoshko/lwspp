@@ -28,6 +28,11 @@ void EventHandler::onError(srv::SessionId, const std::string& /*errorMessage*/) 
 
 }
 
+void EventHandler::onWarning(srv::SessionId, const std::string& /*warningMessage*/) noexcept
+{
+
+}
+
 void EventHandler::setMessageSender(srv::IMessageSenderPtr messageSender)
 {
     _messageSender = std::move(messageSender);

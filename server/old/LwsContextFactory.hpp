@@ -6,11 +6,11 @@
 #pragma once
 
 #include "LwsAdapter/LwsContext.hpp"
-#include "TypesFwd.hpp"
+#include "LwsAdapter/LwsTypesFwd.hpp"
 
 namespace wspp::srv
 {
 
-auto createLwsContext(const ServerContext&, CallbackContext&) -> LwsContext;
+auto createLwsContext(const ServerContext&, ILwsCallbackContext&) -> LwsContext;
 
 } // namespace wspp::srv

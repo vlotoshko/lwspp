@@ -3,12 +3,17 @@
  * @date Jan, 2023
  */
 
+#include <map>
+#include <mutex>
+
 #include "websocketpp/server/IEventHandler.hpp"
 #include "websocketpp/server/IMessageSender.hpp"
-#include "CallbackContext.hpp"
-#include "ISession.hpp"
+#include "LwsAdapter/LwsContext.hpp"
+//#include "CallbackContext.hpp"
 #include "Server.hpp"
-#include "Sessions.hpp"
+#include "ServerContext.hpp"
+//#include "Sessions.hpp"
+//#include <iostream>
 
 namespace wspp::srv
 {
@@ -52,59 +57,15 @@ void unregisterSingnalHandling(int port)
 
 } // namespace
 
-class MessageSender : public IMessageSender
-{
-public:
-    explicit MessageSender(LwsContext& l, ISessionsPtr s)
-        : _lwsContext(l)
-        , _sessions(std::move(s))
-    {}
-
-    void sendMessage(SessionId sessionId, const std::string& message) override
-    {
-        if (auto session = _sessions->get(sessionId))
-        {
-            session->addMessage(message);
-        }
-    }
-    void sendMessage(const std::string& message) override
-    {
-        for(auto& entry : _sessions->getAllSessions())
-        {
-            entry->addMessage(message);
-        }
-
-        lws_callback_on_writable_all_protocol(_lwsContext.lowLeveContext.get(),
-                                              _lwsContext.dataHolder.protocols.data());
-    }
-private:
-    LwsContext& _lwsContext; // TODO replace with some notifier
-    ISessionsPtr _sessions;
-};
-
 Server::Server(const ServerContext& context)
-    : _sessions(std::make_shared<Sessions>())
-    , _callbackContext(std::make_shared<CallbackContext>(context.eventHandler, _sessions))
-    , _lwsContext(context, *_callbackContext)
+    : _lwsContext(context)
 {
-    if (_lwsContext.lowLeveContext == nullptr)
-    {
-        throw std::runtime_error{"lws_context initialization failed"};
-    }
-
-    auto sender = std::make_shared<MessageSender>(_lwsContext, _sessions);
-    _callbackContext->getEventHandler()->setMessageSender(std::move(sender));
-    registerSingnalHandling(_lwsContext.dataHolder.port, this);
+    registerSingnalHandling(_lwsContext.getPort(), this);
 }
 
 void Server::start()
 {
-    int n = 0;
-    while (n >= 0 && !_callbackContext->isServerStopped())
-    {
-        n = lws_service(_lwsContext.lowLeveContext.get(), 0);
-    }
-    _callbackContext->isServerStopped();    
+    _lwsContext.startListening();
 }
 
 void Server::stop()
@@ -114,16 +75,13 @@ void Server::stop()
 
 void Server::stop_()
 {
-    if (!_callbackContext->isServerStopped())
-    {
-        _callbackContext->setServerStopped();
-    }
+    _lwsContext.stopListening();
 }
 
 Server::~Server()
 {
     stop_();
-    unregisterSingnalHandling(_lwsContext.dataHolder.port);
+    unregisterSingnalHandling(_lwsContext.getPort());
 }
 
 } // namespace wspp::srv

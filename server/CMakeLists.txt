@@ -16,23 +16,35 @@ set(${PROJECT_NAME}_SRC_FILES
     include/websocketpp/server/Types.hpp
     include/websocketpp/server/TypesFwd.hpp
 
-    src/LwsAdapter/LwsContext.cpp
-    src/LwsAdapter/LwsContext.hpp
+    src/LwsAdapter/ILwsCallbackContext.hpp
+    src/LwsAdapter/ILwsCallbackNotifier.hpp
+    src/LwsAdapter/ILwsSession.hpp
+    src/LwsAdapter/ILwsSessions.hpp
     src/LwsAdapter/LwsCallback.cpp
     src/LwsAdapter/LwsCallback.hpp
+    src/LwsAdapter/LwsCallbackContext.cpp
+    src/LwsAdapter/LwsCallbackContext.hpp
+    src/LwsAdapter/LwsContext.cpp
+    src/LwsAdapter/LwsContext.hpp
     src/LwsAdapter/LwsContextDeleter.hpp
     src/LwsAdapter/LwsDataHolder.cpp
     src/LwsAdapter/LwsDataHolder.hpp
+    src/LwsAdapter/LwsMessageSender.cpp
+    src/LwsAdapter/LwsMessageSender.hpp
     src/LwsAdapter/LwsProtocolsFactory.cpp
     src/LwsAdapter/LwsProtocolsFactory.hpp
+    src/LwsAdapter/LwsSession.cpp
+    src/LwsAdapter/LwsSession.hpp
+    src/LwsAdapter/LwsSessions.cpp
+    src/LwsAdapter/LwsSessions.hpp
     src/LwsAdapter/LwsTypesFwd.hpp
 
-    src/CallbackContext.cpp
-    src/CallbackContext.hpp
+#    src/CallbackContext.cpp
+#    src/CallbackContext.hpp
     src/Consts.hpp
 #    src/EventHandlerWrapper.cpp
 #    src/EventHandlerWrapper.hpp
-    src/ICallbackContext.hpp
+#    src/ICallbackContext.hpp
     src/IContextVisitor.hpp
     src/IContextVisitorAcceptor.hpp
     src/ISession.hpp
@@ -44,10 +56,10 @@ set(${PROJECT_NAME}_SRC_FILES
     src/ServerContext.hpp
     src/ServerContextBuilder.cpp
     src/ServerFactory.cpp
-    src/Session.cpp
-    src/Session.hpp
-    src/Sessions.cpp
-    src/Sessions.hpp
+#    src/Session.cpp
+#    src/Session.hpp
+#    src/Sessions.cpp
+#    src/Sessions.hpp
     src/TypesFwd.hpp
 )
 

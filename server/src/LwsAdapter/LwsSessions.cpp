@@ -3,27 +3,28 @@
  * @date Feb, 2023
  */
 
-#include "Sessions.hpp"
-#include "Session.hpp"
+//#include "LwsAdapter/LwsSessions.hpp"
+#include "LwsAdapter/ILwsSession.hpp"
+#include "LwsAdapter/LwsSessions.hpp"
 
 namespace wspp::srv
 {
 
-void Sessions::add(SessionId sessionId)
+void LwsSessions::add(ILwsSessionPtr session)
 {
     const std::lock_guard<std::mutex> guard(_mutex);
-    _sessions.insert({sessionId, std::make_shared<Session>()});
+    _sessions.insert({session->getSessionId(), session});
     _cacheExpired = true;
 }
 
-void Sessions::remove(SessionId sessionId)
+void LwsSessions::remove(SessionId sessionId)
 {
     const std::lock_guard<std::mutex> guard(_mutex);
     _sessions.erase(sessionId);
     _cacheExpired = true;
 }
 
-auto Sessions::get(SessionId sessionId) -> ISessionPtr
+auto LwsSessions::get(SessionId sessionId) -> ILwsSessionPtr
 {
     const std::lock_guard<std::mutex> guard(_mutex);
     auto it = _sessions.find(sessionId);
@@ -31,10 +32,10 @@ auto Sessions::get(SessionId sessionId) -> ISessionPtr
     {
         return it->second;
     }
-    return ISessionPtr{};
+    return ILwsSessionPtr{};
 }
 
-auto Sessions::getAllSessions() -> std::vector<ISessionPtr>
+auto LwsSessions::getAllSessions() -> std::vector<ILwsSessionPtr>
 {
     if (_cacheExpired)
     {

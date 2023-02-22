@@ -9,12 +9,31 @@
 #include <memory>
 #include <vector>
 
-#include "LwsAdapter/LwsContextDeleter.hpp"
 
 namespace wspp::srv
 {
 
-using LowLevelContext = std::unique_ptr<lws_context, LwsContextDeleter>;
+class ILwsCallbackContext;
+using ILwsCallbackContextPtr = std::shared_ptr<ILwsCallbackContext>;
+
+class ILwsCallbackNotifier;
+using ILwsCallbackNotifierPtr = std::shared_ptr<ILwsCallbackNotifier>;
+
+class ILwsSession;
+using ILwsSessionPtr = std::shared_ptr<ILwsSession>;
+
+class ILwsSessions;
+using ILwsSessionsPtr = std::shared_ptr<ILwsSessions>;
+
+using LwsInstanceRawPtr = lws*;
+
+class LwsDataHolder;
+using LwsDataHolderPtr = std::shared_ptr<LwsDataHolder>;
+using LwsDataHolderWeak = std::weak_ptr<LwsDataHolder>;
+
+using LowLevelContextPtr = std::shared_ptr<lws_context>;
+using LowLevelContextWeak = std::weak_ptr<lws_context>;
+
 using LwsProtocols = std::vector<lws_protocols>;
 using LwsCallback = lws_callback_function;
 

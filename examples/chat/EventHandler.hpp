@@ -17,6 +17,7 @@ public:
     void onConnect(srv::SessionId) noexcept override;
     void onDisconnect(srv::SessionId) noexcept override;
     void onError(srv::SessionId, const std::string& errorMessage) noexcept override;
+    void onWarning(srv::SessionId, const std::string& warningMessage) noexcept override;
     void setMessageSender(srv::IMessageSenderPtr) override;
 
 private:

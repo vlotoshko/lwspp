@@ -26,7 +26,7 @@ public:
     auto operator=(ISessions&&) noexcept -> ISessions& = default;
 
 public:
-    virtual void add(SessionId) = 0;
+    virtual void add(SessionId, lws*) = 0;
     virtual void remove(SessionId) = 0;
     virtual auto get(SessionId) -> ISessionPtr = 0;
     virtual auto getAllSessions() -> std::vector<ISessionPtr> = 0;

@@ -25,7 +25,7 @@ auto lwsCallback_v1(
         lws *wsi,
         lws_callback_reasons reason,
         void* userData,
-        void* poniter,
+        void* pointer,
         size_t length)
 -> int;
 

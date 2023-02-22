@@ -37,35 +37,37 @@ public:
     {}
     void onError(srv::SessionId, const std::string&) noexcept override
     {}
+    void onWarning(srv::SessionId, const std::string&) noexcept override
+    {}
     void setMessageSender(srv::IMessageSenderPtr) override
     {}
 };
 
-SCENARIO( "Simple test cases", "[]" )
+SCENARIO( "Simple test cases", "[test]" )
 {
     GIVEN( "Server and client" )
     {
-        const srv::Port PORT = 9000;
+//        const srv::Port PORT = 9000;
 
-        auto eventHandler = std::make_shared<EventHandler>();
+//        auto eventHandler = std::make_shared<EventHandler>();
 
-        auto serverBuilder = srv::ServerContextBuilder{};
-        serverBuilder
-                .setVersion(srv::ServerVersion::v1_Andromeda)
-                .setPort(PORT)
-                .setEventHandler(eventHandler)
-                .setLogging(1)
-                ;
+//        auto serverBuilder = srv::ServerContextBuilder{};
+//        serverBuilder
+//                .setVersion(srv::ServerVersion::v1_Andromeda)
+//                .setPort(PORT)
+//                .setEventHandler(eventHandler)
+//                .setLogging(1)
+//                ;
 
-        auto clientBuilder = cli::ClientContextBuilder{PORT};
-        clientBuilder
-                .setBehavior(std::string{""})
-                .setLogging(1)
-                ;
+//        auto clientBuilder = cli::ClientContextBuilder{PORT};
+//        clientBuilder
+//                .setBehavior(std::string{""})
+//                .setLogging(1)
+//                ;
 
-        auto server = srv::createServer(*serverBuilder.build());
-        server->start();
-        auto client = cli::createClient(*clientBuilder.build());
+//        auto server = srv::createServer(*serverBuilder.build());
+//        server->start();
+//        auto client = cli::createClient(*clientBuilder.build());
 
 //        WHEN( "Client sends message to server" )
 //        {

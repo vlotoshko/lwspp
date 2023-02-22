@@ -4,15 +4,16 @@
  */
 
 
+//#include "LwsAdapter/LwsCallbackContext.hpp"
 #include "LwsAdapter/LwsContextFactory.hpp"
 #include "LwsAdapter/LwsTypesFwd.hpp"
-#include "CallbackContext.hpp"
+//#include "CallbackContext.hpp"
 #include "ServerContext.hpp"
 
 namespace wspp::srv
 {
 
-auto createLwsContext(const ServerContext& serverContext, CallbackContext& callbackContext) -> LwsContext
+auto createLwsContext(const ServerContext& serverContext, ILwsCallbackContext& callbackContext) -> LwsContext
 {
     LwsContext lwsContext{serverContext};
     const auto& dataHolder = lwsContext.dataHolder;
