@@ -7,14 +7,14 @@ project(
 )
 
 set(${PROJECT_NAME}_SRC_FILES
-    ChatMessageSender.cpp
-    ChatMessageSender.hpp
-    EventHandler.cpp
-    EventHandler.hpp
-    main.cpp
-    Server.cpp
-    Server.hpp
-    Types.hpp
+    server/ChatMessageSender.cpp
+    server/ChatMessageSender.hpp
+    server/EventHandler.cpp
+    server/EventHandler.hpp
+    server/main.cpp
+    server/Server.cpp
+    server/Server.hpp
+    server/Types.hpp
 )
 
 add_executable(${PROJECT_NAME} ${${PROJECT_NAME}_SRC_FILES})
@@ -24,8 +24,7 @@ set(WebsocketServer_INCLUDE_DIR
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE
-#    ${PROJECT_SOURCE_DIR}/include
-#    ${PROJECT_SOURCE_DIR}/src
+    ${PROJECT_SOURCE_DIR}/server
 
     ${WebsocketServer_INCLUDE_DIR}
 )
