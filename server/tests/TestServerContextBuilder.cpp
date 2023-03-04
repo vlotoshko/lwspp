@@ -44,6 +44,8 @@ public:
     }
     void onDisconnect(SessionId) noexcept override
     {}
+    void onMessageReceive(srv::SessionId, const std::string&) noexcept override
+    {}
     void onError(srv::SessionId, const std::string&) noexcept override
     {}
     void onWarning(srv::SessionId, const std::string&) noexcept override

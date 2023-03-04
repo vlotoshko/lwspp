@@ -33,6 +33,7 @@ public:
     virtual void onConnect(SessionId) noexcept = 0;
     virtual void onDisconnect(SessionId) noexcept = 0;
 
+    virtual void onMessageReceive(SessionId, const std::string& message) noexcept = 0;
     virtual void onError(SessionId, const std::string& errorMessage) noexcept = 0;
     virtual void onWarning(SessionId, const std::string& errorMessage) noexcept = 0;
 

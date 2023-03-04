@@ -7,14 +7,14 @@ project(
 )
 
 set(${PROJECT_NAME}_SRC_FILES
+    ChatMessageSender.cpp
+    ChatMessageSender.hpp
     EventHandler.cpp
     EventHandler.hpp
     main.cpp
     Server.cpp
     Server.hpp
-    ServerData.cpp
-    ServerData.hpp
-    TypesFwd.hpp
+    Types.hpp
 )
 
 add_executable(${PROJECT_NAME} ${${PROJECT_NAME}_SRC_FILES})

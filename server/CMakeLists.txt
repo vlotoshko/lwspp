@@ -39,16 +39,9 @@ set(${PROJECT_NAME}_SRC_FILES
     src/LwsAdapter/LwsSessions.hpp
     src/LwsAdapter/LwsTypesFwd.hpp
 
-#    src/CallbackContext.cpp
-#    src/CallbackContext.hpp
     src/Consts.hpp
-#    src/EventHandlerWrapper.cpp
-#    src/EventHandlerWrapper.hpp
-#    src/ICallbackContext.hpp
     src/IContextVisitor.hpp
     src/IContextVisitorAcceptor.hpp
-    src/ISession.hpp
-    src/ISessions.hpp
     src/IServerContext.hpp
     src/Server.cpp
     src/Server.hpp
@@ -56,10 +49,6 @@ set(${PROJECT_NAME}_SRC_FILES
     src/ServerContext.hpp
     src/ServerContextBuilder.cpp
     src/ServerFactory.cpp
-#    src/Session.cpp
-#    src/Session.hpp
-#    src/Sessions.cpp
-#    src/Sessions.hpp
     src/TypesFwd.hpp
 )
 
