@@ -9,7 +9,6 @@
 #include <vector>
 
 #include "websocketpp/server/IEventHandler.hpp"
-#include "websocketpp/server/TypesFwd.hpp"
 
 #include "ChatMessageSender.hpp"
 #include "Types.hpp"
@@ -32,8 +31,7 @@ public:
 
 private:
     ChatMessageSender _chatMessageSender;
-    std::vector<Message> _chatMessages;
-//    srv::IMessageSenderPtr _messageSender;
+    std::vector<Message> _history;
 
     std::map<srv::SessionId, User> _users;
 };

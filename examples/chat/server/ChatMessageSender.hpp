@@ -22,6 +22,7 @@ public:
     explicit ChatMessageSender(srv::IMessageSenderPtr);
 
     void sendUserMessage(const Message&);
+    void sendWellcome(const User&);
     void sendChatHistory(const User&, const std::vector<Message>&);
 
     void updateUsers(const std::map<srv::SessionId, User>& users);

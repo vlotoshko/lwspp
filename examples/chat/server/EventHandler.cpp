@@ -4,7 +4,6 @@
  */
 
 #include "websocketpp/server/Consts.hpp"
-//#include "websocketpp/server/IMessageSender.hpp"
 
 #include "EventHandler.hpp"
 
@@ -16,24 +15,45 @@ namespace
 
 const User ALL_USERS = User{srv::ALL_SESSIONS, "ALL"};
 
-auto getRecipient(const std::map<srv::SessionId, User>& users, const std::string& message)
+auto trim(const std::string& str) -> std::string
+{
+    const size_t first = str.find_first_not_of(' ');
+    if (first == std::string::npos)
+    {
+        return std::string{};
+    }
+    const size_t last = str.find_last_not_of(' ');
+    return str.substr(first, (last-first+1));
+}
+
+auto getUserByName(const std::map<srv::SessionId, User>& users, const std::string& userName)
 -> User
 {
-    auto pos = message.find_first_of(':');
-
-    if (pos != std::string::npos)
+    for (const auto& entry : users)
     {
-        auto userName = message.substr(0, pos);
-        for (const auto& entry : users)
+        if (entry.second.userName == userName)
         {
-            if (entry.second.userName == userName)
-            {
-                return entry.second;
-                break;
-            }
+            return entry.second;
+            break;
         }
     }
     return ALL_USERS;
+}
+
+// Trying to retrieve recipient name if message is private
+auto parseIncomingMessage(const std::map<srv::SessionId, User>& users, const std::string& message)
+-> std::tuple<User, std::string>
+{
+    auto pos = message.find_first_of(">:");
+
+    if (pos != std::string::npos && message.front() == '<')
+    {
+        auto userName = message.substr(1, pos-1);
+        auto rawMessage = message.substr(pos+2, message.length()-1);
+        return std::make_pair(getUserByName(users, userName), trim(rawMessage));
+    }
+
+    return std::make_pair(ALL_USERS, trim(message));
 }
 
 } // namespace
@@ -43,11 +63,12 @@ EventHandler::EventHandler() : _chatMessageSender(srv::IMessageSenderPtr{})
 
 void EventHandler::onConnect(wspp::srv::SessionId sessionId) noexcept
 {
-    User user = {sessionId, std::string{"user#"}.append(std::to_string(sessionId))};
+    const User user = {sessionId, std::string{"user#"}.append(std::to_string(sessionId))};
     _users[sessionId] = user;
 
+    _chatMessageSender.sendWellcome(user);
     _chatMessageSender.updateUsers(_users);
-    _chatMessageSender.sendChatHistory(user, _chatMessages);
+    _chatMessageSender.sendChatHistory(user, _history);
 }
 
 void EventHandler::onDisconnect(wspp::srv::SessionId sessionId) noexcept
@@ -58,10 +79,15 @@ void EventHandler::onDisconnect(wspp::srv::SessionId sessionId) noexcept
 
 void EventHandler::onMessageReceive(srv::SessionId sessionId, const std::string& messageText) noexcept
 {
-    auto recipient = getRecipient(_users, messageText);
-    auto message = Message{_users[sessionId], recipient, messageText};
+    // Expected common message format: "MessageText"
+    // Expected private message format: "<To>: MessageText"
+    User recipient;
+    std::string rawMessage;
+    std::tie(recipient, rawMessage) = parseIncomingMessage(_users, messageText);
+
+    auto message = Message{_users[sessionId], recipient, rawMessage};
     _chatMessageSender.sendUserMessage(message);
-    _chatMessages.emplace_back(std::move(message));
+    _history.emplace_back(std::move(message));
 }
 
 void EventHandler::onError(srv::SessionId, const std::string& /*errorMessage*/) noexcept

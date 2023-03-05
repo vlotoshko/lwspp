@@ -10,12 +10,12 @@
 namespace wspp::chat
 {
 
-bool isPrivateMessage(const User& user, const Message& message)
+auto isPrivateMessage(const User& user, const Message& message) -> bool
 {
     return message.from.sessionId == user.sessionId ||  message.to.sessionId == user.sessionId;
 }
 
-bool isCommonMessage(const Message& message)
+auto isCommonMessage(const Message& message) -> bool
 {
     return message.to.sessionId == srv::ALL_SESSIONS;
 }
@@ -26,38 +26,54 @@ ChatMessageSender::ChatMessageSender(srv::IMessageSenderPtr s)
 
 void ChatMessageSender::sendUserMessage(const Message& message)
 {
-    // Message format: "MSG:<From>:<To>:<MessageText>"
-    std::string messageToSend{"MSG:"};
-    messageToSend.append(message.from.userName).append(":");
-    if (message.to.sessionId == srv::ALL_SESSIONS)
+    // Message format: "MSG:<From>:<To>:MessageText"
+    if (_messageSender != nullptr)
     {
-        messageToSend.append("ALL:").append(message.text);
-        _messageSender->sendMessage(messageToSend);
-    }
-    else
-    {
-        messageToSend.append(message.text);
-
-        _messageSender->sendMessage(message.to.sessionId, messageToSend);
-        if (message.to.sessionId != message.from.sessionId)
+        std::string messageToSend{"MSG:<"};
+        messageToSend
+                .append(message.from.userName)
+                .append(">:<")
+                .append(message.to.userName).append(">:")
+                .append(message.text)
+                ;
+        if (message.to.sessionId == srv::ALL_SESSIONS)
         {
-            _messageSender->sendMessage(message.from.sessionId, messageToSend);
+            _messageSender->sendMessage(messageToSend);
+        }
+        else
+        {
+            _messageSender->sendMessage(message.to.sessionId, messageToSend);
+            if (message.to.sessionId != message.from.sessionId)
+            {
+                _messageSender->sendMessage(message.from.sessionId, messageToSend);
+            }
         }
     }
 }
 
-void ChatMessageSender::sendChatHistory(const User& user, const std::vector<Message>& messages)
+void ChatMessageSender::sendWellcome(const User& user)
 {
-    // Message format: "HIST:<From>:<To>:<MessageText>"
+    // Message format: "WLL:UserName"
     if (_messageSender != nullptr)
     {
-        for (const auto& message : messages)
+        std::string message{"WLL:"};
+        _messageSender->sendMessage(user.sessionId, message.append(user.userName));
+    }
+
+}
+
+void ChatMessageSender::sendChatHistory(const User& user, const std::vector<Message>& history)
+{
+    // Message format: "HIST:<From>:<To>:MessageText"
+    if (_messageSender != nullptr)
+    {
+        for (const auto& message : history)
         {
             if (isCommonMessage(message) || isPrivateMessage(user, message))
             {
-                _messageSender->sendMessage(user.sessionId, std::string{"HIST:"}
-                                            .append(message.from.userName).append(":")
-                                            .append(message.to.userName).append(":")
+                _messageSender->sendMessage(user.sessionId, std::string{"HIST:<"}
+                                            .append(message.from.userName).append(">:<")
+                                            .append(message.to.userName).append(">:")
                                             .append(message.text));
             }
         }
@@ -66,7 +82,7 @@ void ChatMessageSender::sendChatHistory(const User& user, const std::vector<Mess
 
 void wspp::chat::ChatMessageSender::updateUsers(const std::map<srv::SessionId, User>& users)
 {
-    // Message format: "USRUPD:<User1>,<User2>,<User3>,"
+    // Message format: "USRUPD:User1,User2,User3,"
     if (_messageSender != nullptr)
     {
         std::string message{"USRUPD:"};
