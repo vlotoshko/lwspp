@@ -27,7 +27,7 @@ using ILwsSessionsPtr = std::shared_ptr<ILwsSessions>;
 
 using LwsInstanceRawPtr = lws*;
 
-class LwsDataHolder;
+struct LwsDataHolder;
 using LwsDataHolderPtr = std::shared_ptr<LwsDataHolder>;
 using LwsDataHolderWeak = std::weak_ptr<LwsDataHolder>;
 

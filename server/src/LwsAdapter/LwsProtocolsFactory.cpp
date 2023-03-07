@@ -3,8 +3,6 @@
  * @date Feb, 2023
  */
 
-#include <iostream>
-
 #include "LwsAdapter/LwsCallback.hpp"
 #include "LwsAdapter/LwsProtocolsFactory.hpp"
 

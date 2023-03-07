@@ -16,6 +16,8 @@ namespace wspp::srv
 {
 namespace
 {
+// The libwebsockets closes current session if callback returns -1
+const int CLOSE_SESSION = -1;
 
 std::array<unsigned char, LWS_PRE + MAX_MESSAGE_SIZE> msg;
 
@@ -75,15 +77,9 @@ auto reasonToString(lws_callback_reasons reason) -> std::string
 
 auto sendMessage(lws* wsInstance, const std::string& message) -> bool
 {
-    auto itEnd = message.cend();
-    if (message.size() > MAX_MESSAGE_SIZE)
-    {
-        itEnd = message.cbegin() + MAX_MESSAGE_SIZE;
-        // TODO: warning - message exceeds the maximum size
-    }
+    std::copy(message.cbegin(), message.cend(), msg.data() + LWS_PRE);
 
-    std::copy(message.cbegin(), itEnd, msg.data() + LWS_PRE);
-    const int expectedSize = static_cast<int>(itEnd - message.cbegin());
+    const int expectedSize = static_cast<int>(message.size());
     const int actualSize = lws_write(wsInstance, msg.data() + LWS_PRE, expectedSize, LWS_WRITE_TEXT);
 
     return expectedSize == actualSize;
@@ -111,7 +107,6 @@ auto lwsCallback_v1(
         auto sessions = callbackContext.getSessions();
         sessions->add(std::make_shared<LwsSession>(sessionId, wsInstance));
         eventHandler->onConnect(sessionId);
-//        lws_callback_on_writable(wsInstance);
         break;
     }
     case LWS_CALLBACK_SERVER_WRITEABLE:
@@ -120,10 +115,14 @@ auto lwsCallback_v1(
         if (auto session = sessions->get(sessionId))
         {
             auto& messages = session->getMessages();
-
             if (!messages.empty() && !callbackContext.isStopping())
             {
                 auto& message = messages.front();
+                if (message.size() > MAX_MESSAGE_SIZE)
+                {
+                    eventHandler->onError(sessionId, "Message exceeds the maximum alowed size");
+                }
+
                 if (sendMessage(wsInstance, message))
                 {
                     messages.pop();
@@ -134,13 +133,16 @@ auto lwsCallback_v1(
                 }
                 else
                 {
-                    eventHandler->onError(sessionId, "Error writing to socket");
+                    eventHandler->onError(sessionId, "Error writing data to socket");
                 }
             }
         }
         else
         {
-            // TODO: waring - session not found
+            // Never should be here
+            eventHandler->onWarning(sessionId, "Referring to unknown or deleted session. "
+                                               "Dropping connection for this session");
+            return CLOSE_SESSION;
         }
         break;
     }

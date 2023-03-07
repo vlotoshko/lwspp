@@ -6,14 +6,9 @@
 #include <map>
 #include <mutex>
 
-#include "websocketpp/server/IEventHandler.hpp"
-#include "websocketpp/server/IMessageSender.hpp"
 #include "LwsAdapter/LwsContext.hpp"
-//#include "CallbackContext.hpp"
 #include "Server.hpp"
 #include "ServerContext.hpp"
-//#include "Sessions.hpp"
-//#include <iostream>
 
 namespace wspp::srv
 {
