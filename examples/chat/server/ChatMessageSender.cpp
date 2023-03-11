@@ -12,7 +12,7 @@ namespace wspp::chat
 
 auto isPrivateMessage(const User& user, const Message& message) -> bool
 {
-    return message.from.sessionId == user.sessionId ||  message.to.sessionId == user.sessionId;
+    return message.from.userName == user.userName ||  message.to.userName == user.userName;
 }
 
 auto isCommonMessage(const Message& message) -> bool
@@ -43,23 +43,13 @@ void ChatMessageSender::sendUserMessage(const Message& message)
         else
         {
             _messageSender->sendMessage(message.to.sessionId, messageToSend);
-            if (message.to.sessionId != message.from.sessionId)
+            if (message.to.sessionId != message.from.sessionId &&
+                message.from.sessionId != srv::UNDEFINED_SESSION_ID)
             {
                 _messageSender->sendMessage(message.from.sessionId, messageToSend);
             }
         }
     }
-}
-
-void ChatMessageSender::sendWellcome(const User& user)
-{
-    // Message format: "WLL:UserName"
-    if (_messageSender != nullptr)
-    {
-        std::string message{"WLL:"};
-        _messageSender->sendMessage(user.sessionId, message.append(user.userName));
-    }
-
 }
 
 void ChatMessageSender::sendChatHistory(const User& user, const std::vector<Message>& history)

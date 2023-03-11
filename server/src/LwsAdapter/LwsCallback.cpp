@@ -92,7 +92,7 @@ auto lwsCallback_v1(
         lws_callback_reasons reason,
         void* /*userData*/,
         void* in/*pointer*/,
-        size_t size/*length*/)
+        size_t len/*length*/)
 -> int
 {
     std::cout << "LwsCallback reason: " << reasonToString(reason) << std:: endl;
@@ -148,7 +148,7 @@ auto lwsCallback_v1(
     }
     case LWS_CALLBACK_RECEIVE:
     {
-        eventHandler->onMessageReceive(sessionId, std::string{reinterpret_cast<const char *>(in), size});
+        eventHandler->onMessageReceive(sessionId, std::string{reinterpret_cast<const char *>(in), len});
         break;
     }
     case LWS_CALLBACK_CLOSED:

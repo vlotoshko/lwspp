@@ -30,6 +30,10 @@ public:
     void setMessageSender(srv::IMessageSenderPtr) override;
 
 private:
+    void processHelloMessage_(srv::SessionId, const std::string& message);
+    void processUserMessage_(srv::SessionId, const std::string& message);
+
+private:
     ChatMessageSender _chatMessageSender;
     std::vector<Message> _history;
 

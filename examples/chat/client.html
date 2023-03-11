@@ -17,7 +17,19 @@
         </style>
     </head>
     <body>
-        <h3>Simple websocket chat v.0.0.1</h3>
+        <div class="container">
+            <h3>Simple websocket chat v.0.0.1</h3>
+            Address:
+            <input type="text" name="address" id="address" value="localhost" size="12"/>
+            Port:
+            <input type="text" name="port" id="port" value="9000" size="4"/>
+         <!--   <br>-->
+            Nickname:
+            <input type="text" name="input_nickname" id="input_nickname" value="user1" size="10"/>
+            <input type="button" name="connectBtn" id="connectBtn" value="Connect"/>
+        </div>
+        <br>
+
         <div class="container">
             <div>Common chat</div>
             <div><textarea readonly id="output_common" cols="55" rows="20"></textarea></div>
@@ -29,19 +41,19 @@
             <ol id="users" class="users"></ol>
         </div>
 
-        <div></div>
+        <br>
         <div class="container">
-            <div id="your_name">Your name:</div>
+            <span id="nickname">Nickname</span>types:
+            <input type="text" name="input_message" id="input_message" size="55"/>
         </div>
         <div class="container">
-            <input type="text" name="input_message" id="input_message" size="55"/>
         </div>
 
         <div>
             <input type="button" name="inputBtn" id="inputBtn" value="Send message"/>
         </div>
 
-        <div></div>
+        <br>
         <div class="container">
             <div>Server status:</div>
         </div>
@@ -50,31 +62,45 @@
         </div>
 
         <script type="text/javascript">
-            var PORT = 9000;
-            var ws = new WebSocket("ws://localhost:" + PORT);
+            var address = document.getElementById("address");
+            var port = document.getElementById("port");
+            var input_nickname = document.getElementById("input_nickname");
+            var connectBtn = document.getElementById("connectBtn");
+            var ws = new WebSocket("ws://localhost:0");
+
             var output_common = document.getElementById("output_common");
             var output_private = document.getElementById("output_private");
             var input_message = document.getElementById("input_message");
             var inputBtn = document.getElementById("inputBtn");
             var server_messages = document.getElementById("server_messages");
             var users = document.getElementById("users");
-            var your_name = document.getElementById("your_name");
-            yourNameValue = ""
+            var nickname = document.getElementById("nickname");
 
-            ws.onmessage = function(evt) {
-                parseMessage(evt.data);
-            };
+            connectBtn.onclick = function(evt){
+                ws.close();
+                ws = new WebSocket("ws://" + address.value + ":" + port.value);
 
-            ws.onerror = function(evt) {
-                server_messages.innerHTML = "<i>Server error :(</i>"
-            };
+                output_common.value = "";
+                output_private.value = "";
 
-            ws.onopen = function(evt) {
-                server_messages.innerHTML = "<i>Connected</i>"
-            };
+                ws.onmessage = function(evt) {
+                    parseMessage(evt.data);
+                };
 
-            ws.onclose = function(evt) {
-                server_messages.innerHTML = "<i>Disconnected</i>"
+                ws.onerror = function(evt) {
+                    server_messages.innerHTML = "<i>Server error :(</i>"
+                };
+
+                ws.onopen = function(evt) {
+                    server_messages.innerHTML = "<i>Connected</i>"
+                    nickname.innerHTML = input_nickname.value;
+                    ws.send("HELLO:" + nickname.innerHTML);
+                };
+
+                ws.onclose = function(evt) {
+                    server_messages.innerHTML = "<i>Disconnected</i>"
+                };
+
             };
 
             inputBtn.onclick = function(evt){
@@ -89,11 +115,10 @@
 
             function sendMessage() {
                 if (input_message.value != "") {
-                    ws.send(input_message.value);
+                    ws.send("MSG:" + input_message.value);
                     input_message.value = '';
                 }
             }
-
 
             function stripUserName(userName) {
                 if(userName.charAt(0) == '<') {
@@ -110,12 +135,7 @@
                 var messageArray = message.split(":");
                 messageObj.type = messageArray[0];
 
-                if (messageObj.type == "WLL") {
-                    yourNameValue = messageArray[1];
-                    your_name.innerHTML = "<b>" + yourNameValue + "</b>";
-                }
-
-                else if (messageObj.type == "USRUPD") {
+                if (messageObj.type == "USRUPD") {
                     var usersArray = messageArray[1].split(",");
 
                     users.innerHTML = ""
@@ -153,7 +173,8 @@
                             msg += '\n';
                             output_common.value += msg;
                         }
-                        else if (from == yourNameValue || to == yourNameValue) {
+                        else if (from == nickname.innerHTML ||
+                                 from == "SYS" || to == nickname.innerHTML) {
                             msg = from + " --> " + to + ": ";
                             for (let i = 3; i < messageArray.length; i++) {
                                 msg += messageArray[i];
