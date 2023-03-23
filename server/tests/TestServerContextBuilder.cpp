@@ -32,16 +32,7 @@ class EventHandler : public IEventHandler
 {
 public:
     void onConnect(SessionId) noexcept override
-    {
-        try
-        {
-//            std::cout << "event handler connection invoked " << std::endl;
-        }
-        catch (...)
-        {
-
-        }
-    }
+    {}
     void onDisconnect(SessionId) noexcept override
     {}
     void onMessageReceive(srv::SessionId, const std::string&) noexcept override
@@ -65,7 +56,7 @@ public:
         REQUIRE(context.port == expected.port);
 
         // Non-mandatory parameters
-        REQUIRE(context.protocolName == expected.protocolName);
+//        REQUIRE(context.protocolName == expected.protocolName);
     }
 
     ServerContext expected;
@@ -138,7 +129,7 @@ SCENARIO( "ServerContext construction", "[server_context_parameters]" )
             AND_WHEN( "All non-mandatory parameters are set" )
             {
                 auto serverContext = serverContextBuilder
-                        .setProtocolName("TestProtocolName")
+//                        .setProtocolName("TestProtocolName")
                         .build();
 
                 THEN( "Server context has correct data" )
@@ -147,7 +138,7 @@ SCENARIO( "ServerContext construction", "[server_context_parameters]" )
                     checker->expected.serverVersion = ServerVersion::v1_Andromeda;
                     checker->expected.eventHandler = handler;
                     checker->expected.port = PORT;
-                    checker->expected.protocolName = "TestProtocolName";
+//                    checker->expected.protocolName = "TestProtocolName";
 
                     serverContext->accept(*checker);
                 }

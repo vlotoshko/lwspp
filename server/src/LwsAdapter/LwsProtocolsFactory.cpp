@@ -33,11 +33,11 @@ auto createLwsProtocols(ServerVersion version) -> LwsProtocols
         {
             "/",
             callback,
-            0, // user data struct not used
-            0,
-            0,
-            nullptr,
-            0
+            0, // per session data size, not used
+            0, // rx buffer size
+            static_cast<unsigned int>(version), // id
+            nullptr, // pointer on user data
+            0 // tx packet size
         },
         LWS_PROTOCOL_LIST_TERM
     };

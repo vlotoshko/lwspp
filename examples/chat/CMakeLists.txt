@@ -12,8 +12,6 @@ set(${PROJECT_NAME}_SRC_FILES
     server/EventHandler.cpp
     server/EventHandler.hpp
     server/main.cpp
-    server/Server.cpp
-    server/Server.hpp
     server/Types.hpp
 )
 

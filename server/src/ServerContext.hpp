@@ -28,8 +28,6 @@ public:
     ServerVersion serverVersion = UNDEFINED_SERVER_VERSION;
     Port port = UNDEFINED_PORT;
     IEventHandlerPtr eventHandler;
-
-    std::string protocolName = "/";
 };
 
 } // namespace wspp::srv

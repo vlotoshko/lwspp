@@ -40,8 +40,7 @@ public:
     auto setEventHandler(IEventHandlerPtr) -> ServerContextBuilder&;
 
     // Non mandatory options
-    auto setProtocolName(std::string) -> ServerContextBuilder&;
-    auto setLogging(int) -> ServerContextBuilder&;
+    auto setPingPongInterval(int) -> ServerContextBuilder&;
 
 private:
     std::unique_ptr<ServerContext> _serverContext;

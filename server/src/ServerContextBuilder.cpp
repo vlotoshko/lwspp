@@ -3,6 +3,8 @@
  * @date Jan, 2023
  */
 
+#include <stdexcept>
+
 #include "websocketpp/server/ServerContextBuilder.hpp"
 #include "ServerContext.hpp"
 
@@ -72,13 +74,7 @@ auto ServerContextBuilder::setEventHandler(IEventHandlerPtr e) -> ServerContextB
     return *this;
 }
 
-auto ServerContextBuilder::setProtocolName(std::string b) -> ServerContextBuilder&
-{
-    _serverContext->protocolName = std::move(b);
-    return *this;
-}
-
-auto ServerContextBuilder::setLogging(int) -> ServerContextBuilder&
+auto ServerContextBuilder::setPingPongInterval(int) -> ServerContextBuilder&
 {
     return *this;
 }

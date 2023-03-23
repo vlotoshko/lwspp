@@ -21,7 +21,6 @@ struct LwsDataHolder
 
     Port port;
     LwsProtocols protocols;
-    std::string protocolName;
 };
 
 } // namespace wspp::srv

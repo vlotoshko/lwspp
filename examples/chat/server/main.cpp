@@ -20,10 +20,10 @@ auto main() -> int
             .setPort(PORT)
             .setVersion(srv::ServerVersion::v1_Andromeda)
             .setEventHandler(std::make_shared<chat::EventHandler>())
-            .setLogging(1)
             ;
 
     auto server = srv::createServer(*serverContextBuilder.build());
+
     // blocks the thread
     server->start();
 
