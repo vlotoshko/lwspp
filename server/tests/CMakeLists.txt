@@ -1,5 +1,5 @@
 set(TESTS_TARGET_SRC_FILES
-    framework/catch.hpp
+    framework/catch2/catch.hpp
     framework/fakeit.hpp
     main.cpp
 
@@ -9,6 +9,7 @@ set(TESTS_TARGET_SRC_FILES
 add_executable(${PROJECT_NAME}-tests ${TESTS_TARGET_SRC_FILES})
 
 target_include_directories(${PROJECT_NAME}-tests PRIVATE
+    ${PROJECT_SOURCE_DIR}/tests/framework
     ${PROJECT_SOURCE_DIR}/include
     ${PROJECT_SOURCE_DIR}/src
 )

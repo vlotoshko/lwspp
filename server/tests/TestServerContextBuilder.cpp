@@ -3,7 +3,7 @@
  * @date Jan, 2023
  */
 
-#include "framework/catch.hpp"
+#include "catch2/catch.hpp"
 
 #include "websocketpp/server/IEventHandler.hpp"
 #include "websocketpp/server/ServerContextBuilder.hpp"
