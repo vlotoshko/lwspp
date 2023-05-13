@@ -9,9 +9,16 @@ project(
 set(${PROJECT_NAME}_SRC_FILES
     include/websocketpp/client/ClientContextBuilder.hpp
     include/websocketpp/client/ClientFactory.hpp
-    include/websocketpp/client/types/IClient.hpp
-    include/websocketpp/client/types/TypesFwd.hpp
+    include/websocketpp/client/ClientVersions.hpp
+    include/websocketpp/client/Consts.hpp
+    include/websocketpp/client/IClient.hpp
+    include/websocketpp/client/IEventHandler.hpp
+    include/websocketpp/client/IMessageSender.hpp
+    include/websocketpp/client/Types.hpp
+    include/websocketpp/client/TypesFwd.hpp
 
+    src/LwsAdapter/LwsCallback.cpp
+    src/LwsAdapter/LwsCallback.hpp
     src/Client.cpp
     src/Client.hpp
     src/ClientContext.cpp
@@ -28,6 +35,7 @@ add_library(${PROJECT_NAME} STATIC ${${PROJECT_NAME}_SRC_FILES})
 
 target_include_directories(${PROJECT_NAME} PRIVATE
     ${PROJECT_SOURCE_DIR}/include
+    ${PROJECT_SOURCE_DIR}/src
 )
 
 set_target_properties(${PROJECT_NAME} PROPERTIES

@@ -25,4 +25,3 @@ set_target_properties(${PROJECT_NAME}-tests PROPERTIES
     CXX_EXTENSIONS OFF
     LINKER_LANGUAGE CXX
 )
-

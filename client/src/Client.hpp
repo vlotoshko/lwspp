@@ -5,7 +5,7 @@
 
 #pragma once
 
-#include "websocketpp/client/types/IClient.hpp"
+#include "websocketpp/client/IClient.hpp"
 
 namespace wspp::cli
 {

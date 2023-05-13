@@ -19,8 +19,6 @@ namespace
 // The libwebsockets closes current session if callback returns -1
 const int CLOSE_SESSION = -1;
 
-std::array<unsigned char, LWS_PRE + MAX_MESSAGE_SIZE> msg;
-
 auto getCallbackContext(lws* wsInstance) -> ILwsCallbackContext&
 {
     void* contextData = lws_context_user(lws_get_context(wsInstance));
@@ -77,6 +75,7 @@ auto reasonToString(lws_callback_reasons reason) -> std::string
 
 auto sendMessage(lws* wsInstance, const std::string& message) -> bool
 {
+    std::array<unsigned char, LWS_PRE + MAX_MESSAGE_SIZE> msg{};
     std::copy(message.cbegin(), message.cend(), msg.data() + LWS_PRE);
 
     const int expectedSize = static_cast<int>(message.size());

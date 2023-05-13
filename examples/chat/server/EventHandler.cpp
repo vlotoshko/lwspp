@@ -21,7 +21,7 @@ enum class MessageType
     UNKNOWN,
 };
 
-const std::string UNKNOWN_USERN_NAME = "UNKNOWN_USERN_NAME";
+const std::string UNKNOWN_USERN_NAME = "UNKNOWN_USER_NAME";
 const User UNKNOWN_USER = User{srv::UNDEFINED_SESSION_ID, "UNKNOWN"};
 const User SYSTEM = User{srv::UNDEFINED_SESSION_ID, "SYS"};
 const User ALL_USERS = User{srv::ALL_SESSIONS, "ALL"};
@@ -136,7 +136,7 @@ void EventHandler::onDisconnect(wspp::srv::SessionId sessionId) noexcept
 void EventHandler::onMessageReceive(srv::SessionId sessionId, const std::string& messageText) noexcept
 {
     // Expected messages:
-    //   hello message, format: "HELLO:<Nikcname>"
+    //   hello message, format: "HELLO:<Nickname>"
     //   user message common, format: "MSG:MessageText"
     //   user message private, format: "MSG:<To>: MessageText"
 

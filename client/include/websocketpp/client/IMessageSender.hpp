@@ -1,19 +1,19 @@
 /**
  * @author Volodymyr Lotoshko (vlotoshko@gmail.com)
- * @date Feb, 2023
+ * @date Apr, 2023
  */
 
 #pragma once
 
 #include <string>
 
-#include "websocketpp/server/Types.hpp"
+#include "websocketpp/client/Types.hpp"
 
-namespace wspp::srv
+namespace wspp::cli
 {
 
 /**
- * @brief The IMessageSender class sends messages to the server's client
+ * @brief The IMessageSender class sends messages to the server
  */
 class IMessageSender
 {
@@ -33,4 +33,4 @@ public:
     virtual void sendMessage(const std::string&) = 0;
 };
 
-} // namespace wspp::srv
+} // namespace wspp::cli

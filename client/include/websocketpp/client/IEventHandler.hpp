@@ -1,16 +1,16 @@
 /**
  * @author Volodymyr Lotoshko (vlotoshko@gmail.com)
- * @date Jan, 2023
+ * @date Apr, 2023
  */
 
 #pragma once
 
 #include <string>
 
-#include "websocketpp/server/Types.hpp"
-#include "websocketpp/server/TypesFwd.hpp"
+#include "websocketpp/client/Types.hpp"
+#include "websocketpp/client/TypesFwd.hpp"
 
-namespace wspp::srv
+namespace wspp::cli
 {
 
 /**
@@ -30,12 +30,12 @@ public:
     auto operator=(const IEventHandler&) noexcept -> IEventHandler& = delete;
 
 public:
-    virtual void onConnect(SessionId) noexcept = 0;
-    virtual void onDisconnect(SessionId) noexcept = 0;
+//    virtual void onConnect(SessionId) noexcept = 0;
+//    virtual void onDisconnect(SessionId) noexcept = 0;
 
-    virtual void onMessageReceive(SessionId, const std::string& message) noexcept = 0;
-    virtual void onError(SessionId, const std::string& errorMessage) noexcept = 0;
-    virtual void onWarning(SessionId, const std::string& errorMessage) noexcept = 0;
+//    virtual void onMessageReceive(SessionId, const std::string& message) noexcept = 0;
+//    virtual void onError(SessionId, const std::string& errorMessage) noexcept = 0;
+//    virtual void onWarning(SessionId, const std::string& errorMessage) noexcept = 0;
 
     // The setMessageSender method is used by server factory to set the message sender
     // for the IEventHandler. The user's implementations of the IEventHandler can use the
@@ -43,4 +43,4 @@ public:
     virtual void setMessageSender(IMessageSenderPtr) = 0;
 };
 
-} // namespace wspp::srv
+} // namespace wspp::cli
