@@ -14,7 +14,7 @@ namespace wspp::cli
 {
 
 /**
- * @brief The IEventHandler class defines interface for the server behavior implementation.
+ * @brief The IEventHandler class defines interface for the client behavior implementation.
  * The library user implements this interface on its own.
  */
 class IEventHandler

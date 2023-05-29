@@ -4,14 +4,37 @@
  */
 
 #include "websocketpp/client/ClientFactory.hpp"
+
+#include "IClientContext.hpp"
+#include "IContextVisitor.hpp"
+#include "IContextVisitorAcceptor.hpp"
 #include "Client.hpp"
 
 namespace wspp::cli
 {
 
-auto createClient(const IClientContext&) -> IClientPtr
+class ClientFactory : private IContextVisitor
 {
-    return std::make_shared<Client>();
+public:
+    auto createClient(const IContextVisitorAcceptor& c) -> IClientPtr
+    {
+        c.accept(*this);
+        return _client;
+    }
+
+private:
+    void VisitClientContext(const ClientContext& ctx) override
+    {
+        _client = std::make_shared<Client>(ctx);
+    }
+
+private:
+    IClientPtr _client;
+};
+
+auto createClient(const IClientContext& ctx) -> IClientPtr
+{
+    return ClientFactory{}.createClient(ctx);
 }
 
 } // namespace wspp::cli

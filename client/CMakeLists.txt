@@ -17,8 +17,19 @@ set(${PROJECT_NAME}_SRC_FILES
     include/websocketpp/client/Types.hpp
     include/websocketpp/client/TypesFwd.hpp
 
+    src/LwsAdapter/ILwsCallbackContext.hpp
     src/LwsAdapter/LwsCallback.cpp
     src/LwsAdapter/LwsCallback.hpp
+    src/LwsAdapter/LwsCallbackContext.cpp
+    src/LwsAdapter/LwsCallbackContext.hpp
+    src/LwsAdapter/LwsContext.cpp
+    src/LwsAdapter/LwsContext.hpp
+    src/LwsAdapter/LwsContextDeleter.hpp
+    src/LwsAdapter/LwsDataHolder.cpp
+    src/LwsAdapter/LwsDataHolder.hpp
+    src/LwsAdapter/LwsProtocolsFactory.cpp
+    src/LwsAdapter/LwsProtocolsFactory.hpp
+    src/LwsAdapter/LwsTypesFwd.hpp
     src/Client.cpp
     src/Client.hpp
     src/ClientContext.cpp

@@ -152,8 +152,8 @@ void EventHandler::onMessageReceive(srv::SessionId sessionId, const std::string&
         processUserMessage_(sessionId, messageText);
         break;
     }
-
     default:
+        // TODO: unknown message type warning
         break;
     }
 }

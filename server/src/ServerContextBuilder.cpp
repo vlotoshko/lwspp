@@ -16,7 +16,6 @@ namespace
 
 class UndefinedRequiredParameterException : public std::runtime_error
 {
-    std::string _whatMessage;
 public:
     explicit UndefinedRequiredParameterException(const std::string& parameter)
         : std::runtime_error("Required parameter is undefined: " + parameter)

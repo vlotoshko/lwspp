@@ -3,9 +3,8 @@ set(TESTS_TARGET_SRC_FILES
     framework/fakeit.hpp
     main.cpp
 
-#    TestClientConstruction.cpp
     TestConnections.cpp
-#    TestServerConstruction.cpp
+    TestHelloWorld.cpp
 )
 
 add_executable(${PROJECT_NAME}-tests ${TESTS_TARGET_SRC_FILES})
