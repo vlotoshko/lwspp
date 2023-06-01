@@ -7,8 +7,6 @@
 
 #include <string>
 
-#include "websocketpp/client/Types.hpp"
-
 namespace wspp::cli
 {
 
@@ -28,8 +26,7 @@ public:
     auto operator=(IMessageSender&&) noexcept -> IMessageSender& = default;
 
 public:
-    virtual void sendMessage(SessionId, const std::string&) = 0;
-    // Sends a message to all clients
+    // Sends a message to a server
     virtual void sendMessage(const std::string&) = 0;
 };
 

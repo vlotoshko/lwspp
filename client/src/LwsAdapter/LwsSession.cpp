@@ -6,7 +6,7 @@
 #include "Consts.hpp"
 #include "LwsAdapter/LwsSession.hpp"
 
-namespace wspp::srv
+namespace wspp::cli
 {
 namespace
 {
@@ -27,15 +27,9 @@ auto splitMessages(const std::string& message, unsigned int maxSize) -> std::vec
 
 } // namespace
 
-LwsSession::LwsSession(SessionId sessionId, LwsInstanceRawPtr instance)
-    : _sessionId(sessionId)
-    , _wsInstance(instance)
+LwsSession::LwsSession(LwsInstanceRawPtr instance)
+    : _wsInstance(instance)
 {}
-
-auto LwsSession::getSessionId() const -> SessionId
-{
-    return _sessionId;
-}
 
 auto LwsSession::getLwsInstance() -> LwsInstanceRawPtr
 {
@@ -63,4 +57,4 @@ auto LwsSession::getMessages() -> std::queue<std::string>&
     return _messagesToSend;
 }
 
-} // namespace wspp::srv
+} // namespace wspp::cli

@@ -10,6 +10,7 @@
 #include "IContextVisitor.hpp"
 #include "ClientContext.hpp"
 
+// NOLINTBEGIN (readability-function-cognitive-complexity)
 namespace wspp::tests
 {
 using namespace cli;
@@ -30,16 +31,16 @@ auto toString(ClientVersion version) -> std::string
 class EventHandler : public IEventHandler
 {
 public:
-//    void onConnect(SessionId) noexcept override
-//    {}
-//    void onDisconnect(SessionId) noexcept override
-//    {}
-//    void onMessageReceive(srv::SessionId, const std::string&) noexcept override
-//    {}
-//    void onError(srv::SessionId, const std::string&) noexcept override
-//    {}
-//    void onWarning(srv::SessionId, const std::string&) noexcept override
-//    {}
+    void onConnect() noexcept override
+    {}
+    void onDisconnect() noexcept override
+    {}
+    void onMessageReceive(const std::string&) noexcept override
+    {}
+    void onError(const std::string&) noexcept override
+    {}
+    void onWarning(const std::string&) noexcept override
+    {}
     void setMessageSender(cli::IMessageSenderPtr) override
     {}
 };
@@ -130,7 +131,7 @@ SCENARIO( "ClientContext construction", "[client_context_parameters]" )
             AND_WHEN( "All non-mandatory parameters are set" )
             {
                 auto clientContext = clientContextBuilder
-                                         //                        .setProtocolName("TestProtocolName")
+//                                         .setProtocolName("TestProtocolName")
                                          .build();
 
                 THEN( "Client context has correct data" )
@@ -139,7 +140,7 @@ SCENARIO( "ClientContext construction", "[client_context_parameters]" )
                     checker->expected.clientVersion = ClientVersion::v1_Amsterdam;
                     checker->expected.eventHandler = handler;
                     checker->expected.port = PORT;
-                    //                    checker->expected.protocolName = "TestProtocolName";
+//                    checker->expected.protocolName = "TestProtocolName";
 
                     clientContext->accept(*checker);
                 }
@@ -147,4 +148,6 @@ SCENARIO( "ClientContext construction", "[client_context_parameters]" )
         }
     } // GIVEN
 } // SCENARIO
+
 } // namespace wspp::tests
+// NOLINTEND (readability-function-cognitive-complexity)

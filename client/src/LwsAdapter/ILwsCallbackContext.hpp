@@ -6,6 +6,7 @@
 #pragma once
 
 #include "websocketpp/client/TypesFwd.hpp"
+#include "LwsAdapter/LwsTypesFwd.hpp"
 
 namespace wspp::cli
 {
@@ -23,6 +24,13 @@ public:
     auto operator=(ILwsCallbackContext&&) noexcept -> ILwsCallbackContext& = default;
 
 public:
+    virtual void setStopping() = 0;
+    virtual auto isStopping() const -> bool = 0;
+
+    virtual auto getSession() -> ILwsSessionPtr = 0;
+    virtual void setSession(ILwsSessionPtr) = 0;
+    virtual void resetSession() = 0;
+
     virtual auto getEventHandler() -> IEventHandlerPtr = 0;
 };
 

@@ -19,6 +19,9 @@
 namespace wspp::srv
 {
 
+namespace
+{
+
 class LwsCallbackNotifier : public ILwsCallbackNotifier
 {
 public:
@@ -39,7 +42,7 @@ public:
             if (auto dataHolder = _dataHolder.lock())
             {
                 lws_callback_on_writable_all_protocol(
-                            context.get(), dataHolder->protocols.data());
+                    context.get(), dataHolder->protocols.data());
             }
         }
     }
@@ -49,25 +52,34 @@ private:
     LowLevelContextWeak _lowLevelContext;
 };
 
-LwsContext::LwsContext(const ServerContext& context)
-    : _sessions(std::make_shared<LwsSessions>())
-    , _callbackContext(std::make_shared<LwsCallbackContext>(context.eventHandler, _sessions))
-    , _dataHolder(std::make_shared<LwsDataHolder>(context))
+auto setupLowLeverContext(const ILwsCallbackContextPtr& callbackContext, const LwsDataHolderPtr& dataHolder)
+    -> LowLevelContextPtr
 {
     auto lwsContextInfo = lws_context_creation_info{};
 
-    lwsContextInfo.user = _callbackContext.get();
-    lwsContextInfo.port = _dataHolder->port;
-    lwsContextInfo.protocols = _dataHolder->protocols.data();
+    lwsContextInfo.user = callbackContext.get();
+    lwsContextInfo.port = dataHolder->port;
+    lwsContextInfo.protocols = dataHolder->protocols.data();
 
-    _lowLevelContext = LowLevelContextPtr{lws_create_context(&lwsContextInfo), LwsContextDeleter{}};
-    if (_lowLevelContext == nullptr)
+    auto lowLevelContext = LowLevelContextPtr{lws_create_context(&lwsContextInfo), LwsContextDeleter{}};
+    if (lowLevelContext == nullptr)
     {
         throw std::runtime_error{"lws_context initialization failed"};
     }
+    return lowLevelContext;
+}
+
+}
+
+LwsContext::LwsContext(const ServerContext& context)
+{
+    auto sessions = std::make_shared<LwsSessions>();
+    _callbackContext = std::make_shared<LwsCallbackContext>(context.eventHandler, sessions);
+    _dataHolder = std::make_shared<LwsDataHolder>(context);
+    _lowLevelContext = setupLowLeverContext(_callbackContext, _dataHolder);
 
     auto notifier = std::make_shared<LwsCallbackNotifier>(_dataHolder, _lowLevelContext);
-    auto sender = std::make_shared<LwsMessageSender>(_sessions, std::move(notifier));
+    auto sender = std::make_shared<LwsMessageSender>(sessions, std::move(notifier));
     _callbackContext->getEventHandler()->setMessageSender(std::move(sender));
 }
 

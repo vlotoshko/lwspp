@@ -24,9 +24,7 @@ public:
     auto getPort() const -> Port;
 
 private:
-    ILwsSessionsPtr _sessions;
     ILwsCallbackContextPtr _callbackContext;
-
     LwsDataHolderPtr _dataHolder;
     LowLevelContextPtr _lowLevelContext;
 

@@ -36,8 +36,26 @@ auto reasonToString(lws_callback_reasons reason) -> std::string
 
     switch (reason)
     {
+    case LWS_CALLBACK_CLIENT_CONNECTION_ERROR:
+        return std::string{"LWS_CALLBACK_CLIENT_CONNECTION_ERROR"}.append(alpha);
+    case LWS_CALLBACK_CLIENT_FILTER_PRE_ESTABLISH:
+        return std::string{"LWS_CALLBACK_CLIENT_FILTER_PRE_ESTABLISH"}.append(alpha);
+    case LWS_CALLBACK_CLIENT_ESTABLISHED:
+        return std::string{"LWS_CALLBACK_CLIENT_ESTABLISHED"}.append(alpha);
+    case LWS_CALLBACK_CLIENT_CLOSED:
+        return std::string{"LWS_CALLBACK_CLIENT_CLOSED"}.append(alpha);
+    case LWS_CALLBACK_CLIENT_RECEIVE:
+        return std::string{"LWS_CALLBACK_CLIENT_RECEIVE"}.append(alpha);
+    case LWS_CALLBACK_CLIENT_WRITEABLE:
+        return std::string{"LWS_CALLBACK_CLIENT_WRITEABLE"}.append(alpha);
+    case LWS_CALLBACK_CLIENT_APPEND_HANDSHAKE_HEADER:
+        return std::string{"LWS_CALLBACK_CLIENT_APPEND_HANDSHAKE_HEADER"}.append(alpha);
+    case LWS_CALLBACK_CLOSED_HTTP:
+        return std::string{"LWS_CALLBACK_CLOSED_HTTP"}.append(alpha);
     case LWS_CALLBACK_PROTOCOL_INIT:
         return std::string{"LWS_CALLBACK_PROTOCOL_INIT"}.append(alpha);
+    case LWS_CALLBACK_PROTOCOL_DESTROY:
+        return std::string{"LWS_CALLBACK_PROTOCOL_DESTROY"}.append(alpha);
     case LWS_CALLBACK_FILTER_NETWORK_CONNECTION:
         return std::string{"LWS_CALLBACK_FILTER_NETWORK_CONNECTION"}.append(alpha);
     case LWS_CALLBACK_WSI_CREATE:

@@ -18,6 +18,7 @@ set(${PROJECT_NAME}_SRC_FILES
     include/websocketpp/client/TypesFwd.hpp
 
     src/LwsAdapter/ILwsCallbackContext.hpp
+    src/LwsAdapter/ILwsSession.hpp
     src/LwsAdapter/LwsCallback.cpp
     src/LwsAdapter/LwsCallback.hpp
     src/LwsAdapter/LwsCallbackContext.cpp
@@ -27,8 +28,12 @@ set(${PROJECT_NAME}_SRC_FILES
     src/LwsAdapter/LwsContextDeleter.hpp
     src/LwsAdapter/LwsDataHolder.cpp
     src/LwsAdapter/LwsDataHolder.hpp
+    src/LwsAdapter/LwsMessageSender.cpp
+    src/LwsAdapter/LwsMessageSender.hpp
     src/LwsAdapter/LwsProtocolsFactory.cpp
     src/LwsAdapter/LwsProtocolsFactory.hpp
+    src/LwsAdapter/LwsSession.cpp
+    src/LwsAdapter/LwsSession.hpp
     src/LwsAdapter/LwsTypesFwd.hpp
     src/Client.cpp
     src/Client.hpp

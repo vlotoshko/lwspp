@@ -18,6 +18,7 @@ public:
     explicit Client(const ClientContext&);
 
     void connect() override;
+    void disconnect() override;
     auto isConnected() const -> bool override;
 
 private:

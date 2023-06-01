@@ -11,7 +11,10 @@ namespace wspp::cli
 {
 
 LwsDataHolder::LwsDataHolder(const ClientContext& context)
-    : protocols(createLwsProtocols(context.clientVersion))
+    : address(context.address)
+    , port(context.port)
+    , path(context.path)
+    , protocols(createLwsProtocols(context.clientVersion))
 {}
 
 } // namespace wspp::cli

@@ -19,7 +19,9 @@ struct LwsDataHolder
 {
     explicit LwsDataHolder(const ClientContext&);
 
+    Address address;
     Port port;
+    Path path;
     LwsProtocols protocols;
 };
 

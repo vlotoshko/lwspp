@@ -21,6 +21,7 @@ public:
     virtual ~IClient() = default;
 
     virtual void connect() = 0;
+    virtual void disconnect() = 0;
     virtual auto isConnected() const -> bool = 0;
 };
 

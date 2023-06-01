@@ -7,7 +7,6 @@
 
 #include <string>
 
-#include "websocketpp/client/Types.hpp"
 #include "websocketpp/client/TypesFwd.hpp"
 
 namespace wspp::cli
@@ -30,16 +29,16 @@ public:
     auto operator=(const IEventHandler&) noexcept -> IEventHandler& = delete;
 
 public:
-//    virtual void onConnect(SessionId) noexcept = 0;
-//    virtual void onDisconnect(SessionId) noexcept = 0;
+    virtual void onConnect() noexcept = 0;
+    virtual void onDisconnect() noexcept = 0;
 
-//    virtual void onMessageReceive(SessionId, const std::string& message) noexcept = 0;
-//    virtual void onError(SessionId, const std::string& errorMessage) noexcept = 0;
-//    virtual void onWarning(SessionId, const std::string& errorMessage) noexcept = 0;
+    virtual void onMessageReceive(const std::string& message) noexcept = 0;
+    virtual void onError(const std::string& errorMessage) noexcept = 0;
+    virtual void onWarning(const std::string& errorMessage) noexcept = 0;
 
-    // The setMessageSender method is used by server factory to set the message sender
-    // for the IEventHandler. The user's implementations of the IEventHandler can use the
-    // IMessageSenderPtr to send messages to the clients.
+    // The setMessageSender method is used by client factory to set the message sender
+    // for the IEventHandler. The user's implementations of the IEventHandler can use
+    // the IMessageSenderPtr to send messages to the server.
     virtual void setMessageSender(IMessageSenderPtr) = 0;
 };
 

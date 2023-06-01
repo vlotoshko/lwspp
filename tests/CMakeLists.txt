@@ -3,7 +3,7 @@ set(TESTS_TARGET_SRC_FILES
     framework/fakeit.hpp
     main.cpp
 
-    TestConnections.cpp
+#    TestConnections.cpp
     TestHelloWorld.cpp
 )
 

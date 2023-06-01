@@ -6,11 +6,10 @@
 #include <iostream>
 
 #include "websocketpp/client/IEventHandler.hpp"
-//#include "LwsAdapter/ILwsCallbackContext.hpp"
-//#include "LwsAdapter/ILwsSessions.hpp"
+#include "LwsAdapter/ILwsCallbackContext.hpp"
 #include "LwsAdapter/LwsCallback.hpp"
-//#include "LwsAdapter/LwsSession.hpp"
-//#include "Consts.hpp"
+#include "LwsAdapter/LwsSession.hpp"
+#include "Consts.hpp"
 
 namespace wspp::cli
 {
@@ -19,16 +18,11 @@ namespace
 // The libwebsockets closes current session if callback returns -1
 const int CLOSE_SESSION = -1;
 
-//auto getCallbackContext(lws* wsInstance) -> ILwsCallbackContext&
-//{
-//    void* contextData = lws_context_user(lws_get_context(wsInstance));
-//    return *(reinterpret_cast<ILwsCallbackContext *>(contextData));
-//}
-
-//auto getSessionId(lws* wsInstance) -> SessionId
-//{
-//    return lws_get_socket_fd(wsInstance);
-//}
+auto getCallbackContext(lws* wsInstance) -> ILwsCallbackContext&
+{
+    void* contextData = lws_context_user(lws_get_context(wsInstance));
+    return *(reinterpret_cast<ILwsCallbackContext *>(contextData));
+}
 
 auto reasonToString(lws_callback_reasons reason) -> std::string
 {
@@ -36,8 +30,26 @@ auto reasonToString(lws_callback_reasons reason) -> std::string
 
     switch (reason)
     {
+    case LWS_CALLBACK_CLIENT_CONNECTION_ERROR:
+        return std::string{"LWS_CALLBACK_CLIENT_CONNECTION_ERROR"}.append(alpha);
+    case LWS_CALLBACK_CLIENT_FILTER_PRE_ESTABLISH:
+        return std::string{"LWS_CALLBACK_CLIENT_FILTER_PRE_ESTABLISH"}.append(alpha);
+    case LWS_CALLBACK_CLIENT_ESTABLISHED:
+        return std::string{"LWS_CALLBACK_CLIENT_ESTABLISHED"}.append(alpha);
+    case LWS_CALLBACK_CLIENT_CLOSED:
+        return std::string{"LWS_CALLBACK_CLIENT_CLOSED"}.append(alpha);
+    case LWS_CALLBACK_CLIENT_RECEIVE:
+        return std::string{"LWS_CALLBACK_CLIENT_RECEIVE"}.append(alpha);
+    case LWS_CALLBACK_CLIENT_WRITEABLE:
+        return std::string{"LWS_CALLBACK_CLIENT_WRITEABLE"}.append(alpha);
+    case LWS_CALLBACK_CLIENT_APPEND_HANDSHAKE_HEADER:
+        return std::string{"LWS_CALLBACK_CLIENT_APPEND_HANDSHAKE_HEADER"}.append(alpha);
+    case LWS_CALLBACK_CLOSED_HTTP:
+        return std::string{"LWS_CALLBACK_CLOSED_HTTP"}.append(alpha);
     case LWS_CALLBACK_PROTOCOL_INIT:
         return std::string{"LWS_CALLBACK_PROTOCOL_INIT"}.append(alpha);
+    case LWS_CALLBACK_PROTOCOL_DESTROY:
+        return std::string{"LWS_CALLBACK_PROTOCOL_DESTROY"}.append(alpha);
     case LWS_CALLBACK_FILTER_NETWORK_CONNECTION:
         return std::string{"LWS_CALLBACK_FILTER_NETWORK_CONNECTION"}.append(alpha);
     case LWS_CALLBACK_WSI_CREATE:
@@ -68,21 +80,31 @@ auto reasonToString(lws_callback_reasons reason) -> std::string
         return std::string{"LWS_CALLBACK_CLOSED"}.append(alpha);
     case LWS_CALLBACK_WSI_DESTROY:
         return std::string{"LWS_CALLBACK_WSI_DESTROY"}.append(alpha);
+    case LWS_CALLBACK_ADD_POLL_FD:
+        return std::string{"LWS_CALLBACK_ADD_POLL_FD"}.append(alpha);
+    case LWS_CALLBACK_DEL_POLL_FD:
+        return std::string{"LWS_CALLBACK_DEL_POLL_FD"}.append(alpha);
+    case LWS_CALLBACK_CHANGE_MODE_POLL_FD:
+        return std::string{"LWS_CALLBACK_CHANGE_MODE_POLL_FD"}.append(alpha);
+    case LWS_CALLBACK_LOCK_POLL:
+        return std::string{"LWS_CALLBACK_LOCK_POLL"}.append(alpha);
+    case LWS_CALLBACK_UNLOCK_POLL:
+        return std::string{"LWS_CALLBACK_UNLOCK_POLL"}.append(alpha);
     default:
-        return std::string{"Unknown("}.append(alpha);
+        return std::string{"Unknown"}.append(alpha);
     }
 }
 
-//auto sendMessage(lws* wsInstance, const std::string& message) -> bool
-//{
-//    std::array<unsigned char, LWS_PRE + MAX_MESSAGE_SIZE> msg{};
-//    std::copy(message.cbegin(), message.cend(), msg.data() + LWS_PRE);
+auto sendMessage(lws* wsInstance, const std::string& message) -> bool
+{
+    std::array<unsigned char, LWS_PRE + MAX_MESSAGE_SIZE> msg{};
+    std::copy(message.cbegin(), message.cend(), msg.data() + LWS_PRE);
 
-//    const int expectedSize = static_cast<int>(message.size());
-//    const int actualSize = lws_write(wsInstance, msg.data() + LWS_PRE, expectedSize, LWS_WRITE_TEXT);
+    const int expectedSize = static_cast<int>(message.size());
+    const int actualSize = lws_write(wsInstance, msg.data() + LWS_PRE, expectedSize, LWS_WRITE_TEXT);
 
-//    return expectedSize == actualSize;
-//}
+    return expectedSize == actualSize;
+}
 
 } // namespace
 
@@ -94,72 +116,78 @@ auto lwsCallback_v1(
         size_t len/*length*/)
 -> int
 {
-    std::cout << "LwsCallback reason: " << reasonToString(reason) << std:: endl;
-//    auto& callbackContext = getCallbackContext(wsInstance);
-//    auto eventHandler = callbackContext.getEventHandler();
-//    auto sessionId = getSessionId(wsInstance);
+    std::cout << "cli LwsCallback reason: " << reasonToString(reason) << std:: endl;
+    auto& callbackContext = getCallbackContext(wsInstance);
+    auto eventHandler = callbackContext.getEventHandler();
 
-//    switch(reason)
-//    {
-//    case LWS_CALLBACK_ESTABLISHED:
-//    {
-//        auto sessions = callbackContext.getSessions();
-//        sessions->add(std::make_shared<LwsSession>(sessionId, wsInstance));
-//        eventHandler->onConnect(sessionId);
-//        break;
-//    }
-//    case LWS_CALLBACK_SERVER_WRITEABLE:
-//    {
-//        auto sessions = callbackContext.getSessions();
-//        if (auto session = sessions->get(sessionId))
-//        {
-//            auto& messages = session->getMessages();
-//            if (!messages.empty() && !callbackContext.isStopping())
-//            {
-//                auto& message = messages.front();
-//                if (message.size() > MAX_MESSAGE_SIZE)
-//                {
-//                    eventHandler->onError(sessionId, "Message exceeds the maximum alowed size");
-//                }
+    switch(reason)
+    {
+    case LWS_CALLBACK_CLIENT_CONNECTION_ERROR:
+    {
+        auto errorMessage = std::string{"CLIENT_CONNECTION_ERROR: "};
+        errorMessage.append(in ? std::string{reinterpret_cast<const char *>(in), len} : "(null)");
 
-//                if (sendMessage(wsInstance, message))
-//                {
-//                    messages.pop();
-//                    if (!messages.empty())
-//                    {
-//                        lws_callback_on_writable(wsInstance);
-//                    }
-//                }
-//                else
-//                {
-//                    eventHandler->onError(sessionId, "Error writing data to socket");
-//                }
-//            }
-//        }
-//        else
-//        {
-//            // Never should be here
-//            eventHandler->onWarning(sessionId, "Referring to unknown or deleted session. "
-//                                               "Dropping connection for this session");
-//            return CLOSE_SESSION;
-//        }
-//        break;
-//    }
-//    case LWS_CALLBACK_RECEIVE:
-//    {
-//        eventHandler->onMessageReceive(sessionId, std::string{reinterpret_cast<const char *>(in), len});
-//        break;
-//    }
-//    case LWS_CALLBACK_CLOSED:
-//    {
-//        auto sessions = callbackContext.getSessions();
-//        sessions->remove(sessionId);
-//        eventHandler->onDisconnect(sessionId);
-//        break;
-//    }
-//    default:
-//        break;
-//    }
+        lwsl_err("%s\n", errorMessage.c_str());
+        eventHandler->onError(errorMessage);
+        break;
+    }
+    case LWS_CALLBACK_CLIENT_ESTABLISHED:
+    {
+        callbackContext.setSession(std::make_shared<LwsSession>(wsInstance));
+        eventHandler->onConnect();
+        break;
+    }
+    case LWS_CALLBACK_CLIENT_WRITEABLE:
+    {
+        if (auto session = callbackContext.getSession())
+        {
+            auto& messages = session->getMessages();
+            if (!messages.empty() && !callbackContext.isStopping())
+            {
+                auto& message = messages.front();
+                if (message.size() > MAX_MESSAGE_SIZE)
+                {
+                    eventHandler->onError("Message exceeds the maximum alowed size");
+                }
+
+                if (sendMessage(wsInstance, message))
+                {
+                    messages.pop();
+                    if (!messages.empty())
+                    {
+                        lws_callback_on_writable(wsInstance);
+                    }
+                }
+                else
+                {
+                    eventHandler->onError("Error writing data to socket");
+                }
+            }
+        }
+        else
+        {
+            // Never should be here
+            eventHandler->onWarning("Referring to unknown or deleted session. "
+                                    "Dropping connection for this session");
+            return CLOSE_SESSION;
+        }
+        break;
+    }
+    case LWS_CALLBACK_CLIENT_RECEIVE:
+    {
+        eventHandler->onMessageReceive(std::string{reinterpret_cast<const char *>(in), len});
+        break;
+    }
+    case LWS_CALLBACK_CLIENT_CLOSED:
+    {
+        callbackContext.resetSession();
+        eventHandler->onDisconnect();
+        break;
+    }
+    default:
+        break;
+    }
+
     return 0;
 }
 
