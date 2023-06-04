@@ -17,9 +17,8 @@ class Client : public IClient
 public:
     explicit Client(const ClientContext&);
 
+    // NOTE: the 'connect' member function blocks the thread
     void connect() override;
-    void disconnect() override;
-    auto isConnected() const -> bool override;
 
 private:
     LwsContext _lwsContext;

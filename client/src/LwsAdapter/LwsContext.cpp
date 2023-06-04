@@ -25,9 +25,26 @@ LwsContext::LwsContext(const ClientContext& context)
     setupConnectionInfo();
 }
 
+LwsContext::~LwsContext()
+{
+    _isStopping = true;
+    _callbackContext->setStopping();
+}
+
 void LwsContext::connect()
 {
-    _wsInstance = lws_client_connect_via_info(&_lwsConnectionInfo);
+    {
+        const std::lock_guard<std::mutex> guard(_mutex);
+        if (!_isConnected)
+        {
+            _wsInstance = lws_client_connect_via_info(&_lwsConnectionInfo);
+            _isConnected = true;
+        }
+        else
+        {
+            return;
+        }
+    }
 
     int n = 0;
     while (n >= 0 && !_isStopping)
@@ -35,12 +52,6 @@ void LwsContext::connect()
         n = lws_service(_lowLevelContext.get(), 0);
     }
     _isStopping = true;
-}
-
-void LwsContext::disconnect()
-{
-    _isStopping = true;
-    _callbackContext->setStopping();
 }
 
 void LwsContext::setupLowLeverContext()

@@ -20,9 +20,9 @@ public:
 
     virtual ~IClient() = default;
 
+public:
+    // NOTE: the 'connect' method can be implemented as blocking thread method
     virtual void connect() = 0;
-    virtual void disconnect() = 0;
-    virtual auto isConnected() const -> bool = 0;
 };
 
 } // namespace wspp::cli

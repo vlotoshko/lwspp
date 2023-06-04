@@ -27,7 +27,6 @@ public:
 public:
     // NOTE: the 'start' method can be implemented as blocking thread method
     virtual void start() = 0;
-    virtual void stop() = 0;
 };
 
 } // namespace wspp::srv

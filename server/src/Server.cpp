@@ -15,28 +15,28 @@ namespace wspp::srv
 namespace
 {
 
-std::map<int, Server*> registeredServers;
-std::mutex registeredServersMutex;
+std::map<int, std::function<void()>> stoppers;
+std::mutex registeredStoppersMutex;
 
 void signalHandler(int signum)
 {
-    const std::lock_guard<std::mutex> lock{registeredServersMutex};
-    for (auto server : registeredServers)
+    const std::lock_guard<std::mutex> lock{registeredStoppersMutex};
+    for (auto stopper : stoppers)
     {
-        server.second->stop();
+        stopper.second();
     }
     exit(signum);
 }
 
-void registerSingnalHandling(int port, Server* server)
+void registerSingnalHandling(int port, std::function<void()>&& stopper)
 {
-    const std::lock_guard<std::mutex> lock{registeredServersMutex};
+    const std::lock_guard<std::mutex> lock{registeredStoppersMutex};
     signal(SIGINT, signalHandler);
 
-    auto it = registeredServers.find(port);
-    if (it == registeredServers.end())
+    auto it = stoppers.find(port);
+    if (it == stoppers.end())
     {
-        registeredServers[port] = server;
+        stoppers[port] = std::move(stopper);
     }
     else
     {
@@ -46,8 +46,8 @@ void registerSingnalHandling(int port, Server* server)
 
 void unregisterSingnalHandling(int port)
 {
-    const std::lock_guard<std::mutex> lock{registeredServersMutex};
-    registeredServers.erase(port);
+    const std::lock_guard<std::mutex> lock{registeredStoppersMutex};
+    stoppers.erase(port);
 }
 
 } // namespace
@@ -55,22 +55,7 @@ void unregisterSingnalHandling(int port)
 Server::Server(const ServerContext& context)
     : _lwsContext(context)
 {
-    registerSingnalHandling(_lwsContext.getPort(), this);
-}
-
-void Server::start()
-{
-    _lwsContext.startListening();
-}
-
-void Server::stop()
-{
-    stop_();
-}
-
-void Server::stop_()
-{
-    _lwsContext.stopListening();
+    registerSingnalHandling(_lwsContext.getPort(), [this] { stop_(); });
 }
 
 Server::~Server()
@@ -78,5 +63,16 @@ Server::~Server()
     stop_();
     unregisterSingnalHandling(_lwsContext.getPort());
 }
+
+void Server::start()
+{
+    _lwsContext.startListening();
+}
+
+void Server::stop_()
+{
+    _lwsContext.stopListening();
+}
+
 
 } // namespace wspp::srv

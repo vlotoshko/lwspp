@@ -27,7 +27,6 @@ public:
 public:
     // NOTE: the 'start' member function blocks the thread
     void start() override;
-    void stop() override;
 
 private:
     void stop_();

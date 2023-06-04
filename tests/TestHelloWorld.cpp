@@ -143,8 +143,8 @@ SCENARIO( "Clients sends 'hello world' to the server", "[hello_world]" )
                 const auto timeout = 100U;
                 std::this_thread::sleep_for(std::chrono::milliseconds(timeout));
 
-                client->disconnect();
-                server->stop();
+                client.reset();
+                server.reset();
 
                 asyncClientStart.wait();
                 asyncServerStart.wait();

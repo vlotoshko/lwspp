@@ -5,6 +5,8 @@
 
 #pragma once
 
+#include <mutex>
+
 #include "websocketpp/server/Types.hpp"
 #include "LwsAdapter/LwsTypesFwd.hpp"
 #include "TypesFwd.hpp"
@@ -28,7 +30,9 @@ private:
     LwsDataHolderPtr _dataHolder;
     LowLevelContextPtr _lowLevelContext;
 
+    bool _isStarted = false;
     bool _stopListening = false;
+    std::mutex _mutex;
 };
 
 } // namespace wspp::srv

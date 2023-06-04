@@ -85,6 +85,18 @@ LwsContext::LwsContext(const ServerContext& context)
 
 void LwsContext::startListening()
 {
+    {
+        const std::lock_guard<std::mutex> guard(_mutex);
+        if (!_isStarted)
+        {
+            _isStarted = true;
+        }
+        else
+        {
+            return;
+        }
+    }
+
     int n = 0;
     while (n >= 0 && !_stopListening)
     {
