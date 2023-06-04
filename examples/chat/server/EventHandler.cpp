@@ -3,11 +3,11 @@
  * @date Feb, 2023
  */
 
-#include "websocketpp/server/Consts.hpp"
+#include "easywebsocket/server/Consts.hpp"
 
 #include "EventHandler.hpp"
 
-namespace wspp::chat
+namespace ews::chat
 {
 
 namespace
@@ -121,13 +121,13 @@ auto getUserNameFromHello(const std::string& message) -> std::string
 EventHandler::EventHandler() : _chatMessageSender(srv::IMessageSenderPtr{})
 {}
 
-void EventHandler::onConnect(wspp::srv::SessionId sessionId) noexcept
+void EventHandler::onConnect(ews::srv::SessionId sessionId) noexcept
 {
     const User user = {sessionId, UNKNOWN_USERN_NAME};
     _users[sessionId] = user;
 }
 
-void EventHandler::onDisconnect(wspp::srv::SessionId sessionId) noexcept
+void EventHandler::onDisconnect(ews::srv::SessionId sessionId) noexcept
 {
     _users.erase(sessionId);
     _chatMessageSender.updateUsers(_users);
@@ -208,4 +208,4 @@ void EventHandler::processUserMessage_(srv::SessionId sessionId, const std::stri
     _history.emplace_back(std::move(message));
 }
 
-} // namespace wspp::chat
+} // namespace ews::chat

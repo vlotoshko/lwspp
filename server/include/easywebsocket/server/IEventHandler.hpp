@@ -7,10 +7,10 @@
 
 #include <string>
 
-#include "websocketpp/server/Types.hpp"
-#include "websocketpp/server/TypesFwd.hpp"
+#include "easywebsocket/server/Types.hpp"
+#include "easywebsocket/server/TypesFwd.hpp"
 
-namespace wspp::srv
+namespace ews::srv
 {
 
 /**
@@ -43,4 +43,4 @@ public:
     virtual void setMessageSender(IMessageSenderPtr) = 0;
 };
 
-} // namespace wspp::srv
+} // namespace ews::srv

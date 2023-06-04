@@ -5,11 +5,11 @@
 
 #pragma once
 
-namespace wspp::srv
+namespace ews::srv
 {
 
 // TODO: consider strong types using
 using Port = int;
 using SessionId = int;
 
-} // namespace wspp::srv
+} // namespace ews::srv

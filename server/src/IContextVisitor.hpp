@@ -7,7 +7,7 @@
 
 #include "TypesFwd.hpp"
 
-namespace wspp::srv
+namespace ews::srv
 {
 
 class IContextVisitor
@@ -26,4 +26,4 @@ public:
     virtual void VisitServerContext(const ServerContext&) = 0;
 };
 
-} // namespace wspp::srv
+} // namespace ews::srv

@@ -7,10 +7,10 @@
 
 #include <vector>
 
-#include "websocketpp/server/Types.hpp"
+#include "easywebsocket/server/Types.hpp"
 #include "LwsAdapter/LwsTypesFwd.hpp"
 
-namespace wspp::srv
+namespace ews::srv
 {
 
 class ILwsSessions
@@ -32,4 +32,4 @@ public:
     virtual auto getAllSessions() -> std::vector<ILwsSessionPtr> = 0;
 };
 
-} // namespace wspp::srv
+} // namespace ews::srv

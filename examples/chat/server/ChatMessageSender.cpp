@@ -3,11 +3,11 @@
  * @date March, 2023
  */
 
-#include "websocketpp/server/IMessageSender.hpp"
+#include "easywebsocket/server/IMessageSender.hpp"
 
 #include "ChatMessageSender.hpp"
 
-namespace wspp::chat
+namespace ews::chat
 {
 
 auto isPrivateMessage(const User& user, const Message& message) -> bool
@@ -70,7 +70,7 @@ void ChatMessageSender::sendChatHistory(const User& user, const std::vector<Mess
     }
 }
 
-void wspp::chat::ChatMessageSender::updateUsers(const std::map<srv::SessionId, User>& users)
+void ews::chat::ChatMessageSender::updateUsers(const std::map<srv::SessionId, User>& users)
 {
     // Message format: "USRUPD:User1,User2,User3,"
     if (_messageSender != nullptr)
@@ -84,4 +84,4 @@ void wspp::chat::ChatMessageSender::updateUsers(const std::map<srv::SessionId, U
     }
 }
 
-} // namespace wspp::chat
+} // namespace ews::chat

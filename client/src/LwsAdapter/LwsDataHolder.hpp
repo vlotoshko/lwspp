@@ -5,11 +5,11 @@
 
 #pragma once
 
-#include "websocketpp/client/Types.hpp"
+#include "easywebsocket/client/Types.hpp"
 #include "LwsAdapter/LwsTypesFwd.hpp"
 #include "TypesFwd.hpp"
 
-namespace wspp::cli
+namespace ews::cli
 {
 
 /**
@@ -25,4 +25,4 @@ struct LwsDataHolder
     LwsProtocols protocols;
 };
 
-} // namespace wspp::cli
+} // namespace ews::cli

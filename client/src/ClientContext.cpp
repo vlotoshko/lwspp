@@ -6,7 +6,7 @@
 #include "IContextVisitor.hpp"
 #include "ClientContext.hpp"
 
-namespace wspp::cli
+namespace ews::cli
 {
 
 void ClientContext::accept(IContextVisitor& visitor) const
@@ -14,4 +14,4 @@ void ClientContext::accept(IContextVisitor& visitor) const
     visitor.VisitClientContext(*this);
 }
 
-} // namespace wspp::cli
+} // namespace ews::cli

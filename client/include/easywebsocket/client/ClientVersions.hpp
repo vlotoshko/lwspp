@@ -5,7 +5,7 @@
 
 #pragma once
 
-namespace wspp::cli
+namespace ews::cli
 {
 
 /**
@@ -26,4 +26,4 @@ enum class ClientVersion
     Undefined,
 };
 
-} // namespace wspp::cli
+} // namespace ews::cli

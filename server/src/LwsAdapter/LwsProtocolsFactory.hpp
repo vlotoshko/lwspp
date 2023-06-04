@@ -5,12 +5,12 @@
 
 #pragma once
 
-#include "websocketpp/server/ServerVersions.hpp"
+#include "easywebsocket/server/ServerVersions.hpp"
 #include "LwsAdapter/LwsTypesFwd.hpp"
 
-namespace wspp::srv
+namespace ews::srv
 {
 
 auto createLwsProtocols(ServerVersion) -> LwsProtocols;
 
-} // namespace wspp::srv
+} // namespace ews::srv

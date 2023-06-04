@@ -5,7 +5,7 @@
 
 #pragma once
 
-namespace wspp::srv
+namespace ews::srv
 {
 
 /**
@@ -25,4 +25,4 @@ enum class ServerVersion
     Undefined,
 };
 
-} // namespace wspp::srv
+} // namespace ews::srv

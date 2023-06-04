@@ -7,7 +7,7 @@
 
 #include "TypesFwd.hpp"
 
-namespace wspp::srv
+namespace ews::srv
 {
 
 class IContextVisitorAcceptor
@@ -26,4 +26,4 @@ public:
     virtual void accept(IContextVisitor&) const = 0;
 };
 
-} // namespace wspp::srv
+} // namespace ews::srv

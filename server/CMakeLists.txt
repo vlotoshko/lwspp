@@ -7,14 +7,15 @@ project(
 )
 
 set(${PROJECT_NAME}_SRC_FILES
-    include/websocketpp/server/IEventHandler.hpp
-    include/websocketpp/server/IMessageSender.hpp
-    include/websocketpp/server/IServer.hpp
-    include/websocketpp/server/ServerContextBuilder.hpp
-    include/websocketpp/server/ServerFactory.hpp
-    include/websocketpp/server/ServerVersions.hpp
-    include/websocketpp/server/Types.hpp
-    include/websocketpp/server/TypesFwd.hpp
+    include/easywebsocket/server/Consts.hpp
+    include/easywebsocket/server/IEventHandler.hpp
+    include/easywebsocket/server/IMessageSender.hpp
+    include/easywebsocket/server/IServer.hpp
+    include/easywebsocket/server/ServerContextBuilder.hpp
+    include/easywebsocket/server/ServerFactory.hpp
+    include/easywebsocket/server/ServerVersions.hpp
+    include/easywebsocket/server/Types.hpp
+    include/easywebsocket/server/TypesFwd.hpp
 
     src/LwsAdapter/ILwsCallbackContext.hpp
     src/LwsAdapter/ILwsCallbackNotifier.hpp

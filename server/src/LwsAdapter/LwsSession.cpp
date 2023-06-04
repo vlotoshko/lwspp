@@ -6,7 +6,7 @@
 #include "Consts.hpp"
 #include "LwsAdapter/LwsSession.hpp"
 
-namespace wspp::srv
+namespace ews::srv
 {
 namespace
 {
@@ -63,4 +63,4 @@ auto LwsSession::getMessages() -> std::queue<std::string>&
     return _messagesToSend;
 }
 
-} // namespace wspp::srv
+} // namespace ews::srv

@@ -7,7 +7,7 @@
 
 #include <memory>
 
-namespace wspp::cli
+namespace ews::cli
 {
 
 class IClient;
@@ -22,4 +22,4 @@ using IEventHandlerPtr = std::shared_ptr<IEventHandler>;
 class IMessageSender;
 using IMessageSenderPtr = std::shared_ptr<IMessageSender>;
 
-} // namespace wspp::cli
+} // namespace ews::cli

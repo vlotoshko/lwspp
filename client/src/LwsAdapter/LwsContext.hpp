@@ -10,7 +10,7 @@
 #include "LwsAdapter/LwsTypesFwd.hpp"
 #include "TypesFwd.hpp"
 
-namespace wspp::cli
+namespace ews::cli
 {
 
 class LwsContext
@@ -44,4 +44,4 @@ private:
     std::mutex _mutex;
 };
 
-} // namespace wspp::cli
+} // namespace ews::cli

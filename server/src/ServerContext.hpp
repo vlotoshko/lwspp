@@ -8,12 +8,12 @@
 #include <functional>
 #include <string>
 
-#include "websocketpp/server/ServerVersions.hpp"
-#include "websocketpp/server/TypesFwd.hpp"
+#include "easywebsocket/server/ServerVersions.hpp"
+#include "easywebsocket/server/TypesFwd.hpp"
 #include "Consts.hpp"
 #include "IServerContext.hpp"
 
-namespace wspp::srv
+namespace ews::srv
 {
 
 /**
@@ -30,4 +30,4 @@ public:
     IEventHandlerPtr eventHandler;
 };
 
-} // namespace wspp::srv
+} // namespace ews::srv

@@ -6,7 +6,7 @@
 #include "IContextVisitor.hpp"
 #include "ServerContext.hpp"
 
-namespace wspp::srv
+namespace ews::srv
 {
 
 void ServerContext::accept(IContextVisitor& visitor) const
@@ -15,4 +15,4 @@ void ServerContext::accept(IContextVisitor& visitor) const
 }
 
 
-} // namespace wspp::srv
+} // namespace ews::srv

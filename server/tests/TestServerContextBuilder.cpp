@@ -5,13 +5,13 @@
 
 #include "catch2/catch.hpp"
 
-#include "websocketpp/server/IEventHandler.hpp"
-#include "websocketpp/server/ServerContextBuilder.hpp"
+#include "easywebsocket/server/IEventHandler.hpp"
+#include "easywebsocket/server/ServerContextBuilder.hpp"
 #include "IContextVisitor.hpp"
 #include "ServerContext.hpp"
 
 // NOLINTBEGIN (readability-function-cognitive-complexity)
-namespace wspp::tests
+namespace ews::tests
 {
 using namespace srv;
 
@@ -147,5 +147,5 @@ SCENARIO( "ServerContext construction", "[server_context_parameters]" )
     } // GIVEN
 } // SCENARIO
 
-} // namespace wspp::tests
+} // namespace ews::tests
 // NOLINTEND (readability-function-cognitive-complexity)

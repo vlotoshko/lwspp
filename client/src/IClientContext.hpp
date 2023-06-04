@@ -7,7 +7,7 @@
 
 #include "IContextVisitorAcceptor.hpp"
 
-namespace wspp::cli
+namespace ews::cli
 {
 
 class IClientContext : public IContextVisitorAcceptor
@@ -23,4 +23,4 @@ public:
     auto operator=(IClientContext&&) noexcept -> IClientContext& = default;
 };
 
-} // namespace wspp::cli
+} // namespace ews::cli

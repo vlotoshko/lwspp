@@ -7,9 +7,9 @@
 
 #include <string>
 
-#include "websocketpp/server/Types.hpp"
+#include "easywebsocket/server/Types.hpp"
 
-namespace wspp::srv
+namespace ews::srv
 {
 
 /**
@@ -33,4 +33,4 @@ public:
     virtual void sendMessage(const std::string&) = 0;
 };
 
-} // namespace wspp::srv
+} // namespace ews::srv

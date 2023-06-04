@@ -7,15 +7,15 @@ project(
 )
 
 set(${PROJECT_NAME}_SRC_FILES
-    include/websocketpp/client/ClientContextBuilder.hpp
-    include/websocketpp/client/ClientFactory.hpp
-    include/websocketpp/client/ClientVersions.hpp
-    include/websocketpp/client/Consts.hpp
-    include/websocketpp/client/IClient.hpp
-    include/websocketpp/client/IEventHandler.hpp
-    include/websocketpp/client/IMessageSender.hpp
-    include/websocketpp/client/Types.hpp
-    include/websocketpp/client/TypesFwd.hpp
+    include/easywebsocket/client/ClientContextBuilder.hpp
+    include/easywebsocket/client/ClientFactory.hpp
+    include/easywebsocket/client/ClientVersions.hpp
+    include/easywebsocket/client/Consts.hpp
+    include/easywebsocket/client/IClient.hpp
+    include/easywebsocket/client/IEventHandler.hpp
+    include/easywebsocket/client/IMessageSender.hpp
+    include/easywebsocket/client/Types.hpp
+    include/easywebsocket/client/TypesFwd.hpp
 
     src/LwsAdapter/ILwsCallbackContext.hpp
     src/LwsAdapter/ILwsSession.hpp
@@ -41,6 +41,7 @@ set(${PROJECT_NAME}_SRC_FILES
     src/ClientContext.hpp
     src/ClientContextBuilder.cpp
     src/ClientFactory.cpp
+    src/Consts.hpp
     src/IClientContext.hpp
     src/IContextVisitor.hpp
     src/IContextVisitorAcceptor.hpp

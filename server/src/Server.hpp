@@ -5,11 +5,11 @@
 
 #pragma once
 
-#include "websocketpp/server/IServer.hpp"
+#include "easywebsocket/server/IServer.hpp"
 #include "LwsAdapter/LwsContext.hpp"
 #include "TypesFwd.hpp"
 
-namespace wspp::srv
+namespace ews::srv
 {
 
 class Server : public IServer
@@ -35,4 +35,4 @@ private:
     LwsContext _lwsContext;
 };
 
-} // namespace wspp::srv
+} // namespace ews::srv

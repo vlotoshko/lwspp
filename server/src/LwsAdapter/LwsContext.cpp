@@ -5,7 +5,7 @@
 
 #include <libwebsockets.h>
 
-#include "websocketpp/server/IEventHandler.hpp"
+#include "easywebsocket/server/IEventHandler.hpp"
 #include "LwsAdapter/ILwsCallbackNotifier.hpp"
 #include "LwsAdapter/ILwsSession.hpp"
 #include "LwsAdapter/LwsCallbackContext.hpp"
@@ -16,7 +16,7 @@
 #include "LwsAdapter/LwsSessions.hpp"
 #include "ServerContext.hpp"
 
-namespace wspp::srv
+namespace ews::srv
 {
 
 namespace
@@ -116,4 +116,4 @@ auto LwsContext::getPort() const -> Port
     return _dataHolder->port;
 }
 
-} // namespace wspp::srv
+} // namespace ews::srv

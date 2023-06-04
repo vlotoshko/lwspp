@@ -5,7 +5,7 @@
 
 #pragma once
 
-namespace wspp::cli
+namespace ews::cli
 {
 
 class IClient
@@ -25,4 +25,4 @@ public:
     virtual void connect() = 0;
 };
 
-} // namespace wspp::cli
+} // namespace ews::cli

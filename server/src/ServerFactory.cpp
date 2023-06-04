@@ -3,14 +3,14 @@
  * @date Jan, 2023
  */
 
-#include "websocketpp/server/ServerFactory.hpp"
+#include "easywebsocket/server/ServerFactory.hpp"
 
 #include "IContextVisitor.hpp"
 #include "IContextVisitorAcceptor.hpp"
 #include "IServerContext.hpp"
 #include "Server.hpp"
 
-namespace wspp::srv
+namespace ews::srv
 {
 
 class ServerFactory : private IContextVisitor
@@ -37,4 +37,4 @@ auto createServer(const IServerContext& ctx) -> IServerPtr
     return ServerFactory{}.createServer(ctx);
 }
 
-} // namespace wspp::srv
+} // namespace ews::srv

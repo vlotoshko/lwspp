@@ -8,7 +8,7 @@
 #include "LwsAdapter/ILwsSessions.hpp"
 #include "LwsAdapter/LwsMessageSender.hpp"
 
-namespace wspp::srv
+namespace ews::srv
 {
 
 LwsMessageSender::LwsMessageSender(ILwsSessionsPtr s, ILwsCallbackNotifierPtr n)
@@ -41,4 +41,4 @@ void LwsMessageSender::sendMessage(const std::string& message)
     _notifier->sendPendingMessages();
 }
 
-} // namespace wspp::srv
+} // namespace ews::srv

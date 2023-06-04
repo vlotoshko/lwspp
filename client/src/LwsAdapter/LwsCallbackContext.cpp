@@ -5,12 +5,12 @@
 
 #include <stdexcept>
 
-#include "websocketpp/client/IEventHandler.hpp"
+#include "easywebsocket/client/IEventHandler.hpp"
 
 #include "LwsAdapter/LwsCallbackContext.hpp"
 #include "LwsAdapter/LwsMessageSender.hpp"
 
-namespace wspp::cli
+namespace ews::cli
 {
 
 LwsCallbackContext::LwsCallbackContext(IEventHandlerPtr e)
@@ -52,4 +52,4 @@ void LwsCallbackContext::resetSession()
     _session.reset();
 }
 
-} // namespace wspp::cli
+} // namespace ews::cli

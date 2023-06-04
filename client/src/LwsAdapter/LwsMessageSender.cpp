@@ -6,7 +6,7 @@
 #include "LwsAdapter/ILwsSession.hpp"
 #include "LwsAdapter/LwsMessageSender.hpp"
 
-namespace wspp::cli
+namespace ews::cli
 {
 
 LwsMessageSender::LwsMessageSender(const ILwsSessionPtr& s)
@@ -22,4 +22,4 @@ void LwsMessageSender::sendMessage(const std::string& message)
     }
 }
 
-} // namespace wspp::cli
+} // namespace ews::cli

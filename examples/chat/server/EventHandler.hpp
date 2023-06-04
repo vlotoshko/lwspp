@@ -8,12 +8,12 @@
 #include <map>
 #include <vector>
 
-#include "websocketpp/server/IEventHandler.hpp"
+#include "easywebsocket/server/IEventHandler.hpp"
 
 #include "ChatMessageSender.hpp"
 #include "Types.hpp"
 
-namespace wspp::chat
+namespace ews::chat
 {
 
 class EventHandler : public srv::IEventHandler
@@ -40,4 +40,4 @@ private:
     std::map<srv::SessionId, User> _users;
 };
 
-} // namespace wspp::chat
+} // namespace ews::chat

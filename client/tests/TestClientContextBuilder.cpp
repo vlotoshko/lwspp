@@ -5,13 +5,13 @@
 
 #include "catch2/catch.hpp"
 
-#include "websocketpp/client/IEventHandler.hpp"
-#include "websocketpp/client/ClientContextBuilder.hpp"
+#include "easywebsocket/client/IEventHandler.hpp"
+#include "easywebsocket/client/ClientContextBuilder.hpp"
 #include "IContextVisitor.hpp"
 #include "ClientContext.hpp"
 
 // NOLINTBEGIN (readability-function-cognitive-complexity)
-namespace wspp::tests
+namespace ews::tests
 {
 using namespace cli;
 
@@ -149,5 +149,5 @@ SCENARIO( "ClientContext construction", "[client_context_parameters]" )
     } // GIVEN
 } // SCENARIO
 
-} // namespace wspp::tests
+} // namespace ews::tests
 // NOLINTEND (readability-function-cognitive-complexity)

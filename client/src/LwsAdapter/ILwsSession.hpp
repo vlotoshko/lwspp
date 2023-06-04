@@ -10,7 +10,7 @@
 
 #include "LwsAdapter/LwsTypesFwd.hpp"
 
-namespace wspp::cli
+namespace ews::cli
 {
 
 class ILwsSession
@@ -32,4 +32,4 @@ public:
     virtual auto getMessages() -> std::queue<std::string>& = 0;
 };
 
-} // namespace wspp::cli
+} // namespace ews::cli

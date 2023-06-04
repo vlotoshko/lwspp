@@ -7,7 +7,7 @@
 
 #include "LwsAdapter/ILwsCallbackContext.hpp"
 
-namespace wspp::srv
+namespace ews::srv
 {
 
 class LwsCallbackContext : public ILwsCallbackContext
@@ -28,4 +28,4 @@ private:
     bool _isStopping = false;
 };
 
-} // namespace wspp::srv
+} // namespace ews::srv

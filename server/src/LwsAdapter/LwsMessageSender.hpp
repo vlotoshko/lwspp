@@ -5,11 +5,11 @@
 
 #pragma once
 
-#include "websocketpp/server/IMessageSender.hpp"
+#include "easywebsocket/server/IMessageSender.hpp"
 
 #include "LwsAdapter/LwsTypesFwd.hpp"
 
-namespace wspp::srv
+namespace ews::srv
 {
 
 class LwsMessageSender : public IMessageSender
@@ -25,4 +25,4 @@ private:
     ILwsCallbackNotifierPtr _notifier;
 };
 
-} // namespace wspp::srv
+} // namespace ews::srv

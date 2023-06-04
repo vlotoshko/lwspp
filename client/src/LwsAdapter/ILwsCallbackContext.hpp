@@ -5,10 +5,10 @@
 
 #pragma once
 
-#include "websocketpp/client/TypesFwd.hpp"
+#include "easywebsocket/client/TypesFwd.hpp"
 #include "LwsAdapter/LwsTypesFwd.hpp"
 
-namespace wspp::cli
+namespace ews::cli
 {
 
 class ILwsCallbackContext
@@ -34,4 +34,4 @@ public:
     virtual auto getEventHandler() -> IEventHandlerPtr = 0;
 };
 
-} // namespace wspp::cli
+} // namespace ews::cli

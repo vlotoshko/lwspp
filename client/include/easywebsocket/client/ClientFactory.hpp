@@ -5,9 +5,9 @@
 
 #pragma once
 
-#include "websocketpp/client/TypesFwd.hpp"
+#include "easywebsocket/client/TypesFwd.hpp"
 
-namespace wspp::cli
+namespace ews::cli
 {
 
 /**
@@ -17,4 +17,4 @@ namespace wspp::cli
  */
 auto createClient(const IClientContext&) -> IClientPtr;
 
-} // namespace wspp::cli
+} // namespace ews::cli

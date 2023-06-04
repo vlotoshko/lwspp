@@ -10,7 +10,7 @@
 #include "Server.hpp"
 #include "ServerContext.hpp"
 
-namespace wspp::srv
+namespace ews::srv
 {
 namespace
 {
@@ -75,4 +75,4 @@ void Server::stop_()
 }
 
 
-} // namespace wspp::srv
+} // namespace ews::srv

@@ -5,9 +5,9 @@
 
 #pragma once
 
-#include "websocketpp/server/TypesFwd.hpp"
+#include "easywebsocket/server/TypesFwd.hpp"
 
-namespace wspp::srv
+namespace ews::srv
 {
 
 /**
@@ -17,4 +17,4 @@ namespace wspp::srv
  */
 auto createServer(const IServerContext& c) -> IServerPtr;
 
-} // namespace wspp::srv
+} // namespace ews::srv

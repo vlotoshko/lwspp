@@ -5,12 +5,12 @@
 
 #pragma once
 
-#include "websocketpp/client/Types.hpp"
+#include "easywebsocket/client/Types.hpp"
 
-namespace wspp::cli
+namespace ews::cli
 {
 
 const SessionId UNDEFINED_SESSION_ID = static_cast<int>(0U - 1);
 const SessionId ALL_SESSIONS = static_cast<int>(0U - 2);
 
-} // namespace wspp::cli
+} // namespace ews::cli

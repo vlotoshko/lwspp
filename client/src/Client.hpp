@@ -5,11 +5,11 @@
 
 #pragma once
 
-#include "websocketpp/client/IClient.hpp"
+#include "easywebsocket/client/IClient.hpp"
 #include "LwsAdapter/LwsContext.hpp"
 #include "TypesFwd.hpp"
 
-namespace wspp::cli
+namespace ews::cli
 {
 
 class Client : public IClient
@@ -24,4 +24,4 @@ private:
     LwsContext _lwsContext;
 };
 
-} // namespace wspp::cli
+} // namespace ews::cli

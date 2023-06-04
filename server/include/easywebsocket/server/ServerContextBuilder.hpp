@@ -5,11 +5,11 @@
 
 #pragma once
 
-#include "websocketpp/server/ServerVersions.hpp"
-#include "websocketpp/server/Types.hpp"
-#include "websocketpp/server/TypesFwd.hpp"
+#include "easywebsocket/server/ServerVersions.hpp"
+#include "easywebsocket/server/Types.hpp"
+#include "easywebsocket/server/TypesFwd.hpp"
 
-namespace wspp::srv
+namespace ews::srv
 {
 
 class ServerContext;
@@ -46,4 +46,4 @@ private:
     std::unique_ptr<ServerContext> _serverContext;
 };
 
-} // namespace wspp::srv
+} // namespace ews::srv

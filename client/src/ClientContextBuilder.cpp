@@ -5,10 +5,10 @@
 
 #include <stdexcept>
 
-#include "websocketpp/client/ClientContextBuilder.hpp"
+#include "easywebsocket/client/ClientContextBuilder.hpp"
 #include "ClientContext.hpp"
 
-namespace wspp::cli
+namespace ews::cli
 {
 
 namespace
@@ -86,4 +86,4 @@ auto ClientContextBuilder::setVersion(ClientVersion version) -> ClientContextBui
     return *this;
 }
 
-} // namespace wspp::cli
+} // namespace ews::cli

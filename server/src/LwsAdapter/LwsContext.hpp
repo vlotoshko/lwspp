@@ -7,11 +7,11 @@
 
 #include <mutex>
 
-#include "websocketpp/server/Types.hpp"
+#include "easywebsocket/server/Types.hpp"
 #include "LwsAdapter/LwsTypesFwd.hpp"
 #include "TypesFwd.hpp"
 
-namespace wspp::srv
+namespace ews::srv
 {
 
 class LwsContext
@@ -35,4 +35,4 @@ private:
     std::mutex _mutex;
 };
 
-} // namespace wspp::srv
+} // namespace ews::srv

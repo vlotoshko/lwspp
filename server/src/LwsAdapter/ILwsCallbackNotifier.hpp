@@ -7,7 +7,7 @@
 
 #include "LwsAdapter/LwsTypesFwd.hpp"
 
-namespace wspp::srv
+namespace ews::srv
 {
 
 class ILwsCallbackNotifier
@@ -27,4 +27,4 @@ public:
     virtual void sendPendingMessages() = 0;
 };
 
-} // namespace wspp::srv
+} // namespace ews::srv

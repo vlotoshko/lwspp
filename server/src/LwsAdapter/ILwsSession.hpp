@@ -8,10 +8,10 @@
 #include <queue>
 #include <string>
 
-#include "websocketpp/server/Types.hpp"
+#include "easywebsocket/server/Types.hpp"
 #include "LwsAdapter/LwsTypesFwd.hpp"
 
-namespace wspp::srv
+namespace ews::srv
 {
 
 class ILwsSession
@@ -34,4 +34,4 @@ public:
     virtual auto getMessages() -> std::queue<std::string>& = 0;
 };
 
-} // namespace wspp::srv
+} // namespace ews::srv

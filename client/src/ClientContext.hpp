@@ -7,11 +7,11 @@
 
 #include <string>
 
-#include "websocketpp/client/TypesFwd.hpp"
+#include "easywebsocket/client/TypesFwd.hpp"
 #include "Consts.hpp"
 #include "IClientContext.hpp"
 
-namespace wspp::cli
+namespace ews::cli
 {
 
 class ClientContext : public IClientContext
@@ -26,4 +26,4 @@ public:
     IEventHandlerPtr eventHandler;
 };
 
-} // namespace wspp::cli
+} // namespace ews::cli

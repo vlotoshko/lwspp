@@ -7,7 +7,7 @@
 #include "LwsAdapter/LwsProtocolsFactory.hpp"
 #include "ClientContext.hpp"
 
-namespace wspp::cli
+namespace ews::cli
 {
 
 LwsDataHolder::LwsDataHolder(const ClientContext& context)
@@ -17,4 +17,4 @@ LwsDataHolder::LwsDataHolder(const ClientContext& context)
     , protocols(createLwsProtocols(context.clientVersion))
 {}
 
-} // namespace wspp::cli
+} // namespace ews::cli

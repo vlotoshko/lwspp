@@ -5,7 +5,7 @@
 
 #pragma once
 
-namespace wspp::cli
+namespace ews::cli
 {
 
 class IContextVisitor;
@@ -13,4 +13,4 @@ class IContextVisitorAcceptor;
 
 class ClientContext;
 
-} // namespace wspp::cli
+} // namespace ews::cli

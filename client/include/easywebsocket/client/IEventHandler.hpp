@@ -7,9 +7,9 @@
 
 #include <string>
 
-#include "websocketpp/client/TypesFwd.hpp"
+#include "easywebsocket/client/TypesFwd.hpp"
 
-namespace wspp::cli
+namespace ews::cli
 {
 
 /**
@@ -42,4 +42,4 @@ public:
     virtual void setMessageSender(IMessageSenderPtr) = 0;
 };
 
-} // namespace wspp::cli
+} // namespace ews::cli

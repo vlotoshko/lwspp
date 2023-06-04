@@ -5,13 +5,13 @@
 
 #include <iostream>
 
-#include "websocketpp/client/IEventHandler.hpp"
+#include "easywebsocket/client/IEventHandler.hpp"
 #include "LwsAdapter/ILwsCallbackContext.hpp"
 #include "LwsAdapter/LwsCallback.hpp"
 #include "LwsAdapter/LwsSession.hpp"
 #include "Consts.hpp"
 
-namespace wspp::cli
+namespace ews::cli
 {
 namespace
 {
@@ -191,4 +191,4 @@ auto lwsCallback_v1(
     return 0;
 }
 
-} // namespace wspp::cli
+} // namespace ews::cli

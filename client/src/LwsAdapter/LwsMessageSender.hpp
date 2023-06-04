@@ -5,11 +5,11 @@
 
 #pragma once
 
-#include "websocketpp/client/IMessageSender.hpp"
+#include "easywebsocket/client/IMessageSender.hpp"
 
 #include "LwsAdapter/LwsTypesFwd.hpp"
 
-namespace wspp::cli
+namespace ews::cli
 {
 
 class LwsMessageSender : public IMessageSender
@@ -23,4 +23,4 @@ private:
     ILwsSessionWeak _session;
 };
 
-} // namespace wspp::cli
+} // namespace ews::cli

@@ -5,11 +5,11 @@
 
 #pragma once
 
-namespace wspp::srv
+namespace ews::srv
 {
 
 class IContextVisitor;
 class IContextVisitorAcceptor;
 class ServerContext;
 
-} // namespace wspp::srv
+} // namespace ews::srv

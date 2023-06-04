@@ -8,10 +8,10 @@
 #include <map>
 #include <mutex>
 
-#include "websocketpp/server/Types.hpp"
+#include "easywebsocket/server/Types.hpp"
 #include "LwsAdapter/ILwsSessions.hpp"
 
-namespace wspp::srv
+namespace ews::srv
 {
 
 class LwsSessions : public ILwsSessions
@@ -29,4 +29,4 @@ private:
     bool _cacheExpired = true;
 };
 
-} // namespace wspp::srv
+} // namespace ews::srv

@@ -7,10 +7,10 @@
 
 #include <string>
 
-#include "websocketpp/server/Consts.hpp"
-#include "websocketpp/server/Types.hpp"
+#include "easywebsocket/server/Consts.hpp"
+#include "easywebsocket/server/Types.hpp"
 
-namespace wspp::chat
+namespace ews::chat
 {
 
 struct User
@@ -26,4 +26,4 @@ struct Message
     std::string text;
 };
 
-} // namespace wspp::chat
+} // namespace ews::chat

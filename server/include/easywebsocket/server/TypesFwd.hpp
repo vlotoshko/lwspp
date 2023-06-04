@@ -7,7 +7,7 @@
 
 #include <memory>
 
-namespace wspp::srv
+namespace ews::srv
 {
 
 class IEventHandler;
@@ -22,4 +22,4 @@ using IServerPtr = std::shared_ptr<IServer>;
 class IServerContext;
 using IServerContextPtr = std::shared_ptr<IServerContext>;
 
-} // namespace wspp::srv
+} // namespace ews::srv

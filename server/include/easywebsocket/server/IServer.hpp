@@ -5,7 +5,7 @@
 
 #pragma once
 
-namespace wspp::srv
+namespace ews::srv
 {
 
 /**
@@ -29,4 +29,4 @@ public:
     virtual void start() = 0;
 };
 
-} // namespace wspp::srv
+} // namespace ews::srv

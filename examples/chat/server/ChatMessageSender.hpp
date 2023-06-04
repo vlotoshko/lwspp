@@ -9,11 +9,11 @@
 #include <string>
 #include <vector>
 
-#include "websocketpp/server/TypesFwd.hpp"
+#include "easywebsocket/server/TypesFwd.hpp"
 
 #include "Types.hpp"
 
-namespace wspp::chat
+namespace ews::chat
 {
 
 class ChatMessageSender
@@ -30,4 +30,4 @@ private:
     srv::IMessageSenderPtr _messageSender;
 };
 
-} // namespace wspp::chat
+} // namespace ews::chat

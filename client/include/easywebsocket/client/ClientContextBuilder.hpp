@@ -5,11 +5,11 @@
 
 #pragma once
 
-#include "websocketpp/client/ClientVersions.hpp"
-#include "websocketpp/client/Types.hpp"
-#include "websocketpp/client/TypesFwd.hpp"
+#include "easywebsocket/client/ClientVersions.hpp"
+#include "easywebsocket/client/Types.hpp"
+#include "easywebsocket/client/TypesFwd.hpp"
 
-namespace wspp::cli
+namespace ews::cli
 {
 
 class ClientContext;
@@ -48,4 +48,4 @@ private:
     std::unique_ptr<ClientContext> _clientContext;
 };
 
-} // namespace wspp::cli
+} // namespace ews::cli

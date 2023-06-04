@@ -3,14 +3,14 @@
  * @date Jan, 2023
  */
 
-#include "websocketpp/client/ClientFactory.hpp"
+#include "easywebsocket/client/ClientFactory.hpp"
 
 #include "IClientContext.hpp"
 #include "IContextVisitor.hpp"
 #include "IContextVisitorAcceptor.hpp"
 #include "Client.hpp"
 
-namespace wspp::cli
+namespace ews::cli
 {
 
 class ClientFactory : private IContextVisitor
@@ -37,4 +37,4 @@ auto createClient(const IClientContext& ctx) -> IClientPtr
     return ClientFactory{}.createClient(ctx);
 }
 
-} // namespace wspp::cli
+} // namespace ews::cli

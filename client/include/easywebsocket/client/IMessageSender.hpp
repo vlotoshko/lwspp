@@ -7,7 +7,7 @@
 
 #include <string>
 
-namespace wspp::cli
+namespace ews::cli
 {
 
 /**
@@ -30,4 +30,4 @@ public:
     virtual void sendMessage(const std::string&) = 0;
 };
 
-} // namespace wspp::cli
+} // namespace ews::cli

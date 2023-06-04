@@ -5,7 +5,7 @@
 
 #include "LwsAdapter/LwsCallbackContext.hpp"
 
-namespace wspp::srv
+namespace ews::srv
 {
 
 LwsCallbackContext::LwsCallbackContext(IEventHandlerPtr e, ILwsSessionsPtr s)
@@ -34,4 +34,4 @@ auto LwsCallbackContext::getEventHandler() -> IEventHandlerPtr
 }
 
 
-} // namespace wspp::srv
+} // namespace ews::srv

@@ -5,10 +5,10 @@
 
 #include <stdexcept>
 
-#include "websocketpp/server/ServerContextBuilder.hpp"
+#include "easywebsocket/server/ServerContextBuilder.hpp"
 #include "ServerContext.hpp"
 
-namespace wspp::srv
+namespace ews::srv
 {
 
 namespace
@@ -78,4 +78,4 @@ auto ServerContextBuilder::setPingPongInterval(int) -> ServerContextBuilder&
     return *this;
 }
 
-} // namespace wspp::srv
+} // namespace ews::srv

@@ -9,20 +9,20 @@
 
 #include "catch2/catch.hpp"
 
-#include "websocketpp/client/ClientContextBuilder.hpp"
-#include "websocketpp/client/ClientFactory.hpp"
-#include "websocketpp/client/IClient.hpp"
-#include "websocketpp/client/IEventHandler.hpp"
-#include "websocketpp/client/IMessageSender.hpp"
+#include "easywebsocket/client/ClientContextBuilder.hpp"
+#include "easywebsocket/client/ClientFactory.hpp"
+#include "easywebsocket/client/IClient.hpp"
+#include "easywebsocket/client/IEventHandler.hpp"
+#include "easywebsocket/client/IMessageSender.hpp"
 
-#include "websocketpp/server/IEventHandler.hpp"
-#include "websocketpp/server/IMessageSender.hpp"
-#include "websocketpp/server/IServer.hpp"
-#include "websocketpp/server/ServerFactory.hpp"
-#include "websocketpp/server/ServerContextBuilder.hpp"
+#include "easywebsocket/server/IEventHandler.hpp"
+#include "easywebsocket/server/IMessageSender.hpp"
+#include "easywebsocket/server/IServer.hpp"
+#include "easywebsocket/server/ServerFactory.hpp"
+#include "easywebsocket/server/ServerContextBuilder.hpp"
 
 // NOLINTBEGIN (readability-function-cognitive-complexity)
-namespace wspp::tests
+namespace ews::tests
 {
 
 const srv::Port PORT = 9000;
@@ -156,5 +156,5 @@ SCENARIO( "Clients sends 'hello world' to the server", "[hello_world]" )
     } // GIVEN
 } // SCENARIO
 
-} // namespace wspp::tests
+} // namespace ews::tests
 // NOLINTEND (readability-function-cognitive-complexity)

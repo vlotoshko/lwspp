@@ -7,7 +7,7 @@
 
 #include <string>
 
-namespace wspp::cli
+namespace ews::cli
 {
 
 // TODO: consider strong types using
@@ -16,4 +16,4 @@ using Port = int;
 using Path = std::string;
 
 
-} // namespace wspp::cli
+} // namespace ews::cli

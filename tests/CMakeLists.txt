@@ -16,8 +16,8 @@ target_include_directories(${PROJECT_NAME}-tests PRIVATE
 )
 
 target_link_libraries(${PROJECT_NAME}-tests
-    websocketpp-client
-    websocketpp-server
+    easywebsocket-client
+    easywebsocket-server
 )
 
 set_target_properties(${PROJECT_NAME}-tests PROPERTIES

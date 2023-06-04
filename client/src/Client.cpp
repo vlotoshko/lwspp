@@ -5,7 +5,7 @@
 
 #include "Client.hpp"
 
-namespace wspp::cli
+namespace ews::cli
 {
 
 Client::Client(const ClientContext& context)
@@ -17,4 +17,4 @@ void Client::connect()
     _lwsContext.connect();
 }
 
-} // namespace wspp::cli
+} // namespace ews::cli

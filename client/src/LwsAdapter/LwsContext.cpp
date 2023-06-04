@@ -12,7 +12,7 @@
 #include "LwsAdapter/LwsContextDeleter.hpp"
 #include "LwsAdapter/LwsDataHolder.hpp"
 
-namespace wspp::cli
+namespace ews::cli
 {
 
 LwsContext::LwsContext(const ClientContext& context)
@@ -81,4 +81,4 @@ void LwsContext::setupConnectionInfo()
     _lwsConnectionInfo.pwsi = &_wsInstance;
 }
 
-} // namespace wspp::cli
+} // namespace ews::cli
