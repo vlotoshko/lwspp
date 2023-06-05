@@ -10,7 +10,6 @@ set(${PROJECT_NAME}_SRC_FILES
     include/easywebsocket/client/ClientContextBuilder.hpp
     include/easywebsocket/client/ClientFactory.hpp
     include/easywebsocket/client/ClientVersions.hpp
-    include/easywebsocket/client/Consts.hpp
     include/easywebsocket/client/IClient.hpp
     include/easywebsocket/client/IEventHandler.hpp
     include/easywebsocket/client/IMessageSender.hpp

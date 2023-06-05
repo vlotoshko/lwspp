@@ -22,7 +22,7 @@ void LwsCallbackContext::setStopping()
     _isStopping = true;
 }
 
-bool LwsCallbackContext::isStopping() const
+auto LwsCallbackContext::isStopping() const -> bool
 {
     return _isStopping;
 }
@@ -32,7 +32,7 @@ auto LwsCallbackContext::getEventHandler() -> IEventHandlerPtr
     return _eventHandler;
 }
 
-ILwsSessionPtr LwsCallbackContext::getSession()
+auto LwsCallbackContext::getSession() -> ILwsSessionPtr
 {
     return _session;
 }

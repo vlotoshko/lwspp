@@ -125,7 +125,8 @@ auto lwsCallback_v1(
     case LWS_CALLBACK_CLIENT_CONNECTION_ERROR:
     {
         auto errorMessage = std::string{"CLIENT_CONNECTION_ERROR: "};
-        errorMessage.append(in ? std::string{reinterpret_cast<const char *>(in), len} : "(null)");
+        errorMessage.append(in != nullptr ?
+                            std::string{reinterpret_cast<const char *>(in), len} : "(null)");
 
         lwsl_err("%s\n", errorMessage.c_str());
         eventHandler->onError(errorMessage);

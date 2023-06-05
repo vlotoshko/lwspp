@@ -15,5 +15,4 @@ using Address = std::string;
 using Port = int;
 using Path = std::string;
 
-
 } // namespace ews::cli

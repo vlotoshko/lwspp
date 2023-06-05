@@ -21,7 +21,7 @@ std::mutex registeredStoppersMutex;
 void signalHandler(int signum)
 {
     const std::lock_guard<std::mutex> lock{registeredStoppersMutex};
-    for (auto stopper : stoppers)
+    for (const auto& stopper : stoppers)
     {
         stopper.second();
     }
@@ -73,6 +73,5 @@ void Server::stop_()
 {
     _lwsContext.stopListening();
 }
-
 
 } // namespace ews::srv
