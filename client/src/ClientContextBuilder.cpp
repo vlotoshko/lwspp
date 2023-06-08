@@ -29,6 +29,11 @@ void checkContext(const ClientContext& context)
         throw UndefinedRequiredParameterException{"client version"};
     }
 
+    if (context.address == UNDEFINED_ADDRESS)
+    {
+        throw UndefinedRequiredParameterException{"address"};
+    }
+
     if (context.port == UNDEFINED_PORT)
     {
         throw UndefinedRequiredParameterException{"port"};

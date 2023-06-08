@@ -16,6 +16,7 @@ namespace ews::tests
 using namespace cli;
 
 const Port PORT = 9000;
+const Address ADDRESS = "localhost";
 
 auto toString(ClientVersion version) -> std::string
 {
@@ -79,9 +80,24 @@ SCENARIO( "ClientContext construction", "[client_context_parameters]" )
             }
         }
 
+        WHEN( "Address is not set" )
+        {
+            clientContextBuilder
+                .setVersion(ClientVersion::v1_Amsterdam)
+                .setPort(PORT);
+
+            THEN( "Exception is thrown on context build" )
+            {
+                REQUIRE_THROWS_WITH(clientContextBuilder.build(),
+                                    "Required parameter is undefined: address");
+            }
+        }
+
         WHEN( "Port is not set" )
         {
-            clientContextBuilder.setVersion(ClientVersion::v1_Amsterdam);
+            clientContextBuilder
+                .setVersion(ClientVersion::v1_Amsterdam)
+                .setAddress(ADDRESS);
 
             THEN( "Exception is thrown on context build" )
             {
@@ -94,6 +110,7 @@ SCENARIO( "ClientContext construction", "[client_context_parameters]" )
         {
             clientContextBuilder
                 .setVersion(ClientVersion::v1_Amsterdam)
+                .setAddress(ADDRESS)
                 .setPort(PORT);
 
             THEN( "Exception is thrown on context build" )
@@ -108,6 +125,7 @@ SCENARIO( "ClientContext construction", "[client_context_parameters]" )
             auto handler = std::make_shared<EventHandler>();
             clientContextBuilder
                 .setVersion(ClientVersion::v1_Amsterdam)
+                .setAddress(ADDRESS)
                 .setPort(PORT)
                 .setEventHandler(handler);
 
@@ -121,8 +139,9 @@ SCENARIO( "ClientContext construction", "[client_context_parameters]" )
                 {
                     auto checker = std::make_shared<ClientContextVisitor>();
                     checker->expected.clientVersion = ClientVersion::v1_Amsterdam;
-                    checker->expected.eventHandler = handler;
+                    checker->expected.address = ADDRESS;
                     checker->expected.port = PORT;
+                    checker->expected.eventHandler = handler;
 
                     clientContext->accept(*checker);
                 }
@@ -138,8 +157,9 @@ SCENARIO( "ClientContext construction", "[client_context_parameters]" )
                 {
                     auto checker = std::make_shared<ClientContextVisitor>();
                     checker->expected.clientVersion = ClientVersion::v1_Amsterdam;
-                    checker->expected.eventHandler = handler;
+                    checker->expected.address = ADDRESS;
                     checker->expected.port = PORT;
+                    checker->expected.eventHandler = handler;
 //                    checker->expected.protocolName = "TestProtocolName";
 
                     clientContext->accept(*checker);

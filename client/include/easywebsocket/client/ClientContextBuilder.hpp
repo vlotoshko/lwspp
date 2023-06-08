@@ -38,10 +38,10 @@ public:
     auto setVersion(ClientVersion) -> ClientContextBuilder&;
     auto setAddress(Address) -> ClientContextBuilder&;
     auto setPort(Port) -> ClientContextBuilder&;
-    auto setPath(Path) -> ClientContextBuilder&;
     auto setEventHandler(IEventHandlerPtr) -> ClientContextBuilder&;
 
     // Non mandatory options
+    auto setPath(Path) -> ClientContextBuilder&;
     auto setPingPongInterval(int) -> ClientContextBuilder&;
 
 private:
