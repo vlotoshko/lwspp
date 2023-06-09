@@ -28,7 +28,7 @@ public:
     void connect();
 
 private:
-    void setupLowLeverContext();
+    void setupLowLevelContext();
     void setupConnectionInfo();
 
 private:

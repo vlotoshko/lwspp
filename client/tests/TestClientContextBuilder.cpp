@@ -151,8 +151,7 @@ SCENARIO( "ClientContext construction", "[client_context_parameters]" )
 
             AND_WHEN( "All non-mandatory parameters are set" )
             {
-                auto clientContext =
-                    clientContextBuilder
+                auto clientContext = clientContextBuilder
                         .setProtocolName(PROTOCOL_NAME)
                         .setPath(PATH)
                         .build();

@@ -14,6 +14,7 @@ LwsDataHolder::LwsDataHolder(const ClientContext& context)
     : address(context.address)
     , port(context.port)
     , path(context.path)
+    , protocolName(context.protocolName)
     , protocols(createLwsProtocols(context.clientVersion))
 {}
 

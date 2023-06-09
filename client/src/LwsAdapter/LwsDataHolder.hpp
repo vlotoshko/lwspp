@@ -22,6 +22,7 @@ struct LwsDataHolder
     Address address;
     Port port;
     Path path;
+    std::string protocolName;
     LwsProtocols protocols;
 };
 
