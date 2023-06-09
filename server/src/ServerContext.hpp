@@ -25,9 +25,11 @@ class ServerContext : public IServerContext
 public:
     void accept(IContextVisitor&) const override;
 
+    IEventHandlerPtr eventHandler;
     ServerVersion serverVersion = UNDEFINED_SERVER_VERSION;
     Port port = UNDEFINED_PORT;
-    IEventHandlerPtr eventHandler;
+
+    std::string protocolName = DEFAULT_PROTOCOL_NAME;
 };
 
 } // namespace ews::srv

@@ -73,6 +73,12 @@ auto ServerContextBuilder::setEventHandler(IEventHandlerPtr e) -> ServerContextB
     return *this;
 }
 
+auto ServerContextBuilder::setProtocolName(std::string protocolName) -> ServerContextBuilder&
+{
+    _serverContext->protocolName = std::move(protocolName);
+    return *this;
+}
+
 auto ServerContextBuilder::setPingPongInterval(int) -> ServerContextBuilder&
 {
     return *this;

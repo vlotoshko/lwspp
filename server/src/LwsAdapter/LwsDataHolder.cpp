@@ -12,7 +12,8 @@ namespace ews::srv
 
 LwsDataHolder::LwsDataHolder(const ServerContext& context)
     : port(context.port)
-    , protocols(createLwsProtocols(context.serverVersion))
+    , protocolName(context.protocolName)
+    , protocols(createLwsProtocols(context.serverVersion, protocolName))
 {}
 
 } // namespace ews::srv

@@ -5,6 +5,8 @@
 
 #pragma once
 
+#include <string>
+
 #include "easywebsocket/server/Types.hpp"
 #include "LwsAdapter/LwsTypesFwd.hpp"
 #include "TypesFwd.hpp"
@@ -20,6 +22,7 @@ struct LwsDataHolder
     explicit LwsDataHolder(const ServerContext&);
 
     Port port;
+    std::string protocolName;
     LwsProtocols protocols;
 };
 

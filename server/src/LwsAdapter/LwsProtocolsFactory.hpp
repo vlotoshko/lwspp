@@ -11,6 +11,6 @@
 namespace ews::srv
 {
 
-auto createLwsProtocols(ServerVersion) -> LwsProtocols;
+auto createLwsProtocols(ServerVersion, const std::string& protocolName) -> LwsProtocols;
 
 } // namespace ews::srv
