@@ -67,6 +67,12 @@ auto ClientContextBuilder::setEventHandler(IEventHandlerPtr e) -> ClientContextB
     return *this;
 }
 
+auto ClientContextBuilder::setProtocolName(std::string protocolName) -> ClientContextBuilder&
+{
+    _clientContext->protocolName = std::move(protocolName);
+    return *this;
+}
+
 auto ClientContextBuilder::setPath(Path path) -> ClientContextBuilder&
 {
     _clientContext->path = std::move(path);

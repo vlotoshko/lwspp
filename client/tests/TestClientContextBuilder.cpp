@@ -17,6 +17,8 @@ using namespace cli;
 
 const Port PORT = 9000;
 const Address ADDRESS = "localhost";
+const std::string PROTOCOL_NAME = "PROTOCOL_NAME";
+const Path PATH = "PATH";
 
 auto toString(ClientVersion version) -> std::string
 {
@@ -56,10 +58,10 @@ public:
         REQUIRE(context.eventHandler == expected.eventHandler);
         REQUIRE(context.address == expected.address);
         REQUIRE(context.port == expected.port);
-        REQUIRE(context.path == expected.path);
 
         // Non-mandatory parameters
-        //        REQUIRE(context.protocolName == expected.protocolName);
+        REQUIRE(context.protocolName == expected.protocolName);
+        REQUIRE(context.path == expected.path);
     }
 
     ClientContext expected;
@@ -149,9 +151,11 @@ SCENARIO( "ClientContext construction", "[client_context_parameters]" )
 
             AND_WHEN( "All non-mandatory parameters are set" )
             {
-                auto clientContext = clientContextBuilder
-//                                         .setProtocolName("TestProtocolName")
-                                         .build();
+                auto clientContext =
+                    clientContextBuilder
+                        .setProtocolName(PROTOCOL_NAME)
+                        .setPath(PATH)
+                        .build();
 
                 THEN( "Client context has correct data" )
                 {
@@ -160,7 +164,9 @@ SCENARIO( "ClientContext construction", "[client_context_parameters]" )
                     checker->expected.address = ADDRESS;
                     checker->expected.port = PORT;
                     checker->expected.eventHandler = handler;
-//                    checker->expected.protocolName = "TestProtocolName";
+
+                    checker->expected.protocolName = PROTOCOL_NAME;
+                    checker->expected.path = PATH;
 
                     clientContext->accept(*checker);
                 }

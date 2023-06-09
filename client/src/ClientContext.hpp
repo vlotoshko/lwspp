@@ -20,10 +20,12 @@ public:
     void accept(IContextVisitor&) const override;
 
     ClientVersion clientVersion = UNDEFINED_CLIENT_VERSION;
+    IEventHandlerPtr eventHandler;
     Address address = UNDEFINED_ADDRESS;
     Port port = UNDEFINED_PORT;
-    Path path = UNDEFINED_PATH;
-    IEventHandlerPtr eventHandler;
+
+    Path path = DEFAULT_PATH;
+    std::string protocolName = DEFAULT_PROTOCOL_NAME;
 };
 
 } // namespace ews::cli

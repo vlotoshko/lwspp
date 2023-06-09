@@ -41,6 +41,7 @@ public:
     auto setEventHandler(IEventHandlerPtr) -> ClientContextBuilder&;
 
     // Non mandatory options
+    auto setProtocolName(std::string) -> ClientContextBuilder&;
     auto setPath(Path) -> ClientContextBuilder&;
     auto setPingPongInterval(int) -> ClientContextBuilder&;
 
