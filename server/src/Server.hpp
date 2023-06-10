@@ -15,6 +15,8 @@ namespace ews::srv
 
 /**
  * @brief The Server class is the wrapper for the interlnal LwsServer implementation
+ * @note The server starts listening on construction and stops listening on destruction
+ * @note The server spawns a separate thread for the listening
  */
 class Server : public IServer
 {
@@ -29,7 +31,7 @@ public:
     auto operator=(const Server&) -> Server& = delete;
 
 private:
-    LwsContextPtr _lwsContext;
+    LwsServerPtr _lwsServer;
     std::future<void> _serverStop;
 };
 

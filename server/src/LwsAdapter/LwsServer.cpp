@@ -7,13 +7,14 @@
 #include <thread>
 
 #include "easywebsocket/server/IEventHandler.hpp"
+
 #include "LwsAdapter/ILwsCallbackNotifier.hpp"
 #include "LwsAdapter/ILwsSession.hpp"
 #include "LwsAdapter/LwsCallbackContext.hpp"
-#include "LwsAdapter/LwsContext.hpp"
 #include "LwsAdapter/LwsContextDeleter.hpp"
 #include "LwsAdapter/LwsDataHolder.hpp"
 #include "LwsAdapter/LwsMessageSender.hpp"
+#include "LwsAdapter/LwsServer.hpp"
 #include "LwsAdapter/LwsSessions.hpp"
 #include "ServerContext.hpp"
 
@@ -72,7 +73,7 @@ auto setupLowLeverContext(const ILwsCallbackContextPtr& callbackContext, const L
 
 } // namespace
 
-LwsContext::LwsContext(const ServerContext& context)
+LwsServer::LwsServer(const ServerContext& context)
 {
     auto sessions = std::make_shared<LwsSessions>();
     _callbackContext = std::make_shared<LwsCallbackContext>(context.eventHandler, sessions);
@@ -84,7 +85,7 @@ LwsContext::LwsContext(const ServerContext& context)
     _callbackContext->getEventHandler()->setMessageSender(std::move(sender));
 }
 
-LwsContext::~LwsContext()
+LwsServer::~LwsServer()
 {
     {
         const std::lock_guard<std::mutex> guard(_mutex);
@@ -97,7 +98,7 @@ LwsContext::~LwsContext()
     waitForServerStopped_();
 }
 
-void LwsContext::startListening()
+void LwsServer::startListening()
 {
     {
         const std::lock_guard<std::mutex> guard(_mutex);
@@ -127,7 +128,7 @@ void LwsContext::startListening()
     _isStoppedCV.notify_one();
 }
 
-void LwsContext::waitForServerStopped_()
+void LwsServer::waitForServerStopped_()
 {
     std::unique_lock<std::mutex> guard(_mutex);
     _isStoppedCV.wait(guard, [this]{ return _state == State::Stopped || _state == State::Initial; });

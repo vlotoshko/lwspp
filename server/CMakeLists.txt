@@ -25,8 +25,6 @@ set(${PROJECT_NAME}_SRC_FILES
     src/LwsAdapter/LwsCallback.hpp
     src/LwsAdapter/LwsCallbackContext.cpp
     src/LwsAdapter/LwsCallbackContext.hpp
-    src/LwsAdapter/LwsContext.cpp
-    src/LwsAdapter/LwsContext.hpp
     src/LwsAdapter/LwsContextDeleter.hpp
     src/LwsAdapter/LwsDataHolder.cpp
     src/LwsAdapter/LwsDataHolder.hpp
@@ -34,6 +32,8 @@ set(${PROJECT_NAME}_SRC_FILES
     src/LwsAdapter/LwsMessageSender.hpp
     src/LwsAdapter/LwsProtocolsFactory.cpp
     src/LwsAdapter/LwsProtocolsFactory.hpp
+    src/LwsAdapter/LwsServer.cpp
+    src/LwsAdapter/LwsServer.hpp
     src/LwsAdapter/LwsSession.cpp
     src/LwsAdapter/LwsSession.hpp
     src/LwsAdapter/LwsSessions.cpp

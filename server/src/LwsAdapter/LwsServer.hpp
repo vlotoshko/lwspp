@@ -14,20 +14,17 @@
 namespace ews::srv
 {
 
-
-enum class State
-{
-    Initial,
-    Started,
-    Stopping,
-    Stopped,
-};
-
-class LwsContext
+class LwsServer
 {
 public:
-    explicit LwsContext(const ServerContext&);
-    ~LwsContext();
+    explicit LwsServer(const ServerContext&);
+    ~LwsServer();
+
+    LwsServer(LwsServer&&) noexcept = delete;
+    auto operator=(LwsServer&&) noexcept -> LwsServer& = delete;
+
+    LwsServer(const LwsServer&) = delete;
+    auto operator=(const LwsServer&) -> LwsServer& = delete;
 
     // NOTE: the 'startListening' method blocks the thread
     void startListening();
@@ -35,8 +32,15 @@ public:
 private:
     void waitForServerStopped_();
 
-
 private:
+    enum class State
+    {
+        Initial,
+        Started,
+        Stopping,
+        Stopped,
+    };
+
     ILwsCallbackContextPtr _callbackContext;
     LwsDataHolderPtr _dataHolder;
     LowLevelContextPtr _lowLevelContext;

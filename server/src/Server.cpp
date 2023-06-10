@@ -3,21 +3,21 @@
  * @date Jan, 2023
  */
 
-#include "LwsAdapter/LwsContext.hpp"
+#include "LwsAdapter/LwsServer.hpp"
 #include "Server.hpp"
 
 namespace ews::srv
 {
 
 Server::Server(const ServerContext& context)
-    : _lwsContext(std::make_shared<LwsContext>(context))
+    : _lwsServer(std::make_shared<LwsServer>(context))
 {
-    _serverStop = std::async(std::launch::async, [&]{ _lwsContext->startListening(); });
+    _serverStop = std::async(std::launch::async, [&]{ _lwsServer->startListening(); });
 }
 
 Server::~Server()
 {
-    _lwsContext.reset();
+    _lwsServer.reset();
     _serverStop.wait();
 }
 

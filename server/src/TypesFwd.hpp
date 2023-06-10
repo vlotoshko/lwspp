@@ -14,7 +14,7 @@ class IContextVisitor;
 class IContextVisitorAcceptor;
 class ServerContext;
 
-class LwsContext;
-using LwsContextPtr = std::shared_ptr<LwsContext>;
+class LwsServer;
+using LwsServerPtr = std::shared_ptr<LwsServer>;
 
 } // namespace ews::srv
