@@ -10,7 +10,9 @@ namespace ews::srv
 
 /**
  * @brief The IServer class defines the server interface. Use the server factory to get the
- * instance of this interface implementation
+ * instance of the server implementation
+ * @note The server starts listening on construction and stops listening on destruction
+ * @note The server spawns a separate thread for the listening
  */
 class IServer
 {
@@ -23,10 +25,6 @@ public:
 
     IServer(const IServer&) = delete;
     auto operator=(const IServer&) noexcept -> IServer& = delete;
-
-public:
-    // NOTE: the 'start' method can be implemented as blocking thread method
-    virtual void start() = 0;
 };
 
 } // namespace ews::srv

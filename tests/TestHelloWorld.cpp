@@ -4,7 +4,6 @@
  */
 
 #include <future>
-#include <iostream>
 #include <thread>
 
 #include "catch2/catch.hpp"
@@ -24,8 +23,11 @@
 // NOLINTBEGIN (readability-function-cognitive-complexity)
 namespace ews::tests
 {
+namespace
+{
 
 const srv::Port PORT = 9000;
+const cli::Address ADDRESS = "localhost";
 
 const std::string HELLO_SERVER = "hello server!";
 const std::string HELLO_CLIENT = "hello client!";
@@ -49,7 +51,7 @@ public:
     }
 
     void onError(srv::SessionId, const std::string&) noexcept override
-    {}    
+    {}
     void onWarning(srv::SessionId, const std::string&) noexcept override
     {}
 
@@ -98,29 +100,31 @@ private:
 srv::IServerPtr setupServer(std::string& messageHolder)
 {
     auto serverEventHandler = std::make_shared<ServerEventHandler>(messageHolder);
-    auto serverBuilder = srv::ServerContextBuilder{};
-    serverBuilder
+    auto serverContextBuilder = srv::ServerContextBuilder{};
+    serverContextBuilder
         .setVersion(srv::ServerVersion::v1_Andromeda)
         .setPort(PORT)
         .setEventHandler(serverEventHandler)
         ;
 
-    return srv::createServer(*serverBuilder.build());
+    return srv::createServer(*serverContextBuilder.build());
 }
 
 cli::IClientPtr setupClient(std::string& messageHolder)
 {
     auto clientEventHandler = std::make_shared<ClientEventHandler>(messageHolder);
-    auto clientBuilder = cli::ClientContextBuilder{};
-    clientBuilder
+    auto clientContextBuilder = cli::ClientContextBuilder{};
+    clientContextBuilder
         .setVersion(cli::ClientVersion::v1_Amsterdam)
-        .setAddress("localhost")
+        .setAddress(ADDRESS)
         .setPort(PORT)
         .setEventHandler(clientEventHandler)
         ;
 
-    return cli::createClient(*clientBuilder.build());
+    return cli::createClient(*clientContextBuilder.build());
 }
+
+} // namespace
 
 SCENARIO( "Clients sends 'hello world' to the server", "[hello_world]" )
 {
@@ -136,18 +140,16 @@ SCENARIO( "Clients sends 'hello world' to the server", "[hello_world]" )
         {
             THEN( "Server receives message from client and sends message back" )
             {
-                auto asyncServerStart = std::async(std::launch::async, [&](){server->start();});
-                auto asyncClientStart = std::async(std::launch::async, [&](){client->connect();});
+                auto asyncClientStart = std::async(std::launch::async, [&]{client->connect();});
 
                 // waiting for the client and server exchange with the messages
-                const auto timeout = 100U;
+                const auto timeout = 10U;
                 std::this_thread::sleep_for(std::chrono::milliseconds(timeout));
 
                 client.reset();
-                server.reset();
+//                server.reset();
 
                 asyncClientStart.wait();
-                asyncServerStart.wait();
 
                 REQUIRE(actualMessageReceivedByServer == HELLO_SERVER);
                 REQUIRE(actualMessageReceivedByClient == HELLO_CLIENT);

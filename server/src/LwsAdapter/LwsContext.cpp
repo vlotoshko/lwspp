@@ -4,6 +4,7 @@
  */
 
 #include <libwebsockets.h>
+#include <thread>
 
 #include "easywebsocket/server/IEventHandler.hpp"
 #include "LwsAdapter/ILwsCallbackNotifier.hpp"
@@ -69,7 +70,7 @@ auto setupLowLeverContext(const ILwsCallbackContextPtr& callbackContext, const L
     return lowLevelContext;
 }
 
-}
+} // namespace
 
 LwsContext::LwsContext(const ServerContext& context)
 {
@@ -83,13 +84,26 @@ LwsContext::LwsContext(const ServerContext& context)
     _callbackContext->getEventHandler()->setMessageSender(std::move(sender));
 }
 
+LwsContext::~LwsContext()
+{
+    {
+        const std::lock_guard<std::mutex> guard(_mutex);
+        if (_state == State::Started)
+        {
+            _state = State::Stopping;
+        }
+    }
+    _callbackContext->setStopping();
+    waitForServerStopped_();
+}
+
 void LwsContext::startListening()
 {
     {
         const std::lock_guard<std::mutex> guard(_mutex);
-        if (!_isStarted)
+        if (_state == State::Initial)
         {
-            _isStarted = true;
+            _state = State::Started;
         }
         else
         {
@@ -97,23 +111,26 @@ void LwsContext::startListening()
         }
     }
 
-    int n = 0;
-    while (n >= 0 && !_stopListening)
+    int res = 0;
+    while (res >= 0 && _state != State::Stopping)
     {
-        n = lws_service(_lowLevelContext.get(), 0);
+        res = lws_service(_lowLevelContext.get(), 0);
     }
-    _stopListening = true;
+
+    if (res < 0)
+    {
+        throw std::runtime_error{
+            std::string{"lws_service stopped with the error code: "}.append(std::to_string(res))};
+    }
+
+    _state = State::Stopped;
+    _isStoppedCV.notify_one();
 }
 
-void LwsContext::stopListening()
+void LwsContext::waitForServerStopped_()
 {
-    _stopListening = true;
-    _callbackContext->setStopping();
-}
-
-auto LwsContext::getPort() const -> Port
-{
-    return _dataHolder->port;
+    std::unique_lock<std::mutex> guard(_mutex);
+    _isStoppedCV.wait(guard, [this]{ return _state == State::Stopped || _state == State::Initial; });
 }
 
 } // namespace ews::srv

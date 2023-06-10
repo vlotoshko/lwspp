@@ -5,33 +5,44 @@
 
 #pragma once
 
+#include <condition_variable>
 #include <mutex>
 
-#include "easywebsocket/server/Types.hpp"
 #include "LwsAdapter/LwsTypesFwd.hpp"
 #include "TypesFwd.hpp"
 
 namespace ews::srv
 {
 
+
+enum class State
+{
+    Initial,
+    Started,
+    Stopping,
+    Stopped,
+};
+
 class LwsContext
 {
 public:
     explicit LwsContext(const ServerContext&);
+    ~LwsContext();
 
     // NOTE: the 'startListening' method blocks the thread
     void startListening();
-    void stopListening();
 
-    auto getPort() const -> Port;
+private:
+    void waitForServerStopped_();
+
 
 private:
     ILwsCallbackContextPtr _callbackContext;
     LwsDataHolderPtr _dataHolder;
     LowLevelContextPtr _lowLevelContext;
 
-    bool _isStarted = false;
-    bool _stopListening = false;
+    std::condition_variable _isStoppedCV;
+    State _state = State::Initial;
     std::mutex _mutex;
 };
 

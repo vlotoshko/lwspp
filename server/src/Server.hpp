@@ -5,13 +5,17 @@
 
 #pragma once
 
+#include <future>
+
 #include "easywebsocket/server/IServer.hpp"
-#include "LwsAdapter/LwsContext.hpp"
 #include "TypesFwd.hpp"
 
 namespace ews::srv
 {
 
+/**
+ * @brief The Server class is the wrapper for the interlnal LwsServer implementation
+ */
 class Server : public IServer
 {
 public:
@@ -24,15 +28,9 @@ public:
     Server(const Server&) = delete;
     auto operator=(const Server&) -> Server& = delete;
 
-public:
-    // NOTE: the 'start' member function blocks the thread
-    void start() override;
-
 private:
-    void stop_();
-
-private:
-    LwsContext _lwsContext;
+    LwsContextPtr _lwsContext;
+    std::future<void> _serverStop;
 };
 
 } // namespace ews::srv
