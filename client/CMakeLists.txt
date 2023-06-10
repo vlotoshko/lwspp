@@ -22,8 +22,8 @@ set(${PROJECT_NAME}_SRC_FILES
     src/LwsAdapter/LwsCallback.hpp
     src/LwsAdapter/LwsCallbackContext.cpp
     src/LwsAdapter/LwsCallbackContext.hpp
-    src/LwsAdapter/LwsContext.cpp
-    src/LwsAdapter/LwsContext.hpp
+    src/LwsAdapter/LwsClient.cpp
+    src/LwsAdapter/LwsClient.hpp
     src/LwsAdapter/LwsContextDeleter.hpp
     src/LwsAdapter/LwsDataHolder.cpp
     src/LwsAdapter/LwsDataHolder.hpp

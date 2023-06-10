@@ -4,17 +4,21 @@
  */
 
 #include "Client.hpp"
+#include "LwsAdapter/LwsClient.hpp"
 
 namespace ews::cli
 {
 
 Client::Client(const ClientContext& context)
-    : _lwsContext(context)
+    : _lwsClient(std::make_shared<LwsClient>(context))
+    , _clientStop(std::async(std::launch::async, [&]{ _lwsClient->connect(); }))
 {}
 
-void Client::connect()
+Client::~Client()
 {
-    _lwsContext.connect();
+    _lwsClient.reset();
+    _clientStop.wait();
 }
+
 
 } // namespace ews::cli

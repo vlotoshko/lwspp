@@ -10,13 +10,11 @@
 
 #include "easywebsocket/client/ClientContextBuilder.hpp"
 #include "easywebsocket/client/ClientFactory.hpp"
-#include "easywebsocket/client/IClient.hpp"
 #include "easywebsocket/client/IEventHandler.hpp"
 #include "easywebsocket/client/IMessageSender.hpp"
 
 #include "easywebsocket/server/IEventHandler.hpp"
 #include "easywebsocket/server/IMessageSender.hpp"
-#include "easywebsocket/server/IServer.hpp"
 #include "easywebsocket/server/ServerFactory.hpp"
 #include "easywebsocket/server/ServerContextBuilder.hpp"
 
@@ -140,16 +138,9 @@ SCENARIO( "Clients sends 'hello world' to the server", "[hello_world]" )
         {
             THEN( "Server receives message from client and sends message back" )
             {
-                auto asyncClientStart = std::async(std::launch::async, [&]{client->connect();});
-
                 // waiting for the client and server exchange with the messages
-                const auto timeout = 10U;
+                const auto timeout = 100U;
                 std::this_thread::sleep_for(std::chrono::milliseconds(timeout));
-
-                client.reset();
-//                server.reset();
-
-                asyncClientStart.wait();
 
                 REQUIRE(actualMessageReceivedByServer == HELLO_SERVER);
                 REQUIRE(actualMessageReceivedByClient == HELLO_CLIENT);

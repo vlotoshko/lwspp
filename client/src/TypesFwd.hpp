@@ -5,6 +5,8 @@
 
 #pragma once
 
+#include <memory>
+
 namespace ews::cli
 {
 
@@ -12,5 +14,8 @@ class IContextVisitor;
 class IContextVisitorAcceptor;
 
 class ClientContext;
+
+class LwsClient;
+using LwsClientPtr = std::shared_ptr<LwsClient>;
 
 } // namespace ews::cli

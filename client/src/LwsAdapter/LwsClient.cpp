@@ -8,37 +8,44 @@
 
 #include "ClientContext.hpp"
 #include "LwsAdapter/LwsCallbackContext.hpp"
-#include "LwsAdapter/LwsContext.hpp"
+#include "LwsAdapter/LwsClient.hpp"
 #include "LwsAdapter/LwsContextDeleter.hpp"
 #include "LwsAdapter/LwsDataHolder.hpp"
 
 namespace ews::cli
 {
 
-LwsContext::LwsContext(const ClientContext& context)
+LwsClient::LwsClient(const ClientContext& context)
     : _lwsConnectionInfo()
 {
     _callbackContext = std::make_shared<LwsCallbackContext>(context.eventHandler);
     _dataHolder = std::make_shared<LwsDataHolder>(context);
 
-    setupLowLevelContext();
-    setupConnectionInfo();
+    setupLowLevelContext_();
+    setupConnectionInfo_();
 }
 
-LwsContext::~LwsContext()
-{
-    _isStopping = true;
-    _callbackContext->setStopping();
-}
-
-void LwsContext::connect()
+LwsClient::~LwsClient()
 {
     {
         const std::lock_guard<std::mutex> guard(_mutex);
-        if (!_isConnected)
+        if (_state == State::Started)
+        {
+            _state = State::Stopping;
+        }
+    }
+    _callbackContext->setStopping();
+    waitForClientStopping_();
+}
+
+void LwsClient::connect()
+{
+    {
+        const std::lock_guard<std::mutex> guard(_mutex);
+        if (_state == State::Initial)
         {
             _wsInstance = lws_client_connect_via_info(&_lwsConnectionInfo);
-            _isConnected = true;
+           _state = State::Started;
         }
         else
         {
@@ -46,15 +53,23 @@ void LwsContext::connect()
         }
     }
 
-    int n = 0;
-    while (n >= 0 && !_isStopping)
+    int res = 0;
+    while (res >= 0 && _state != State::Stopping)
     {
-        n = lws_service(_lowLevelContext.get(), 0);
+        res = lws_service(_lowLevelContext.get(), 0);
     }
-    _isStopping = true;
+
+    if (res < 0)
+    {
+        throw std::runtime_error{
+            std::string{"lws_service stopped with the error code: "}.append(std::to_string(res))};
+    }
+
+    _state = State::Stopped;
+    _isStoppedCV.notify_one();
 }
 
-void LwsContext::setupLowLevelContext()
+void LwsClient::setupLowLevelContext_()
 {
     auto lwsContextInfo = lws_context_creation_info{};
     lwsContextInfo.user = _callbackContext.get();
@@ -68,7 +83,7 @@ void LwsContext::setupLowLevelContext()
     }
 }
 
-void LwsContext::setupConnectionInfo()
+void LwsClient::setupConnectionInfo_()
 {
     _lwsConnectionInfo.context = _lowLevelContext.get();
     _lwsConnectionInfo.pwsi = &_wsInstance;
@@ -83,6 +98,12 @@ void LwsContext::setupConnectionInfo()
     {
         _lwsConnectionInfo.protocol = _dataHolder->protocolName.c_str();
     }
+}
+
+void LwsClient::waitForClientStopping_()
+{
+    std::unique_lock<std::mutex> guard(_mutex);
+    _isStoppedCV.wait(guard, [this]{ return _state == State::Stopped || _state == State::Initial; });
 }
 
 } // namespace ews::cli
