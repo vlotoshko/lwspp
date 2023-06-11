@@ -27,14 +27,7 @@ LwsClient::LwsClient(const ClientContext& context)
 
 LwsClient::~LwsClient()
 {
-    {
-        const std::lock_guard<std::mutex> guard(_mutex);
-        if (_state == State::Started)
-        {
-            _state = State::Stopping;
-        }
-    }
-    _callbackContext->setStopping();
+    disconnect();
     waitForClientStopping_();
 }
 
@@ -67,6 +60,20 @@ void LwsClient::connect()
 
     _state = State::Stopped;
     _isStoppedCV.notify_one();
+}
+
+void LwsClient::disconnect()
+{
+    const std::lock_guard<std::mutex> guard(_mutex);
+    if (_state == State::Initial)
+    {
+        _state = State::Stopped;
+    }
+    else if (_state == State::Started)
+    {
+        _state = State::Stopping;
+        _callbackContext->setStopping();
+    }
 }
 
 void LwsClient::setupLowLevelContext_()

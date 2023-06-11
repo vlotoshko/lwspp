@@ -11,14 +11,24 @@ namespace ews::cli
 
 Client::Client(const ClientContext& context)
     : _lwsClient(std::make_shared<LwsClient>(context))
-    , _clientStop(std::async(std::launch::async, [&]{ _lwsClient->connect(); }))
-{}
+{
+    std::weak_ptr<LwsClient> weakLwsClient = _lwsClient;
+
+    auto asyncConnect = [weakLwsClient]
+    {
+        if (auto lwsClient = weakLwsClient.lock())
+        {
+            lwsClient->connect();
+        }
+    };
+
+    _clientStop = std::async(std::launch::async, asyncConnect);
+}
 
 Client::~Client()
 {
-    _lwsClient.reset();
+    _lwsClient->disconnect();
     _clientStop.wait();
 }
-
 
 } // namespace ews::cli

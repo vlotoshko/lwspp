@@ -28,6 +28,7 @@ public:
 
     // NOTE: the 'startListening' method blocks the thread
     void startListening();
+    void stopListening();
 
 private:
     void waitForServerStopped_();

@@ -87,14 +87,7 @@ LwsServer::LwsServer(const ServerContext& context)
 
 LwsServer::~LwsServer()
 {
-    {
-        const std::lock_guard<std::mutex> guard(_mutex);
-        if (_state == State::Started)
-        {
-            _state = State::Stopping;
-        }
-    }
-    _callbackContext->setStopping();
+    stopListening();
     waitForServerStopped_();
 }
 
@@ -126,6 +119,20 @@ void LwsServer::startListening()
 
     _state = State::Stopped;
     _isStoppedCV.notify_one();
+}
+
+void LwsServer::stopListening()
+{
+    const std::lock_guard<std::mutex> guard(_mutex);
+    if (_state == State::Initial)
+    {
+        _state = State::Stopped;
+    }
+    else if (_state == State::Started)
+    {
+        _state = State::Stopping;
+        _callbackContext->setStopping();
+    }
 }
 
 void LwsServer::waitForServerStopped_()

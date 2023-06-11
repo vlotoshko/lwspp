@@ -26,7 +26,9 @@ public:
     LwsClient(const LwsClient&) = delete;
     auto operator=(const LwsClient&) noexcept -> LwsClient& = delete;
 
+    // NOTE: the 'connect' method blocks the thread
     void connect();
+    void disconnect();
 
 private:
     void setupLowLevelContext_();
