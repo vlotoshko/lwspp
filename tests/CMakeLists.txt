@@ -3,8 +3,8 @@ set(TESTS_TARGET_SRC_FILES
     framework/fakeit.hpp
     main.cpp
 
-#    TestConnections.cpp
     TestHelloWorld.cpp
+    TestSimpleFeatures.cpp
 )
 
 add_executable(${PROJECT_NAME}-tests ${TESTS_TARGET_SRC_FILES})
@@ -26,4 +26,3 @@ set_target_properties(${PROJECT_NAME}-tests PROPERTIES
     CXX_EXTENSIONS OFF
     LINKER_LANGUAGE CXX
 )
-
