@@ -34,7 +34,7 @@ auto toString(ClientVersion version) -> std::string
 class EventHandler : public IEventHandler
 {
 public:
-    void onConnect() noexcept override
+    void onConnect(cli::ISessionInfoPtr) noexcept override
     {}
     void onDisconnect() noexcept override
     {}

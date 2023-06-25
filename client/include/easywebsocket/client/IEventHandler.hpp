@@ -29,7 +29,7 @@ public:
     auto operator=(const IEventHandler&) noexcept -> IEventHandler& = delete;
 
 public:
-    virtual void onConnect() noexcept = 0;
+    virtual void onConnect(ISessionInfoPtr) noexcept = 0;
     virtual void onDisconnect() noexcept = 0;
 
     virtual void onMessageReceive(const std::string& message) noexcept = 0;

@@ -22,4 +22,7 @@ using IEventHandlerPtr = std::shared_ptr<IEventHandler>;
 class IMessageSender;
 using IMessageSenderPtr = std::shared_ptr<IMessageSender>;
 
+class ISessionInfo;
+using ISessionInfoPtr = std::shared_ptr<ISessionInfo>;
+
 } // namespace ews::cli

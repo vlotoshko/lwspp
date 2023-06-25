@@ -4,6 +4,7 @@
  */
 
 #include "easywebsocket/server/Consts.hpp"
+#include "easywebsocket/server/ISessionInfo.hpp"
 
 #include "EventHandler.hpp"
 
@@ -121,10 +122,10 @@ auto getUserNameFromHello(const std::string& message) -> std::string
 EventHandler::EventHandler() : _chatMessageSender(srv::IMessageSenderPtr{})
 {}
 
-void EventHandler::onConnect(ews::srv::SessionId sessionId) noexcept
+void EventHandler::onConnect(ews::srv::ISessionInfoPtr sessionInfo) noexcept
 {
-    const User user = {sessionId, UNKNOWN_USERN_NAME};
-    _users[sessionId] = user;
+    const User user = {sessionInfo->getSessionId(), UNKNOWN_USERN_NAME};
+    _users[sessionInfo->getSessionId()] = user;
 }
 
 void EventHandler::onDisconnect(ews::srv::SessionId sessionId) noexcept

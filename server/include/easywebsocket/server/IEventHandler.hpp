@@ -30,7 +30,7 @@ public:
     auto operator=(const IEventHandler&) noexcept -> IEventHandler& = delete;
 
 public:
-    virtual void onConnect(SessionId) noexcept = 0;
+    virtual void onConnect(ISessionInfoPtr) noexcept = 0;
     virtual void onDisconnect(SessionId) noexcept = 0;
 
     virtual void onMessageReceive(SessionId, const std::string& message) noexcept = 0;

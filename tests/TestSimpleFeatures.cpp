@@ -3,21 +3,16 @@
  * @date May, 2023
  */
 
-#include <future>
-#include <iostream>
 #include <thread>
 
 #include "catch2/catch.hpp"
 
 #include "easywebsocket/client/ClientContextBuilder.hpp"
 #include "easywebsocket/client/ClientFactory.hpp"
-//#include "easywebsocket/client/IClient.hpp"
 #include "easywebsocket/client/IEventHandler.hpp"
-//#include "easywebsocket/client/IMessageSender.hpp"
 
 #include "easywebsocket/server/IEventHandler.hpp"
-//#include "easywebsocket/server/IMessageSender.hpp"
-//#include "easywebsocket/server/IServer.hpp"
+#include "easywebsocket/server/ISessionInfo.hpp"
 #include "easywebsocket/server/ServerFactory.hpp"
 #include "easywebsocket/server/ServerContextBuilder.hpp"
 
@@ -32,16 +27,14 @@ const cli::Address ADDRESS = "localhost";
 const std::string CUSTOM_PROTOCOL_NAME = "CUSTOM_PROTOCOL_NAME";
 const std::string CUSTOM_PROTOCOL_NAME_2 = "CUSTOM_PROTOCOL_NAME_2";
 
-class ServerEventHandler : public srv::IEventHandler
+const std::string SPECIFIC_PATH_NAME = "SPECIFIC_PATH_NAME";
+const std::string SPECIFIC_PATH_NAME_2 = "SPECIFIC_PATH_NAME_2";
+
+class ServerEventHandlerBase : public srv::IEventHandler
 {
 public:
-    explicit ServerEventHandler(bool& b)
-        :_connected(b)
+    void onConnect(srv::ISessionInfoPtr) noexcept override
     {}
-    void onConnect(srv::SessionId) noexcept override
-    {
-        _connected = true;
-    }
     void onDisconnect(srv::SessionId) noexcept override
     {}
     void onMessageReceive(srv::SessionId, const std::string&) noexcept override
@@ -52,20 +45,44 @@ public:
     {}
     void setMessageSender(srv::IMessageSenderPtr) override
     {}
+};
+
+class ServerEventHandlerProtocolName : public ServerEventHandlerBase
+{
+public:
+    explicit ServerEventHandlerProtocolName(bool& b)
+        :_connected(b)
+    {}
+    void onConnect(srv::ISessionInfoPtr) noexcept override
+    {
+        _connected = true;
+    }
 private:
     bool& _connected;
 };
 
-class ClientEventHandler : public cli::IEventHandler
+class ServerEventHandlerPath : public ServerEventHandlerBase
 {
 public:
-    explicit ClientEventHandler(bool& b)
-        :_connected(b)
+    explicit ServerEventHandlerPath(bool& b)
+        : _useSpecificBehaviour(b)
     {}
-    void onConnect() noexcept override
+    void onConnect(srv::ISessionInfoPtr sessionInfo) noexcept override
     {
-        _connected = true;
+        if (sessionInfo != nullptr && sessionInfo->getPath() == SPECIFIC_PATH_NAME)
+        {
+            _useSpecificBehaviour = true;
+        }
     }
+private:
+    bool& _useSpecificBehaviour;
+};
+
+class ClientEventHandlerBase : public cli::IEventHandler
+{
+public:
+    void onConnect(cli::ISessionInfoPtr) noexcept override
+    {}
     void onDisconnect() noexcept override
     {}
     void onMessageReceive(const std::string&) noexcept override
@@ -76,6 +93,18 @@ public:
     {}
     void setMessageSender(cli::IMessageSenderPtr) override
     {}
+};
+
+class ClientEventHandlerProtocolName : public ClientEventHandlerBase
+{
+public:
+    explicit ClientEventHandlerProtocolName(bool& b)
+        :_connected(b)
+    {}
+    void onConnect(cli::ISessionInfoPtr) noexcept override
+    {
+        _connected = true;
+    }
 private:
     bool& _connected;
 };
@@ -96,7 +125,8 @@ SCENARIO( "Protocol name feature testing", "[protocol_name]" )
         bool actualServerConnected = false;
         bool actualClientConnected = false;
 
-        auto serverEventHandler = std::make_shared<ServerEventHandler>(actualServerConnected);
+        auto serverEventHandler
+            = std::make_shared<ServerEventHandlerProtocolName>(actualServerConnected);
         auto serverBuilder = srv::ServerContextBuilder{};
         serverBuilder
             .setVersion(srv::ServerVersion::v1_Andromeda)
@@ -104,7 +134,8 @@ SCENARIO( "Protocol name feature testing", "[protocol_name]" )
             .setEventHandler(serverEventHandler)
             ;
 
-        auto clientEventHandler = std::make_shared<ClientEventHandler>(actualClientConnected);
+        auto clientEventHandler
+            = std::make_shared<ClientEventHandlerProtocolName>(actualClientConnected);
         auto clientBuilder = cli::ClientContextBuilder{};
         clientBuilder
             .setVersion(cli::ClientVersion::v1_Amsterdam)
@@ -200,6 +231,75 @@ SCENARIO( "Protocol name feature testing", "[protocol_name]" )
             }
         }
 
+    } // GIVEN
+} // SCENARIO
+
+
+SCENARIO( "Path feature testing", "[path]" )
+{
+    GIVEN( "Server and client" )
+    {
+        bool actualUseSpecificBehaviour = false;
+        auto serverEventHandler = std::make_shared<ServerEventHandlerPath>(actualUseSpecificBehaviour);
+        auto serverBuilder = srv::ServerContextBuilder{};
+        serverBuilder
+            .setVersion(srv::ServerVersion::v1_Andromeda)
+            .setPort(PORT)
+            .setEventHandler(serverEventHandler)
+            ;
+
+        auto clientEventHandler = std::make_shared<ClientEventHandlerBase>();
+        auto clientBuilder = cli::ClientContextBuilder{};
+        clientBuilder
+            .setVersion(cli::ClientVersion::v1_Amsterdam)
+            .setAddress(ADDRESS)
+            .setPort(PORT)
+            .setEventHandler(clientEventHandler)
+            ;
+
+        WHEN( "Client uses default uri path" )
+        {
+            auto server = srv::createServer(*serverBuilder.build());
+            auto client = cli::createClient(*clientBuilder.build());
+
+            THEN("Server uses default behavoiur")
+            {
+                waitForInitialization();
+
+                const bool expectedUseSpecificBehaviour = false;
+                REQUIRE(actualUseSpecificBehaviour == expectedUseSpecificBehaviour);
+            }
+        }
+
+        WHEN( "Client uses specific uri path" )
+        {
+            auto server = srv::createServer(*serverBuilder.build());
+            clientBuilder.setPath(SPECIFIC_PATH_NAME);
+            auto client = cli::createClient(*clientBuilder.build());
+
+            AND_WHEN("Server uses specific behavoiur")
+            {
+                waitForInitialization();
+
+                const bool expectedUseSpecificBehaviour = true;
+                REQUIRE(actualUseSpecificBehaviour == expectedUseSpecificBehaviour);
+            }
+        }
+
+        WHEN( "Client uses specific uri path, but other than specified by server" )
+        {
+            auto server = srv::createServer(*serverBuilder.build());
+            clientBuilder.setPath(SPECIFIC_PATH_NAME_2);
+            auto client = cli::createClient(*clientBuilder.build());
+
+            AND_WHEN("Server uses default behavoiur")
+            {
+                waitForInitialization();
+
+                const bool expectedUseSpecificBehaviour = false;
+                REQUIRE(actualUseSpecificBehaviour == expectedUseSpecificBehaviour);
+            }
+        }
     } // GIVEN
 } // SCENARIO
 

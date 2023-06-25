@@ -34,7 +34,6 @@ void waitForSignal()
 
 } // namespace name
 
-
 auto main() -> int
 {
     signal(SIGINT, interruption::signalHandler);

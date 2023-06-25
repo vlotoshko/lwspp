@@ -21,7 +21,7 @@ class EventHandler : public srv::IEventHandler
 public:
     EventHandler();
 
-    void onConnect(srv::SessionId) noexcept override;
+    void onConnect(srv::ISessionInfoPtr) noexcept override;
     void onDisconnect(srv::SessionId) noexcept override;
     void onMessageReceive(srv::SessionId, const std::string& message) noexcept override;
 

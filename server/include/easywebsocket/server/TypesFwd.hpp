@@ -22,4 +22,7 @@ using IServerPtr = std::shared_ptr<IServer>;
 class IServerContext;
 using IServerContextPtr = std::shared_ptr<IServerContext>;
 
+class ISessionInfo;
+using ISessionInfoPtr = std::shared_ptr<ISessionInfo>;
+
 } // namespace ews::srv

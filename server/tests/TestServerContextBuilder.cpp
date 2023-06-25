@@ -32,7 +32,7 @@ auto toString(ServerVersion version) -> std::string
 class EventHandler : public IEventHandler
 {
 public:
-    void onConnect(SessionId) noexcept override
+    void onConnect(ISessionInfoPtr) noexcept override
     {}
     void onDisconnect(SessionId) noexcept override
     {}

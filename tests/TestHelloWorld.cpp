@@ -37,7 +37,7 @@ public:
         :_incomeMessage(i)
     {}
 
-    void onConnect(srv::SessionId) noexcept override
+    void onConnect(srv::ISessionInfoPtr) noexcept override
     {}
     void onDisconnect(srv::SessionId) noexcept override
     {}
@@ -70,7 +70,7 @@ public:
         :_incomeMessage(i)
     {}
 
-    void onConnect() noexcept override
+    void onConnect(cli::ISessionInfoPtr) noexcept override
     {
         _messageSender->sendMessage(HELLO_SERVER);
     }

@@ -13,6 +13,7 @@ set(${PROJECT_NAME}_SRC_FILES
     include/easywebsocket/client/IClient.hpp
     include/easywebsocket/client/IEventHandler.hpp
     include/easywebsocket/client/IMessageSender.hpp
+    include/easywebsocket/client/ISessionInfo.hpp
     include/easywebsocket/client/Types.hpp
     include/easywebsocket/client/TypesFwd.hpp
 
@@ -44,6 +45,7 @@ set(${PROJECT_NAME}_SRC_FILES
     src/IClientContext.hpp
     src/IContextVisitor.hpp
     src/IContextVisitorAcceptor.hpp
+    src/SessionInfoExternal.hpp
     src/TypesFwd.hpp
 )
 

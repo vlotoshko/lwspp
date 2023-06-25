@@ -11,6 +11,7 @@
 #include "LwsAdapter/LwsCallback.hpp"
 #include "LwsAdapter/LwsSession.hpp"
 #include "Consts.hpp"
+#include "SessionInfoExternal.hpp"
 
 namespace ews::srv
 {
@@ -28,6 +29,14 @@ auto getCallbackContext(lws* wsInstance) -> ILwsCallbackContext&
 auto getSessionId(lws* wsInstance) -> SessionId
 {
     return lws_get_socket_fd(wsInstance);
+}
+
+Path getSessionPath(lws* wsInstance)
+{
+    std::array<char, MAX_PATH_SIZE> buffer{};
+    lws_hdr_copy(wsInstance, buffer.data(), MAX_PATH_SIZE, WSI_TOKEN_GET_URI);
+
+    return static_cast<Path>(buffer.data());
 }
 
 auto reasonToString(lws_callback_reasons reason) -> std::string
@@ -133,7 +142,10 @@ auto lwsCallback_v1(
     {
         auto sessions = callbackContext.getSessions();
         sessions->add(std::make_shared<LwsSession>(sessionId, wsInstance));
-        eventHandler->onConnect(sessionId);
+
+        auto sessionInfo =
+            std::make_shared<SessionInfoExternal>(sessionId, getSessionPath(wsInstance));
+        eventHandler->onConnect(sessionInfo);
         break;
     }
     case LWS_CALLBACK_SERVER_WRITEABLE:

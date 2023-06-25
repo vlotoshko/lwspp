@@ -10,6 +10,7 @@
 #include "LwsAdapter/LwsCallback.hpp"
 #include "LwsAdapter/LwsSession.hpp"
 #include "Consts.hpp"
+#include "SessionInfoExternal.hpp"
 
 namespace ews::cli
 {
@@ -135,7 +136,7 @@ auto lwsCallback_v1(
     case LWS_CALLBACK_CLIENT_ESTABLISHED:
     {
         callbackContext.setSession(std::make_shared<LwsSession>(wsInstance));
-        eventHandler->onConnect();
+        eventHandler->onConnect(std::make_shared<SessionInfoExternal>());
         break;
     }
     case LWS_CALLBACK_CLIENT_WRITEABLE:
