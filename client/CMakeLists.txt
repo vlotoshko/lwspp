@@ -14,6 +14,7 @@ set(${PROJECT_NAME}_SRC_FILES
     include/easywebsocket/client/EventHandlerBase.hpp
     include/easywebsocket/client/IEventHandler.hpp
     include/easywebsocket/client/IMessageSender.hpp
+    include/easywebsocket/client/IMessageSenderAcceptor.hpp
     include/easywebsocket/client/ISessionInfo.hpp
     include/easywebsocket/client/Types.hpp
     include/easywebsocket/client/TypesFwd.hpp

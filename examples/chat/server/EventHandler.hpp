@@ -25,7 +25,7 @@ public:
     void onDisconnect(srv::SessionId) noexcept override;
     void onMessageReceive(srv::SessionId, const std::string& message) noexcept override;
 
-    void setMessageSender(srv::IMessageSenderPtr) noexcept override;
+    void acceptMessageSender(srv::IMessageSenderPtr) noexcept override;
 
 private:
     void processHelloMessage_(srv::SessionId, const std::string& message);

@@ -38,6 +38,7 @@ public:
     auto setVersion(ServerVersion) -> ServerContextBuilder&;
     auto setPort(Port) -> ServerContextBuilder&;
     auto setEventHandler(IEventHandlerPtr) -> ServerContextBuilder&;
+    auto setMessageSenderAcceptor(IMessageSenderAcceptorPtr) -> ServerContextBuilder&;
 
     // Non mandatory options
     auto setProtocolName(std::string) -> ServerContextBuilder&;

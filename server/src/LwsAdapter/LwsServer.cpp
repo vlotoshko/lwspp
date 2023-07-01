@@ -6,7 +6,7 @@
 #include <libwebsockets.h>
 #include <thread>
 
-#include "easywebsocket/server/IEventHandler.hpp"
+#include "easywebsocket/server/IMessageSenderAcceptor.hpp"
 
 #include "LwsAdapter/ILwsCallbackNotifier.hpp"
 #include "LwsAdapter/ILwsSession.hpp"
@@ -82,7 +82,8 @@ LwsServer::LwsServer(const ServerContext& context)
 
     auto notifier = std::make_shared<LwsCallbackNotifier>(_dataHolder, _lowLevelContext);
     auto sender = std::make_shared<LwsMessageSender>(sessions, std::move(notifier));
-    _callbackContext->getEventHandler()->setMessageSender(std::move(sender));
+    context.messageSenderAcceptor->acceptMessageSender(std::move(sender));
+//    _callbackContext->getEventHandler()->setMessageSender();
 }
 
 LwsServer::~LwsServer()

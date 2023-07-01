@@ -74,6 +74,7 @@ srv::IServerPtr setupServer(std::string& messageHolder)
         .setVersion(srv::ServerVersion::v1_Andromeda)
         .setPort(PORT)
         .setEventHandler(serverEventHandler)
+        .setMessageSenderAcceptor(serverEventHandler)
         ;
 
     return srv::createServer(*serverContextBuilder.build());
@@ -88,6 +89,7 @@ cli::IClientPtr setupClient(std::string& messageHolder)
         .setAddress(ADDRESS)
         .setPort(PORT)
         .setEventHandler(clientEventHandler)
+        .setMessageSenderAcceptor(clientEventHandler)
         ;
 
     return cli::createClient(*clientContextBuilder.build());

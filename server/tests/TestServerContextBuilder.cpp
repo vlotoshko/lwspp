@@ -75,13 +75,28 @@ SCENARIO( "ServerContext construction", "[server_context_parameters]" )
         WHEN( "Event handler is not set" )
         {
             serverContextBuilder
-                    .setVersion(ServerVersion::v1_Andromeda)
-                    .setPort(PORT);
+                .setVersion(ServerVersion::v1_Andromeda)
+                .setPort(PORT);
 
             THEN( "Exception is thrown on context build" )
             {
                 REQUIRE_THROWS_WITH(serverContextBuilder.build(),
                                     "Required parameter is undefined: event handler");
+            }
+        }
+
+        WHEN( "MessageSenderAcceptor is not set" )
+        {
+            auto handler = std::make_shared<EventHandlerBase>();
+            serverContextBuilder
+                .setVersion(ServerVersion::v1_Andromeda)
+                .setPort(PORT)
+                .setEventHandler(handler);
+
+            THEN( "Exception is thrown on context build" )
+            {
+                REQUIRE_THROWS_WITH(serverContextBuilder.build(),
+                                    "Required parameter is undefined: message sender acceptor");
             }
         }
 
@@ -91,7 +106,8 @@ SCENARIO( "ServerContext construction", "[server_context_parameters]" )
             serverContextBuilder
                     .setVersion(ServerVersion::v1_Andromeda)
                     .setPort(PORT)
-                    .setEventHandler(handler);
+                    .setEventHandler(handler)
+                    .setMessageSenderAcceptor(handler);
 
             THEN( "Context builds successfully" )
             {

@@ -43,6 +43,11 @@ void checkContext(const ClientContext& context)
     {
         throw UndefinedRequiredParameterException{"event handler"};
     }
+
+    if (context.messageSenderAcceptor == nullptr)
+    {
+        throw UndefinedRequiredParameterException{"message sender acceptor"};
+    }
 }
 
 } // namespace
@@ -55,7 +60,6 @@ ClientContextBuilder::~ClientContextBuilder() = default;
 
 auto ClientContextBuilder::build() const -> IClientContextPtr
 {
-
     const auto& context = *_clientContext;
     checkContext(context);
     return std::make_shared<ClientContext>(*_clientContext);
@@ -64,6 +68,12 @@ auto ClientContextBuilder::build() const -> IClientContextPtr
 auto ClientContextBuilder::setEventHandler(IEventHandlerPtr e) -> ClientContextBuilder&
 {
     _clientContext->eventHandler = std::move(e);
+    return *this;
+}
+
+auto ClientContextBuilder::setMessageSenderAcceptor(IMessageSenderAcceptorPtr a) -> ClientContextBuilder&
+{
+    _clientContext->messageSenderAcceptor = std::move(a);
     return *this;
 }
 

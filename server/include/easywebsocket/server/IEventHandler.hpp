@@ -32,15 +32,10 @@ public:
 public:
     virtual void onConnect(ISessionInfoPtr) noexcept = 0;
     virtual void onDisconnect(SessionId) noexcept = 0;
-
     virtual void onMessageReceive(SessionId, const std::string& message) noexcept = 0;
+
     virtual void onError(SessionId, const std::string& errorMessage) noexcept = 0;
     virtual void onWarning(SessionId, const std::string& errorMessage) noexcept = 0;
-
-    // The setMessageSender method is used by server factory to set the message sender
-    // for the IEventHandler. The user's implementations of the IEventHandler can use the
-    // IMessageSenderPtr to send messages to the clients.
-    virtual void setMessageSender(IMessageSenderPtr) noexcept = 0;
 };
 
 } // namespace ews::srv

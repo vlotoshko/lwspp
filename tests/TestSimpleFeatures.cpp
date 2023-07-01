@@ -98,6 +98,7 @@ SCENARIO( "Protocol name feature testing", "[protocol_name]" )
             .setVersion(srv::ServerVersion::v1_Andromeda)
             .setPort(PORT)
             .setEventHandler(serverEventHandler)
+            .setMessageSenderAcceptor(serverEventHandler)
             ;
 
         auto clientEventHandler
@@ -108,6 +109,7 @@ SCENARIO( "Protocol name feature testing", "[protocol_name]" )
             .setAddress(ADDRESS)
             .setPort(PORT)
             .setEventHandler(clientEventHandler)
+            .setMessageSenderAcceptor(clientEventHandler)
             ;
 
         WHEN( "Server uses default protocol name" )
@@ -212,6 +214,7 @@ SCENARIO( "Path feature testing", "[path]" )
             .setVersion(srv::ServerVersion::v1_Andromeda)
             .setPort(PORT)
             .setEventHandler(serverEventHandler)
+            .setMessageSenderAcceptor(serverEventHandler)
             ;
 
         auto clientEventHandler = std::make_shared<cli::EventHandlerBase>();
@@ -221,6 +224,7 @@ SCENARIO( "Path feature testing", "[path]" )
             .setAddress(ADDRESS)
             .setPort(PORT)
             .setEventHandler(clientEventHandler)
+            .setMessageSenderAcceptor(clientEventHandler)
             ;
 
         WHEN( "Client uses default uri path" )

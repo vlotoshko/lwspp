@@ -5,7 +5,7 @@
 
 #include <stdexcept>
 
-#include "easywebsocket/client/IEventHandler.hpp"
+#include "easywebsocket/client/IMessageSenderAcceptor.hpp"
 
 #include "LwsAdapter/LwsCallbackContext.hpp"
 #include "LwsAdapter/LwsMessageSender.hpp"
@@ -13,8 +13,9 @@
 namespace ews::cli
 {
 
-LwsCallbackContext::LwsCallbackContext(IEventHandlerPtr e)
+LwsCallbackContext::LwsCallbackContext(IEventHandlerPtr e, IMessageSenderAcceptorPtr a)
     : _eventHandler(std::move(e))
+    ,_messageSenderAcceptor(std::move(a))
 {}
 
 void LwsCallbackContext::setStopping()
@@ -44,7 +45,9 @@ void LwsCallbackContext::setSession(ILwsSessionPtr s)
         throw std::runtime_error{"unaintialized lws session found"};
     }
     _session = std::move(s);
-    _eventHandler->setMessageSender(std::make_shared<LwsMessageSender>(_session));
+
+    auto messageSender = std::make_shared<LwsMessageSender>(_session);
+    _messageSenderAcceptor->acceptMessageSender(std::move(messageSender));
 }
 
 void LwsCallbackContext::resetSession()

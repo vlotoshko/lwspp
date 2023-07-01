@@ -8,11 +8,12 @@
 #include <string>
 
 #include "easywebsocket/client/IEventHandler.hpp"
+#include "easywebsocket/client/IMessageSenderAcceptor.hpp"
 
 namespace ews::cli
 {
 
-class EventHandlerBase : public IEventHandler
+class EventHandlerBase : public IEventHandler, public IMessageSenderAcceptor
 {
 public:
     void onConnect(ISessionInfoPtr) noexcept override;
@@ -22,7 +23,7 @@ public:
     void onError(const std::string& errorMessage) noexcept override;
     void onWarning(const std::string& errorMessage) noexcept override;
 
-    void setMessageSender(IMessageSenderPtr) noexcept override;
+    void acceptMessageSender(IMessageSenderPtr) noexcept override;
 
 protected:
     IMessageSenderPtr _messageSender;

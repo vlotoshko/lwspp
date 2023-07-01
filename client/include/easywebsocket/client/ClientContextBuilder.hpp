@@ -39,6 +39,7 @@ public:
     auto setAddress(Address) -> ClientContextBuilder&;
     auto setPort(Port) -> ClientContextBuilder&;
     auto setEventHandler(IEventHandlerPtr) -> ClientContextBuilder&;
+    auto setMessageSenderAcceptor(IMessageSenderAcceptorPtr) -> ClientContextBuilder&;
 
     // Non mandatory options
     auto setProtocolName(std::string) -> ClientContextBuilder&;

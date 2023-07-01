@@ -159,9 +159,10 @@ void EventHandler::onMessageReceive(srv::SessionId sessionId, const std::string&
     }
 }
 
-void EventHandler::setMessageSender(srv::IMessageSenderPtr messageSender) noexcept
+void EventHandler::acceptMessageSender(srv::IMessageSenderPtr messageSender) noexcept
 {
-    _chatMessageSender = ChatMessageSender{std::move(messageSender)};
+    srv::EventHandlerBase::acceptMessageSender(messageSender);
+    _chatMessageSender = ChatMessageSender{_messageSender};
 }
 
 void EventHandler::processHelloMessage_(srv::SessionId sessionId, const std::string& messageText)

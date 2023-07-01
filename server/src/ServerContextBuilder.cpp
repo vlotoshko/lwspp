@@ -38,6 +38,11 @@ void checkContext(const ServerContext& context)
     {
         throw UndefinedRequiredParameterException{"event handler"};
     }
+
+    if (context.messageSenderAcceptor == nullptr)
+    {
+        throw UndefinedRequiredParameterException{"message sender acceptor"};
+    }
 }
 
 } // namespace
@@ -70,6 +75,12 @@ auto ServerContextBuilder::setPort(Port port) -> ServerContextBuilder&
 auto ServerContextBuilder::setEventHandler(IEventHandlerPtr e) -> ServerContextBuilder&
 {
     _serverContext->eventHandler = std::move(e);
+    return *this;
+}
+
+auto ServerContextBuilder::setMessageSenderAcceptor(IMessageSenderAcceptorPtr a) -> ServerContextBuilder&
+{
+    _serverContext->messageSenderAcceptor = std::move(a);
     return *this;
 }
 

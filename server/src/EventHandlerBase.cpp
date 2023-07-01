@@ -23,7 +23,7 @@ void EventHandlerBase::onError(SessionId, const std::string& /*errorMessage*/) n
 void EventHandlerBase::onWarning(SessionId, const std::string& /*errorMessage*/) noexcept
 {}
 
-void EventHandlerBase::setMessageSender(IMessageSenderPtr messageSender) noexcept
+void EventHandlerBase::acceptMessageSender(IMessageSenderPtr messageSender) noexcept
 {
     _messageSender = std::move(messageSender);
 }

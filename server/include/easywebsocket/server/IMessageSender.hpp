@@ -28,6 +28,7 @@ public:
     auto operator=(IMessageSender&&) noexcept -> IMessageSender& = default;
 
 public:
+    // Sends a message to a specific client
     virtual void sendMessage(SessionId, const std::string&) = 0;
     // Sends a message to all clients
     virtual void sendMessage(const std::string&) = 0;

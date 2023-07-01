@@ -16,6 +16,9 @@ using IEventHandlerPtr = std::shared_ptr<IEventHandler>;
 class IMessageSender;
 using IMessageSenderPtr = std::shared_ptr<IMessageSender>;
 
+class IMessageSenderAcceptor;
+using IMessageSenderAcceptorPtr = std::shared_ptr<IMessageSenderAcceptor>;
+
 class IServer;
 using IServerPtr = std::shared_ptr<IServer>;
 

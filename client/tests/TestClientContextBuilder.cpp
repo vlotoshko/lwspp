@@ -105,7 +105,7 @@ SCENARIO( "ClientContext construction", "[client_context_parameters]" )
             }
         }
 
-        WHEN( "All mandatory parameters are set" )
+        WHEN( "MessageSenderAcceptor is not set" )
         {
             auto handler = std::make_shared<EventHandlerBase>();
             clientContextBuilder
@@ -113,6 +113,23 @@ SCENARIO( "ClientContext construction", "[client_context_parameters]" )
                 .setAddress(ADDRESS)
                 .setPort(PORT)
                 .setEventHandler(handler);
+
+            THEN( "Exception is thrown on context build" )
+            {
+                REQUIRE_THROWS_WITH(clientContextBuilder.build(),
+                                    "Required parameter is undefined: message sender acceptor");
+            }
+        }
+
+        WHEN( "All mandatory parameters are set" )
+        {
+            auto handler = std::make_shared<EventHandlerBase>();
+            clientContextBuilder
+                .setVersion(ClientVersion::v1_Amsterdam)
+                .setAddress(ADDRESS)
+                .setPort(PORT)
+                .setEventHandler(handler)
+                .setMessageSenderAcceptor(handler);
 
             THEN( "Context builds successfully" )
             {

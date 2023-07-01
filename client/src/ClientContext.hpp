@@ -21,6 +21,7 @@ public:
 
     ClientVersion clientVersion = UNDEFINED_CLIENT_VERSION;
     IEventHandlerPtr eventHandler;
+    IMessageSenderAcceptorPtr messageSenderAcceptor;
     Address address = UNDEFINED_ADDRESS;
     Port port = UNDEFINED_PORT;
 

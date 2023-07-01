@@ -26,6 +26,7 @@ public:
     void accept(IContextVisitor&) const override;
 
     IEventHandlerPtr eventHandler;
+    IMessageSenderAcceptorPtr messageSenderAcceptor;
     ServerVersion serverVersion = UNDEFINED_SERVER_VERSION;
     Port port = UNDEFINED_PORT;
 

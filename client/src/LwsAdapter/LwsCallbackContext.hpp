@@ -13,7 +13,7 @@ namespace ews::cli
 class LwsCallbackContext : public ILwsCallbackContext
 {
 public:
-    LwsCallbackContext(IEventHandlerPtr);
+    LwsCallbackContext(IEventHandlerPtr, IMessageSenderAcceptorPtr);
 
     void setStopping() override;
     auto isStopping() const -> bool override;
@@ -26,6 +26,7 @@ public:
 
 private:
     IEventHandlerPtr _eventHandler;
+    IMessageSenderAcceptorPtr _messageSenderAcceptor;
     ILwsSessionPtr _session;
 
     bool _isStopping = false;
