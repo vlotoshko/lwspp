@@ -159,15 +159,9 @@ void EventHandler::onMessageReceive(srv::SessionId sessionId, const std::string&
     }
 }
 
-void EventHandler::onError(srv::SessionId, const std::string& /*errorMessage*/) noexcept
-{}
-
-void EventHandler::onWarning(srv::SessionId, const std::string& /*warningMessage*/) noexcept
-{}
-
-void EventHandler::setMessageSender(srv::IMessageSenderPtr messageSender)
+void EventHandler::setMessageSender(srv::IMessageSenderPtr messageSender) noexcept
 {
-    _chatMessageSender = ChatMessageSender{messageSender};
+    _chatMessageSender = ChatMessageSender{std::move(messageSender)};
 }
 
 void EventHandler::processHelloMessage_(srv::SessionId sessionId, const std::string& messageText)

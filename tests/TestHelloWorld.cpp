@@ -3,17 +3,16 @@
  * @date May, 2023
  */
 
-#include <future>
 #include <thread>
 
 #include "catch2/catch.hpp"
 
 #include "easywebsocket/client/ClientContextBuilder.hpp"
 #include "easywebsocket/client/ClientFactory.hpp"
-#include "easywebsocket/client/IEventHandler.hpp"
+#include "easywebsocket/client/EventHandlerBase.hpp"
 #include "easywebsocket/client/IMessageSender.hpp"
 
-#include "easywebsocket/server/IEventHandler.hpp"
+#include "easywebsocket/server/EventHandlerBase.hpp"
 #include "easywebsocket/server/IMessageSender.hpp"
 #include "easywebsocket/server/ServerFactory.hpp"
 #include "easywebsocket/server/ServerContextBuilder.hpp"
@@ -30,16 +29,11 @@ const cli::Address ADDRESS = "localhost";
 const std::string HELLO_SERVER = "hello server!";
 const std::string HELLO_CLIENT = "hello client!";
 
-class ServerEventHandler : public srv::IEventHandler
+class ServerEventHandler : public srv::EventHandlerBase
 {
 public:
     explicit ServerEventHandler(std::string& i)
         :_incomeMessage(i)
-    {}
-
-    void onConnect(srv::ISessionInfoPtr) noexcept override
-    {}
-    void onDisconnect(srv::SessionId) noexcept override
     {}
 
     void onMessageReceive(srv::SessionId sessionId, const std::string& message) noexcept override
@@ -48,22 +42,11 @@ public:
         _messageSender->sendMessage(sessionId, HELLO_CLIENT);
     }
 
-    void onError(srv::SessionId, const std::string&) noexcept override
-    {}
-    void onWarning(srv::SessionId, const std::string&) noexcept override
-    {}
-
-    void setMessageSender(srv::IMessageSenderPtr ms) override
-    {
-        _messageSender = ms;
-    }
-
 private:
-    srv::IMessageSenderPtr _messageSender;
     std::string& _incomeMessage;
 };
 
-class ClientEventHandler : public cli::IEventHandler
+class ClientEventHandler : public cli::EventHandlerBase
 {
 public:
     explicit ClientEventHandler(std::string& i)
@@ -74,24 +57,12 @@ public:
     {
         _messageSender->sendMessage(HELLO_SERVER);
     }
-    void onDisconnect() noexcept override
-    {}
     void onMessageReceive(const std::string& message) noexcept override
     {
         _incomeMessage = message;
     }
-    void onError(const std::string&) noexcept override
-    {}
-    void onWarning(const std::string&) noexcept override
-    {}
-
-    void setMessageSender(cli::IMessageSenderPtr ms) override
-    {
-        _messageSender = ms;
-    }
 
 private:
-    cli::IMessageSenderPtr _messageSender;
     std::string& _incomeMessage;
 };
 

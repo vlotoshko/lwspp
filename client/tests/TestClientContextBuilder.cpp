@@ -5,8 +5,8 @@
 
 #include "catch2/catch.hpp"
 
-#include "easywebsocket/client/IEventHandler.hpp"
 #include "easywebsocket/client/ClientContextBuilder.hpp"
+#include "easywebsocket/client/EventHandlerBase.hpp"
 #include "IContextVisitor.hpp"
 #include "ClientContext.hpp"
 
@@ -30,23 +30,6 @@ auto toString(ClientVersion version) -> std::string
         return "Undefined";
     }
 }
-
-class EventHandler : public IEventHandler
-{
-public:
-    void onConnect(cli::ISessionInfoPtr) noexcept override
-    {}
-    void onDisconnect() noexcept override
-    {}
-    void onMessageReceive(const std::string&) noexcept override
-    {}
-    void onError(const std::string&) noexcept override
-    {}
-    void onWarning(const std::string&) noexcept override
-    {}
-    void setMessageSender(cli::IMessageSenderPtr) override
-    {}
-};
 
 class ClientContextVisitor : public IContextVisitor
 {
@@ -124,7 +107,7 @@ SCENARIO( "ClientContext construction", "[client_context_parameters]" )
 
         WHEN( "All mandatory parameters are set" )
         {
-            auto handler = std::make_shared<EventHandler>();
+            auto handler = std::make_shared<EventHandlerBase>();
             clientContextBuilder
                 .setVersion(ClientVersion::v1_Amsterdam)
                 .setAddress(ADDRESS)

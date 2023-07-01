@@ -5,7 +5,7 @@
 
 #include "catch2/catch.hpp"
 
-#include "easywebsocket/server/IEventHandler.hpp"
+#include "easywebsocket/server/EventHandlerBase.hpp"
 #include "easywebsocket/server/ServerContextBuilder.hpp"
 #include "IContextVisitor.hpp"
 #include "ServerContext.hpp"
@@ -28,23 +28,6 @@ auto toString(ServerVersion version) -> std::string
         return "Undefined";
     }
 }
-
-class EventHandler : public IEventHandler
-{
-public:
-    void onConnect(ISessionInfoPtr) noexcept override
-    {}
-    void onDisconnect(SessionId) noexcept override
-    {}
-    void onMessageReceive(srv::SessionId, const std::string&) noexcept override
-    {}
-    void onError(srv::SessionId, const std::string&) noexcept override
-    {}
-    void onWarning(srv::SessionId, const std::string&) noexcept override
-    {}
-    void setMessageSender(srv::IMessageSenderPtr) override
-    {}
-};
 
 class ServerContextVisitor : public IContextVisitor
 {
@@ -104,7 +87,7 @@ SCENARIO( "ServerContext construction", "[server_context_parameters]" )
 
         WHEN( "All mandatory parameters are set" )
         {
-            auto handler = std::make_shared<EventHandler>();
+            auto handler = std::make_shared<EventHandlerBase>();
             serverContextBuilder
                     .setVersion(ServerVersion::v1_Andromeda)
                     .setPort(PORT)

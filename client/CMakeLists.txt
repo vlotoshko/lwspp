@@ -11,6 +11,7 @@ set(${PROJECT_NAME}_SRC_FILES
     include/easywebsocket/client/ClientFactory.hpp
     include/easywebsocket/client/ClientVersions.hpp
     include/easywebsocket/client/IClient.hpp
+    include/easywebsocket/client/EventHandlerBase.hpp
     include/easywebsocket/client/IEventHandler.hpp
     include/easywebsocket/client/IMessageSender.hpp
     include/easywebsocket/client/ISessionInfo.hpp
@@ -35,6 +36,7 @@ set(${PROJECT_NAME}_SRC_FILES
     src/LwsAdapter/LwsSession.cpp
     src/LwsAdapter/LwsSession.hpp
     src/LwsAdapter/LwsTypesFwd.hpp
+
     src/Client.cpp
     src/Client.hpp
     src/ClientContext.cpp
@@ -42,6 +44,7 @@ set(${PROJECT_NAME}_SRC_FILES
     src/ClientContextBuilder.cpp
     src/ClientFactory.cpp
     src/Consts.hpp
+    src/EventHandlerBase.cpp
     src/IClientContext.hpp
     src/IContextVisitor.hpp
     src/IContextVisitorAcceptor.hpp

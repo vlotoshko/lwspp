@@ -8,7 +8,7 @@
 #include <map>
 #include <vector>
 
-#include "easywebsocket/server/IEventHandler.hpp"
+#include "easywebsocket/server/EventHandlerBase.hpp"
 
 #include "ChatMessageSender.hpp"
 #include "Types.hpp"
@@ -16,7 +16,7 @@
 namespace ews::chat
 {
 
-class EventHandler : public srv::IEventHandler
+class EventHandler : public srv::EventHandlerBase
 {
 public:
     EventHandler();
@@ -25,9 +25,7 @@ public:
     void onDisconnect(srv::SessionId) noexcept override;
     void onMessageReceive(srv::SessionId, const std::string& message) noexcept override;
 
-    void onError(srv::SessionId, const std::string& errorMessage) noexcept override;
-    void onWarning(srv::SessionId, const std::string& warningMessage) noexcept override;
-    void setMessageSender(srv::IMessageSenderPtr) override;
+    void setMessageSender(srv::IMessageSenderPtr) noexcept override;
 
 private:
     void processHelloMessage_(srv::SessionId, const std::string& message);

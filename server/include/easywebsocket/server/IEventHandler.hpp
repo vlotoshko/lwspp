@@ -40,7 +40,7 @@ public:
     // The setMessageSender method is used by server factory to set the message sender
     // for the IEventHandler. The user's implementations of the IEventHandler can use the
     // IMessageSenderPtr to send messages to the clients.
-    virtual void setMessageSender(IMessageSenderPtr) = 0;
+    virtual void setMessageSender(IMessageSenderPtr) noexcept = 0;
 };
 
 } // namespace ews::srv

@@ -9,9 +9,9 @@
 
 #include "easywebsocket/client/ClientContextBuilder.hpp"
 #include "easywebsocket/client/ClientFactory.hpp"
-#include "easywebsocket/client/IEventHandler.hpp"
+#include "easywebsocket/client/EventHandlerBase.hpp"
 
-#include "easywebsocket/server/IEventHandler.hpp"
+#include "easywebsocket/server/EventHandlerBase.hpp"
 #include "easywebsocket/server/ISessionInfo.hpp"
 #include "easywebsocket/server/ServerFactory.hpp"
 #include "easywebsocket/server/ServerContextBuilder.hpp"
@@ -30,24 +30,7 @@ const std::string CUSTOM_PROTOCOL_NAME_2 = "CUSTOM_PROTOCOL_NAME_2";
 const std::string SPECIFIC_PATH_NAME = "SPECIFIC_PATH_NAME";
 const std::string SPECIFIC_PATH_NAME_2 = "SPECIFIC_PATH_NAME_2";
 
-class ServerEventHandlerBase : public srv::IEventHandler
-{
-public:
-    void onConnect(srv::ISessionInfoPtr) noexcept override
-    {}
-    void onDisconnect(srv::SessionId) noexcept override
-    {}
-    void onMessageReceive(srv::SessionId, const std::string&) noexcept override
-    {}
-    void onError(srv::SessionId, const std::string&) noexcept override
-    {}
-    void onWarning(srv::SessionId, const std::string&) noexcept override
-    {}
-    void setMessageSender(srv::IMessageSenderPtr) override
-    {}
-};
-
-class ServerEventHandlerProtocolName : public ServerEventHandlerBase
+class ServerEventHandlerProtocolName : public srv::EventHandlerBase
 {
 public:
     explicit ServerEventHandlerProtocolName(bool& b)
@@ -61,7 +44,7 @@ private:
     bool& _connected;
 };
 
-class ServerEventHandlerPath : public ServerEventHandlerBase
+class ServerEventHandlerPath : public srv::EventHandlerBase
 {
 public:
     explicit ServerEventHandlerPath(bool& b)
@@ -78,24 +61,7 @@ private:
     bool& _useSpecificBehaviour;
 };
 
-class ClientEventHandlerBase : public cli::IEventHandler
-{
-public:
-    void onConnect(cli::ISessionInfoPtr) noexcept override
-    {}
-    void onDisconnect() noexcept override
-    {}
-    void onMessageReceive(const std::string&) noexcept override
-    {}
-    void onError(const std::string&) noexcept override
-    {}
-    void onWarning(const std::string&) noexcept override
-    {}
-    void setMessageSender(cli::IMessageSenderPtr) override
-    {}
-};
-
-class ClientEventHandlerProtocolName : public ClientEventHandlerBase
+class ClientEventHandlerProtocolName : public cli::EventHandlerBase
 {
 public:
     explicit ClientEventHandlerProtocolName(bool& b)
@@ -248,7 +214,7 @@ SCENARIO( "Path feature testing", "[path]" )
             .setEventHandler(serverEventHandler)
             ;
 
-        auto clientEventHandler = std::make_shared<ClientEventHandlerBase>();
+        auto clientEventHandler = std::make_shared<cli::EventHandlerBase>();
         auto clientBuilder = cli::ClientContextBuilder{};
         clientBuilder
             .setVersion(cli::ClientVersion::v1_Amsterdam)

@@ -8,6 +8,7 @@ project(
 
 set(${PROJECT_NAME}_SRC_FILES
     include/easywebsocket/server/Consts.hpp
+    include/easywebsocket/server/EventHandlerBase.hpp
     include/easywebsocket/server/IEventHandler.hpp
     include/easywebsocket/server/IMessageSender.hpp
     include/easywebsocket/server/IServer.hpp
@@ -42,6 +43,7 @@ set(${PROJECT_NAME}_SRC_FILES
     src/LwsAdapter/LwsTypesFwd.hpp
 
     src/Consts.hpp
+    src/EventHandlerBase.cpp
     src/IContextVisitor.hpp
     src/IContextVisitorAcceptor.hpp
     src/IServerContext.hpp
