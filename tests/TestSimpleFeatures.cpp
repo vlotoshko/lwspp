@@ -198,7 +198,6 @@ SCENARIO( "Protocol name feature testing", "[protocol_name]" )
                 }
             }
         }
-
     } // GIVEN
 } // SCENARIO
 

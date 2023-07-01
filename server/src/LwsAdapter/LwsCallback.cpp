@@ -31,7 +31,7 @@ auto getSessionId(lws* wsInstance) -> SessionId
     return lws_get_socket_fd(wsInstance);
 }
 
-Path getSessionPath(lws* wsInstance)
+auto getSessionPath(lws* wsInstance) -> Path
 {
     std::array<char, MAX_PATH_SIZE> buffer{};
     lws_hdr_copy(wsInstance, buffer.data(), MAX_PATH_SIZE, WSI_TOKEN_GET_URI);

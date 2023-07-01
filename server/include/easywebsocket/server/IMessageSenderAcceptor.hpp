@@ -20,10 +20,10 @@ public:
     virtual ~IMessageSenderAcceptor() = default;
 
     IMessageSenderAcceptor(const IMessageSenderAcceptor&) = default;
-    IMessageSenderAcceptor(IMessageSenderAcceptor&&) = default;
+    auto operator=(const IMessageSenderAcceptor&) noexcept -> IMessageSenderAcceptor& = default;
 
-    IMessageSenderAcceptor& operator=(const IMessageSenderAcceptor&) = default;
-    IMessageSenderAcceptor& operator=(IMessageSenderAcceptor&&) = default;
+    IMessageSenderAcceptor(IMessageSenderAcceptor&&) = default;
+    auto operator=(IMessageSenderAcceptor&&) noexcept -> IMessageSenderAcceptor& = default;
 
 public:
     virtual void acceptMessageSender(IMessageSenderPtr) noexcept = 0;
