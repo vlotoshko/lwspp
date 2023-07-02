@@ -27,6 +27,7 @@ public:
 
     Path path = DEFAULT_PATH;
     std::string protocolName = DEFAULT_PROTOCOL_NAME;
+    bool enableSsl = false;
 };
 
 } // namespace ews::cli

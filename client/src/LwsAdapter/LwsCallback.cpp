@@ -91,6 +91,10 @@ auto reasonToString(lws_callback_reasons reason) -> std::string
         return std::string{"LWS_CALLBACK_LOCK_POLL"}.append(alpha);
     case LWS_CALLBACK_UNLOCK_POLL:
         return std::string{"LWS_CALLBACK_UNLOCK_POLL"}.append(alpha);
+    case LWS_CALLBACK_OPENSSL_PERFORM_SERVER_CERT_VERIFICATION:
+        return std::string{"LWS_CALLBACK_OPENSSL_PERFORM_SERVER_CERT_VERIFICATION"}.append(alpha);
+    case LWS_CALLBACK_OPENSSL_LOAD_EXTRA_CLIENT_VERIFY_CERTS:
+        return std::string{"LWS_CALLBACK_OPENSSL_LOAD_EXTRA_CLIENT_VERIFY_CERTS"}.append(alpha);
     default:
         return std::string{"Unknown"}.append(alpha);
     }

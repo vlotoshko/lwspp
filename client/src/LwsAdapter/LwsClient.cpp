@@ -22,8 +22,8 @@ LwsClient::LwsClient(const ClientContext& context)
                                                             context.messageSenderAcceptor);
     _dataHolder = std::make_shared<LwsDataHolder>(context);
 
-    setupLowLevelContext_();
-    setupConnectionInfo_();
+    setupLowLevelContext_(context);
+    setupConnectionInfo_(context);
 }
 
 LwsClient::~LwsClient()
@@ -77,12 +77,17 @@ void LwsClient::disconnect()
     }
 }
 
-void LwsClient::setupLowLevelContext_()
+void LwsClient::setupLowLevelContext_(const ClientContext& context)
 {
     auto lwsContextInfo = lws_context_creation_info{};
+    lwsContextInfo.protocols = _dataHolder->protocols.data();
     lwsContextInfo.user = _callbackContext.get();
     lwsContextInfo.port = CONTEXT_PORT_NO_LISTEN;
-    lwsContextInfo.protocols = _dataHolder->protocols.data();
+
+    if (context.enableSsl)
+    {
+        lwsContextInfo.options = LWS_SERVER_OPTION_DO_SSL_GLOBAL_INIT;
+    }
 
     _lowLevelContext = LowLevelContextPtr{lws_create_context(&lwsContextInfo), LwsContextDeleter{}};
     if (_lowLevelContext == nullptr)
@@ -91,7 +96,7 @@ void LwsClient::setupLowLevelContext_()
     }
 }
 
-void LwsClient::setupConnectionInfo_()
+void LwsClient::setupConnectionInfo_(const ClientContext& context)
 {
     _lwsConnectionInfo.context = _lowLevelContext.get();
     _lwsConnectionInfo.pwsi = &_wsInstance;
@@ -101,7 +106,12 @@ void LwsClient::setupConnectionInfo_()
     _lwsConnectionInfo.path = _dataHolder->path.c_str();
     _lwsConnectionInfo.host = _lwsConnectionInfo.address;
     _lwsConnectionInfo.origin = _lwsConnectionInfo.address;
-    //    _lwsClientConnectionInfo.ssl_connection = LCCSCF_USE_SSL;
+
+    if (context.enableSsl)
+    {
+        _lwsConnectionInfo.ssl_connection = LCCSCF_USE_SSL;
+    }
+
     if (_dataHolder->protocolName != DEFAULT_PROTOCOL_NAME)
     {
         _lwsConnectionInfo.protocol = _dataHolder->protocolName.c_str();

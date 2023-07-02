@@ -45,6 +45,7 @@ public:
     auto setProtocolName(std::string) -> ClientContextBuilder&;
     auto setPath(Path) -> ClientContextBuilder&;
     auto setPingPongInterval(int) -> ClientContextBuilder&;
+    auto enableSsl() -> ClientContextBuilder&;
 
 private:
     std::unique_ptr<ClientContext> _clientContext;

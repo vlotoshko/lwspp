@@ -3,6 +3,7 @@ set(TESTS_TARGET_SRC_FILES
     framework/fakeit.hpp
     main.cpp
 
+    TestHelloBinance.cpp
     TestHelloWorld.cpp
     TestSimpleFeatures.cpp
 )

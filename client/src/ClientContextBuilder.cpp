@@ -89,6 +89,12 @@ auto ClientContextBuilder::setPath(Path path) -> ClientContextBuilder&
     return *this;
 }
 
+auto ClientContextBuilder::enableSsl() -> ClientContextBuilder&
+{
+    _clientContext->enableSsl = true;
+    return *this;
+}
+
 auto ClientContextBuilder::setPort(Port port) -> ClientContextBuilder&
 {
     _clientContext->port = port;
