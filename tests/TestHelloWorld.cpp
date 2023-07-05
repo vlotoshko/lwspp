@@ -13,8 +13,7 @@
 
 #include "easywebsocket/server/EventHandlerBase.hpp"
 #include "easywebsocket/server/IMessageSender.hpp"
-#include "easywebsocket/server/ServerFactory.hpp"
-#include "easywebsocket/server/ServerContextBuilder.hpp"
+#include "easywebsocket/server/ServerBuilder.hpp"
 
 // NOLINTBEGIN (readability-function-cognitive-complexity)
 namespace ews::tests
@@ -68,22 +67,22 @@ private:
 srv::IServerPtr setupServer(std::string& messageHolder)
 {
     auto serverEventHandler = std::make_shared<ServerEventHandler>(messageHolder);
-    auto serverContextBuilder = srv::ServerContextBuilder{};
-    serverContextBuilder
+    auto serverBuilder = srv::ServerBuilder{};
+    serverBuilder
         .setVersion(srv::ServerVersion::v1_Andromeda)
         .setPort(PORT)
         .setEventHandler(serverEventHandler)
         .setMessageSenderAcceptor(serverEventHandler)
         ;
 
-    return srv::createServer(*serverContextBuilder.build());
+    return serverBuilder.build();
 }
 
 cli::IClientPtr setupClient(std::string& messageHolder)
 {
     auto clientEventHandler = std::make_shared<ClientEventHandler>(messageHolder);
-    auto clientContextBuilder = cli::ClientBuilder{};
-    clientContextBuilder
+    auto clientBuilder = cli::ClientBuilder{};
+    clientBuilder
         .setVersion(cli::ClientVersion::v1_Amsterdam)
         .setAddress(ADDRESS)
         .setPort(PORT)
@@ -91,7 +90,7 @@ cli::IClientPtr setupClient(std::string& messageHolder)
         .setMessageSenderAcceptor(clientEventHandler)
         ;
 
-    return clientContextBuilder.build();
+    return clientBuilder.build();
 }
 
 } // namespace

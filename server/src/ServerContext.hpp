@@ -5,13 +5,10 @@
 
 #pragma once
 
-#include <functional>
 #include <string>
 
-#include "easywebsocket/server/ServerVersions.hpp"
 #include "easywebsocket/server/TypesFwd.hpp"
 #include "Consts.hpp"
-#include "IServerContext.hpp"
 
 namespace ews::srv
 {
@@ -20,11 +17,9 @@ namespace ews::srv
  * @brief The ServerContext class is the 'high-level' context to create the
  * 'low-level' lws_context of the libwebsocket
  */
-class ServerContext : public IServerContext
+class ServerContext
 {
 public:
-    void accept(IContextVisitor&) const override;
-
     IEventHandlerPtr eventHandler;
     IMessageSenderAcceptorPtr messageSenderAcceptor;
     ServerVersion serverVersion = UNDEFINED_SERVER_VERSION;

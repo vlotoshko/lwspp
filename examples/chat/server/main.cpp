@@ -6,8 +6,7 @@
 #include <condition_variable>
 #include <csignal>
 
-#include "easywebsocket/server/ServerFactory.hpp"
-#include "easywebsocket/server/ServerContextBuilder.hpp"
+#include "easywebsocket/server/ServerBuilder.hpp"
 #include "easywebsocket/server/Types.hpp"
 #include "easywebsocket/server/TypesFwd.hpp"
 
@@ -41,13 +40,15 @@ auto main() -> int
     using namespace ews;
     const srv::Port PORT = 9000;
 
-    auto serverContextBuilder = srv::ServerContextBuilder{};
-    serverContextBuilder
-            .setPort(PORT)
-            .setVersion(srv::ServerVersion::v1_Andromeda)
-            .setEventHandler(std::make_shared<chat::EventHandler>())
-            ;
-    auto server = srv::createServer(*serverContextBuilder.build());
+    auto eventHandler = std::make_shared<chat::EventHandler>();
+    auto serverBuilder = srv::ServerBuilder{};
+    serverBuilder
+        .setPort(PORT)
+        .setVersion(srv::ServerVersion::v1_Andromeda)
+        .setEventHandler(eventHandler)
+        .setMessageSenderAcceptor(eventHandler)
+        ;
+    auto server = serverBuilder.build();
 
     interruption::waitForSignal();
     return 0;

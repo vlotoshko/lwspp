@@ -10,8 +10,6 @@
 namespace ews::srv
 {
 
-class IContextVisitor;
-class IContextVisitorAcceptor;
 class ServerContext;
 
 class LwsServer;

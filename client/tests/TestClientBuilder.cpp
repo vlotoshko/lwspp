@@ -28,7 +28,8 @@ private:
     const ClientBuilder& _clientBuilder;
 };
 
-}
+} // namespace ews::cli
+
 // NOLINTBEGIN (readability-function-cognitive-complexity)
 namespace ews::tests
 {
@@ -182,9 +183,10 @@ SCENARIO( "Client construction", "[client_builder]" )
                 .setEventHandler(handler)
                 .setMessageSenderAcceptor(handler);
 
+            auto expression = [&clientBuilder] {clientBuilder.build();};
+
             THEN( "Client builds successfully" )
             {
-                auto expression = [&clientBuilder] {clientBuilder.build();};
                 REQUIRE_NOTHROW(expression());
             }
 
@@ -196,7 +198,6 @@ SCENARIO( "Client construction", "[client_builder]" )
 
                 THEN( "Client builds successfully" )
                 {
-                    auto expression = [&clientBuilder] {clientBuilder.build();};
                     REQUIRE_NOTHROW(expression());
                 }
             }

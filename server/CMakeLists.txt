@@ -14,8 +14,7 @@ set(${PROJECT_NAME}_SRC_FILES
     include/easywebsocket/server/IMessageSenderAcceptor.hpp
     include/easywebsocket/server/IServer.hpp
     include/easywebsocket/server/ISessionInfo.hpp
-    include/easywebsocket/server/ServerContextBuilder.hpp
-    include/easywebsocket/server/ServerFactory.hpp
+    include/easywebsocket/server/ServerBuilder.hpp
     include/easywebsocket/server/ServerVersions.hpp
     include/easywebsocket/server/Types.hpp
     include/easywebsocket/server/TypesFwd.hpp
@@ -45,15 +44,10 @@ set(${PROJECT_NAME}_SRC_FILES
 
     src/Consts.hpp
     src/EventHandlerBase.cpp
-    src/IContextVisitor.hpp
-    src/IContextVisitorAcceptor.hpp
-    src/IServerContext.hpp
     src/Server.cpp
     src/Server.hpp
-    src/ServerContext.cpp
     src/ServerContext.hpp
-    src/ServerContextBuilder.cpp
-    src/ServerFactory.cpp
+    src/ServerBuilder.cpp
     src/SessionInfoExternal.cpp
     src/SessionInfoExternal.hpp
     src/TypesFwd.hpp

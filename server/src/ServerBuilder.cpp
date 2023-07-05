@@ -5,7 +5,8 @@
 
 #include <stdexcept>
 
-#include "easywebsocket/server/ServerContextBuilder.hpp"
+#include "easywebsocket/server/ServerBuilder.hpp"
+#include "Server.hpp"
 #include "ServerContext.hpp"
 
 namespace ews::srv
@@ -48,49 +49,49 @@ void checkContext(const ServerContext& context)
 } // namespace
 
 
-ServerContextBuilder::ServerContextBuilder() : _serverContext(new ServerContext{})
+ServerBuilder::ServerBuilder() : _serverContext(new ServerContext{})
 {}
 
-ServerContextBuilder::~ServerContextBuilder() = default;
+ServerBuilder::~ServerBuilder() = default;
 
-auto ServerContextBuilder::build() const -> IServerContextPtr
+auto ServerBuilder::build() const -> IServerPtr
 {
     const auto& context = *_serverContext;
     checkContext(context);
-    return std::make_shared<ServerContext>(context);
+    return std::make_shared<Server>(context);
 }
 
-auto ServerContextBuilder::setVersion(ServerVersion version) -> ServerContextBuilder&
+auto ServerBuilder::setVersion(ServerVersion version) -> ServerBuilder&
 {
     _serverContext->serverVersion = version;
     return *this;
 }
 
-auto ServerContextBuilder::setPort(Port port) -> ServerContextBuilder&
+auto ServerBuilder::setPort(Port port) -> ServerBuilder&
 {
     _serverContext->port = port;
     return *this;
 }
 
-auto ServerContextBuilder::setEventHandler(IEventHandlerPtr e) -> ServerContextBuilder&
+auto ServerBuilder::setEventHandler(IEventHandlerPtr e) -> ServerBuilder&
 {
     _serverContext->eventHandler = std::move(e);
     return *this;
 }
 
-auto ServerContextBuilder::setMessageSenderAcceptor(IMessageSenderAcceptorPtr a) -> ServerContextBuilder&
+auto ServerBuilder::setMessageSenderAcceptor(IMessageSenderAcceptorPtr a) -> ServerBuilder&
 {
     _serverContext->messageSenderAcceptor = std::move(a);
     return *this;
 }
 
-auto ServerContextBuilder::setProtocolName(std::string protocolName) -> ServerContextBuilder&
+auto ServerBuilder::setProtocolName(std::string protocolName) -> ServerBuilder&
 {
     _serverContext->protocolName = std::move(protocolName);
     return *this;
 }
 
-auto ServerContextBuilder::setPingPongInterval(int) -> ServerContextBuilder&
+auto ServerBuilder::setPingPongInterval(int) -> ServerBuilder&
 {
     return *this;
 }

@@ -12,8 +12,7 @@
 
 #include "easywebsocket/server/EventHandlerBase.hpp"
 #include "easywebsocket/server/ISessionInfo.hpp"
-#include "easywebsocket/server/ServerFactory.hpp"
-#include "easywebsocket/server/ServerContextBuilder.hpp"
+#include "easywebsocket/server/ServerBuilder.hpp"
 
 // NOLINTBEGIN (readability-function-cognitive-complexity)
 namespace ews::tests
@@ -92,7 +91,7 @@ SCENARIO( "Protocol name feature testing", "[protocol_name]" )
 
         auto serverEventHandler
             = std::make_shared<ServerEventHandlerProtocolName>(actualServerConnected);
-        auto serverBuilder = srv::ServerContextBuilder{};
+        auto serverBuilder = srv::ServerBuilder{};
         serverBuilder
             .setVersion(srv::ServerVersion::v1_Andromeda)
             .setPort(PORT)
@@ -113,7 +112,7 @@ SCENARIO( "Protocol name feature testing", "[protocol_name]" )
 
         WHEN( "Server uses default protocol name" )
         {
-            auto server = srv::createServer(*serverBuilder.build());
+            auto server = serverBuilder.build();
 
             AND_WHEN("Client uses default protocol name")
             {
@@ -150,7 +149,7 @@ SCENARIO( "Protocol name feature testing", "[protocol_name]" )
         WHEN( "Server uses custom protocol name" )
         {
             serverBuilder.setProtocolName(CUSTOM_PROTOCOL_NAME);
-            auto server = srv::createServer(*serverBuilder.build());
+            auto server = serverBuilder.build();
 
             AND_WHEN("Client uses default protocol name")
             {
@@ -207,7 +206,7 @@ SCENARIO( "Path feature testing", "[path]" )
     {
         bool actualUseSpecificBehaviour = false;
         auto serverEventHandler = std::make_shared<ServerEventHandlerPath>(actualUseSpecificBehaviour);
-        auto serverBuilder = srv::ServerContextBuilder{};
+        auto serverBuilder = srv::ServerBuilder{};
         serverBuilder
             .setVersion(srv::ServerVersion::v1_Andromeda)
             .setPort(PORT)
@@ -227,7 +226,7 @@ SCENARIO( "Path feature testing", "[path]" )
 
         WHEN( "Client uses default uri path" )
         {
-            auto server = srv::createServer(*serverBuilder.build());
+            auto server = serverBuilder.build();
             auto client = clientBuilder.build();
 
             THEN("Server uses default behavoiur")
@@ -241,7 +240,7 @@ SCENARIO( "Path feature testing", "[path]" )
 
         WHEN( "Client uses specific uri path" )
         {
-            auto server = srv::createServer(*serverBuilder.build());
+            auto server = serverBuilder.build();
             clientBuilder.setPath(SPECIFIC_PATH_NAME);
             auto client = clientBuilder.build();
 
@@ -256,7 +255,7 @@ SCENARIO( "Path feature testing", "[path]" )
 
         WHEN( "Client uses specific uri path, but other than specified by server" )
         {
-            auto server = srv::createServer(*serverBuilder.build());
+            auto server = serverBuilder.build();
             clientBuilder.setPath(SPECIFIC_PATH_NAME_2);
             auto client = clientBuilder.build();
 

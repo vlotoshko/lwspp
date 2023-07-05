@@ -22,9 +22,6 @@ using IMessageSenderAcceptorPtr = std::shared_ptr<IMessageSenderAcceptor>;
 class IServer;
 using IServerPtr = std::shared_ptr<IServer>;
 
-class IServerContext;
-using IServerContextPtr = std::shared_ptr<IServerContext>;
-
 class ISessionInfo;
 using ISessionInfoPtr = std::shared_ptr<ISessionInfo>;
 
