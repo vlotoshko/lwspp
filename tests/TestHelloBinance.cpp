@@ -7,8 +7,7 @@
 
 #include "catch2/catch.hpp"
 
-#include "easywebsocket/client/ClientContextBuilder.hpp"
-#include "easywebsocket/client/ClientFactory.hpp"
+#include "easywebsocket/client/ClientBuilder.hpp"
 #include "easywebsocket/client/EventHandlerBase.hpp"
 #include "easywebsocket/client/IMessageSender.hpp"
 
@@ -49,7 +48,7 @@ private:
 cli::IClientPtr setupClient(bool& connected, bool& messageReceived)
 {
     auto clientEventHandler = std::make_shared<ClientEventHandler>(connected, messageReceived);
-    auto clientContextBuilder = cli::ClientContextBuilder{};
+    auto clientContextBuilder = cli::ClientBuilder{};
     clientContextBuilder
         .setVersion(cli::ClientVersion::v1_Amsterdam)
         .setAddress(ADDRESS)
@@ -60,7 +59,7 @@ cli::IClientPtr setupClient(bool& connected, bool& messageReceived)
         .enableSsl()
         ;
 
-    return cli::createClient(*clientContextBuilder.build());
+    return clientContextBuilder.build();
 }
 
 } // namespace
@@ -85,7 +84,6 @@ SCENARIO( "Clients connect to the binance service", "[hello_binance]" )
                 bool expectedMessageReceived = true;
                 REQUIRE(actualConnected == expectedConnected);
                 REQUIRE(actualMessageReceived == expectedMessageReceived);
-
             }
         }
     } // GIVEN

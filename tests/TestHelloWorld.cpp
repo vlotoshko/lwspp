@@ -7,8 +7,7 @@
 
 #include "catch2/catch.hpp"
 
-#include "easywebsocket/client/ClientContextBuilder.hpp"
-#include "easywebsocket/client/ClientFactory.hpp"
+#include "easywebsocket/client/ClientBuilder.hpp"
 #include "easywebsocket/client/EventHandlerBase.hpp"
 #include "easywebsocket/client/IMessageSender.hpp"
 
@@ -83,7 +82,7 @@ srv::IServerPtr setupServer(std::string& messageHolder)
 cli::IClientPtr setupClient(std::string& messageHolder)
 {
     auto clientEventHandler = std::make_shared<ClientEventHandler>(messageHolder);
-    auto clientContextBuilder = cli::ClientContextBuilder{};
+    auto clientContextBuilder = cli::ClientBuilder{};
     clientContextBuilder
         .setVersion(cli::ClientVersion::v1_Amsterdam)
         .setAddress(ADDRESS)
@@ -92,7 +91,7 @@ cli::IClientPtr setupClient(std::string& messageHolder)
         .setMessageSenderAcceptor(clientEventHandler)
         ;
 
-    return cli::createClient(*clientContextBuilder.build());
+    return clientContextBuilder.build();
 }
 
 } // namespace

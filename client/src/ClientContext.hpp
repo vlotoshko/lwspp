@@ -9,16 +9,13 @@
 
 #include "easywebsocket/client/TypesFwd.hpp"
 #include "Consts.hpp"
-#include "IClientContext.hpp"
 
 namespace ews::cli
 {
 
-class ClientContext : public IClientContext
+class ClientContext
 {
 public:
-    void accept(IContextVisitor&) const override;
-
     ClientVersion clientVersion = UNDEFINED_CLIENT_VERSION;
     IEventHandlerPtr eventHandler;
     IMessageSenderAcceptorPtr messageSenderAcceptor;

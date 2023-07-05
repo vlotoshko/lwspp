@@ -7,8 +7,7 @@ project(
 )
 
 set(${PROJECT_NAME}_SRC_FILES
-    include/easywebsocket/client/ClientContextBuilder.hpp
-    include/easywebsocket/client/ClientFactory.hpp
+    include/easywebsocket/client/ClientBuilder.hpp
     include/easywebsocket/client/ClientVersions.hpp
     include/easywebsocket/client/IClient.hpp
     include/easywebsocket/client/EventHandlerBase.hpp
@@ -40,15 +39,10 @@ set(${PROJECT_NAME}_SRC_FILES
 
     src/Client.cpp
     src/Client.hpp
-    src/ClientContext.cpp
     src/ClientContext.hpp
-    src/ClientContextBuilder.cpp
-    src/ClientFactory.cpp
+    src/ClientBuilder.cpp
     src/Consts.hpp
     src/EventHandlerBase.cpp
-    src/IClientContext.hpp
-    src/IContextVisitor.hpp
-    src/IContextVisitorAcceptor.hpp
     src/SessionInfoExternal.hpp
     src/TypesFwd.hpp
 )

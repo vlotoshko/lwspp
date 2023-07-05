@@ -13,9 +13,6 @@ namespace ews::cli
 class IClient;
 using IClientPtr = std::shared_ptr<IClient>;
 
-class IClientContext;
-using IClientContextPtr = std::shared_ptr<IClientContext>;
-
 class IEventHandler;
 using IEventHandlerPtr = std::shared_ptr<IEventHandler>;
 

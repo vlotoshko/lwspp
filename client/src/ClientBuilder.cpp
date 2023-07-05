@@ -5,7 +5,8 @@
 
 #include <stdexcept>
 
-#include "easywebsocket/client/ClientContextBuilder.hpp"
+#include "easywebsocket/client/ClientBuilder.hpp"
+#include "Client.hpp"
 #include "ClientContext.hpp"
 
 namespace ews::cli
@@ -53,61 +54,61 @@ void checkContext(const ClientContext& context)
 } // namespace
 
 
-ClientContextBuilder::ClientContextBuilder() : _clientContext(new ClientContext{})
+ClientBuilder::ClientBuilder() : _clientContext(new ClientContext{})
 {}
 
-ClientContextBuilder::~ClientContextBuilder() = default;
+ClientBuilder::~ClientBuilder() = default;
 
-auto ClientContextBuilder::build() const -> IClientContextPtr
+auto ClientBuilder::build() const -> IClientPtr
 {
     const auto& context = *_clientContext;
     checkContext(context);
-    return std::make_shared<ClientContext>(*_clientContext);
+    return std::make_shared<Client>(context);
 }
 
-auto ClientContextBuilder::setEventHandler(IEventHandlerPtr e) -> ClientContextBuilder&
+auto ClientBuilder::setEventHandler(IEventHandlerPtr e) -> ClientBuilder&
 {
     _clientContext->eventHandler = std::move(e);
     return *this;
 }
 
-auto ClientContextBuilder::setMessageSenderAcceptor(IMessageSenderAcceptorPtr a) -> ClientContextBuilder&
+auto ClientBuilder::setMessageSenderAcceptor(IMessageSenderAcceptorPtr a) -> ClientBuilder&
 {
     _clientContext->messageSenderAcceptor = std::move(a);
     return *this;
 }
 
-auto ClientContextBuilder::setProtocolName(std::string protocolName) -> ClientContextBuilder&
+auto ClientBuilder::setProtocolName(std::string protocolName) -> ClientBuilder&
 {
     _clientContext->protocolName = std::move(protocolName);
     return *this;
 }
 
-auto ClientContextBuilder::setPath(Path path) -> ClientContextBuilder&
+auto ClientBuilder::setPath(Path path) -> ClientBuilder&
 {
     _clientContext->path = std::move(path);
     return *this;
 }
 
-auto ClientContextBuilder::enableSsl() -> ClientContextBuilder&
+auto ClientBuilder::enableSsl() -> ClientBuilder&
 {
     _clientContext->enableSsl = true;
     return *this;
 }
 
-auto ClientContextBuilder::setPort(Port port) -> ClientContextBuilder&
+auto ClientBuilder::setPort(Port port) -> ClientBuilder&
 {
     _clientContext->port = port;
     return *this;
 }
 
-auto ClientContextBuilder::setAddress(Address address) -> ClientContextBuilder&
+auto ClientBuilder::setAddress(Address address) -> ClientBuilder&
 {
     _clientContext->address = std::move(address);
     return *this;
 }
 
-auto ClientContextBuilder::setVersion(ClientVersion version) -> ClientContextBuilder&
+auto ClientBuilder::setVersion(ClientVersion version) -> ClientBuilder&
 {
     _clientContext->clientVersion = version;
     return *this;

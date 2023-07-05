@@ -7,8 +7,7 @@
 
 #include "catch2/catch.hpp"
 
-#include "easywebsocket/client/ClientContextBuilder.hpp"
-#include "easywebsocket/client/ClientFactory.hpp"
+#include "easywebsocket/client/ClientBuilder.hpp"
 #include "easywebsocket/client/EventHandlerBase.hpp"
 
 #include "easywebsocket/server/EventHandlerBase.hpp"
@@ -103,7 +102,7 @@ SCENARIO( "Protocol name feature testing", "[protocol_name]" )
 
         auto clientEventHandler
             = std::make_shared<ClientEventHandlerProtocolName>(actualClientConnected);
-        auto clientBuilder = cli::ClientContextBuilder{};
+        auto clientBuilder = cli::ClientBuilder{};
         clientBuilder
             .setVersion(cli::ClientVersion::v1_Amsterdam)
             .setAddress(ADDRESS)
@@ -118,7 +117,7 @@ SCENARIO( "Protocol name feature testing", "[protocol_name]" )
 
             AND_WHEN("Client uses default protocol name")
             {
-                auto client = cli::createClient(*clientBuilder.build());
+                auto client = clientBuilder.build();
 
                 THEN( "Client connects to the server successfully" )
                 {
@@ -134,7 +133,7 @@ SCENARIO( "Protocol name feature testing", "[protocol_name]" )
             AND_WHEN("Client uses custom protocol name")
             {
                 clientBuilder.setProtocolName(CUSTOM_PROTOCOL_NAME);
-                auto client = cli::createClient(*clientBuilder.build());
+                auto client = clientBuilder.build();
 
                 THEN( "Client cann't connect to the server" )
                 {
@@ -155,7 +154,7 @@ SCENARIO( "Protocol name feature testing", "[protocol_name]" )
 
             AND_WHEN("Client uses default protocol name")
             {
-                auto client = cli::createClient(*clientBuilder.build());
+                auto client = clientBuilder.build();
                 THEN( "Client connects to the server successfully" )
                 {
                     waitForInitialization();
@@ -170,7 +169,7 @@ SCENARIO( "Protocol name feature testing", "[protocol_name]" )
             AND_WHEN("Client uses a custom protocol name that differs from the servers protocol name")
             {
                 clientBuilder.setProtocolName(CUSTOM_PROTOCOL_NAME_2);
-                auto client = cli::createClient(*clientBuilder.build());
+                auto client = clientBuilder.build();
                 THEN( "Client cann't connect to the server" )
                 {
                     waitForInitialization();
@@ -185,7 +184,7 @@ SCENARIO( "Protocol name feature testing", "[protocol_name]" )
             AND_WHEN("Client uses a custom protocol name that equals the servers protocol name")
             {
                 clientBuilder.setProtocolName(CUSTOM_PROTOCOL_NAME);
-                auto client = cli::createClient(*clientBuilder.build());
+                auto client = clientBuilder.build();
 
                 THEN( "Client connects to the server successfully" )
                 {
@@ -217,7 +216,7 @@ SCENARIO( "Path feature testing", "[path]" )
             ;
 
         auto clientEventHandler = std::make_shared<cli::EventHandlerBase>();
-        auto clientBuilder = cli::ClientContextBuilder{};
+        auto clientBuilder = cli::ClientBuilder{};
         clientBuilder
             .setVersion(cli::ClientVersion::v1_Amsterdam)
             .setAddress(ADDRESS)
@@ -229,7 +228,7 @@ SCENARIO( "Path feature testing", "[path]" )
         WHEN( "Client uses default uri path" )
         {
             auto server = srv::createServer(*serverBuilder.build());
-            auto client = cli::createClient(*clientBuilder.build());
+            auto client = clientBuilder.build();
 
             THEN("Server uses default behavoiur")
             {
@@ -244,7 +243,7 @@ SCENARIO( "Path feature testing", "[path]" )
         {
             auto server = srv::createServer(*serverBuilder.build());
             clientBuilder.setPath(SPECIFIC_PATH_NAME);
-            auto client = cli::createClient(*clientBuilder.build());
+            auto client = clientBuilder.build();
 
             AND_WHEN("Server uses specific behavoiur")
             {
@@ -259,7 +258,7 @@ SCENARIO( "Path feature testing", "[path]" )
         {
             auto server = srv::createServer(*serverBuilder.build());
             clientBuilder.setPath(SPECIFIC_PATH_NAME_2);
-            auto client = cli::createClient(*clientBuilder.build());
+            auto client = clientBuilder.build();
 
             AND_WHEN("Server uses default behavoiur")
             {

@@ -10,9 +10,6 @@
 namespace ews::cli
 {
 
-class IContextVisitor;
-class IContextVisitorAcceptor;
-
 class ClientContext;
 
 class LwsClient;
