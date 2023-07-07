@@ -41,10 +41,10 @@ public:
 
     // Non mandatory options
     auto setProtocolName(std::string) -> ServerBuilder&;
-    auto setPingPongInterval(int) -> ServerBuilder&;
+    auto setSslSettings(SslSettingsPtr) -> ServerBuilder&;
 
 private:
-    std::unique_ptr<ServerContext> _serverContext;
+    std::unique_ptr<ServerContext> _context;
 
     friend class TestServerBuilder;
 };

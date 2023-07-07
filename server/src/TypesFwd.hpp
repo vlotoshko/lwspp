@@ -15,4 +15,7 @@ class ServerContext;
 class LwsServer;
 using LwsServerPtr = std::shared_ptr<LwsServer>;
 
+class SslSettings;
+using SslSettingsPtr = std::shared_ptr<SslSettings>;
+
 } // namespace ews::srv

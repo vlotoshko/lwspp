@@ -7,7 +7,9 @@
 
 #include "easywebsocket/server/EventHandlerBase.hpp"
 #include "easywebsocket/server/ServerBuilder.hpp"
+#include "easywebsocket/server/SslSettingsBuilder.hpp"
 #include "ServerContext.hpp"
+#include "SslSettings.hpp"
 
 namespace ews::srv
 {
@@ -21,7 +23,7 @@ public:
 
     auto getServerContext() const -> const ServerContext&
     {
-        return *_serverBuilder._serverContext;
+        return *_serverBuilder._context;
     }
 
 private:
@@ -37,6 +39,10 @@ using namespace srv;
 
 const Port PORT = 9000;
 const std::string PROTOCOL_NAME = "PROTOCOL_NAME";
+
+const std::string CA_CERT_PATH = "/home/volodymyr/Projects/EasyWebsocket/tests/TestData/ssl/rootCA.crt";
+const std::string SERVER_CERT_PATH = "/home/volodymyr/Projects/EasyWebsocket/tests/TestData/ssl/server.crt";
+const std::string SERVER_KEY_PATH = "/home/volodymyr/Projects/EasyWebsocket/tests/TestData/ssl/server.key";
 
 auto toString(ServerVersion version) -> std::string
 {
@@ -58,6 +64,15 @@ void compareServerContexts(const ServerContext& actual, const ServerContext& exp
 
     // Non-mandatory parameters
     REQUIRE(actual.protocolName == expected.protocolName);
+    REQUIRE((actual.ssl != nullptr && expected.ssl != nullptr ||
+             actual.ssl == nullptr && expected.ssl == nullptr));
+
+    if (actual.ssl != nullptr && expected.ssl != nullptr)
+    {
+        REQUIRE(actual.ssl->privateKeyPath == expected.ssl->privateKeyPath);
+        REQUIRE(actual.ssl->certPath == expected.ssl->certPath);
+        REQUIRE(actual.ssl->caCertPath == expected.ssl->caCertPath);
+    }
 }
 
 
@@ -70,14 +85,19 @@ SCENARIO( "ServerContext setup", "[server_builder]" )
         WHEN( "All parameters are set" )
         {
             auto handler = std::make_shared<EventHandlerBase>();
+            auto sslSettings = SslSettingsBuilder{}
+                                   .setPrivateKeyFilepath(SERVER_KEY_PATH)
+                                   .setCertFilepath(SERVER_CERT_PATH)
+                                   .setCaCertFilepath(CA_CERT_PATH)
+                                   .build();
+
             serverBuilder
                 .setVersion(ServerVersion::v1_Andromeda)
                 .setPort(PORT)
                 .setEventHandler(handler)
                 .setMessageSenderAcceptor(handler)
                 .setProtocolName(PROTOCOL_NAME)
-
-                ;
+                .setSslSettings(sslSettings);
 
             const ServerContext& actual = TestServerBuilder{serverBuilder}.getServerContext();
 
@@ -88,6 +108,10 @@ SCENARIO( "ServerContext setup", "[server_builder]" )
                 expected.eventHandler = handler;
                 expected.port = PORT;
                 expected.protocolName = PROTOCOL_NAME;
+                expected.ssl = std::make_shared<SslSettings>();
+                expected.ssl->privateKeyPath = SERVER_KEY_PATH;
+                expected.ssl->certPath = SERVER_CERT_PATH;
+                expected.ssl->caCertPath = CA_CERT_PATH;
 
                 compareServerContexts(actual, expected);
             }
@@ -167,11 +191,30 @@ SCENARIO( "Server construction", "[server_builder]" )
 
             AND_WHEN( "All non-mandatory parameters are set" )
             {
-                serverBuilder.setProtocolName(PROTOCOL_NAME);
+                serverBuilder
+                    .setProtocolName(PROTOCOL_NAME)
+                    .setSslSettings(std::make_shared<SslSettings>());
 
                 THEN( "Server builds successfully" )
                 {
                     REQUIRE_NOTHROW(expression());
+                }
+            }
+
+            AND_WHEN( "Dependent parameter 'ssl certificate path' is not set" )
+            {
+                auto sslSettings =
+                    SslSettingsBuilder{}
+                        .setPrivateKeyFilepath(SERVER_KEY_PATH)
+                        .build();
+
+                serverBuilder
+                    .setSslSettings(sslSettings);
+
+                THEN( "Exception is thrown on server build" )
+                {
+                    REQUIRE_THROWS_WITH(serverBuilder.build(),
+                                        "Required parameter is undefined: ssl certificate path");
                 }
             }
         }

@@ -14,6 +14,7 @@ LwsDataHolder::LwsDataHolder(const ServerContext& context)
     : port(context.port)
     , protocolName(context.protocolName)
     , protocols(createLwsProtocols(context.serverVersion, protocolName))
+    , ssl(context.ssl)
 {}
 
 } // namespace ews::srv

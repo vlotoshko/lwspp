@@ -8,6 +8,7 @@
 #include "easywebsocket/server/ServerBuilder.hpp"
 #include "Server.hpp"
 #include "ServerContext.hpp"
+#include "SslSettings.hpp"
 
 namespace ews::srv
 {
@@ -44,55 +45,63 @@ void checkContext(const ServerContext& context)
     {
         throw UndefinedRequiredParameterException{"message sender acceptor"};
     }
+
+    if (context.ssl != nullptr &&
+        context.ssl->privateKeyPath != UNDEFINED_FILE_PATH &&
+        context.ssl->certPath == UNDEFINED_FILE_PATH)
+    {
+        throw UndefinedRequiredParameterException{"ssl certificate path"};
+    }
 }
 
 } // namespace
 
 
-ServerBuilder::ServerBuilder() : _serverContext(new ServerContext{})
+ServerBuilder::ServerBuilder() : _context(new ServerContext{})
 {}
 
 ServerBuilder::~ServerBuilder() = default;
 
 auto ServerBuilder::build() const -> IServerPtr
 {
-    const auto& context = *_serverContext;
+    const auto& context = *_context;
     checkContext(context);
     return std::make_shared<Server>(context);
 }
 
 auto ServerBuilder::setVersion(ServerVersion version) -> ServerBuilder&
 {
-    _serverContext->serverVersion = version;
+    _context->serverVersion = version;
     return *this;
 }
 
 auto ServerBuilder::setPort(Port port) -> ServerBuilder&
 {
-    _serverContext->port = port;
+    _context->port = port;
     return *this;
 }
 
 auto ServerBuilder::setEventHandler(IEventHandlerPtr e) -> ServerBuilder&
 {
-    _serverContext->eventHandler = std::move(e);
+    _context->eventHandler = std::move(e);
     return *this;
 }
 
 auto ServerBuilder::setMessageSenderAcceptor(IMessageSenderAcceptorPtr a) -> ServerBuilder&
 {
-    _serverContext->messageSenderAcceptor = std::move(a);
+    _context->messageSenderAcceptor = std::move(a);
     return *this;
 }
 
 auto ServerBuilder::setProtocolName(std::string protocolName) -> ServerBuilder&
 {
-    _serverContext->protocolName = std::move(protocolName);
+    _context->protocolName = std::move(protocolName);
     return *this;
 }
 
-auto ServerBuilder::setPingPongInterval(int) -> ServerBuilder&
+auto ServerBuilder::setSslSettings(SslSettingsPtr ssl) -> ServerBuilder&
 {
+    _context->ssl = std::move(ssl);
     return *this;
 }
 

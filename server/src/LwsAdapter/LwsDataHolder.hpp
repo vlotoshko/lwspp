@@ -24,6 +24,7 @@ struct LwsDataHolder
     Port port;
     std::string protocolName;
     LwsProtocols protocols;
+    SslSettingsPtr ssl;
 };
 
 } // namespace ews::srv

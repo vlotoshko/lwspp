@@ -17,6 +17,7 @@
 #include "LwsAdapter/LwsServer.hpp"
 #include "LwsAdapter/LwsSessions.hpp"
 #include "ServerContext.hpp"
+#include "SslSettings.hpp"
 
 namespace ews::srv
 {
@@ -54,6 +55,34 @@ private:
     LowLevelContextWeak _lowLevelContext;
 };
 
+void setupSslSettings(lws_context_creation_info& lwsContextInfo, const LwsDataHolderPtr& dataHolder)
+{
+    if (dataHolder->ssl != nullptr)
+    {
+        uint64_t options = 0;
+        const auto& ssl = *dataHolder->ssl;
+
+        if (ssl.privateKeyPath != UNDEFINED_FILE_PATH)
+        {
+            options = options | LWS_SERVER_OPTION_DO_SSL_GLOBAL_INIT;
+            lwsContextInfo.ssl_private_key_filepath = ssl.privateKeyPath.c_str();
+        }
+
+        if (ssl.certPath != UNDEFINED_FILE_PATH)
+        {
+            lwsContextInfo.ssl_cert_filepath = ssl.certPath.c_str();
+        }
+
+        if (ssl.caCertPath != UNDEFINED_FILE_PATH)
+        {
+            options = options | LWS_SERVER_OPTION_DO_SSL_GLOBAL_INIT;
+            lwsContextInfo.ssl_ca_filepath = ssl.caCertPath.c_str();
+        }
+
+        lwsContextInfo.options = lwsContextInfo.options | options;
+    }
+}
+
 auto setupLowLeverContext(const ILwsCallbackContextPtr& callbackContext, const LwsDataHolderPtr& dataHolder)
     -> LowLevelContextPtr
 {
@@ -62,6 +91,8 @@ auto setupLowLeverContext(const ILwsCallbackContextPtr& callbackContext, const L
     lwsContextInfo.user = callbackContext.get();
     lwsContextInfo.port = dataHolder->port;
     lwsContextInfo.protocols = dataHolder->protocols.data();
+
+    setupSslSettings(lwsContextInfo, dataHolder);
 
     auto lowLevelContext = LowLevelContextPtr{lws_create_context(&lwsContextInfo), LwsContextDeleter{}};
     if (lowLevelContext == nullptr)
@@ -83,7 +114,6 @@ LwsServer::LwsServer(const ServerContext& context)
     auto notifier = std::make_shared<LwsCallbackNotifier>(_dataHolder, _lowLevelContext);
     auto sender = std::make_shared<LwsMessageSender>(sessions, std::move(notifier));
     context.messageSenderAcceptor->acceptMessageSender(std::move(sender));
-//    _callbackContext->getEventHandler()->setMessageSender();
 }
 
 LwsServer::~LwsServer()

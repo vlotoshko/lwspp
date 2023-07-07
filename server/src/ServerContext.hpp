@@ -26,6 +26,8 @@ public:
     Port port = UNDEFINED_PORT;
 
     std::string protocolName = DEFAULT_PROTOCOL_NAME;
+
+    SslSettingsPtr ssl;
 };
 
 } // namespace ews::srv
