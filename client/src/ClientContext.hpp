@@ -22,9 +22,10 @@ public:
     Address address = UNDEFINED_ADDRESS;
     Port port = UNDEFINED_PORT;
 
-    Path path = DEFAULT_PATH;
+    Path path = DEFAULT_URI_PATH;
     std::string protocolName = DEFAULT_PROTOCOL_NAME;
-    bool enableSsl = false;
+
+    SslSettingsPtr ssl;
 };
 
 } // namespace ews::cli

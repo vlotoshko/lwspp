@@ -15,4 +15,7 @@ class ClientContext;
 class LwsClient;
 using LwsClientPtr = std::shared_ptr<LwsClient>;
 
+class SslSettings;
+using SslSettingsPtr = std::shared_ptr<SslSettings>;
+
 } // namespace ews::cli

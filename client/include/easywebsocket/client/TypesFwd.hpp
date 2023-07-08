@@ -25,4 +25,7 @@ using IMessageSenderAcceptorPtr = std::shared_ptr<IMessageSenderAcceptor>;
 class ISessionInfo;
 using ISessionInfoPtr = std::shared_ptr<ISessionInfo>;
 
+class SslSettings;
+using SslSettingsPtr = std::shared_ptr<SslSettings>;
+
 } // namespace ews::cli

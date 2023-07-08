@@ -208,8 +208,7 @@ SCENARIO( "Server construction", "[server_builder]" )
                         .setPrivateKeyFilepath(SERVER_KEY_PATH)
                         .build();
 
-                serverBuilder
-                    .setSslSettings(sslSettings);
+                serverBuilder.setSslSettings(sslSettings);
 
                 THEN( "Exception is thrown on server build" )
                 {

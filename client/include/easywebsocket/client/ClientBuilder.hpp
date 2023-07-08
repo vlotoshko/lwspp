@@ -43,11 +43,10 @@ public:
     // Non mandatory options
     auto setProtocolName(std::string) -> ClientBuilder&;
     auto setPath(Path) -> ClientBuilder&;
-    auto setPingPongInterval(int) -> ClientBuilder&;
-    auto enableSsl() -> ClientBuilder&;
+    auto setSslSettings(SslSettingsPtr) -> ClientBuilder&;
 
 private:
-    std::unique_ptr<ClientContext> _clientContext;
+    std::unique_ptr<ClientContext> _context;
 
     friend class TestClientBuilder;
 };

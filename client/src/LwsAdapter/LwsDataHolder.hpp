@@ -24,6 +24,7 @@ struct LwsDataHolder
     Path path;
     std::string protocolName;
     LwsProtocols protocols;
+    SslSettingsPtr ssl;
 };
 
 } // namespace ews::cli

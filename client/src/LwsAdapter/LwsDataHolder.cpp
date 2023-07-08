@@ -16,6 +16,7 @@ LwsDataHolder::LwsDataHolder(const ClientContext& context)
     , path(context.path)
     , protocolName(context.protocolName)
     , protocols(createLwsProtocols(context.clientVersion))
+    , ssl(context.ssl)
 {}
 
 } // namespace ews::cli

@@ -31,8 +31,8 @@ public:
     void disconnect();
 
 private:
-    void setupLowLevelContext_(const ClientContext&);
-    void setupConnectionInfo_(const ClientContext&);
+    void setupLowLevelContext_();
+    void setupConnectionInfo_();
     void waitForClientStopping_();
 
 private:

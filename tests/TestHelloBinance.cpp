@@ -10,6 +10,8 @@
 #include "easywebsocket/client/ClientBuilder.hpp"
 #include "easywebsocket/client/EventHandlerBase.hpp"
 #include "easywebsocket/client/IMessageSender.hpp"
+#include "easywebsocket/client/SslSettingsBuilder.hpp"
+
 
 // NOLINTBEGIN (readability-function-cognitive-complexity)
 namespace ews::tests
@@ -56,8 +58,7 @@ cli::IClientPtr setupClient(bool& connected, bool& messageReceived)
         .setPort(PORT)
         .setEventHandler(clientEventHandler)
         .setMessageSenderAcceptor(clientEventHandler)
-        .enableSsl()
-        ;
+        .setSslSettings(cli::SslSettingsBuilder{}.build());
 
     return clientContextBuilder.build();
 }

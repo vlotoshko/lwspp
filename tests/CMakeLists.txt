@@ -6,6 +6,7 @@ set(TESTS_TARGET_SRC_FILES
     TestHelloBinance.cpp
     TestHelloWorld.cpp
     TestSimpleFeatures.cpp
+    TestSslFeature.cpp
 )
 
 add_executable(${PROJECT_NAME}-tests ${TESTS_TARGET_SRC_FILES})

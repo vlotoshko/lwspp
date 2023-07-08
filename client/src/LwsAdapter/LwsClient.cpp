@@ -11,9 +11,40 @@
 #include "LwsAdapter/LwsClient.hpp"
 #include "LwsAdapter/LwsContextDeleter.hpp"
 #include "LwsAdapter/LwsDataHolder.hpp"
+#include "SslSettings.hpp"
 
 namespace ews::cli
 {
+namespace
+{
+
+void setupSslSettings(lws_context_creation_info& lwsContextInfo, const LwsDataHolderPtr& dataHolder)
+{
+    if (dataHolder->ssl != nullptr)
+    {
+        uint64_t options = LWS_SERVER_OPTION_DO_SSL_GLOBAL_INIT;
+        const auto& ssl = *dataHolder->ssl;
+
+        if (ssl.privateKeyPath != UNDEFINED_FILE_PATH)
+        {
+            lwsContextInfo.ssl_private_key_filepath = ssl.privateKeyPath.c_str();
+        }
+
+        if (ssl.certPath != UNDEFINED_FILE_PATH)
+        {
+            lwsContextInfo.ssl_cert_filepath = ssl.certPath.c_str();
+        }
+
+        if (ssl.caCertPath != UNDEFINED_FILE_PATH)
+        {
+            lwsContextInfo.ssl_ca_filepath = ssl.caCertPath.c_str();
+        }
+
+        lwsContextInfo.options = lwsContextInfo.options | options;
+    }
+}
+
+} // namespace
 
 LwsClient::LwsClient(const ClientContext& context)
     : _lwsConnectionInfo()
@@ -22,8 +53,8 @@ LwsClient::LwsClient(const ClientContext& context)
                                                             context.messageSenderAcceptor);
     _dataHolder = std::make_shared<LwsDataHolder>(context);
 
-    setupLowLevelContext_(context);
-    setupConnectionInfo_(context);
+    setupLowLevelContext_();
+    setupConnectionInfo_();
 }
 
 LwsClient::~LwsClient()
@@ -77,17 +108,14 @@ void LwsClient::disconnect()
     }
 }
 
-void LwsClient::setupLowLevelContext_(const ClientContext& context)
+void LwsClient::setupLowLevelContext_()
 {
     auto lwsContextInfo = lws_context_creation_info{};
     lwsContextInfo.protocols = _dataHolder->protocols.data();
     lwsContextInfo.user = _callbackContext.get();
     lwsContextInfo.port = CONTEXT_PORT_NO_LISTEN;
 
-    if (context.enableSsl)
-    {
-        lwsContextInfo.options = LWS_SERVER_OPTION_DO_SSL_GLOBAL_INIT;
-    }
+    setupSslSettings(lwsContextInfo, _dataHolder);
 
     _lowLevelContext = LowLevelContextPtr{lws_create_context(&lwsContextInfo), LwsContextDeleter{}};
     if (_lowLevelContext == nullptr)
@@ -96,7 +124,7 @@ void LwsClient::setupLowLevelContext_(const ClientContext& context)
     }
 }
 
-void LwsClient::setupConnectionInfo_(const ClientContext& context)
+void LwsClient::setupConnectionInfo_()
 {
     _lwsConnectionInfo.context = _lowLevelContext.get();
     _lwsConnectionInfo.pwsi = &_wsInstance;
@@ -107,9 +135,13 @@ void LwsClient::setupConnectionInfo_(const ClientContext& context)
     _lwsConnectionInfo.host = _lwsConnectionInfo.address;
     _lwsConnectionInfo.origin = _lwsConnectionInfo.address;
 
-    if (context.enableSsl)
+    if (_dataHolder->ssl != nullptr)
     {
-        _lwsConnectionInfo.ssl_connection = LCCSCF_USE_SSL;
+        _lwsConnectionInfo.ssl_connection = LCCSCF_USE_SSL
+            | LCCSCF_ALLOW_SELFSIGNED
+            | LCCSCF_SKIP_SERVER_CERT_HOSTNAME_CHECK
+            | LCCSCF_ALLOW_INSECURE
+            ;
     }
 
     if (_dataHolder->protocolName != DEFAULT_PROTOCOL_NAME)

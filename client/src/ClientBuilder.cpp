@@ -8,6 +8,7 @@
 #include "easywebsocket/client/ClientBuilder.hpp"
 #include "Client.hpp"
 #include "ClientContext.hpp"
+#include "SslSettings.hpp"
 
 namespace ews::cli
 {
@@ -49,68 +50,75 @@ void checkContext(const ClientContext& context)
     {
         throw UndefinedRequiredParameterException{"message sender acceptor"};
     }
+
+    if (context.ssl != nullptr &&
+        context.ssl->privateKeyPath != UNDEFINED_FILE_PATH &&
+        context.ssl->certPath == UNDEFINED_FILE_PATH)
+    {
+        throw UndefinedRequiredParameterException{"ssl certificate path"};
+    }
 }
 
 } // namespace
 
 
-ClientBuilder::ClientBuilder() : _clientContext(new ClientContext{})
+ClientBuilder::ClientBuilder() : _context(new ClientContext{})
 {}
 
 ClientBuilder::~ClientBuilder() = default;
 
 auto ClientBuilder::build() const -> IClientPtr
 {
-    const auto& context = *_clientContext;
+    const auto& context = *_context;
     checkContext(context);
     return std::make_shared<Client>(context);
 }
 
 auto ClientBuilder::setEventHandler(IEventHandlerPtr e) -> ClientBuilder&
 {
-    _clientContext->eventHandler = std::move(e);
+    _context->eventHandler = std::move(e);
     return *this;
 }
 
 auto ClientBuilder::setMessageSenderAcceptor(IMessageSenderAcceptorPtr a) -> ClientBuilder&
 {
-    _clientContext->messageSenderAcceptor = std::move(a);
+    _context->messageSenderAcceptor = std::move(a);
     return *this;
 }
 
 auto ClientBuilder::setProtocolName(std::string protocolName) -> ClientBuilder&
 {
-    _clientContext->protocolName = std::move(protocolName);
+    _context->protocolName = std::move(protocolName);
     return *this;
 }
 
 auto ClientBuilder::setPath(Path path) -> ClientBuilder&
 {
-    _clientContext->path = std::move(path);
-    return *this;
-}
-
-auto ClientBuilder::enableSsl() -> ClientBuilder&
-{
-    _clientContext->enableSsl = true;
+    _context->path = std::move(path);
     return *this;
 }
 
 auto ClientBuilder::setPort(Port port) -> ClientBuilder&
 {
-    _clientContext->port = port;
+    _context->port = port;
     return *this;
 }
 
 auto ClientBuilder::setAddress(Address address) -> ClientBuilder&
 {
-    _clientContext->address = std::move(address);
+    _context->address = std::move(address);
     return *this;
 }
 
 auto ClientBuilder::setVersion(ClientVersion version) -> ClientBuilder&
 {
-    _clientContext->clientVersion = version;
+    _context->clientVersion = version;
+    return *this;
+}
+
+auto ClientBuilder::setSslSettings(SslSettingsPtr ssl) -> ClientBuilder&
+{
+    _context->ssl = std::move(ssl);
     return *this;
 }
 

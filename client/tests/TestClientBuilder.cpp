@@ -7,7 +7,9 @@
 
 #include "easywebsocket/client/ClientBuilder.hpp"
 #include "easywebsocket/client/EventHandlerBase.hpp"
+#include "easywebsocket/client/SslSettingsBuilder.hpp"
 #include "ClientContext.hpp"
+#include "SslSettings.hpp"
 
 namespace ews::cli
 {
@@ -21,7 +23,7 @@ public:
 
     auto getClientContext() const -> const ClientContext&
     {
-        return *_clientBuilder._clientContext;
+        return *_clientBuilder._context;
     }
 
 private:
@@ -39,6 +41,10 @@ const Port PORT = 9000;
 const Address ADDRESS = "localhost";
 const std::string PROTOCOL_NAME = "PROTOCOL_NAME";
 const Path PATH = "PATH";
+
+const std::string CA_CERT_PATH = "/home/volodymyr/Projects/EasyWebsocket/tests/TestData/ssl/rootCA.crt";
+const std::string CLIENT_CERT_PATH = "/home/volodymyr/Projects/EasyWebsocket/tests/TestData/ssl/client.crt";
+const std::string CLIENT_KEY_PATH = "/home/volodymyr/Projects/EasyWebsocket/tests/TestData/ssl/client.key";
 
 auto toString(ClientVersion version) -> std::string
 {
@@ -62,6 +68,15 @@ void compareClientContexts(const ClientContext& actual, const ClientContext& exp
     // Non-mandatory parameters
     REQUIRE(actual.protocolName == expected.protocolName);
     REQUIRE(actual.path == expected.path);
+    REQUIRE((actual.ssl != nullptr && expected.ssl != nullptr ||
+             actual.ssl == nullptr && expected.ssl == nullptr));
+
+    if (actual.ssl != nullptr && expected.ssl != nullptr)
+    {
+        REQUIRE(actual.ssl->privateKeyPath == expected.ssl->privateKeyPath);
+        REQUIRE(actual.ssl->certPath == expected.ssl->certPath);
+        REQUIRE(actual.ssl->caCertPath == expected.ssl->caCertPath);
+    }
 }
 
 
@@ -74,6 +89,11 @@ SCENARIO( "ClientContext setup", "[client_builder]" )
         WHEN( "All parameters are set" )
         {
             auto handler = std::make_shared<EventHandlerBase>();
+            auto sslSettings = SslSettingsBuilder{}
+                                   .setPrivateKeyFilepath(CLIENT_KEY_PATH)
+                                   .setCertFilepath(CLIENT_CERT_PATH)
+                                   .setCaCertFilepath(CA_CERT_PATH)
+                                   .build();
             clientBuilder
                 .setVersion(ClientVersion::v1_Amsterdam)
                 .setAddress(ADDRESS)
@@ -82,7 +102,7 @@ SCENARIO( "ClientContext setup", "[client_builder]" )
                 .setMessageSenderAcceptor(handler)
                 .setProtocolName(PROTOCOL_NAME)
                 .setPath(PATH)
-                ;
+                .setSslSettings(sslSettings);
 
             const ClientContext& actual = TestClientBuilder{clientBuilder}.getClientContext();
 
@@ -95,6 +115,10 @@ SCENARIO( "ClientContext setup", "[client_builder]" )
                 expected.eventHandler = handler;
                 expected.protocolName = PROTOCOL_NAME;
                 expected.path = PATH;
+                expected.ssl = std::make_shared<SslSettings>();
+                expected.ssl->privateKeyPath = CLIENT_KEY_PATH;
+                expected.ssl->certPath = CLIENT_CERT_PATH;
+                expected.ssl->caCertPath = CA_CERT_PATH;
 
                 compareClientContexts(actual, expected);
             }
@@ -194,11 +218,28 @@ SCENARIO( "Client construction", "[client_builder]" )
             {
                 clientBuilder
                     .setProtocolName(PROTOCOL_NAME)
-                    .setPath(PATH);
+                    .setPath(PATH)
+                    .setSslSettings(std::make_shared<SslSettings>());
 
                 THEN( "Client builds successfully" )
                 {
                     REQUIRE_NOTHROW(expression());
+                }
+            }
+
+            AND_WHEN( "Dependent parameter 'ssl certificate path' is not set" )
+            {
+                auto sslSettings =
+                    SslSettingsBuilder{}
+                        .setPrivateKeyFilepath(CLIENT_KEY_PATH)
+                        .build();
+
+                clientBuilder.setSslSettings(sslSettings);
+
+                THEN( "Exception is thrown on client build" )
+                {
+                    REQUIRE_THROWS_WITH(clientBuilder.build(),
+                                        "Required parameter is undefined: ssl certificate path");
                 }
             }
         }
