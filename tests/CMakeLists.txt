@@ -2,7 +2,7 @@ set(TESTS_TARGET_SRC_FILES
     framework/catch2/catch.hpp
     framework/fakeit.hpp
     main.cpp
-#    MockedPtr.hpp
+    MockedPtr.hpp
 
 #    TestHelloBinance.cpp
     TestHelloWorld.cpp

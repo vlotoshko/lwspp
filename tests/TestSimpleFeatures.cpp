@@ -6,11 +6,14 @@
 #include <thread>
 
 #include "catch2/catch.hpp"
+#include "MockedPtr.hpp"
 
 #include "easywebsocket/client/ClientBuilder.hpp"
-#include "easywebsocket/client/EventHandlerBase.hpp"
+#include "easywebsocket/client/IEventHandler.hpp"
+#include "easywebsocket/client/IMessageSenderAcceptor.hpp"
 
-#include "easywebsocket/server/EventHandlerBase.hpp"
+#include "easywebsocket/server/IEventHandler.hpp"
+#include "easywebsocket/server/IMessageSenderAcceptor.hpp"
 #include "easywebsocket/server/ISessionInfo.hpp"
 #include "easywebsocket/server/ServerBuilder.hpp"
 
@@ -25,53 +28,8 @@ const cli::Address ADDRESS = "localhost";
 const std::string CUSTOM_PROTOCOL_NAME = "CUSTOM_PROTOCOL_NAME";
 const std::string CUSTOM_PROTOCOL_NAME_2 = "CUSTOM_PROTOCOL_NAME_2";
 
-const std::string SPECIFIC_PATH_NAME = "SPECIFIC_PATH_NAME";
-const std::string SPECIFIC_PATH_NAME_2 = "SPECIFIC_PATH_NAME_2";
-
-class ServerEventHandlerProtocolName : public srv::EventHandlerBase
-{
-public:
-    explicit ServerEventHandlerProtocolName(bool& b)
-        :_connected(b)
-    {}
-    void onConnect(srv::ISessionInfoPtr) noexcept override
-    {
-        _connected = true;
-    }
-private:
-    bool& _connected;
-};
-
-class ServerEventHandlerPath : public srv::EventHandlerBase
-{
-public:
-    explicit ServerEventHandlerPath(bool& b)
-        : _useSpecificBehaviour(b)
-    {}
-    void onConnect(srv::ISessionInfoPtr sessionInfo) noexcept override
-    {
-        if (sessionInfo != nullptr && sessionInfo->getPath() == SPECIFIC_PATH_NAME)
-        {
-            _useSpecificBehaviour = true;
-        }
-    }
-private:
-    bool& _useSpecificBehaviour;
-};
-
-class ClientEventHandlerProtocolName : public cli::EventHandlerBase
-{
-public:
-    explicit ClientEventHandlerProtocolName(bool& b)
-        :_connected(b)
-    {}
-    void onConnect(cli::ISessionInfoPtr) noexcept override
-    {
-        _connected = true;
-    }
-private:
-    bool& _connected;
-};
+const std::string SPECIFIC_PATH = "SPECIFIC_PATH";
+const std::string SPECIFIC_PATH_2 = "SPECIFIC_PATH_2";
 
 void waitForInitialization()
 {
@@ -79,36 +37,60 @@ void waitForInitialization()
     std::this_thread::sleep_for(std::chrono::milliseconds(timeout));
 }
 
+void setupServerBehavior(fakeit::Mock<srv::IEventHandler>& eventHandler,
+                         fakeit::Mock<srv::IMessageSenderAcceptor>& messageSenderAcceptor,
+                         srv::IMessageSenderPtr& messageSender)
+{
+    fakeit::Fake(Method(eventHandler, onConnect), Method(eventHandler, onDisconnect));
+
+    fakeit::When(Method(messageSenderAcceptor, acceptMessageSender))
+        .Do([&messageSender](srv::IMessageSenderPtr ms){ messageSender = ms; });
+}
+
+void setupClientBehavior(fakeit::Mock<cli::IEventHandler>& eventHandler,
+                         fakeit::Mock<cli::IMessageSenderAcceptor>& messageSenderAcceptor,
+                         cli::IMessageSenderPtr& messageSender)
+{
+    fakeit::Fake(Method(eventHandler, onConnect), Method(eventHandler, onError),
+                 Method(eventHandler, onDisconnect));
+
+    fakeit::When(Method(messageSenderAcceptor, acceptMessageSender))
+        .Do([&messageSender](cli::IMessageSenderPtr ms){ messageSender = ms; });
+}
+
 } // namespace
 
 
 SCENARIO( "Protocol name feature testing", "[protocol_name]" )
 {
+    auto srvEventHadler = MockedPtr<srv::IEventHandler>{};
+    auto cliEventHadler = MockedPtr<cli::IEventHandler>{};
+
+    auto srvMessageSenderAcceptor = MockedPtr<srv::IMessageSenderAcceptor>{};
+    auto cliMessageSenderAcceptor = MockedPtr<cli::IMessageSenderAcceptor>{};
+
+    srv::IMessageSenderPtr srvMessageSender;
+    cli::IMessageSenderPtr cliMessageSender;
+
+    setupServerBehavior(srvEventHadler.mock(), srvMessageSenderAcceptor.mock(), srvMessageSender);
+    setupClientBehavior(cliEventHadler.mock(), cliMessageSenderAcceptor.mock(), cliMessageSender);
+
     GIVEN( "Server and client" )
     {
-        bool actualServerConnected = false;
-        bool actualClientConnected = false;
-
-        auto serverEventHandler
-            = std::make_shared<ServerEventHandlerProtocolName>(actualServerConnected);
         auto serverBuilder = srv::ServerBuilder{};
         serverBuilder
             .setVersion(srv::ServerVersion::v1_Andromeda)
             .setPort(PORT)
-            .setEventHandler(serverEventHandler)
-            .setMessageSenderAcceptor(serverEventHandler)
-            ;
+            .setEventHandler(srvEventHadler.ptr())
+            .setMessageSenderAcceptor(srvMessageSenderAcceptor.ptr());
 
-        auto clientEventHandler
-            = std::make_shared<ClientEventHandlerProtocolName>(actualClientConnected);
         auto clientBuilder = cli::ClientBuilder{};
         clientBuilder
             .setVersion(cli::ClientVersion::v1_Amsterdam)
             .setAddress(ADDRESS)
             .setPort(PORT)
-            .setEventHandler(clientEventHandler)
-            .setMessageSenderAcceptor(clientEventHandler)
-            ;
+            .setEventHandler(cliEventHadler.ptr())
+            .setMessageSenderAcceptor(cliMessageSenderAcceptor.ptr());
 
         WHEN( "Server uses default protocol name" )
         {
@@ -121,35 +103,38 @@ SCENARIO( "Protocol name feature testing", "[protocol_name]" )
                 THEN( "Client connects to the server successfully" )
                 {
                     waitForInitialization();
+                    server.reset();
+                    client.reset();
 
-                    const bool expectedServerConnected = true;
-                    const bool expectedClientConnected = true;
-                    REQUIRE(actualServerConnected == expectedServerConnected);
-                    REQUIRE(actualClientConnected == expectedClientConnected);
+                    fakeit::Verify(Method(srvEventHadler.mock(), onConnect),
+                                   Method(srvEventHadler.mock(), onDisconnect)
+                                   ).Once();
+
+                    fakeit::Verify(Method(cliEventHadler.mock(), onConnect),
+                                   Method(cliEventHadler.mock(), onDisconnect)
+                                   ).Once();
                 }
             }
 
             AND_WHEN("Client uses custom protocol name")
             {
-                clientBuilder.setProtocolName(CUSTOM_PROTOCOL_NAME);
-                auto client = clientBuilder.build();
+                auto client = clientBuilder.setProtocolName(CUSTOM_PROTOCOL_NAME).build();
 
                 THEN( "Client cann't connect to the server" )
                 {
                     waitForInitialization();
+                    server.reset();
+                    client.reset();
 
-                    const bool expectedServerConnected = false;
-                    const bool expectedClientConnected = false;
-                    REQUIRE(actualServerConnected == expectedServerConnected);
-                    REQUIRE(actualClientConnected == expectedClientConnected);
+                    fakeit::VerifyNoOtherInvocations(srvEventHadler.mock());
+                    fakeit::Verify(Method(cliEventHadler.mock(), onError)).Once();
                 }
             }
         }
 
         WHEN( "Server uses custom protocol name" )
         {
-            serverBuilder.setProtocolName(CUSTOM_PROTOCOL_NAME);
-            auto server = serverBuilder.build();
+            auto server = serverBuilder.setProtocolName(CUSTOM_PROTOCOL_NAME).build();
 
             AND_WHEN("Client uses default protocol name")
             {
@@ -157,26 +142,32 @@ SCENARIO( "Protocol name feature testing", "[protocol_name]" )
                 THEN( "Client connects to the server successfully" )
                 {
                     waitForInitialization();
+                    server.reset();
+                    client.reset();
 
-                    const bool expectedServerConnected = true;
-                    const bool expectedClientConnected = true;
-                    REQUIRE(actualServerConnected == expectedServerConnected);
-                    REQUIRE(actualClientConnected == expectedClientConnected);
+                    fakeit::Verify(Method(srvEventHadler.mock(), onConnect),
+                                   Method(srvEventHadler.mock(), onDisconnect)).Once();
+
+                    fakeit::Verify(Method(cliEventHadler.mock(), onConnect),
+                                   Method(cliEventHadler.mock(), onDisconnect)).Once();
+
+                    fakeit::VerifyNoOtherInvocations(srvEventHadler.mock());
+                    fakeit::VerifyNoOtherInvocations(cliEventHadler.mock());
                 }
             }
 
             AND_WHEN("Client uses a custom protocol name that differs from the servers protocol name")
             {
-                clientBuilder.setProtocolName(CUSTOM_PROTOCOL_NAME_2);
-                auto client = clientBuilder.build();
+                auto client = clientBuilder.setProtocolName(CUSTOM_PROTOCOL_NAME_2).build();
                 THEN( "Client cann't connect to the server" )
                 {
                     waitForInitialization();
+                    server.reset();
+                    client.reset();
 
-                    const bool expectedServerConnected = false;
-                    const bool expectedClientConnected = false;
-                    REQUIRE(actualServerConnected == expectedServerConnected);
-                    REQUIRE(actualClientConnected == expectedClientConnected);
+                    fakeit::Verify(Method(cliEventHadler.mock(), onError)).Once();
+                    fakeit::VerifyNoOtherInvocations(srvEventHadler.mock());
+                    fakeit::VerifyNoOtherInvocations(cliEventHadler.mock());
                 }
             }
 
@@ -188,41 +179,64 @@ SCENARIO( "Protocol name feature testing", "[protocol_name]" )
                 THEN( "Client connects to the server successfully" )
                 {
                     waitForInitialization();
+                    server.reset();
+                    client.reset();
 
-                    const bool expectedServerConnected = true;
-                    const bool expectedClientConnected = true;
-                    REQUIRE(actualServerConnected == expectedServerConnected);
-                    REQUIRE(actualClientConnected == expectedClientConnected);
+                    fakeit::Verify(Method(srvEventHadler.mock(), onConnect),
+                                   Method(srvEventHadler.mock(), onDisconnect)).Once();
+
+                    fakeit::Verify(Method(cliEventHadler.mock(), onConnect),
+                                   Method(cliEventHadler.mock(), onDisconnect)).Once();
+
+                    fakeit::VerifyNoOtherInvocations(srvEventHadler.mock());
+                    fakeit::VerifyNoOtherInvocations(cliEventHadler.mock());
                 }
             }
         }
     } // GIVEN
 } // SCENARIO
 
-
 SCENARIO( "Path feature testing", "[path]" )
 {
+    auto srvEventHadler = MockedPtr<srv::IEventHandler>{};
+    auto cliEventHadler = MockedPtr<cli::IEventHandler>{};
+
+    auto srvMessageSenderAcceptor = MockedPtr<srv::IMessageSenderAcceptor>{};
+    auto cliMessageSenderAcceptor = MockedPtr<cli::IMessageSenderAcceptor>{};
+
+    srv::IMessageSenderPtr srvMessageSender;
+    cli::IMessageSenderPtr cliMessageSender;
+
+    setupServerBehavior(srvEventHadler.mock(), srvMessageSenderAcceptor.mock(), srvMessageSender);
+    setupClientBehavior(cliEventHadler.mock(), cliMessageSenderAcceptor.mock(), cliMessageSender);
+
     GIVEN( "Server and client" )
     {
-        bool actualUseSpecificBehaviour = false;
-        auto serverEventHandler = std::make_shared<ServerEventHandlerPath>(actualUseSpecificBehaviour);
         auto serverBuilder = srv::ServerBuilder{};
         serverBuilder
             .setVersion(srv::ServerVersion::v1_Andromeda)
             .setPort(PORT)
-            .setEventHandler(serverEventHandler)
-            .setMessageSenderAcceptor(serverEventHandler)
-            ;
+            .setEventHandler(srvEventHadler.ptr())
+            .setMessageSenderAcceptor(srvMessageSenderAcceptor.ptr());
 
-        auto clientEventHandler = std::make_shared<cli::EventHandlerBase>();
         auto clientBuilder = cli::ClientBuilder{};
         clientBuilder
             .setVersion(cli::ClientVersion::v1_Amsterdam)
             .setAddress(ADDRESS)
             .setPort(PORT)
-            .setEventHandler(clientEventHandler)
-            .setMessageSenderAcceptor(clientEventHandler)
-            ;
+            .setEventHandler(cliEventHadler.ptr())
+            .setMessageSenderAcceptor(cliMessageSenderAcceptor.ptr());
+
+        bool actualUseSpecificBehaviour = false;
+        auto onConnect = [&](srv::ISessionInfoPtr sessionInfo)
+        {
+            if (sessionInfo != nullptr && sessionInfo->getPath() == SPECIFIC_PATH)
+            {
+                actualUseSpecificBehaviour = true;
+            }
+        };
+
+        fakeit::When(Method(srvEventHadler.mock(), onConnect)).Do(onConnect);
 
         WHEN( "Client uses default uri path" )
         {
@@ -232,6 +246,17 @@ SCENARIO( "Path feature testing", "[path]" )
             THEN("Server uses default behavoiur")
             {
                 waitForInitialization();
+                server.reset();
+                client.reset();
+
+                fakeit::Verify(Method(srvEventHadler.mock(), onConnect),
+                               Method(srvEventHadler.mock(), onDisconnect)).Once();
+
+                fakeit::Verify(Method(cliEventHadler.mock(), onConnect),
+                               Method(cliEventHadler.mock(), onDisconnect)).Once();
+
+                fakeit::VerifyNoOtherInvocations(srvEventHadler.mock());
+                fakeit::VerifyNoOtherInvocations(cliEventHadler.mock());
 
                 const bool expectedUseSpecificBehaviour = false;
                 REQUIRE(actualUseSpecificBehaviour == expectedUseSpecificBehaviour);
@@ -241,12 +266,23 @@ SCENARIO( "Path feature testing", "[path]" )
         WHEN( "Client uses specific uri path" )
         {
             auto server = serverBuilder.build();
-            clientBuilder.setPath(SPECIFIC_PATH_NAME);
+            clientBuilder.setPath(SPECIFIC_PATH);
             auto client = clientBuilder.build();
 
-            AND_WHEN("Server uses specific behavoiur")
+            THEN("Server uses specific behavoiur")
             {
                 waitForInitialization();
+                server.reset();
+                client.reset();
+
+                fakeit::Verify(Method(srvEventHadler.mock(), onConnect),
+                               Method(srvEventHadler.mock(), onDisconnect)).Once();
+
+                fakeit::Verify(Method(cliEventHadler.mock(), onConnect),
+                               Method(cliEventHadler.mock(), onDisconnect)).Once();
+
+                fakeit::VerifyNoOtherInvocations(srvEventHadler.mock());
+                fakeit::VerifyNoOtherInvocations(cliEventHadler.mock());
 
                 const bool expectedUseSpecificBehaviour = true;
                 REQUIRE(actualUseSpecificBehaviour == expectedUseSpecificBehaviour);
@@ -256,12 +292,23 @@ SCENARIO( "Path feature testing", "[path]" )
         WHEN( "Client uses specific uri path, but other than specified by server" )
         {
             auto server = serverBuilder.build();
-            clientBuilder.setPath(SPECIFIC_PATH_NAME_2);
+            clientBuilder.setPath(SPECIFIC_PATH_2);
             auto client = clientBuilder.build();
 
-            AND_WHEN("Server uses default behavoiur")
+            THEN("Server uses default behavoiur")
             {
                 waitForInitialization();
+                server.reset();
+                client.reset();
+
+                fakeit::Verify(Method(srvEventHadler.mock(), onConnect),
+                               Method(srvEventHadler.mock(), onDisconnect)).Once();
+
+                fakeit::Verify(Method(cliEventHadler.mock(), onConnect),
+                               Method(cliEventHadler.mock(), onDisconnect)).Once();
+
+                fakeit::VerifyNoOtherInvocations(srvEventHadler.mock());
+                fakeit::VerifyNoOtherInvocations(cliEventHadler.mock());
 
                 const bool expectedUseSpecificBehaviour = false;
                 REQUIRE(actualUseSpecificBehaviour == expectedUseSpecificBehaviour);
