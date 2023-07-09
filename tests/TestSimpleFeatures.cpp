@@ -20,6 +20,9 @@
 // NOLINTBEGIN (readability-function-cognitive-complexity)
 namespace ews::tests
 {
+
+using namespace fakeit;
+
 namespace
 {
 
@@ -37,24 +40,24 @@ void waitForInitialization()
     std::this_thread::sleep_for(std::chrono::milliseconds(timeout));
 }
 
-void setupServerBehavior(fakeit::Mock<srv::IEventHandler>& eventHandler,
-                         fakeit::Mock<srv::IMessageSenderAcceptor>& messageSenderAcceptor,
+void setupServerBehavior(Mock<srv::IEventHandler>& eventHandler,
+                         Mock<srv::IMessageSenderAcceptor>& messageSenderAcceptor,
                          srv::IMessageSenderPtr& messageSender)
 {
-    fakeit::Fake(Method(eventHandler, onConnect), Method(eventHandler, onDisconnect));
+    Fake(Method(eventHandler, onConnect), Method(eventHandler, onDisconnect));
 
-    fakeit::When(Method(messageSenderAcceptor, acceptMessageSender))
+    When(Method(messageSenderAcceptor, acceptMessageSender))
         .Do([&messageSender](srv::IMessageSenderPtr ms){ messageSender = ms; });
 }
 
-void setupClientBehavior(fakeit::Mock<cli::IEventHandler>& eventHandler,
-                         fakeit::Mock<cli::IMessageSenderAcceptor>& messageSenderAcceptor,
+void setupClientBehavior(Mock<cli::IEventHandler>& eventHandler,
+                         Mock<cli::IMessageSenderAcceptor>& messageSenderAcceptor,
                          cli::IMessageSenderPtr& messageSender)
 {
-    fakeit::Fake(Method(eventHandler, onConnect), Method(eventHandler, onError),
-                 Method(eventHandler, onDisconnect));
+    Fake(Method(eventHandler, onConnect), Method(eventHandler, onError),
+         Method(eventHandler, onDisconnect));
 
-    fakeit::When(Method(messageSenderAcceptor, acceptMessageSender))
+    When(Method(messageSenderAcceptor, acceptMessageSender))
         .Do([&messageSender](cli::IMessageSenderPtr ms){ messageSender = ms; });
 }
 
@@ -106,13 +109,12 @@ SCENARIO( "Protocol name feature testing", "[protocol_name]" )
                     server.reset();
                     client.reset();
 
-                    fakeit::Verify(Method(srvEventHadler.mock(), onConnect),
-                                   Method(srvEventHadler.mock(), onDisconnect)
-                                   ).Once();
-
-                    fakeit::Verify(Method(cliEventHadler.mock(), onConnect),
-                                   Method(cliEventHadler.mock(), onDisconnect)
-                                   ).Once();
+                    Verify(Method(srvEventHadler.mock(), onConnect),
+                           Method(srvEventHadler.mock(), onDisconnect)).Once();
+                    Verify(Method(cliEventHadler.mock(), onConnect),
+                           Method(cliEventHadler.mock(), onDisconnect)).Once();
+                    VerifyNoOtherInvocations(srvEventHadler.mock());
+                    VerifyNoOtherInvocations(cliEventHadler.mock());
                 }
             }
 
@@ -126,8 +128,8 @@ SCENARIO( "Protocol name feature testing", "[protocol_name]" )
                     server.reset();
                     client.reset();
 
-                    fakeit::VerifyNoOtherInvocations(srvEventHadler.mock());
-                    fakeit::Verify(Method(cliEventHadler.mock(), onError)).Once();
+                    VerifyNoOtherInvocations(srvEventHadler.mock());
+                    Verify(Method(cliEventHadler.mock(), onError)).Once();
                 }
             }
         }
@@ -145,14 +147,12 @@ SCENARIO( "Protocol name feature testing", "[protocol_name]" )
                     server.reset();
                     client.reset();
 
-                    fakeit::Verify(Method(srvEventHadler.mock(), onConnect),
-                                   Method(srvEventHadler.mock(), onDisconnect)).Once();
-
-                    fakeit::Verify(Method(cliEventHadler.mock(), onConnect),
-                                   Method(cliEventHadler.mock(), onDisconnect)).Once();
-
-                    fakeit::VerifyNoOtherInvocations(srvEventHadler.mock());
-                    fakeit::VerifyNoOtherInvocations(cliEventHadler.mock());
+                    Verify(Method(srvEventHadler.mock(), onConnect),
+                           Method(srvEventHadler.mock(), onDisconnect)).Once();
+                    Verify(Method(cliEventHadler.mock(), onConnect),
+                           Method(cliEventHadler.mock(), onDisconnect)).Once();
+                    VerifyNoOtherInvocations(srvEventHadler.mock());
+                    VerifyNoOtherInvocations(cliEventHadler.mock());
                 }
             }
 
@@ -165,9 +165,9 @@ SCENARIO( "Protocol name feature testing", "[protocol_name]" )
                     server.reset();
                     client.reset();
 
-                    fakeit::Verify(Method(cliEventHadler.mock(), onError)).Once();
-                    fakeit::VerifyNoOtherInvocations(srvEventHadler.mock());
-                    fakeit::VerifyNoOtherInvocations(cliEventHadler.mock());
+                    Verify(Method(cliEventHadler.mock(), onError)).Once();
+                    VerifyNoOtherInvocations(srvEventHadler.mock());
+                    VerifyNoOtherInvocations(cliEventHadler.mock());
                 }
             }
 
@@ -182,14 +182,12 @@ SCENARIO( "Protocol name feature testing", "[protocol_name]" )
                     server.reset();
                     client.reset();
 
-                    fakeit::Verify(Method(srvEventHadler.mock(), onConnect),
-                                   Method(srvEventHadler.mock(), onDisconnect)).Once();
-
-                    fakeit::Verify(Method(cliEventHadler.mock(), onConnect),
-                                   Method(cliEventHadler.mock(), onDisconnect)).Once();
-
-                    fakeit::VerifyNoOtherInvocations(srvEventHadler.mock());
-                    fakeit::VerifyNoOtherInvocations(cliEventHadler.mock());
+                    Verify(Method(srvEventHadler.mock(), onConnect),
+                           Method(srvEventHadler.mock(), onDisconnect)).Once();
+                    Verify(Method(cliEventHadler.mock(), onConnect),
+                           Method(cliEventHadler.mock(), onDisconnect)).Once();
+                    VerifyNoOtherInvocations(srvEventHadler.mock());
+                    VerifyNoOtherInvocations(cliEventHadler.mock());
                 }
             }
         }
@@ -236,7 +234,7 @@ SCENARIO( "Path feature testing", "[path]" )
             }
         };
 
-        fakeit::When(Method(srvEventHadler.mock(), onConnect)).Do(onConnect);
+        When(Method(srvEventHadler.mock(), onConnect)).Do(onConnect);
 
         WHEN( "Client uses default uri path" )
         {
@@ -249,14 +247,12 @@ SCENARIO( "Path feature testing", "[path]" )
                 server.reset();
                 client.reset();
 
-                fakeit::Verify(Method(srvEventHadler.mock(), onConnect),
-                               Method(srvEventHadler.mock(), onDisconnect)).Once();
-
-                fakeit::Verify(Method(cliEventHadler.mock(), onConnect),
-                               Method(cliEventHadler.mock(), onDisconnect)).Once();
-
-                fakeit::VerifyNoOtherInvocations(srvEventHadler.mock());
-                fakeit::VerifyNoOtherInvocations(cliEventHadler.mock());
+                Verify(Method(srvEventHadler.mock(), onConnect),
+                       Method(srvEventHadler.mock(), onDisconnect)).Once();
+                Verify(Method(cliEventHadler.mock(), onConnect),
+                       Method(cliEventHadler.mock(), onDisconnect)).Once();
+                VerifyNoOtherInvocations(srvEventHadler.mock());
+                VerifyNoOtherInvocations(cliEventHadler.mock());
 
                 const bool expectedUseSpecificBehaviour = false;
                 REQUIRE(actualUseSpecificBehaviour == expectedUseSpecificBehaviour);
@@ -275,14 +271,12 @@ SCENARIO( "Path feature testing", "[path]" )
                 server.reset();
                 client.reset();
 
-                fakeit::Verify(Method(srvEventHadler.mock(), onConnect),
-                               Method(srvEventHadler.mock(), onDisconnect)).Once();
-
-                fakeit::Verify(Method(cliEventHadler.mock(), onConnect),
-                               Method(cliEventHadler.mock(), onDisconnect)).Once();
-
-                fakeit::VerifyNoOtherInvocations(srvEventHadler.mock());
-                fakeit::VerifyNoOtherInvocations(cliEventHadler.mock());
+                Verify(Method(srvEventHadler.mock(), onConnect),
+                       Method(srvEventHadler.mock(), onDisconnect)).Once();
+                Verify(Method(cliEventHadler.mock(), onConnect),
+                       Method(cliEventHadler.mock(), onDisconnect)).Once();
+                VerifyNoOtherInvocations(srvEventHadler.mock());
+                VerifyNoOtherInvocations(cliEventHadler.mock());
 
                 const bool expectedUseSpecificBehaviour = true;
                 REQUIRE(actualUseSpecificBehaviour == expectedUseSpecificBehaviour);
@@ -301,14 +295,12 @@ SCENARIO( "Path feature testing", "[path]" )
                 server.reset();
                 client.reset();
 
-                fakeit::Verify(Method(srvEventHadler.mock(), onConnect),
-                               Method(srvEventHadler.mock(), onDisconnect)).Once();
-
-                fakeit::Verify(Method(cliEventHadler.mock(), onConnect),
-                               Method(cliEventHadler.mock(), onDisconnect)).Once();
-
-                fakeit::VerifyNoOtherInvocations(srvEventHadler.mock());
-                fakeit::VerifyNoOtherInvocations(cliEventHadler.mock());
+                Verify(Method(srvEventHadler.mock(), onConnect),
+                       Method(srvEventHadler.mock(), onDisconnect)).Once();
+                Verify(Method(cliEventHadler.mock(), onConnect),
+                       Method(cliEventHadler.mock(), onDisconnect)).Once();
+                VerifyNoOtherInvocations(srvEventHadler.mock());
+                VerifyNoOtherInvocations(cliEventHadler.mock());
 
                 const bool expectedUseSpecificBehaviour = false;
                 REQUIRE(actualUseSpecificBehaviour == expectedUseSpecificBehaviour);

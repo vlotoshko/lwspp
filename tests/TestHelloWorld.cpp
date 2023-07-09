@@ -21,6 +21,9 @@
 // NOLINTBEGIN (readability-function-cognitive-complexity)
 namespace ews::tests
 {
+
+using namespace fakeit;
+
 namespace
 {
 
@@ -30,8 +33,8 @@ const cli::Address ADDRESS = "localhost";
 const std::string HELLO_SERVER = "hello server!";
 const std::string HELLO_CLIENT = "hello client!";
 
-void setupServerBehavior(fakeit::Mock<srv::IEventHandler>& eventHandler,
-                         fakeit::Mock<srv::IMessageSenderAcceptor>& messageSenderAcceptor,
+void setupServerBehavior(Mock<srv::IEventHandler>& eventHandler,
+                         Mock<srv::IMessageSenderAcceptor>& messageSenderAcceptor,
                          srv::IMessageSenderPtr& messageSender,
                          std::string& incomeMessage)
 {
@@ -41,15 +44,15 @@ void setupServerBehavior(fakeit::Mock<srv::IEventHandler>& eventHandler,
         messageSender->sendMessage(HELLO_CLIENT);
     };
 
-    fakeit::Fake(Method(eventHandler, onConnect), Method(eventHandler, onDisconnect));
-    fakeit::When(Method(eventHandler, onMessageReceive)).Do(sendHelloToClient);
+    Fake(Method(eventHandler, onConnect), Method(eventHandler, onDisconnect));
+    When(Method(eventHandler, onMessageReceive)).Do(sendHelloToClient);
 
-    fakeit::When(Method(messageSenderAcceptor, acceptMessageSender))
+    When(Method(messageSenderAcceptor, acceptMessageSender))
         .Do([&messageSender](srv::IMessageSenderPtr ms){ messageSender = ms; });
 }
 
-void setupClientBehavior(fakeit::Mock<cli::IEventHandler>& eventHandler,
-                         fakeit::Mock<cli::IMessageSenderAcceptor>& messageSenderAcceptor,
+void setupClientBehavior(Mock<cli::IEventHandler>& eventHandler,
+                         Mock<cli::IMessageSenderAcceptor>& messageSenderAcceptor,
                          cli::IMessageSenderPtr& messageSender,
                          std::string& incomeMessage)
 {
@@ -63,11 +66,11 @@ void setupClientBehavior(fakeit::Mock<cli::IEventHandler>& eventHandler,
         incomeMessage = message;
     };
 
-    fakeit::Fake(Method(eventHandler, onDisconnect));
-    fakeit::When(Method(eventHandler, onConnect)).Do(sendHelloToServer);
-    fakeit::When(Method(eventHandler, onMessageReceive)).Do(onMessageReceive);
+    Fake(Method(eventHandler, onDisconnect));
+    When(Method(eventHandler, onConnect)).Do(sendHelloToServer);
+    When(Method(eventHandler, onMessageReceive)).Do(onMessageReceive);
 
-    fakeit::When(Method(messageSenderAcceptor, acceptMessageSender))
+    When(Method(messageSenderAcceptor, acceptMessageSender))
         .Do([&messageSender](cli::IMessageSenderPtr ms){ messageSender = ms; });
 }
 
@@ -136,16 +139,14 @@ SCENARIO( "Clients sends 'hello world' to the server", "[hello_world]" )
                 server.reset();
                 client.reset();
 
-                fakeit::Verify(Method(srvEventHadler.mock(), onConnect),
-                               Method(srvEventHadler.mock(), onMessageReceive),
-                               Method(srvEventHadler.mock(), onDisconnect)).Once();
-
-                fakeit::Verify(Method(cliEventHadler.mock(), onConnect),
-                               Method(cliEventHadler.mock(), onMessageReceive),
-                               Method(cliEventHadler.mock(), onDisconnect)).Once();
-
-                fakeit::VerifyNoOtherInvocations(srvEventHadler.mock());
-                fakeit::VerifyNoOtherInvocations(cliEventHadler.mock());
+                Verify(Method(srvEventHadler.mock(), onConnect),
+                       Method(srvEventHadler.mock(), onMessageReceive),
+                       Method(srvEventHadler.mock(), onDisconnect)).Once();
+                Verify(Method(cliEventHadler.mock(), onConnect),
+                       Method(cliEventHadler.mock(), onMessageReceive),
+                       Method(cliEventHadler.mock(), onDisconnect)).Once();
+                VerifyNoOtherInvocations(srvEventHadler.mock());
+                VerifyNoOtherInvocations(cliEventHadler.mock());
 
                 REQUIRE(actualServerIncomeMessage == HELLO_SERVER);
                 REQUIRE(actualClientIncomeMessage == HELLO_CLIENT);
