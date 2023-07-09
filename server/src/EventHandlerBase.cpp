@@ -20,7 +20,7 @@ void EventHandlerBase::onMessageReceive(SessionId, const std::string& /*message*
 void EventHandlerBase::onError(SessionId, const std::string& /*errorMessage*/) noexcept
 {}
 
-void EventHandlerBase::onWarning(SessionId, const std::string& /*errorMessage*/) noexcept
+void EventHandlerBase::onWarning(SessionId, const std::string& /*warningMessage*/) noexcept
 {}
 
 void EventHandlerBase::acceptMessageSender(IMessageSenderPtr messageSender) noexcept

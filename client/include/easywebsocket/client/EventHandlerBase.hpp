@@ -21,7 +21,7 @@ public:
 
     void onMessageReceive(const std::string& message) noexcept override;
     void onError(const std::string& errorMessage) noexcept override;
-    void onWarning(const std::string& errorMessage) noexcept override;
+    void onWarning(const std::string& warningMessage) noexcept override;
 
     void acceptMessageSender(IMessageSenderPtr) noexcept override;
 

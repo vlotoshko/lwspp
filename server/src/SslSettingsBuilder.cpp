@@ -38,6 +38,12 @@ auto SslSettingsBuilder::setCaCertFilepath(std::string path) -> SslSettingsBuild
     return *this;
 }
 
+auto SslSettingsBuilder::requireValidClientCert() -> SslSettingsBuilder&
+{
+    _settings->requireValidClientCert = true;
+    return *this;
+}
+
 // namespace
 
 

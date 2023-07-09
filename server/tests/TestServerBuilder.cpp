@@ -40,9 +40,9 @@ using namespace srv;
 const Port PORT = 9000;
 const std::string PROTOCOL_NAME = "PROTOCOL_NAME";
 
-const std::string CA_CERT_PATH = "/home/volodymyr/Projects/EasyWebsocket/tests/TestData/ssl/rootCA.crt";
-const std::string SERVER_CERT_PATH = "/home/volodymyr/Projects/EasyWebsocket/tests/TestData/ssl/server.crt";
-const std::string SERVER_KEY_PATH = "/home/volodymyr/Projects/EasyWebsocket/tests/TestData/ssl/server.key";
+const std::string CA_CERT_PATH = "./TestData/ssl/rootCA.crt";
+const std::string SERVER_CERT_PATH = "./TestData/ssl/server.crt";
+const std::string SERVER_KEY_PATH = "./TestData/ssl/server.key";
 
 auto toString(ServerVersion version) -> std::string
 {
@@ -72,6 +72,7 @@ void compareServerContexts(const ServerContext& actual, const ServerContext& exp
         REQUIRE(actual.ssl->privateKeyPath == expected.ssl->privateKeyPath);
         REQUIRE(actual.ssl->certPath == expected.ssl->certPath);
         REQUIRE(actual.ssl->caCertPath == expected.ssl->caCertPath);
+        REQUIRE(actual.ssl->requireValidClientCert == expected.ssl->requireValidClientCert);
     }
 }
 
@@ -89,6 +90,7 @@ SCENARIO( "ServerContext setup", "[server_builder]" )
                                    .setPrivateKeyFilepath(SERVER_KEY_PATH)
                                    .setCertFilepath(SERVER_CERT_PATH)
                                    .setCaCertFilepath(CA_CERT_PATH)
+                                   .requireValidClientCert()
                                    .build();
 
             serverBuilder

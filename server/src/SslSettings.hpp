@@ -16,6 +16,7 @@ public:
     std::string privateKeyPath = UNDEFINED_FILE_PATH;
     std::string certPath = UNDEFINED_FILE_PATH;
     std::string caCertPath = UNDEFINED_FILE_PATH;
+    bool requireValidClientCert = false;
 };
 
 } // namespace ews::srv

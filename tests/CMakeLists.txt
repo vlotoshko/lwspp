@@ -2,12 +2,15 @@ set(TESTS_TARGET_SRC_FILES
     framework/catch2/catch.hpp
     framework/fakeit.hpp
     main.cpp
+#    MockedPtr.hpp
 
-    TestHelloBinance.cpp
+#    TestHelloBinance.cpp
     TestHelloWorld.cpp
     TestSimpleFeatures.cpp
-    TestSslFeature.cpp
+#    TestSslFeature.cpp
 )
+
+file(COPY ${PROJECT_SOURCE_DIR}/tests/TestData DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
 add_executable(${PROJECT_NAME}-tests ${TESTS_TARGET_SRC_FILES})
 

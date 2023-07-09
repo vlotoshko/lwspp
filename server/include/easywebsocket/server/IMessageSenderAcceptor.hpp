@@ -29,5 +29,4 @@ public:
     virtual void acceptMessageSender(IMessageSenderPtr) noexcept = 0;
 };
 
-
 } // namespace ews::srv

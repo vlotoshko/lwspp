@@ -79,6 +79,10 @@ void setupSslSettings(lws_context_creation_info& lwsContextInfo, const LwsDataHo
             lwsContextInfo.ssl_ca_filepath = ssl.caCertPath.c_str();
         }
 
+        if (ssl.requireValidClientCert)
+        {
+            options = options | LWS_SERVER_OPTION_REQUIRE_VALID_OPENSSL_CLIENT_CERT;
+        }
         lwsContextInfo.options = lwsContextInfo.options | options;
     }
 }

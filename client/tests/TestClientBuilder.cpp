@@ -42,9 +42,9 @@ const Address ADDRESS = "localhost";
 const std::string PROTOCOL_NAME = "PROTOCOL_NAME";
 const Path PATH = "PATH";
 
-const std::string CA_CERT_PATH = "/home/volodymyr/Projects/EasyWebsocket/tests/TestData/ssl/rootCA.crt";
-const std::string CLIENT_CERT_PATH = "/home/volodymyr/Projects/EasyWebsocket/tests/TestData/ssl/client.crt";
-const std::string CLIENT_KEY_PATH = "/home/volodymyr/Projects/EasyWebsocket/tests/TestData/ssl/client.key";
+const std::string CA_CERT_PATH = "./TestData/ssl/rootCA.crt";
+const std::string CLIENT_CERT_PATH = "./TestData/ssl/client.crt";
+const std::string CLIENT_KEY_PATH = "./TestData/ssl/client.key";
 
 auto toString(ClientVersion version) -> std::string
 {

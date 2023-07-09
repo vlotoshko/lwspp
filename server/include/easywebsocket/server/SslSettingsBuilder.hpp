@@ -30,6 +30,7 @@ public:
     auto setPrivateKeyFilepath(std::string) -> SslSettingsBuilder&;
     auto setCertFilepath(std::string) -> SslSettingsBuilder&;
     auto setCaCertFilepath(std::string) -> SslSettingsBuilder&;
+    auto requireValidClientCert() -> SslSettingsBuilder&;
 
 private:
     std::unique_ptr<SslSettings> _settings;
