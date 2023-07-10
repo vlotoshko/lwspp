@@ -29,6 +29,7 @@ target_include_directories(${PROJECT_NAME} PRIVATE
 
 target_link_libraries(${PROJECT_NAME}
     PRIVATE easywebsocket-server
+    PRIVATE websockets
 )
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
