@@ -3,11 +3,13 @@ set(TESTS_TARGET_SRC_FILES
     framework/fakeit.hpp
     main.cpp
     MockedPtr.hpp
+    Utils.cpp
+    Utils.hpp
 
 #    TestHelloBinance.cpp
     TestHelloWorld.cpp
     TestSimpleFeatures.cpp
-#    TestSslFeature.cpp
+    TestSslFeature.cpp
 )
 
 file(COPY ${PROJECT_SOURCE_DIR}/tests/TestData DESTINATION ${CMAKE_CURRENT_BINARY_DIR})

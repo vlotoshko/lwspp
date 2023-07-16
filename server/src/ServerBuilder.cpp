@@ -62,6 +62,19 @@ ServerBuilder::ServerBuilder() : _context(new ServerContext{})
 
 ServerBuilder::~ServerBuilder() = default;
 
+ServerBuilder::ServerBuilder(ServerBuilder&& that) noexcept
+    : _context(std::move(that._context))
+{}
+
+auto ServerBuilder::operator=(ServerBuilder&& that) noexcept -> ServerBuilder&
+{
+    if (this != &that)
+    {
+        _context = std::move(that._context);
+    }
+    return *this;
+}
+
 auto ServerBuilder::build() const -> IServerPtr
 {
     const auto& context = *_context;

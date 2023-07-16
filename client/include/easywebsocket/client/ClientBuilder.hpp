@@ -24,8 +24,8 @@ public:
     ClientBuilder();
     ~ClientBuilder();
 
-    ClientBuilder(ClientBuilder&&) noexcept = default;
-    auto operator=(ClientBuilder&&) noexcept -> ClientBuilder& = default;
+    ClientBuilder(ClientBuilder&&) noexcept;
+    auto operator=(ClientBuilder&&) noexcept -> ClientBuilder&;
 
     ClientBuilder(const ClientBuilder&) = delete;
     auto operator=(const ClientBuilder&) -> ClientBuilder& = delete;

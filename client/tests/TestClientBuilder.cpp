@@ -37,14 +37,20 @@ namespace ews::tests
 {
 using namespace cli;
 
+namespace
+{
+
 const Port PORT = 9000;
 const Address ADDRESS = "localhost";
 const std::string PROTOCOL_NAME = "PROTOCOL_NAME";
 const Path PATH = "PATH";
 
-const std::string CA_CERT_PATH = "./TestData/ssl/rootCA.crt";
-const std::string CLIENT_CERT_PATH = "./TestData/ssl/client.crt";
-const std::string CLIENT_KEY_PATH = "./TestData/ssl/client.key";
+const std::string CA_CERT_PATH     = "CA_CERT_PATH";
+const std::string CLIENT_CERT_PATH = "CLIENT_CERT_PATH";
+const std::string CLIENT_KEY_PATH  = "CLIENT_KEY_PATH";
+const std::string PASSWORD  = "PASSWORD";
+const std::string CIPHER_LIST  = "CIPHER_LIST";
+const std::string CIPHER_LIST_TLS_13  = "CIPHER_LIST_TLS_13";
 
 auto toString(ClientVersion version) -> std::string
 {
@@ -76,9 +82,18 @@ void compareClientContexts(const ClientContext& actual, const ClientContext& exp
         REQUIRE(actual.ssl->privateKeyPath == expected.ssl->privateKeyPath);
         REQUIRE(actual.ssl->certPath == expected.ssl->certPath);
         REQUIRE(actual.ssl->caCertPath == expected.ssl->caCertPath);
+        REQUIRE(actual.ssl->privateKeyPassword == expected.ssl->privateKeyPassword);
+        REQUIRE(actual.ssl->ciphersList == expected.ssl->ciphersList);
+        REQUIRE(actual.ssl->ciphersListTls13 == expected.ssl->ciphersListTls13);
+
+        REQUIRE(actual.ssl->allowSelfSignedServerCert == expected.ssl->allowSelfSignedServerCert);
+        REQUIRE(actual.ssl->allowExpiredServerCert == expected.ssl->allowExpiredServerCert);
+        REQUIRE(actual.ssl->skipServerCertHostnameCheck == expected.ssl->skipServerCertHostnameCheck);
+        REQUIRE(actual.ssl->ignoreServerCaSert == expected.ssl->ignoreServerCaSert);
     }
 }
 
+} // namespace
 
 SCENARIO( "ClientContext setup", "[client_builder]" )
 {
@@ -93,6 +108,13 @@ SCENARIO( "ClientContext setup", "[client_builder]" )
                                    .setPrivateKeyFilepath(CLIENT_KEY_PATH)
                                    .setCertFilepath(CLIENT_CERT_PATH)
                                    .setCaCertFilepath(CA_CERT_PATH)
+                                   .setPrivateKeyPassword(PASSWORD)
+                                   .setCiphersList(CIPHER_LIST)
+                                   .setCiphersListTls13(CIPHER_LIST_TLS_13)
+                                   .allowSelfSignedServerCert()
+                                   .allowExpiredServerCert()
+                                   .skipServerCertHostnameCheck()
+                                   .ignoreServerCaSert()
                                    .build();
             clientBuilder
                 .setVersion(ClientVersion::v1_Amsterdam)
@@ -119,6 +141,14 @@ SCENARIO( "ClientContext setup", "[client_builder]" )
                 expected.ssl->privateKeyPath = CLIENT_KEY_PATH;
                 expected.ssl->certPath = CLIENT_CERT_PATH;
                 expected.ssl->caCertPath = CA_CERT_PATH;
+                expected.ssl->privateKeyPassword = PASSWORD;
+                expected.ssl->ciphersList = CIPHER_LIST;
+                expected.ssl->ciphersListTls13 = CIPHER_LIST_TLS_13;
+
+                expected.ssl->allowSelfSignedServerCert = true;
+                expected.ssl->allowExpiredServerCert = true;
+                expected.ssl->skipServerCertHostnameCheck = true;
+                expected.ssl->ignoreServerCaSert = true;
 
                 compareClientContexts(actual, expected);
             }

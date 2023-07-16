@@ -14,7 +14,7 @@ set(CMAKE_EXE_LINKER_FLAGS ${LINKER_FLAGS})
 
 option(OPTION_BUILD_CLIENT "Build easywebsocket client library" ON)
 option(OPTION_BUILD_SERVER "Build easywebsocket server library" ON)
-option(OPTION_BUILD_EXAMPLES "Build easywebsocket server library" ON)
+option(OPTION_BUILD_EXAMPLES "Build examples" ON)
 option(OPTION_BUILD_INTEGRATION_TESTS  "Build integration tests application" ON)
 
 if(NOT OPTION_BUILD_CLIENT AND NOT OPTION_BUILD_SERVER)
@@ -25,8 +25,8 @@ if(OPTION_BUILD_INTEGRATION_TESTS AND (NOT OPTION_BUILD_CLIENT OR NOT OPTION_BUI
     message(FATAL_ERROR "To build test application please enable building for both client and server libraries.")
 endif()
 
-if(OPTION_BUILD_EXAMPLES AND NOT OPTION_BUILD_SERVER)
-    message(FATAL_ERROR "To build example applications please enable building for the server library.")
+if(OPTION_BUILD_EXAMPLES AND (NOT OPTION_BUILD_CLIENT OR NOT OPTION_BUILD_SERVER))
+    message(FATAL_ERROR "To build example applications please enable building for both client and server libraries.")
 endif()
 
 if(OPTION_BUILD_CLIENT)

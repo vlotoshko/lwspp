@@ -18,30 +18,75 @@ namespace ews::cli
 namespace
 {
 
-void setupSslSettings(lws_context_creation_info& lwsContextInfo, const LwsDataHolderPtr& dataHolder)
+void setupSslSettings(lws_context_creation_info& lwsContextInfo, const SslSettingsPtr& ssl)
 {
-    if (dataHolder->ssl != nullptr)
+    if (ssl != nullptr)
     {
         uint64_t options = LWS_SERVER_OPTION_DO_SSL_GLOBAL_INIT;
-        const auto& ssl = *dataHolder->ssl;
 
-        if (ssl.privateKeyPath != UNDEFINED_FILE_PATH)
+        if (ssl->privateKeyPath != UNDEFINED_FILE_PATH)
         {
-            lwsContextInfo.ssl_private_key_filepath = ssl.privateKeyPath.c_str();
+            lwsContextInfo.client_ssl_private_key_filepath = ssl->privateKeyPath.c_str();
         }
 
-        if (ssl.certPath != UNDEFINED_FILE_PATH)
+        if (ssl->certPath != UNDEFINED_FILE_PATH)
         {
-            lwsContextInfo.ssl_cert_filepath = ssl.certPath.c_str();
+            lwsContextInfo.client_ssl_cert_filepath = ssl->certPath.c_str();
         }
 
-        if (ssl.caCertPath != UNDEFINED_FILE_PATH)
+        if (ssl->caCertPath != UNDEFINED_FILE_PATH)
         {
-            lwsContextInfo.ssl_ca_filepath = ssl.caCertPath.c_str();
+            lwsContextInfo.client_ssl_ca_filepath = ssl->caCertPath.c_str();
+        }
+
+        if (!ssl->privateKeyPassword.empty())
+        {
+            lwsContextInfo.client_ssl_private_key_password= ssl->privateKeyPassword.c_str();
+        }
+
+        if (!ssl->ciphersList.empty())
+        {
+            lwsContextInfo.ssl_cipher_list = ssl->ciphersList.c_str();
+        }
+
+        if (!ssl->ciphersListTls13.empty())
+        {
+            lwsContextInfo.tls1_3_plus_cipher_list = ssl->ciphersListTls13.c_str();
         }
 
         lwsContextInfo.options = lwsContextInfo.options | options;
     }
+}
+
+auto setupSslConnectionFlags(const SslSettingsPtr& ssl) -> int
+{
+    int sslConnectionFlags = 0;
+
+    if (ssl != nullptr)
+    {
+        sslConnectionFlags = sslConnectionFlags | LCCSCF_USE_SSL;
+
+        if (ssl->allowSelfSignedServerCert)
+        {
+            sslConnectionFlags = sslConnectionFlags | LCCSCF_ALLOW_SELFSIGNED;
+        }
+
+        if (ssl->allowExpiredServerCert)
+        {
+            sslConnectionFlags = sslConnectionFlags | LCCSCF_ALLOW_EXPIRED;
+        }
+
+        if (ssl->skipServerCertHostnameCheck)
+        {
+            sslConnectionFlags = sslConnectionFlags | LCCSCF_SKIP_SERVER_CERT_HOSTNAME_CHECK;
+        }
+
+        if (ssl->ignoreServerCaSert)
+        {
+            sslConnectionFlags = sslConnectionFlags | LCCSCF_ALLOW_INSECURE;
+        }
+    }
+    return sslConnectionFlags;
 }
 
 } // namespace
@@ -115,7 +160,7 @@ void LwsClient::setupLowLevelContext_()
     lwsContextInfo.user = _callbackContext.get();
     lwsContextInfo.port = CONTEXT_PORT_NO_LISTEN;
 
-    setupSslSettings(lwsContextInfo, _dataHolder);
+    setupSslSettings(lwsContextInfo, _dataHolder->ssl);
 
     _lowLevelContext = LowLevelContextPtr{lws_create_context(&lwsContextInfo), LwsContextDeleter{}};
     if (_lowLevelContext == nullptr)
@@ -134,15 +179,7 @@ void LwsClient::setupConnectionInfo_()
     _lwsConnectionInfo.path = _dataHolder->path.c_str();
     _lwsConnectionInfo.host = _lwsConnectionInfo.address;
     _lwsConnectionInfo.origin = _lwsConnectionInfo.address;
-
-    if (_dataHolder->ssl != nullptr)
-    {
-        _lwsConnectionInfo.ssl_connection = LCCSCF_USE_SSL
-            | LCCSCF_ALLOW_SELFSIGNED
-            | LCCSCF_SKIP_SERVER_CERT_HOSTNAME_CHECK
-            | LCCSCF_ALLOW_INSECURE
-            ;
-    }
+    _lwsConnectionInfo.ssl_connection = setupSslConnectionFlags(_dataHolder->ssl);
 
     if (_dataHolder->protocolName != DEFAULT_PROTOCOL_NAME)
     {

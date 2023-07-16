@@ -67,6 +67,19 @@ ClientBuilder::ClientBuilder() : _context(new ClientContext{})
 
 ClientBuilder::~ClientBuilder() = default;
 
+ClientBuilder::ClientBuilder(ClientBuilder&& that) noexcept
+    : _context(std::move(that._context))
+{}
+
+auto ClientBuilder::operator=(ClientBuilder&& that) noexcept -> ClientBuilder&
+{
+    if (this != &that)
+    {
+        _context = std::move(that._context);
+    }
+    return *this;
+}
+
 auto ClientBuilder::build() const -> IClientPtr
 {
     const auto& context = *_context;

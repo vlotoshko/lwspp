@@ -128,8 +128,9 @@ SCENARIO( "Protocol name feature testing", "[protocol_name]" )
                     server.reset();
                     client.reset();
 
-                    VerifyNoOtherInvocations(srvEventHadler.mock());
                     Verify(Method(cliEventHadler.mock(), onError)).Once();
+                    VerifyNoOtherInvocations(srvEventHadler.mock());
+                    VerifyNoOtherInvocations(cliEventHadler.mock());
                 }
             }
         }

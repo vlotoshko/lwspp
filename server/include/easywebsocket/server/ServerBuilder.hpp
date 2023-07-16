@@ -24,8 +24,8 @@ public:
     ServerBuilder();
     ~ServerBuilder();
 
-    ServerBuilder(ServerBuilder&&) noexcept = default;
-    auto operator=(ServerBuilder&&) noexcept -> ServerBuilder& = default;
+    ServerBuilder(ServerBuilder&&) noexcept;
+    auto operator=(ServerBuilder&&) noexcept -> ServerBuilder&;
 
     ServerBuilder(const ServerBuilder&) = delete;
     auto operator=(const ServerBuilder&) -> ServerBuilder& = delete;

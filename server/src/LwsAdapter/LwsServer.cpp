@@ -55,31 +55,45 @@ private:
     LowLevelContextWeak _lowLevelContext;
 };
 
-void setupSslSettings(lws_context_creation_info& lwsContextInfo, const LwsDataHolderPtr& dataHolder)
+void setupSslSettings(lws_context_creation_info& lwsContextInfo, const SslSettingsPtr& ssl)
 {
-    if (dataHolder->ssl != nullptr)
+    if (ssl != nullptr)
     {
         uint64_t options = 0;
-        const auto& ssl = *dataHolder->ssl;
 
-        if (ssl.privateKeyPath != UNDEFINED_FILE_PATH)
+        if (ssl->privateKeyPath != UNDEFINED_FILE_PATH)
         {
             options = options | LWS_SERVER_OPTION_DO_SSL_GLOBAL_INIT;
-            lwsContextInfo.ssl_private_key_filepath = ssl.privateKeyPath.c_str();
+            lwsContextInfo.ssl_private_key_filepath = ssl->privateKeyPath.c_str();
         }
 
-        if (ssl.certPath != UNDEFINED_FILE_PATH)
+        if (ssl->certPath != UNDEFINED_FILE_PATH)
         {
-            lwsContextInfo.ssl_cert_filepath = ssl.certPath.c_str();
+            lwsContextInfo.ssl_cert_filepath = ssl->certPath.c_str();
         }
 
-        if (ssl.caCertPath != UNDEFINED_FILE_PATH)
+        if (ssl->caCertPath != UNDEFINED_FILE_PATH)
         {
             options = options | LWS_SERVER_OPTION_DO_SSL_GLOBAL_INIT;
-            lwsContextInfo.ssl_ca_filepath = ssl.caCertPath.c_str();
+            lwsContextInfo.ssl_ca_filepath = ssl->caCertPath.c_str();
         }
 
-        if (ssl.requireValidClientCert)
+        if (!ssl->privateKeyPassword.empty())
+        {
+            lwsContextInfo.ssl_private_key_password= ssl->privateKeyPassword.c_str();
+        }
+
+        if (!ssl->ciphersList.empty())
+        {
+            lwsContextInfo.ssl_cipher_list = ssl->ciphersList.c_str();
+        }
+
+        if (!ssl->ciphersListTls13.empty())
+        {
+            lwsContextInfo.tls1_3_plus_cipher_list = ssl->ciphersListTls13.c_str();
+        }
+
+        if (ssl->requireValidClientCert)
         {
             options = options | LWS_SERVER_OPTION_REQUIRE_VALID_OPENSSL_CLIENT_CERT;
         }
@@ -96,7 +110,7 @@ auto setupLowLeverContext(const ILwsCallbackContextPtr& callbackContext, const L
     lwsContextInfo.port = dataHolder->port;
     lwsContextInfo.protocols = dataHolder->protocols.data();
 
-    setupSslSettings(lwsContextInfo, dataHolder);
+    setupSslSettings(lwsContextInfo, dataHolder->ssl);
 
     auto lowLevelContext = LowLevelContextPtr{lws_create_context(&lwsContextInfo), LwsContextDeleter{}};
     if (lowLevelContext == nullptr)

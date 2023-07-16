@@ -15,6 +15,19 @@ SslSettingsBuilder::SslSettingsBuilder() : _settings(new SslSettings{})
 
 SslSettingsBuilder::~SslSettingsBuilder() = default;
 
+SslSettingsBuilder::SslSettingsBuilder(SslSettingsBuilder&& that) noexcept
+    : _settings(std::move(that._settings))
+{}
+
+auto SslSettingsBuilder::operator=(SslSettingsBuilder&& that) noexcept -> SslSettingsBuilder&
+{
+    if (this != &that)
+    {
+        _settings = std::move(that._settings);
+    }
+    return *this;
+}
+
 auto SslSettingsBuilder::build() const -> SslSettingsPtr
 {
     return std::make_shared<SslSettings>(*_settings);
@@ -38,13 +51,28 @@ auto SslSettingsBuilder::setCaCertFilepath(std::string path) -> SslSettingsBuild
     return *this;
 }
 
+auto SslSettingsBuilder::setPrivateKeyPassword(std::string password) -> SslSettingsBuilder&
+{
+    _settings->privateKeyPassword = std::move(password);
+    return *this;
+}
+
 auto SslSettingsBuilder::requireValidClientCert() -> SslSettingsBuilder&
 {
     _settings->requireValidClientCert = true;
     return *this;
 }
 
-// namespace
+auto SslSettingsBuilder::setCiphersList(std::string ciphersList) -> SslSettingsBuilder&
+{
+    _settings->ciphersList = std::move(ciphersList);
+    return *this;
+}
 
+auto SslSettingsBuilder::setCiphersListTls13(std::string ciphersList) -> SslSettingsBuilder&
+{
+    _settings->ciphersListTls13 = std::move(ciphersList);
+    return *this;
+}
 
 } // namespace ews::srv

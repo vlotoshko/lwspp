@@ -37,12 +37,18 @@ namespace ews::tests
 {
 using namespace srv;
 
+namespace
+{
+
 const Port PORT = 9000;
 const std::string PROTOCOL_NAME = "PROTOCOL_NAME";
 
-const std::string CA_CERT_PATH = "./TestData/ssl/rootCA.crt";
-const std::string SERVER_CERT_PATH = "./TestData/ssl/server.crt";
-const std::string SERVER_KEY_PATH = "./TestData/ssl/server.key";
+const std::string CA_CERT_PATH     = "CA_CERT_PATH";
+const std::string SERVER_CERT_PATH = "SERVER_CERT_PATH";
+const std::string SERVER_KEY_PATH  = "SERVER_KEY_PATH";
+const std::string PASSWORD  = "PASSWORD";
+const std::string CIPHER_LIST  = "CIPHER_LIST";
+const std::string CIPHER_LIST_TLS_13  = "CIPHER_LIST_TLS_13";
 
 auto toString(ServerVersion version) -> std::string
 {
@@ -72,10 +78,14 @@ void compareServerContexts(const ServerContext& actual, const ServerContext& exp
         REQUIRE(actual.ssl->privateKeyPath == expected.ssl->privateKeyPath);
         REQUIRE(actual.ssl->certPath == expected.ssl->certPath);
         REQUIRE(actual.ssl->caCertPath == expected.ssl->caCertPath);
+        REQUIRE(actual.ssl->privateKeyPassword == expected.ssl->privateKeyPassword);
+        REQUIRE(actual.ssl->ciphersList == expected.ssl->ciphersList);
+        REQUIRE(actual.ssl->ciphersListTls13 == expected.ssl->ciphersListTls13);
         REQUIRE(actual.ssl->requireValidClientCert == expected.ssl->requireValidClientCert);
     }
 }
 
+} // namespace
 
 SCENARIO( "ServerContext setup", "[server_builder]" )
 {
@@ -90,6 +100,9 @@ SCENARIO( "ServerContext setup", "[server_builder]" )
                                    .setPrivateKeyFilepath(SERVER_KEY_PATH)
                                    .setCertFilepath(SERVER_CERT_PATH)
                                    .setCaCertFilepath(CA_CERT_PATH)
+                                   .setPrivateKeyPassword(PASSWORD)
+                                   .setCiphersList(CIPHER_LIST)
+                                   .setCiphersListTls13(CIPHER_LIST_TLS_13)
                                    .requireValidClientCert()
                                    .build();
 
@@ -114,6 +127,10 @@ SCENARIO( "ServerContext setup", "[server_builder]" )
                 expected.ssl->privateKeyPath = SERVER_KEY_PATH;
                 expected.ssl->certPath = SERVER_CERT_PATH;
                 expected.ssl->caCertPath = CA_CERT_PATH;
+                expected.ssl->privateKeyPassword = PASSWORD;
+                expected.ssl->ciphersList = CIPHER_LIST;
+                expected.ssl->ciphersListTls13 = CIPHER_LIST_TLS_13;
+                expected.ssl->requireValidClientCert = true;
 
                 compareServerContexts(actual, expected);
             }
