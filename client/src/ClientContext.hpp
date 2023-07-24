@@ -24,7 +24,9 @@ public:
 
     Path path = DEFAULT_URI_PATH;
     std::string protocolName = DEFAULT_PROTOCOL_NAME;
-
+    int keepAliveTimeout = UNDEFINED_UNSET;
+    int keepAliveProbes = UNDEFINED_UNSET;
+    int keepAliveProbesInterval = UNDEFINED_UNSET;
     SslSettingsPtr ssl;
 };
 

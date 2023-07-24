@@ -614,7 +614,7 @@ SCENARIO( "Test server ssl features", "[ssl]" )
 } // SCENARIO
 
 
-// FIX: Tests with ciphers lists do not work, server and client establish connect even
+// FIXME: Tests with ciphers lists do not work, server and client establish connect even
 // they have no common ciphers set, the server's cipher is chosen
 SCENARIO( "Test ssl ciphers list feature", "[.ssl]" )
 {

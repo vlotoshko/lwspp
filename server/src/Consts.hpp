@@ -22,5 +22,6 @@ const std::string UNDEFINED_FILE_PATH = "UNDEFINED_FILE_PATH";
 
 const unsigned int MAX_MESSAGE_SIZE = 1024 * 64;
 const unsigned int MAX_PATH_SIZE = 1024 * 4;
+const int UNDEFINED_UNSET = 0;
 
 } // namespace ews::srv

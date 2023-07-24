@@ -15,6 +15,9 @@ LwsDataHolder::LwsDataHolder(const ServerContext& context)
     , protocolName(context.protocolName)
     , protocols(createLwsProtocols(context.serverVersion, protocolName))
     , ssl(context.ssl)
+    , keepAliveTimeout(context.keepAliveTimeout)
+    , keepAliveProbesInterval(context.keepAliveProbesInterval)
+    , keepAliveProbes(context.keepAliveProbes)
 {}
 
 } // namespace ews::srv

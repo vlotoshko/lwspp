@@ -50,6 +50,10 @@ const std::string PASSWORD  = "PASSWORD";
 const std::string CIPHER_LIST  = "CIPHER_LIST";
 const std::string CIPHER_LIST_TLS_13  = "CIPHER_LIST_TLS_13";
 
+const int KEEPALIVE_TIMEOUT = 20;
+const int KEEPALIVE_PROBES = 5;
+const int KEEPALIVE_PROBES_INTERVAL = 10;
+
 auto toString(ServerVersion version) -> std::string
 {
     switch (version)
@@ -70,6 +74,9 @@ void compareServerContexts(const ServerContext& actual, const ServerContext& exp
 
     // Non-mandatory parameters
     REQUIRE(actual.protocolName == expected.protocolName);
+    REQUIRE(actual.keepAliveTimeout == expected.keepAliveTimeout);
+    REQUIRE(actual.keepAliveProbes == expected.keepAliveProbes);
+    REQUIRE(actual.keepAliveProbesInterval == expected.keepAliveProbesInterval);
     REQUIRE((actual.ssl != nullptr && expected.ssl != nullptr ||
              actual.ssl == nullptr && expected.ssl == nullptr));
 
@@ -112,6 +119,9 @@ SCENARIO( "ServerContext setup", "[server_builder]" )
                 .setEventHandler(handler)
                 .setMessageSenderAcceptor(handler)
                 .setProtocolName(PROTOCOL_NAME)
+                .setKeepAliveTimeout(KEEPALIVE_TIMEOUT)
+                .setKeepAliveProbes(KEEPALIVE_PROBES)
+                .setKeepAliveProbesInterval(KEEPALIVE_PROBES_INTERVAL)
                 .setSslSettings(sslSettings);
 
             const ServerContext& actual = TestServerBuilder{serverBuilder}.getServerContext();
@@ -131,6 +141,9 @@ SCENARIO( "ServerContext setup", "[server_builder]" )
                 expected.ssl->ciphersList = CIPHER_LIST;
                 expected.ssl->ciphersListTls13 = CIPHER_LIST_TLS_13;
                 expected.ssl->requireValidClientCert = true;
+                expected.keepAliveTimeout = KEEPALIVE_TIMEOUT;
+                expected.keepAliveProbes = KEEPALIVE_PROBES;
+                expected.keepAliveProbesInterval = KEEPALIVE_PROBES_INTERVAL;
 
                 compareServerContexts(actual, expected);
             }
@@ -233,6 +246,29 @@ SCENARIO( "Server construction", "[server_builder]" )
                 {
                     REQUIRE_THROWS_WITH(serverBuilder.build(),
                                         "Required parameter is undefined: ssl certificate path");
+                }
+            }
+
+            AND_WHEN( "Dependent parameter 'keep alive probes' is not set" )
+            {
+                serverBuilder.setKeepAliveTimeout(KEEPALIVE_TIMEOUT);
+
+                THEN( "Exception is thrown on server build" )
+                {
+                    REQUIRE_THROWS_WITH(serverBuilder.build(),
+                                        "Required parameter is undefined: keep alive probes");
+                }
+            }
+
+            AND_WHEN( "Dependent parameter 'keep alive probes interval' is not set" )
+            {
+                serverBuilder.setKeepAliveTimeout(KEEPALIVE_TIMEOUT);
+                serverBuilder.setKeepAliveProbes(KEEPALIVE_PROBES);
+
+                THEN( "Exception is thrown on server build" )
+                {
+                    REQUIRE_THROWS_WITH(serverBuilder.build(),
+                                        "Required parameter is undefined: keep alive probes interval");
                 }
             }
         }

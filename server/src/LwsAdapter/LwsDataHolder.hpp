@@ -25,6 +25,10 @@ struct LwsDataHolder
     std::string protocolName;
     LwsProtocols protocols;
     SslSettingsPtr ssl;
+
+    int keepAliveTimeout = 0;
+    int keepAliveProbesInterval = 0;
+    int keepAliveProbes = 0;
 };
 
 } // namespace ews::srv

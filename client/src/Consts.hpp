@@ -18,5 +18,6 @@ const Path DEFAULT_URI_PATH = static_cast<Path>("");
 const std::string DEFAULT_PROTOCOL_NAME;
 const std::string UNDEFINED_FILE_PATH = "UNDEFINED_FILE_PATH";
 const unsigned int MAX_MESSAGE_SIZE = 1024 * 64;
+const int UNDEFINED_UNSET = 0;
 
 } // namespace ews::cli

@@ -52,6 +52,19 @@ void checkContext(const ServerContext& context)
     {
         throw UndefinedRequiredParameterException{"ssl certificate path"};
     }
+
+    if (context.keepAliveTimeout != UNDEFINED_UNSET)
+    {
+        if (context.keepAliveProbes == UNDEFINED_UNSET)
+        {
+            throw UndefinedRequiredParameterException{"keep alive probes"};
+        }
+
+        if (context.keepAliveProbesInterval == UNDEFINED_UNSET)
+        {
+            throw UndefinedRequiredParameterException{"keep alive probes interval"};
+        }
+    }
 }
 
 } // namespace
@@ -115,6 +128,24 @@ auto ServerBuilder::setProtocolName(std::string protocolName) -> ServerBuilder&
 auto ServerBuilder::setSslSettings(SslSettingsPtr ssl) -> ServerBuilder&
 {
     _context->ssl = std::move(ssl);
+    return *this;
+}
+
+auto ServerBuilder::setKeepAliveTimeout(int timeout) -> ServerBuilder&
+{
+    _context->keepAliveTimeout = timeout;
+    return *this;
+}
+
+auto ServerBuilder::setKeepAliveProbes(int probes) -> ServerBuilder&
+{
+    _context->keepAliveProbes = probes;
+    return *this;
+}
+
+auto ServerBuilder::setKeepAliveProbesInterval(int interval) -> ServerBuilder&
+{
+    _context->keepAliveProbesInterval = interval;
     return *this;
 }
 

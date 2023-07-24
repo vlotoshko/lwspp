@@ -109,6 +109,9 @@ auto setupLowLeverContext(const ILwsCallbackContextPtr& callbackContext, const L
     lwsContextInfo.user = callbackContext.get();
     lwsContextInfo.port = dataHolder->port;
     lwsContextInfo.protocols = dataHolder->protocols.data();
+    lwsContextInfo.ka_time = dataHolder->keepAliveTimeout;
+    lwsContextInfo.ka_interval = dataHolder->keepAliveProbesInterval;
+    lwsContextInfo.ka_probes = dataHolder->keepAliveProbes;
 
     setupSslSettings(lwsContextInfo, dataHolder->ssl);
 

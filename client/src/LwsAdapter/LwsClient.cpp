@@ -159,6 +159,9 @@ void LwsClient::setupLowLevelContext_()
     lwsContextInfo.protocols = _dataHolder->protocols.data();
     lwsContextInfo.user = _callbackContext.get();
     lwsContextInfo.port = CONTEXT_PORT_NO_LISTEN;
+    lwsContextInfo.ka_time = _dataHolder->keepAliveTimeout;
+    lwsContextInfo.ka_interval = _dataHolder->keepAliveProbesInterval;
+    lwsContextInfo.ka_probes = _dataHolder->keepAliveProbes;
 
     setupSslSettings(lwsContextInfo, _dataHolder->ssl);
 

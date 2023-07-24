@@ -44,6 +44,9 @@ public:
     auto setProtocolName(std::string) -> ClientBuilder&;
     auto setPath(Path) -> ClientBuilder&;
     auto setSslSettings(SslSettingsPtr) -> ClientBuilder&;
+    auto setKeepAliveTimeout(int) -> ClientBuilder&;
+    auto setKeepAliveProbes(int) -> ClientBuilder&;
+    auto setKeepAliveProbesInterval(int) -> ClientBuilder&;
 
 private:
     std::unique_ptr<ClientContext> _context;

@@ -41,6 +41,9 @@ public:
 
     // Non mandatory options
     auto setProtocolName(std::string) -> ServerBuilder&;
+    auto setKeepAliveTimeout(int) -> ServerBuilder&;
+    auto setKeepAliveProbes(int) -> ServerBuilder&;
+    auto setKeepAliveProbesInterval(int) -> ServerBuilder&;
     auto setSslSettings(SslSettingsPtr) -> ServerBuilder&;
 
 private:

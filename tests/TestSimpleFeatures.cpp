@@ -3,6 +3,7 @@
  * @date May, 2023
  */
 
+#include <condition_variable>
 #include <thread>
 
 #include "catch2/catch.hpp"
@@ -309,6 +310,57 @@ SCENARIO( "Path feature testing", "[path]" )
         }
     } // GIVEN
 } // SCENARIO
+
+// NOTE: This test case is disabled. It was executed manually by disabling the network connection
+// on the VM with the server.
+SCENARIO( "Keep alive feature testing", "[.keep_alive]" )
+{
+    auto cliEventHadler = MockedPtr<cli::IEventHandler>{};
+    auto cliMessageSenderAcceptor = MockedPtr<cli::IMessageSenderAcceptor>{};
+    cli::IMessageSenderPtr cliMessageSender;
+
+    std::mutex mutex;
+    std::condition_variable condVar;
+    bool clientStopped = false;
+
+    auto stopClient = [&condVar, &clientStopped]()
+    {
+        clientStopped = true;
+        condVar.notify_one();
+    };
+
+    Fake(Method(cliEventHadler.mock(), onConnect), Method(cliEventHadler.mock(), onError));
+    When(Method(cliEventHadler.mock(), onDisconnect)).Do(stopClient);
+    When(Method(cliMessageSenderAcceptor.mock(), acceptMessageSender))
+        .Do([&cliMessageSender](cli::IMessageSenderPtr ms){ cliMessageSender = ms; });
+
+    GIVEN( "Server and client" )
+    {
+        auto clientBuilder = cli::ClientBuilder{};
+        clientBuilder
+            .setVersion(cli::ClientVersion::v1_Amsterdam)
+            .setAddress("192.168.1.7")
+            .setPort(PORT)
+            .setEventHandler(cliEventHadler.ptr())
+            .setMessageSenderAcceptor(cliMessageSenderAcceptor.ptr());
+
+        WHEN( "Client sets up keep alive feature" )
+        {
+            clientBuilder.setKeepAliveTimeout(10);
+            clientBuilder.setKeepAliveProbes(3);
+            clientBuilder.setKeepAliveProbesInterval(5);
+
+            auto client = clientBuilder.build();
+
+            std::unique_lock<std::mutex> guard(mutex);
+            condVar.wait(guard, [&clientStopped]{ return clientStopped; });
+
+            Verify(Method(cliEventHadler.mock(), onConnect),
+                   Method(cliEventHadler.mock(), onDisconnect)).Once();
+            VerifyNoOtherInvocations(cliEventHadler.mock());
+        }
+    } // GIVEN
+}
 
 } // namespace ews::tests
 // NOLINTEND (readability-function-cognitive-complexity)

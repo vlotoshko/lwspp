@@ -17,6 +17,9 @@ LwsDataHolder::LwsDataHolder(const ClientContext& context)
     , protocolName(context.protocolName)
     , protocols(createLwsProtocols(context.clientVersion))
     , ssl(context.ssl)
+    , keepAliveTimeout(context.keepAliveTimeout)
+    , keepAliveProbesInterval(context.keepAliveProbesInterval)
+    , keepAliveProbes(context.keepAliveProbes)
 {}
 
 } // namespace ews::cli
