@@ -19,6 +19,7 @@ const SessionId ALL_SESSIONS = static_cast<int>(0U - 1);
 const std::string DEFAULT_PROTOCOL_NAME = "/";
 
 const std::string UNDEFINED_FILE_PATH = "UNDEFINED_FILE_PATH";
+const std::string UNDEFINED_NAME = "UNDEFINED_NAME";
 
 const unsigned int MAX_MESSAGE_SIZE = 1024 * 64;
 const unsigned int MAX_PATH_SIZE = 1024 * 4;

@@ -29,6 +29,8 @@ public:
     int keepAliveTimeout = UNDEFINED_UNSET;
     int keepAliveProbes = UNDEFINED_UNSET;
     int keepAliveProbesInterval = UNDEFINED_UNSET;
+    std::string vhostName = UNDEFINED_NAME;
+    std::string serverString = UNDEFINED_NAME;
     SslSettingsPtr ssl;
 };
 

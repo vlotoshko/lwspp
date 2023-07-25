@@ -11,6 +11,8 @@
 #include "ServerContext.hpp"
 #include "SslSettings.hpp"
 
+#include "LwsAdapter/LwsServer.hpp"
+
 namespace ews::srv
 {
 
@@ -49,6 +51,8 @@ const std::string SERVER_KEY_PATH  = "SERVER_KEY_PATH";
 const std::string PASSWORD  = "PASSWORD";
 const std::string CIPHER_LIST  = "CIPHER_LIST";
 const std::string CIPHER_LIST_TLS_13  = "CIPHER_LIST_TLS_13";
+const std::string VHOST_NAME  = "VHOST_NAME";
+const std::string SERVER_STRING = "SERVER_STRING";
 
 const int KEEPALIVE_TIMEOUT = 20;
 const int KEEPALIVE_PROBES = 5;
@@ -77,6 +81,8 @@ void compareServerContexts(const ServerContext& actual, const ServerContext& exp
     REQUIRE(actual.keepAliveTimeout == expected.keepAliveTimeout);
     REQUIRE(actual.keepAliveProbes == expected.keepAliveProbes);
     REQUIRE(actual.keepAliveProbesInterval == expected.keepAliveProbesInterval);
+    REQUIRE(actual.vhostName == expected.vhostName);
+    REQUIRE(actual.serverString == expected.serverString);
     REQUIRE((actual.ssl != nullptr && expected.ssl != nullptr ||
              actual.ssl == nullptr && expected.ssl == nullptr));
 
@@ -122,6 +128,8 @@ SCENARIO( "ServerContext setup", "[server_builder]" )
                 .setKeepAliveTimeout(KEEPALIVE_TIMEOUT)
                 .setKeepAliveProbes(KEEPALIVE_PROBES)
                 .setKeepAliveProbesInterval(KEEPALIVE_PROBES_INTERVAL)
+                .setVhostName(VHOST_NAME)
+                .setServerString(SERVER_STRING)
                 .setSslSettings(sslSettings);
 
             const ServerContext& actual = TestServerBuilder{serverBuilder}.getServerContext();
@@ -144,9 +152,15 @@ SCENARIO( "ServerContext setup", "[server_builder]" )
                 expected.keepAliveTimeout = KEEPALIVE_TIMEOUT;
                 expected.keepAliveProbes = KEEPALIVE_PROBES;
                 expected.keepAliveProbesInterval = KEEPALIVE_PROBES_INTERVAL;
+                expected.vhostName = VHOST_NAME;
+                expected.serverString = SERVER_STRING;
 
                 compareServerContexts(actual, expected);
             }
+
+
+
+
         }
     } // GIVEN
 } // SCENARIO

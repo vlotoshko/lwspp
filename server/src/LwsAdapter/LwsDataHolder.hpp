@@ -25,6 +25,8 @@ struct LwsDataHolder
     std::string protocolName;
     LwsProtocols protocols;
     SslSettingsPtr ssl;
+    std::string vhostName;
+    std::string serverString;
 
     int keepAliveTimeout = 0;
     int keepAliveProbesInterval = 0;

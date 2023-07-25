@@ -131,6 +131,18 @@ auto ServerBuilder::setSslSettings(SslSettingsPtr ssl) -> ServerBuilder&
     return *this;
 }
 
+auto ServerBuilder::setVhostName(std::string vhostName) -> ServerBuilder&
+{
+    _context->vhostName = std::move(vhostName);
+    return *this;
+}
+
+auto ServerBuilder::setServerString(std::string serverString) -> ServerBuilder&
+{
+    _context->serverString = std::move(serverString);
+    return *this;
+}
+
 auto ServerBuilder::setKeepAliveTimeout(int timeout) -> ServerBuilder&
 {
     _context->keepAliveTimeout = timeout;

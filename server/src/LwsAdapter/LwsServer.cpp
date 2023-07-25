@@ -109,9 +109,23 @@ auto setupLowLeverContext(const ILwsCallbackContextPtr& callbackContext, const L
     lwsContextInfo.user = callbackContext.get();
     lwsContextInfo.port = dataHolder->port;
     lwsContextInfo.protocols = dataHolder->protocols.data();
-    lwsContextInfo.ka_time = dataHolder->keepAliveTimeout;
-    lwsContextInfo.ka_interval = dataHolder->keepAliveProbesInterval;
-    lwsContextInfo.ka_probes = dataHolder->keepAliveProbes;
+
+    if (dataHolder->keepAliveTimeout != UNDEFINED_UNSET)
+    {
+        lwsContextInfo.ka_time = dataHolder->keepAliveTimeout;
+        lwsContextInfo.ka_interval = dataHolder->keepAliveProbesInterval;
+        lwsContextInfo.ka_probes = dataHolder->keepAliveProbes;
+    }
+
+    if (dataHolder->vhostName != UNDEFINED_NAME)
+    {
+        lwsContextInfo.vhost_name = dataHolder->vhostName.data();
+    }
+
+    if (dataHolder->serverString != UNDEFINED_NAME)
+    {
+        lwsContextInfo.server_string = dataHolder->serverString.data();
+    }
 
     setupSslSettings(lwsContextInfo, dataHolder->ssl);
 

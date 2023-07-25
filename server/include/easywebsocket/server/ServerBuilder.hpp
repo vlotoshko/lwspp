@@ -45,6 +45,8 @@ public:
     auto setKeepAliveProbes(int) -> ServerBuilder&;
     auto setKeepAliveProbesInterval(int) -> ServerBuilder&;
     auto setSslSettings(SslSettingsPtr) -> ServerBuilder&;
+    auto setVhostName(std::string) -> ServerBuilder&;
+    auto setServerString(std::string) -> ServerBuilder&;
 
 private:
     std::unique_ptr<ServerContext> _context;
