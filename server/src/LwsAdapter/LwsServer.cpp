@@ -127,6 +127,11 @@ auto setupLowLeverContext(const ILwsCallbackContextPtr& callbackContext, const L
         lwsContextInfo.server_string = dataHolder->serverString.data();
     }
 
+    if (dataHolder->lwsLogLevel != UNDEFINED_UNSET)
+    {
+        lws_set_log_level(dataHolder->lwsLogLevel, nullptr);
+    }
+
     setupSslSettings(lwsContextInfo, dataHolder->ssl);
 
     auto lowLevelContext = LowLevelContextPtr{lws_create_context(&lwsContextInfo), LwsContextDeleter{}};

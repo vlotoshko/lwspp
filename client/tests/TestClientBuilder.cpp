@@ -55,6 +55,7 @@ const std::string CIPHER_LIST_TLS_13  = "CIPHER_LIST_TLS_13";
 const int KEEPALIVE_TIMEOUT = 20;
 const int KEEPALIVE_PROBES = 5;
 const int KEEPALIVE_PROBES_INTERVAL = 10;
+const int LWS_LOG_LEVEL = 9;
 
 auto toString(ClientVersion version) -> std::string
 {
@@ -81,6 +82,7 @@ void compareClientContexts(const ClientContext& actual, const ClientContext& exp
     REQUIRE(actual.keepAliveTimeout == expected.keepAliveTimeout);
     REQUIRE(actual.keepAliveProbes == expected.keepAliveProbes);
     REQUIRE(actual.keepAliveProbesInterval == expected.keepAliveProbesInterval);
+    REQUIRE(actual.lwsLogLevel == expected.lwsLogLevel);
     REQUIRE((actual.ssl != nullptr && expected.ssl != nullptr ||
              actual.ssl == nullptr && expected.ssl == nullptr));
 
@@ -134,6 +136,7 @@ SCENARIO( "ClientContext setup", "[client_builder]" )
                 .setKeepAliveTimeout(KEEPALIVE_TIMEOUT)
                 .setKeepAliveProbes(KEEPALIVE_PROBES)
                 .setKeepAliveProbesInterval(KEEPALIVE_PROBES_INTERVAL)
+                .setLwsLogLevel(LWS_LOG_LEVEL)
                 .setSslSettings(sslSettings);
 
             const ClientContext& actual = TestClientBuilder{clientBuilder}.getClientContext();
@@ -161,6 +164,7 @@ SCENARIO( "ClientContext setup", "[client_builder]" )
                 expected.keepAliveTimeout = KEEPALIVE_TIMEOUT;
                 expected.keepAliveProbes = KEEPALIVE_PROBES;
                 expected.keepAliveProbesInterval = KEEPALIVE_PROBES_INTERVAL;
+                expected.lwsLogLevel = LWS_LOG_LEVEL;
 
                 compareClientContexts(actual, expected);
             }

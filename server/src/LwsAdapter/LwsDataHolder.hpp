@@ -27,6 +27,7 @@ struct LwsDataHolder
     SslSettingsPtr ssl;
     std::string vhostName;
     std::string serverString;
+    int lwsLogLevel = 0;
 
     int keepAliveTimeout = 0;
     int keepAliveProbesInterval = 0;

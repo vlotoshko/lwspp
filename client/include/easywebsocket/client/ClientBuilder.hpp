@@ -47,6 +47,7 @@ public:
     auto setKeepAliveTimeout(int) -> ClientBuilder&;
     auto setKeepAliveProbes(int) -> ClientBuilder&;
     auto setKeepAliveProbesInterval(int) -> ClientBuilder&;
+    auto setLwsLogLevel(int) -> ClientBuilder&;
 
 private:
     std::unique_ptr<ClientContext> _context;

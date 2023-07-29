@@ -166,4 +166,10 @@ auto ClientBuilder::setKeepAliveProbesInterval(int interval) -> ClientBuilder&
     return *this;
 }
 
+auto ClientBuilder::setLwsLogLevel(int logLevel) -> ClientBuilder&
+{
+    _context->lwsLogLevel = logLevel;
+    return *this;
+}
+
 } // namespace ews::cli

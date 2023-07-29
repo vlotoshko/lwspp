@@ -163,6 +163,11 @@ void LwsClient::setupLowLevelContext_()
     lwsContextInfo.ka_interval = _dataHolder->keepAliveProbesInterval;
     lwsContextInfo.ka_probes = _dataHolder->keepAliveProbes;
 
+    if (_dataHolder->lwsLogLevel != UNDEFINED_UNSET)
+    {
+        lws_set_log_level(_dataHolder->lwsLogLevel, nullptr);
+    }
+
     setupSslSettings(lwsContextInfo, _dataHolder->ssl);
 
     _lowLevelContext = LowLevelContextPtr{lws_create_context(&lwsContextInfo), LwsContextDeleter{}};

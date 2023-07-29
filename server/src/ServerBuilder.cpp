@@ -143,6 +143,12 @@ auto ServerBuilder::setServerString(std::string serverString) -> ServerBuilder&
     return *this;
 }
 
+auto ServerBuilder::setLwsLogLevel(int logLevel) -> ServerBuilder&
+{
+    _context->lwsLogLevel = logLevel;
+    return *this;
+}
+
 auto ServerBuilder::setKeepAliveTimeout(int timeout) -> ServerBuilder&
 {
     _context->keepAliveTimeout = timeout;

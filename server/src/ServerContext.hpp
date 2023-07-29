@@ -31,6 +31,7 @@ public:
     int keepAliveProbesInterval = UNDEFINED_UNSET;
     std::string vhostName = UNDEFINED_NAME;
     std::string serverString = UNDEFINED_NAME;
+    int lwsLogLevel = UNDEFINED_UNSET;
     SslSettingsPtr ssl;
 };
 

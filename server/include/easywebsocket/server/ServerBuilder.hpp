@@ -47,6 +47,8 @@ public:
     auto setSslSettings(SslSettingsPtr) -> ServerBuilder&;
     auto setVhostName(std::string) -> ServerBuilder&;
     auto setServerString(std::string) -> ServerBuilder&;
+    auto setLwsLogLevel(int) -> ServerBuilder&;
+
 
 private:
     std::unique_ptr<ServerContext> _context;

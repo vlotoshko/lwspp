@@ -57,6 +57,7 @@ const std::string SERVER_STRING = "SERVER_STRING";
 const int KEEPALIVE_TIMEOUT = 20;
 const int KEEPALIVE_PROBES = 5;
 const int KEEPALIVE_PROBES_INTERVAL = 10;
+const int LWS_LOG_LEVEL = 9;
 
 auto toString(ServerVersion version) -> std::string
 {
@@ -83,6 +84,7 @@ void compareServerContexts(const ServerContext& actual, const ServerContext& exp
     REQUIRE(actual.keepAliveProbesInterval == expected.keepAliveProbesInterval);
     REQUIRE(actual.vhostName == expected.vhostName);
     REQUIRE(actual.serverString == expected.serverString);
+    REQUIRE(actual.lwsLogLevel == expected.lwsLogLevel);
     REQUIRE((actual.ssl != nullptr && expected.ssl != nullptr ||
              actual.ssl == nullptr && expected.ssl == nullptr));
 
@@ -130,6 +132,7 @@ SCENARIO( "ServerContext setup", "[server_builder]" )
                 .setKeepAliveProbesInterval(KEEPALIVE_PROBES_INTERVAL)
                 .setVhostName(VHOST_NAME)
                 .setServerString(SERVER_STRING)
+                .setLwsLogLevel(LWS_LOG_LEVEL)
                 .setSslSettings(sslSettings);
 
             const ServerContext& actual = TestServerBuilder{serverBuilder}.getServerContext();
@@ -154,13 +157,10 @@ SCENARIO( "ServerContext setup", "[server_builder]" )
                 expected.keepAliveProbesInterval = KEEPALIVE_PROBES_INTERVAL;
                 expected.vhostName = VHOST_NAME;
                 expected.serverString = SERVER_STRING;
+                expected.lwsLogLevel = LWS_LOG_LEVEL;
 
                 compareServerContexts(actual, expected);
             }
-
-
-
-
         }
     } // GIVEN
 } // SCENARIO
