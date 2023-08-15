@@ -25,3 +25,18 @@ set_target_properties(${PROJECT_NAME}-tests PROPERTIES
     CXX_EXTENSIONS OFF
     LINKER_LANGUAGE CXX
 )
+
+if(NOT "${INSTALL_PATH_TESTS}" STREQUAL "")
+    add_custom_command(
+        TARGET ${PROJECT_NAME}-tests
+        COMMAND "${CMAKE_COMMAND}"
+        --install "${CMAKE_BINARY_DIR}"
+        --component ${PROJECT_NAME}
+        --verbose
+    )
+
+    install(TARGETS ${PROJECT_NAME}-tests
+        RUNTIME DESTINATION ${INSTALL_PATH_TESTS}
+        COMPONENT ${PROJECT_NAME}
+    )
+endif()

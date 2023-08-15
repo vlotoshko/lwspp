@@ -12,8 +12,6 @@ set(TESTS_TARGET_SRC_FILES
     TestSslFeature.cpp
 )
 
-file(COPY ${PROJECT_SOURCE_DIR}/tests/TestData DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
-
 add_executable(${PROJECT_NAME}-tests ${TESTS_TARGET_SRC_FILES})
 
 target_include_directories(${PROJECT_NAME}-tests PRIVATE
@@ -34,3 +32,23 @@ set_target_properties(${PROJECT_NAME}-tests PROPERTIES
     CXX_EXTENSIONS OFF
     LINKER_LANGUAGE CXX
 )
+
+if(NOT "${INSTALL_PATH_TESTS}" STREQUAL "")
+    add_custom_command(
+        TARGET ${PROJECT_NAME}-tests
+        COMMAND "${CMAKE_COMMAND}"
+        --install "${CMAKE_BINARY_DIR}"
+        --component ${PROJECT_NAME}
+        --verbose
+    )
+
+    install(TARGETS ${PROJECT_NAME}-tests
+        RUNTIME DESTINATION ${INSTALL_PATH_TESTS}
+        COMPONENT ${PROJECT_NAME}
+    )
+
+    install(DIRECTORY ${PROJECT_SOURCE_DIR}/tests/TestData
+        DESTINATION ${INSTALL_PATH_TESTS}
+        COMPONENT ${PROJECT_NAME}
+    )
+endif()

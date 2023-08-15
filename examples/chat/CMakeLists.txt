@@ -32,7 +32,27 @@ target_link_libraries(${PROJECT_NAME}
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
     CXX_STANDARD 17
-    CXX_STANDARD_REQUIRED ON1
+    CXX_STANDARD_REQUIRED ON
     CXX_EXTENSIONS OFF
     LINKER_LANGUAGE CXX
 )
+
+if(NOT "${INSTALL_PATH_EXAMPLES}" STREQUAL "")
+    add_custom_command(
+        TARGET ${PROJECT_NAME}
+        COMMAND "${CMAKE_COMMAND}"
+        --install "${CMAKE_BINARY_DIR}"
+        --component ${PROJECT_NAME}
+        --verbose
+    )
+
+    install(TARGETS ${PROJECT_NAME}
+        RUNTIME DESTINATION ${INSTALL_PATH_EXAMPLES}
+        COMPONENT ${PROJECT_NAME}
+    )
+
+    install(FILES ${PROJECT_SOURCE_DIR}/client.html
+        DESTINATION ${INSTALL_PATH_TESTS}
+        COMPONENT ${PROJECT_NAME}
+    )
+endif()
