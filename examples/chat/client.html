@@ -26,7 +26,7 @@
          <!--   <br>-->
             Nickname:
             <input type="text" name="input_nickname" id="input_nickname" value="user1" size="10"/>
-            <input type="button" name="connectBtn" id="connectBtn" value="Connect"/>
+            <input type="button" name="loginBtn" id="loginBtn" value="Login"/>
         </div>
         <br>
 
@@ -65,7 +65,7 @@
             var address = document.getElementById("address");
             var port = document.getElementById("port");
             var input_nickname = document.getElementById("input_nickname");
-            var connectBtn = document.getElementById("connectBtn");
+            var loginBtn = document.getElementById("loginBtn");
             var ws = new WebSocket("ws://localhost:0");
 
             var output_common = document.getElementById("output_common");
@@ -76,7 +76,7 @@
             var users = document.getElementById("users");
             var nickname = document.getElementById("nickname");
 
-            connectBtn.onclick = function(evt){
+            loginBtn.onclick = function(evt){
                 ws.close();
                 ws = new WebSocket("ws://" + address.value + ":" + port.value);
 
