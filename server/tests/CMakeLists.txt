@@ -33,8 +33,10 @@ if(NOT "${INSTALL_TESTS}" STREQUAL "")
         )
     endif()
 
+    add_custom_target(${PROJECT_NAME}-tests_install DEPENDS ${PROJECT_NAME}-tests)
+
     add_custom_command(
-        TARGET ${PROJECT_NAME}-tests
+        TARGET ${PROJECT_NAME}-tests_install
         COMMAND "${CMAKE_COMMAND}"
         --install "${CMAKE_BINARY_DIR}"
         --component ${PROJECT_NAME}
