@@ -34,12 +34,16 @@ set_target_properties(${PROJECT_NAME}-tests PROPERTIES
 )
 
 if(NOT "${INSTALL_TESTS}" STREQUAL "")
-    set_target_properties(${PROJECT_NAME}-tests PROPERTIES
-        INSTALL_RPATH "${WEBSOCKETS_DIR}/lib"
-    )
+    if(NOT ${WEBSOCKETS_DIR} STREQUAL "")
+        set_target_properties(${PROJECT_NAME}-tests PROPERTIES
+            INSTALL_RPATH "${WEBSOCKETS_DIR}/lib"
+        )
+    endif()
+
+    add_custom_target(${PROJECT_NAME}-tests_install ALL)
 
     add_custom_command(
-        TARGET ${PROJECT_NAME}-tests
+        TARGET ${PROJECT_NAME}-tests_install
         COMMAND "${CMAKE_COMMAND}"
         --install "${CMAKE_BINARY_DIR}"
         --component ${PROJECT_NAME}

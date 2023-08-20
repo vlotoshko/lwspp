@@ -27,9 +27,11 @@ set_target_properties(${PROJECT_NAME}-tests PROPERTIES
 )
 
 if(NOT "${INSTALL_TESTS}" STREQUAL "")
-    set_target_properties(${PROJECT_NAME}-tests PROPERTIES
-        INSTALL_RPATH "${WEBSOCKETS_DIR}/lib"
-    )
+    if(NOT ${WEBSOCKETS_DIR} STREQUAL "")
+        set_target_properties(${PROJECT_NAME}-tests PROPERTIES
+            INSTALL_RPATH "${WEBSOCKETS_DIR}/lib"
+        )
+    endif()
 
     add_custom_command(
         TARGET ${PROJECT_NAME}-tests

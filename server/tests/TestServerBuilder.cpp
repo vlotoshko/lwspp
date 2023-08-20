@@ -11,8 +11,6 @@
 #include "ServerContext.hpp"
 #include "SslSettings.hpp"
 
-#include "LwsAdapter/LwsServer.hpp"
-
 namespace ews::srv
 {
 

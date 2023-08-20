@@ -38,8 +38,16 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
 )
 
 if(NOT "${INSTALL_EXAMPLES}" STREQUAL "")
+    if(NOT ${WEBSOCKETS_DIR} STREQUAL "")
+        set_target_properties(${PROJECT_NAME} PROPERTIES
+            INSTALL_RPATH "${WEBSOCKETS_DIR}/lib"
+        )
+    endif()
+
+    add_custom_target(${PROJECT_NAME}_install ALL)
+
     add_custom_command(
-        TARGET ${PROJECT_NAME}
+        TARGET ${PROJECT_NAME}_install
         COMMAND "${CMAKE_COMMAND}"
         --install "${CMAKE_BINARY_DIR}"
         --component ${PROJECT_NAME}
@@ -47,12 +55,12 @@ if(NOT "${INSTALL_EXAMPLES}" STREQUAL "")
     )
 
     install(TARGETS ${PROJECT_NAME}
-        RUNTIME DESTINATION ${INSTALL_PATH_EXAMPLES}
+        RUNTIME DESTINATION ${INSTALL_EXAMPLES}
         COMPONENT ${PROJECT_NAME}
     )
 
     install(FILES ${PROJECT_SOURCE_DIR}/client.html
-        DESTINATION ${INSTALL_PATH_EXAMPLES}
+        DESTINATION ${INSTALL_EXAMPLES}
         COMPONENT ${PROJECT_NAME}
     )
 endif()

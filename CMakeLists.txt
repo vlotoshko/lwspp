@@ -35,7 +35,7 @@ unset(WEBSOCKETS_LIBRARY CACHE)
 add_library(websockets INTERFACE)
 
 if(NOT ${WEBSOCKETS_GITHUB_TAG} STREQUAL "")
-    set(WEBSOCKETS_DIR ${CMAKE_BINARY_DIR}/websockets/libwebsockets_${WEBSOCKETS_GITHUB_TAG})
+    set(WEBSOCKETS_DIR ${CMAKE_BINARY_DIR}/websockets/${WEBSOCKETS_GITHUB_TAG})
     set(WEBSOCKETS_HEADERS ${WEBSOCKETS_DIR}/include)
 
     add_subdirectory(websockets EXCLUDE_FROM_ALL)
@@ -48,10 +48,10 @@ if(NOT ${WEBSOCKETS_GITHUB_TAG} STREQUAL "")
         WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/websockets)
 
     # Build websockets
-    execute_process(COMMAND ${CMAKE_COMMAND} --build ${CMAKE_BINARY_DIR}/websockets  --config $<CONFIG>)
+    execute_process(COMMAND ${CMAKE_COMMAND} --build ${CMAKE_BINARY_DIR}/websockets)
 
     # Install websockets
-    execute_process(COMMAND ${CMAKE_COMMAND} --install ${CMAKE_BINARY_DIR}/websockets  --config $<CONFIG>)
+    execute_process(COMMAND ${CMAKE_COMMAND} --install ${CMAKE_BINARY_DIR}/websockets)
 endif()
 
 if(NOT ${WEBSOCKETS_GITHUB_TAG} STREQUAL "")
