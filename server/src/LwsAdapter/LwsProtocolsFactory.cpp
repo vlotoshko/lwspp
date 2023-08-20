@@ -13,7 +13,7 @@ namespace ews::srv
 namespace
 {
 
-const lws_protocols LWS_PROTOCOL_LIST_TERM { nullptr, nullptr, 0, 0, 0, nullptr, 0 };
+const lws_protocols LWS_PROTOCOL_TERM_LIST { nullptr, nullptr, 0, 0, 0, nullptr, 0 };
 
 } // namespace
 
@@ -41,7 +41,7 @@ auto createLwsProtocols(ServerVersion version, const std::string& protocolName) 
             nullptr, // pointer on user data
             0 // tx packet size
         },
-        LWS_PROTOCOL_LIST_TERM
+        LWS_PROTOCOL_TERM_LIST
     };
 }
 

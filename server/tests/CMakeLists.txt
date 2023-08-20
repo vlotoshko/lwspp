@@ -26,7 +26,11 @@ set_target_properties(${PROJECT_NAME}-tests PROPERTIES
     LINKER_LANGUAGE CXX
 )
 
-if(NOT "${INSTALL_PATH_TESTS}" STREQUAL "")
+if(NOT "${INSTALL_TESTS}" STREQUAL "")
+    set_target_properties(${PROJECT_NAME}-tests PROPERTIES
+        INSTALL_RPATH "${WEBSOCKETS_DIR}/lib"
+    )
+
     add_custom_command(
         TARGET ${PROJECT_NAME}-tests
         COMMAND "${CMAKE_COMMAND}"
@@ -36,7 +40,7 @@ if(NOT "${INSTALL_PATH_TESTS}" STREQUAL "")
     )
 
     install(TARGETS ${PROJECT_NAME}-tests
-        RUNTIME DESTINATION ${INSTALL_PATH_TESTS}
+        RUNTIME DESTINATION ${INSTALL_TESTS}
         COMPONENT ${PROJECT_NAME}
     )
 endif()

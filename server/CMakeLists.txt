@@ -61,6 +61,7 @@ add_library(${PROJECT_NAME} STATIC ${${PROJECT_NAME}_SRC_FILES})
 target_include_directories(${PROJECT_NAME} PRIVATE
     ${PROJECT_SOURCE_DIR}/include
     ${PROJECT_SOURCE_DIR}/src
+    ${WEBSOCKETS_HEADERS}
 )
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
@@ -69,5 +70,8 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
     CXX_EXTENSIONS OFF
     LINKER_LANGUAGE CXX
 )
+
+install(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION lib)
+install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/easywebsocket DESTINATION include)
 
 add_subdirectory(tests)

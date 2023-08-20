@@ -37,7 +37,7 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
     LINKER_LANGUAGE CXX
 )
 
-if(NOT "${INSTALL_PATH_EXAMPLES}" STREQUAL "")
+if(NOT "${INSTALL_EXAMPLES}" STREQUAL "")
     add_custom_command(
         TARGET ${PROJECT_NAME}
         COMMAND "${CMAKE_COMMAND}"
@@ -52,7 +52,7 @@ if(NOT "${INSTALL_PATH_EXAMPLES}" STREQUAL "")
     )
 
     install(FILES ${PROJECT_SOURCE_DIR}/client.html
-        DESTINATION ${INSTALL_PATH_TESTS}
+        DESTINATION ${INSTALL_PATH_EXAMPLES}
         COMPONENT ${PROJECT_NAME}
     )
 endif()
