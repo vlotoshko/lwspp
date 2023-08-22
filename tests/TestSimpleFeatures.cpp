@@ -34,8 +34,8 @@ const int DISABLE_LOG = 0;
 const std::string CUSTOM_PROTOCOL_NAME = "CUSTOM_PROTOCOL_NAME";
 const std::string CUSTOM_PROTOCOL_NAME_2 = "CUSTOM_PROTOCOL_NAME_2";
 
-const std::string SPECIFIC_PATH = "SPECIFIC_PATH";
-const std::string SPECIFIC_PATH_2 = "SPECIFIC_PATH_2";
+const std::string SPECIFIC_PATH = "/SPECIFIC_PATH";
+const std::string SPECIFIC_PATH_2 = "/SPECIFIC_PATH_2";
 
 void waitForInitialization()
 {
