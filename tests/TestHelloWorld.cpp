@@ -29,6 +29,7 @@ namespace
 
 const srv::Port PORT = 9000;
 const cli::Address ADDRESS = "localhost";
+const int DISABLE_LOG = 0;
 
 const std::string HELLO_SERVER = "hello server!";
 const std::string HELLO_CLIENT = "hello client!";
@@ -82,7 +83,8 @@ srv::IServerPtr setupServer(srv::IEventHandlerPtr eventHandler,
         .setVersion(srv::ServerVersion::v1_Andromeda)
         .setPort(PORT)
         .setEventHandler(eventHandler)
-        .setMessageSenderAcceptor(messageSenderAcceptor);
+        .setMessageSenderAcceptor(messageSenderAcceptor)
+        .setLwsLogLevel(DISABLE_LOG);
 
     return serverBuilder.build();
 }
@@ -96,7 +98,8 @@ cli::IClientPtr setupClient(cli::IEventHandlerPtr eventHandler,
         .setAddress(ADDRESS)
         .setPort(PORT)
         .setEventHandler(eventHandler)
-        .setMessageSenderAcceptor(messageSenderAcceptor);
+        .setMessageSenderAcceptor(messageSenderAcceptor)
+        .setLwsLogLevel(DISABLE_LOG);
 
     return clientBuilder.build();
 }

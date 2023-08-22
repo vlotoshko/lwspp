@@ -33,6 +33,7 @@ namespace
 
 const srv::Port PORT = 9000;
 const cli::Address ADDRESS = "localhost";
+const int DISABLE_LOG = 0;
 
 const std::string EXE_PATH         = getExecDirectory();
 const std::string CA_CERT_PATH     = EXE_PATH + "TestData/ssl/rootCA.crt";
@@ -94,7 +95,8 @@ srv::ServerBuilder setupServerBuilder(srv::IEventHandlerPtr eventHandler,
         .setVersion(srv::ServerVersion::v1_Andromeda)
         .setPort(PORT)
         .setEventHandler(eventHandler)
-        .setMessageSenderAcceptor(messageSenderAcceptor);
+        .setMessageSenderAcceptor(messageSenderAcceptor)
+        .setLwsLogLevel(DISABLE_LOG);
 
     return serverBuilder;
 }
@@ -108,7 +110,8 @@ cli::ClientBuilder setupClientBuilder(cli::IEventHandlerPtr eventHandler,
         .setAddress(ADDRESS)
         .setPort(PORT)
         .setEventHandler(eventHandler)
-        .setMessageSenderAcceptor(messageSenderAcceptor);
+        .setMessageSenderAcceptor(messageSenderAcceptor)
+        .setLwsLogLevel(DISABLE_LOG);
 
     return builder;
 }

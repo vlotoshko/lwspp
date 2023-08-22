@@ -29,6 +29,8 @@ namespace
 
 const srv::Port PORT = 9000;
 const cli::Address ADDRESS = "localhost";
+const int DISABLE_LOG = 0;
+
 const std::string CUSTOM_PROTOCOL_NAME = "CUSTOM_PROTOCOL_NAME";
 const std::string CUSTOM_PROTOCOL_NAME_2 = "CUSTOM_PROTOCOL_NAME_2";
 
@@ -86,7 +88,8 @@ SCENARIO( "Protocol name feature testing", "[protocol_name]" )
             .setVersion(srv::ServerVersion::v1_Andromeda)
             .setPort(PORT)
             .setEventHandler(srvEventHadler.ptr())
-            .setMessageSenderAcceptor(srvMessageSenderAcceptor.ptr());
+            .setMessageSenderAcceptor(srvMessageSenderAcceptor.ptr())
+            .setLwsLogLevel(DISABLE_LOG);
 
         auto clientBuilder = cli::ClientBuilder{};
         clientBuilder
@@ -94,7 +97,8 @@ SCENARIO( "Protocol name feature testing", "[protocol_name]" )
             .setAddress(ADDRESS)
             .setPort(PORT)
             .setEventHandler(cliEventHadler.ptr())
-            .setMessageSenderAcceptor(cliMessageSenderAcceptor.ptr());
+            .setMessageSenderAcceptor(cliMessageSenderAcceptor.ptr())
+            .setLwsLogLevel(DISABLE_LOG);
 
         WHEN( "Server uses default protocol name" )
         {
