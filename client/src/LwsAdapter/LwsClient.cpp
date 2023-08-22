@@ -163,7 +163,7 @@ void LwsClient::setupLowLevelContext_()
     lwsContextInfo.ka_interval = _dataHolder->keepAliveProbesInterval;
     lwsContextInfo.ka_probes = _dataHolder->keepAliveProbes;
 
-    if (_dataHolder->lwsLogLevel != UNDEFINED_UNSET)
+    if (_dataHolder->lwsLogLevel != DEFAULT_LWS_LOG_LEVEL)
     {
         lws_set_log_level(_dataHolder->lwsLogLevel, nullptr);
     }

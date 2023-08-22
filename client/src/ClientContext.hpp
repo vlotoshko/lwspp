@@ -27,7 +27,7 @@ public:
     int keepAliveTimeout = UNDEFINED_UNSET;
     int keepAliveProbes = UNDEFINED_UNSET;
     int keepAliveProbesInterval = UNDEFINED_UNSET;
-    int lwsLogLevel = UNDEFINED_UNSET;
+    int lwsLogLevel = DEFAULT_LWS_LOG_LEVEL;
     SslSettingsPtr ssl;
 };
 

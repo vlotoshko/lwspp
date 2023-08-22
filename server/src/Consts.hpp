@@ -24,5 +24,7 @@ const std::string UNDEFINED_NAME = "UNDEFINED_NAME";
 const unsigned int MAX_MESSAGE_SIZE = 1024 * 64;
 const unsigned int MAX_PATH_SIZE = 1024 * 4;
 const int UNDEFINED_UNSET = 0;
+// 7 = LLL_ERR | LLL_WARN | LLL_NOTICE - default value for the libwebsockets 4.3.2
+const int DEFAULT_LWS_LOG_LEVEL = 7;
 
 } // namespace ews::srv

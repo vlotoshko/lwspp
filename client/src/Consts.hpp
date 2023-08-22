@@ -19,5 +19,7 @@ const std::string DEFAULT_PROTOCOL_NAME;
 const std::string UNDEFINED_FILE_PATH = "UNDEFINED_FILE_PATH";
 const unsigned int MAX_MESSAGE_SIZE = 1024 * 64;
 const int UNDEFINED_UNSET = 0;
+// 7 = LLL_ERR | LLL_WARN | LLL_NOTICE - default value for the libwebsockets 4.3.2
+const int DEFAULT_LWS_LOG_LEVEL = 7;
 
 } // namespace ews::cli

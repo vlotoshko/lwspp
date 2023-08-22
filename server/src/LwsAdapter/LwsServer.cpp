@@ -127,7 +127,7 @@ auto setupLowLeverContext(const ILwsCallbackContextPtr& callbackContext, const L
         lwsContextInfo.server_string = dataHolder->serverString.data();
     }
 
-    if (dataHolder->lwsLogLevel != UNDEFINED_UNSET)
+    if (dataHolder->lwsLogLevel != DEFAULT_LWS_LOG_LEVEL)
     {
         lws_set_log_level(dataHolder->lwsLogLevel, nullptr);
     }
