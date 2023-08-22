@@ -203,6 +203,7 @@ void LwsServer::stopListening()
     {
         _state = State::Stopping;
         _callbackContext->setStopping();
+        lws_cancel_service(_lowLevelContext.get());
     }
 }
 
