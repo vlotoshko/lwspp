@@ -17,8 +17,8 @@ namespace ews::srv
 class TestServerBuilder
 {
 public:
-    explicit TestServerBuilder(const ServerBuilder& serverBuiler)
-        : _serverBuilder(serverBuiler)
+    explicit TestServerBuilder(const ServerBuilder& serverBuilder)
+        : _serverBuilder(serverBuilder)
     {}
 
     auto getServerContext() const -> const ServerContext&
@@ -56,6 +56,7 @@ const int KEEPALIVE_TIMEOUT = 20;
 const int KEEPALIVE_PROBES = 5;
 const int KEEPALIVE_PROBES_INTERVAL = 10;
 const int LWS_LOG_LEVEL = 9;
+const int LWS_LOG_LEVEL_DISABLE = 0;
 
 auto toString(ServerVersion version) -> std::string
 {
@@ -168,6 +169,7 @@ SCENARIO( "Server construction", "[server_builder]" )
     GIVEN( "ServerBuilder" )
     {
         auto serverBuilder = ServerBuilder{};
+        serverBuilder.setLwsLogLevel(LWS_LOG_LEVEL_DISABLE);
 
         WHEN( "Server version is not set" )
         {

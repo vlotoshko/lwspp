@@ -17,8 +17,8 @@ namespace ews::cli
 class TestClientBuilder
 {
 public:
-    explicit TestClientBuilder(const ClientBuilder& clientBuiler)
-        : _clientBuilder(clientBuiler)
+    explicit TestClientBuilder(const ClientBuilder& clientBuidler)
+        : _clientBuilder(clientBuidler)
     {}
 
     auto getClientContext() const -> const ClientContext&
@@ -56,6 +56,7 @@ const int KEEPALIVE_TIMEOUT = 20;
 const int KEEPALIVE_PROBES = 5;
 const int KEEPALIVE_PROBES_INTERVAL = 10;
 const int LWS_LOG_LEVEL = 9;
+const int LWS_LOG_LEVEL_DISABLE = 0;
 
 auto toString(ClientVersion version) -> std::string
 {
@@ -177,6 +178,7 @@ SCENARIO( "Client construction", "[client_builder]" )
     GIVEN( "ClientBuilder" )
     {
         auto clientBuilder = ClientBuilder{};
+        clientBuilder.setLwsLogLevel(LWS_LOG_LEVEL_DISABLE);
 
         WHEN( "Client version is not set" )
         {
