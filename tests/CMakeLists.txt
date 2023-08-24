@@ -6,7 +6,6 @@ set(TESTS_TARGET_SRC_FILES
     Utils.cpp
     Utils.hpp
 
-#    TestHelloBinance.cpp
     TestHelloWorld.cpp
     TestSimpleFeatures.cpp
     TestSslFeature.cpp

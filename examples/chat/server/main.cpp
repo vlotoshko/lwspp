@@ -3,8 +3,8 @@
  * @date Feb, 2023
  */
 
-#include <condition_variable>
 #include <csignal>
+#include <future>
 
 #include "easywebsocket/server/ServerBuilder.hpp"
 #include "easywebsocket/server/Types.hpp"
@@ -12,30 +12,21 @@
 
 #include "EventHandler.hpp"
 
-namespace interruption
-{
-
-std::mutex mutex;
-std::condition_variable condVar;
-bool gotSignal = false;
+std::promise<void> promise;
 
 void signalHandler(int)
 {
-    gotSignal = true;
-    condVar.notify_one();
+    promise.set_value();
 }
 
 void waitForSignal()
 {
-    std::unique_lock<std::mutex> guard(mutex);
-    condVar.wait(guard, []{ return gotSignal; });
+    promise.get_future().wait();
 }
-
-} // namespace name
 
 auto main() -> int
 {
-    signal(SIGINT, interruption::signalHandler);
+    signal(SIGINT, signalHandler);
 
     using namespace ews;
     const srv::Port PORT = 9000;
@@ -50,6 +41,7 @@ auto main() -> int
         ;
     auto server = serverBuilder.build();
 
-    interruption::waitForSignal();
+    waitForSignal(); // Ctrl+C
+
     return 0;
 }
