@@ -6,11 +6,11 @@
 #include <iostream>
 
 #include "easywebsocket/server/IEventHandler.hpp"
+#include "Consts.hpp"
 #include "LwsAdapter/ILwsCallbackContext.hpp"
 #include "LwsAdapter/ILwsSessions.hpp"
 #include "LwsAdapter/LwsCallback.hpp"
 #include "LwsAdapter/LwsSession.hpp"
-#include "Consts.hpp"
 #include "SessionInfoExternal.hpp"
 
 namespace ews::srv
@@ -118,12 +118,10 @@ auto reasonToString(lws_callback_reasons reason) -> std::string
 
 auto sendMessage(lws* wsInstance, const std::string& message) -> bool
 {
-    std::array<unsigned char, LWS_PRE + MAX_MESSAGE_SIZE> msg{};
-    std::copy(message.cbegin(), message.cend(), msg.data() + LWS_PRE);
-
-    const int expectedSize = static_cast<int>(message.size());
-    const int actualSize = lws_write(wsInstance, msg.data() + LWS_PRE, expectedSize, LWS_WRITE_TEXT);
-
+    // C-style cast to convert from const char* to unsigned char*
+    auto* messageBegin = (unsigned char*)(&message[0] + LWS_PRE);
+    const int expectedSize = static_cast<int>(message.size() - LWS_PRE);
+    const int actualSize = lws_write(wsInstance, messageBegin, expectedSize, LWS_WRITE_TEXT);
     return expectedSize == actualSize;
 }
 
@@ -163,11 +161,6 @@ auto lwsCallback_v1(
             if (!messages.empty() && !callbackContext.isStopping())
             {
                 auto& message = messages.front();
-                if (message.size() > MAX_MESSAGE_SIZE)
-                {
-                    eventHandler->onError(sessionId, "Message exceeds the maximum alowed size");
-                }
-
                 if (sendMessage(wsInstance, message))
                 {
                     messages.pop();
