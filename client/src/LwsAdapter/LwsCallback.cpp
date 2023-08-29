@@ -175,7 +175,8 @@ auto lwsCallback_v1(
     }
     case LWS_CALLBACK_CLIENT_RECEIVE:
     {
-        eventHandler->onMessageReceive(std::string{reinterpret_cast<const char *>(in), len});
+        eventHandler->onMessageReceive(std::string{reinterpret_cast<const char *>(in), len},
+                                       static_cast<size_t>(lws_remaining_packet_payload(wsInstance)));
         break;
     }
     case LWS_CALLBACK_CLIENT_CLOSED:

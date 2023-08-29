@@ -31,7 +31,7 @@ public:
 public:
     virtual void onConnect(ISessionInfoPtr) noexcept = 0;
     virtual void onDisconnect() noexcept = 0;
-    virtual void onMessageReceive(const std::string& message) noexcept = 0;
+    virtual void onMessageReceive(const std::string& message, size_t bytesRemains) noexcept = 0;
 
     virtual void onError(const std::string& errorMessage) noexcept = 0;
     virtual void onWarning(const std::string& errorMessage) noexcept = 0;

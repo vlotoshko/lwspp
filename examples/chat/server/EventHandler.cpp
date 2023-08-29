@@ -134,7 +134,7 @@ void EventHandler::onDisconnect(ews::srv::SessionId sessionId) noexcept
     _chatMessageSender.updateUsers(_users);
 }
 
-void EventHandler::onMessageReceive(srv::SessionId sessionId, const std::string& messageText) noexcept
+void EventHandler::onMessageReceive(srv::SessionId sessionId, const std::string& messageText, size_t /*bytesRemains*/) noexcept
 {
     // Expected messages:
     //   hello message, format: "HELLO:<Nickname>"

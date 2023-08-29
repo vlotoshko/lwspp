@@ -23,7 +23,7 @@ public:
 
     void onConnect(srv::ISessionInfoPtr) noexcept override;
     void onDisconnect(srv::SessionId) noexcept override;
-    void onMessageReceive(srv::SessionId, const std::string& message) noexcept override;
+    void onMessageReceive(srv::SessionId, const std::string& message, size_t bytesRemains) noexcept override;
 
     void acceptMessageSender(srv::IMessageSenderPtr) noexcept override;
 

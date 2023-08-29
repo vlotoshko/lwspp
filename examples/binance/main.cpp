@@ -26,7 +26,7 @@ public:
         _messageSender->sendMessage(SUBSCRIBE);
     }
 
-    void onMessageReceive(const std::string& message) noexcept override
+    void onMessageReceive(const std::string& message, size_t /*bytesRemains*/) noexcept override
     {
         if (_messageCounter < MESSAGES_LIMIT)
         {

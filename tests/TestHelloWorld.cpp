@@ -39,7 +39,7 @@ void setupServerBehavior(Mock<srv::IEventHandler>& eventHandler,
                          srv::IMessageSenderPtr& messageSender,
                          std::string& incomeMessage)
 {
-    auto sendHelloToClient = [&](srv::SessionId, const std::string& message)
+    auto sendHelloToClient = [&](srv::SessionId, const std::string& message, size_t /*bytesRemains*/)
     {
         incomeMessage = message;
         messageSender->sendMessage(HELLO_CLIENT);
@@ -62,7 +62,7 @@ void setupClientBehavior(Mock<cli::IEventHandler>& eventHandler,
         messageSender->sendMessage(HELLO_SERVER);
     };
 
-    auto onMessageReceive = [&](const std::string& message)
+    auto onMessageReceive = [&](const std::string& message, size_t /*bytesRemains*/)
     {
         incomeMessage = message;
     };

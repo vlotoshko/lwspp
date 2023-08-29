@@ -24,7 +24,7 @@ public:
         _messageSender->sendMessage("hello server!");
     }
 
-    void onMessageReceive(const std::string& message) noexcept override
+    void onMessageReceive(const std::string& message, size_t /*bytesRemains*/) noexcept override
     {
         std::cout << "client received the message: " << message << std::endl;
     }
@@ -33,7 +33,7 @@ public:
 class ServerEventHandler : public srv::EventHandlerBase
 {
 public:
-    void onMessageReceive(srv::SessionId, const std::string& message) noexcept override
+    void onMessageReceive(srv::SessionId, const std::string& message, size_t /*bytesRemains*/) noexcept override
     {
         std::cout << "server received the message: " << message << std::endl;
         _messageSender->sendMessage("hello client!");
