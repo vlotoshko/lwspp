@@ -17,8 +17,11 @@ class LwsMessageSender : public IMessageSender
 public:
     LwsMessageSender(ILwsSessionsPtr s, ILwsCallbackNotifierPtr n);
 
-    void sendMessage(SessionId sessionId, const std::string& message) override;
-    void sendMessage(const std::string& message) override;
+    void sendMessage(SessionId sessionId, const std::string&) override;
+    void sendData(SessionId sessionId, const std::vector<char>&) override;
+
+    void sendMessage(const std::string&) override;
+    void sendData(const std::vector<char>&) override;
 
 private:
     ILwsSessionsPtr _sessions;

@@ -8,6 +8,23 @@
 namespace ews::cli
 {
 
+namespace
+{
+
+// NOTE: Additional space with the size of LWS_PRE should be added in the front of the data
+// For more information please read lws_write description
+template <typename Container>
+auto addPrefixToMessage(const Container& message) -> std::string
+{
+    std::string result;
+    // NOTE: resize can throw bad alloc if message is too large
+    result.resize(LWS_PRE + message.size());
+    std::copy(message.cbegin(), message.cend(), result.data() + LWS_PRE);
+    return result;
+}
+
+} // namespace
+
 LwsSession::LwsSession(LwsInstanceRawPtr instance)
     : _wsInstance(instance)
 {}
@@ -17,19 +34,23 @@ auto LwsSession::getLwsInstance() -> LwsInstanceRawPtr
     return _wsInstance;
 }
 
-void LwsSession::addMessage(const std::string& message)
+void LwsSession::addBinaryData(const std::vector<char>& binaryData)
 {
-    // Additional space with the size of LWS_PRE should be added in the front of the message
-    // Please, read lws_write description for more information
-    std::string preparedMessage;
+    std::string payload = addPrefixToMessage(binaryData);
 
-    // NOTE: resize can throw bad alloc if message is too large
-    preparedMessage.resize(LWS_PRE + message.size());
-    std::copy(message.cbegin(), message.cend(), preparedMessage.data() + LWS_PRE);
-    _messages.emplace(std::move(preparedMessage));
+    const std::lock_guard<std::mutex> guard(_mutex);
+    _messages.emplace(MessageType::Binary, std::move(payload));
 }
 
-auto LwsSession::getMessages() -> std::queue<std::string>&
+void LwsSession::addTextData(const std::string& textData)
+{
+    std::string payload = addPrefixToMessage(textData);
+
+    const std::lock_guard<std::mutex> guard(_mutex);
+    _messages.emplace(MessageType::Text, std::move(payload));
+}
+
+auto LwsSession::getMessages() -> std::queue<Message>&
 {
     if (_messagesToSend.empty())
     {

@@ -17,7 +17,8 @@ class LwsMessageSender : public IMessageSender
 public:
     explicit LwsMessageSender(const ILwsSessionPtr&);
 
-    void sendMessage(const std::string& message) override;
+    void sendMessage(const std::string&) override;
+    void sendData(const std::vector<char>&) override;
 
 private:
     ILwsSessionWeak _session;

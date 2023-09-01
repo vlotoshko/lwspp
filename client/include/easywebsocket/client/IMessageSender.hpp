@@ -6,6 +6,7 @@
 #pragma once
 
 #include <string>
+#include <vector>
 
 namespace ews::cli
 {
@@ -28,6 +29,8 @@ public:
 public:
     // Sends a message to a server
     virtual void sendMessage(const std::string&) = 0;
+    // Sends a message to a server
+    virtual void sendData(const std::vector<char>&) = 0;
 };
 
 } // namespace ews::cli

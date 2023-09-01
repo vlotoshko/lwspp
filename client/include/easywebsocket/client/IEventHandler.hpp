@@ -6,6 +6,7 @@
 #pragma once
 
 #include <string>
+#include <vector>
 
 #include "easywebsocket/client/TypesFwd.hpp"
 
@@ -31,6 +32,7 @@ public:
 public:
     virtual void onConnect(ISessionInfoPtr) noexcept = 0;
     virtual void onDisconnect() noexcept = 0;
+    virtual void onDataReceive(const std::vector<char>& data, size_t bytesRemains) noexcept = 0;
     virtual void onMessageReceive(const std::string& message, size_t bytesRemains) noexcept = 0;
 
     virtual void onError(const std::string& errorMessage) noexcept = 0;

@@ -8,6 +8,7 @@
 #include <queue>
 #include <string>
 
+#include "easywebsocket/client/Types.hpp"
 #include "LwsAdapter/LwsTypesFwd.hpp"
 
 namespace ews::cli
@@ -28,8 +29,9 @@ public:
 public:
     virtual auto getLwsInstance() -> LwsInstanceRawPtr = 0;
 
-    virtual void addMessage(const std::string&) = 0;
-    virtual auto getMessages() -> std::queue<std::string>& = 0;
+    virtual void addBinaryData(const std::vector<char>&) = 0;
+    virtual void addTextData(const std::string&) = 0;
+    virtual auto getMessages() -> std::queue<Message>& = 0;
 };
 
 } // namespace ews::cli

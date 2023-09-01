@@ -6,6 +6,7 @@
 #pragma once
 
 #include <string>
+#include <vector>
 
 #include "easywebsocket/server/Types.hpp"
 
@@ -30,8 +31,13 @@ public:
 public:
     // Sends a message to a specific client
     virtual void sendMessage(SessionId, const std::string&) = 0;
+    // Sends a message to a specific client
+    virtual void sendData(SessionId, const std::vector<char>&) = 0;
+
     // Sends a message to all clients
     virtual void sendMessage(const std::string&) = 0;
+    // Sends a message to all clients
+    virtual void sendData(const std::vector<char>&) = 0;
 };
 
 } // namespace ews::srv

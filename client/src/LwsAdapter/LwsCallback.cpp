@@ -4,6 +4,7 @@
  */
 
 #include <iostream>
+#include <vector>
 
 #include "easywebsocket/client/IEventHandler.hpp"
 #include "LwsAdapter/ILwsCallbackContext.hpp"
@@ -101,12 +102,14 @@ auto reasonToString(lws_callback_reasons reason) -> std::string
     }
 }
 
-auto sendMessage(lws* wsInstance, const std::string& message) -> bool
+auto sendMessage(lws* wsInstance, const Message& message) -> bool
 {
     // C-style cast to convert from const char* to unsigned char*
-    auto* messageBegin = (unsigned char*)(&message[0] + LWS_PRE);
-    const int expectedSize = static_cast<int>(message.size() - LWS_PRE);
-    const int actualSize = lws_write(wsInstance, messageBegin, expectedSize, LWS_WRITE_TEXT);
+    auto* messageBegin = (unsigned char*)(message.second.data() + LWS_PRE);
+    const int expectedSize = static_cast<int>(message.second.size() - LWS_PRE);
+
+    auto writeProtocol = message.first == MessageType::Text ? LWS_WRITE_TEXT : LWS_WRITE_BINARY;
+    const int actualSize = lws_write(wsInstance, messageBegin, expectedSize, writeProtocol);
     return expectedSize == actualSize;
 }
 
@@ -175,8 +178,16 @@ auto lwsCallback_v1(
     }
     case LWS_CALLBACK_CLIENT_RECEIVE:
     {
-        eventHandler->onMessageReceive(std::string{reinterpret_cast<const char *>(in), len},
-                                       static_cast<size_t>(lws_remaining_packet_payload(wsInstance)));
+        const auto* inAsChar = reinterpret_cast<const char *>(in);
+        const auto bytesRemains = static_cast<size_t>(lws_remaining_packet_payload(wsInstance));
+        if (lws_frame_is_binary(wsInstance) == 1)
+        {
+            eventHandler->onDataReceive(std::vector<char>{inAsChar, inAsChar + len}, bytesRemains);
+        }
+        else
+        {
+            eventHandler->onMessageReceive(std::string{inAsChar, len}, bytesRemains);
+        }
         break;
     }
     case LWS_CALLBACK_CLIENT_CLOSED:

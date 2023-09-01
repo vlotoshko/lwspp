@@ -5,8 +5,6 @@
 
 #pragma once
 
-#include <string>
-
 #include "easywebsocket/client/IEventHandler.hpp"
 #include "easywebsocket/client/IMessageSenderAcceptor.hpp"
 
@@ -19,6 +17,7 @@ public:
     void onConnect(ISessionInfoPtr) noexcept override;
     void onDisconnect() noexcept override;
 
+    void onDataReceive(const std::vector<char>& data, size_t bytesRemains) noexcept override;
     void onMessageReceive(const std::string& message, size_t bytesRemains) noexcept override;
     void onError(const std::string& errorMessage) noexcept override;
     void onWarning(const std::string& warningMessage) noexcept override;

@@ -30,8 +30,9 @@ public:
     virtual auto getSessionId() const -> SessionId = 0;
     virtual auto getLwsInstance() -> LwsInstanceRawPtr = 0;
 
-    virtual void addMessage(const std::string&) = 0;
-    virtual auto getMessages() -> std::queue<std::string>& = 0;
+    virtual void addBinaryData(const std::vector<char>&) = 0;
+    virtual void addTextData(const std::string&) = 0;
+    virtual auto getMessages() -> std::queue<Message>& = 0;
 };
 
 } // namespace ews::srv

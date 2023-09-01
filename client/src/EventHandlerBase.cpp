@@ -14,6 +14,9 @@ void EventHandlerBase::onConnect(ISessionInfoPtr) noexcept
 void EventHandlerBase::onDisconnect() noexcept
 {}
 
+void EventHandlerBase::onDataReceive(const std::vector<char>& /*data*/, size_t /*bytesRemains*/) noexcept
+{}
+
 void EventHandlerBase::onMessageReceive(const std::string& /*message*/, size_t /*bytesRemains*/) noexcept
 {}
 

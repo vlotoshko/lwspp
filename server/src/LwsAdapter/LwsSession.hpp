@@ -22,14 +22,15 @@ public:
     auto getSessionId() const -> SessionId override;
     auto getLwsInstance() -> LwsInstanceRawPtr override;
 
-    void addMessage(const std::string&) override;
-    auto getMessages() -> std::queue<std::string>& override;
+    void addBinaryData(const std::vector<char>&) override;
+    void addTextData(const std::string&) override;
+    auto getMessages() -> std::queue<Message>& override;
 
 private:
     SessionId _sessionId;
     LwsInstanceRawPtr _wsInstance;
-    std::queue<std::string> _messages;
-    std::queue<std::string> _messagesToSend;
+    std::queue<Message> _messages;
+    std::queue<Message> _messagesToSend;
     std::mutex _mutex;
 };
 

@@ -20,7 +20,16 @@ void LwsMessageSender::sendMessage(SessionId sessionId, const std::string& messa
 {
     if (auto session = _sessions->get(sessionId))
     {
-        session->addMessage(message);
+        session->addTextData(message);
+        _notifier->sendSessionMessages(session);
+    }
+}
+
+void LwsMessageSender::sendData(SessionId sessionId, const std::vector<char>& data)
+{
+    if (auto session = _sessions->get(sessionId))
+    {
+        session->addBinaryData(data);
         _notifier->sendSessionMessages(session);
     }
 }
@@ -31,7 +40,23 @@ void LwsMessageSender::sendMessage(const std::string& message)
     {
         if (entry != nullptr)
         {
-            entry->addMessage(message);
+            entry->addTextData(message);
+        }
+        else
+        {
+            // TODO: log warning
+        }
+    }
+    _notifier->sendPendingMessages();
+}
+
+void LwsMessageSender::sendData(const std::vector<char>& data)
+{
+    for(auto& entry : _sessions->getAllSessions())
+    {
+        if (entry != nullptr)
+        {
+            entry->addBinaryData(data);
         }
         else
         {
