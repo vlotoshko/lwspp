@@ -80,7 +80,7 @@ srv::IServerPtr setupServer(srv::IEventHandlerPtr eventHandler,
 {
     auto serverBuilder = srv::ServerBuilder{};
     serverBuilder
-        .setVersion(srv::ServerVersion::v1_Andromeda)
+        .setCallbackVersion(srv::CallbackVersion::v1_Andromeda)
         .setPort(PORT)
         .setEventHandler(eventHandler)
         .setMessageSenderAcceptor(messageSenderAcceptor)
@@ -94,7 +94,7 @@ cli::IClientPtr setupClient(cli::IEventHandlerPtr eventHandler,
 {
     auto clientBuilder = cli::ClientBuilder{};
     clientBuilder
-        .setVersion(cli::ClientVersion::v1_Amsterdam)
+        .setCallbackVersion(cli::CallbackVersion::v1_Amsterdam)
         .setAddress(ADDRESS)
         .setPort(PORT)
         .setEventHandler(eventHandler)

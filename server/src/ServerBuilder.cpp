@@ -26,7 +26,7 @@ public:
 
 void checkContext(const ServerContext& context)
 {
-    if (context.serverVersion == UNDEFINED_SERVER_VERSION)
+    if (context.callbackVersion == UNDEFINED_CALLBACK_VERSION)
     {
         throw UndefinedRequiredParameterException{"server version"};
     }
@@ -95,9 +95,9 @@ auto ServerBuilder::build() const -> IServerPtr
     return std::make_shared<Server>(context);
 }
 
-auto ServerBuilder::setVersion(ServerVersion version) -> ServerBuilder&
+auto ServerBuilder::setCallbackVersion(CallbackVersion version) -> ServerBuilder&
 {
-    _context->serverVersion = version;
+    _context->callbackVersion = version;
     return *this;
 }
 

@@ -13,7 +13,7 @@ namespace ews::srv
 LwsDataHolder::LwsDataHolder(const ServerContext& context)
     : port(context.port)
     , protocolName(context.protocolName)
-    , protocols(createLwsProtocols(context.serverVersion, protocolName))
+    , protocols(createLwsProtocols(context.callbackVersion, protocolName))
     , ssl(context.ssl)
     , vhostName(context.vhostName)
     , serverString(context.serverString)

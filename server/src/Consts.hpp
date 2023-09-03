@@ -7,13 +7,13 @@
 
 #include <string>
 
-#include "easywebsocket/server/ServerVersions.hpp"
+#include "easywebsocket/server/CallbackVersions.hpp"
 #include "easywebsocket/server/Types.hpp"
 
 namespace ews::srv
 {
 
-const ServerVersion UNDEFINED_SERVER_VERSION = ServerVersion::Undefined;
+const CallbackVersion UNDEFINED_CALLBACK_VERSION = CallbackVersion::Undefined;
 const Port UNDEFINED_PORT = static_cast<int>(0U - 1);
 const std::string UNDEFINED_FILE_PATH = "UNDEFINED_FILE_PATH";
 const std::string UNDEFINED_NAME = "UNDEFINED_NAME";

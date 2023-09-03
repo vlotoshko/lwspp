@@ -26,7 +26,7 @@ public:
 
 void checkContext(const ClientContext& context)
 {
-    if (context.clientVersion == UNDEFINED_CLIENT_VERSION)
+    if (context.callbackVersion == UNDEFINED_CALLBACK_VERSION)
     {
         throw UndefinedRequiredParameterException{"client version"};
     }
@@ -136,9 +136,9 @@ auto ClientBuilder::setAddress(Address address) -> ClientBuilder&
     return *this;
 }
 
-auto ClientBuilder::setVersion(ClientVersion version) -> ClientBuilder&
+auto ClientBuilder::setCallbackVersion(CallbackVersion version) -> ClientBuilder&
 {
-    _context->clientVersion = version;
+    _context->callbackVersion = version;
     return *this;
 }
 

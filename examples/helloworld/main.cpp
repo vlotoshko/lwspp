@@ -49,7 +49,7 @@ auto main() -> int
     auto serverBuilder = srv::ServerBuilder{};
     serverBuilder
         .setPort(PORT)
-        .setVersion(srv::ServerVersion::v1_Andromeda)
+        .setCallbackVersion(srv::CallbackVersion::v1_Andromeda)
         .setEventHandler(serverEventHandler)
         .setMessageSenderAcceptor(serverEventHandler)
         .setLwsLogLevel(0)
@@ -62,7 +62,7 @@ auto main() -> int
     clientBuilder
         .setAddress("localhost")
         .setPort(PORT)
-        .setVersion(cli::ClientVersion::v1_Amsterdam)
+        .setCallbackVersion(cli::CallbackVersion::v1_Amsterdam)
         .setEventHandler(clientEventHandler)
         .setMessageSenderAcceptor(clientEventHandler)
         .setLwsLogLevel(0)

@@ -5,7 +5,7 @@
 
 #pragma once
 
-#include "easywebsocket/client/ClientVersions.hpp"
+#include "easywebsocket/client/CallbackVersions.hpp"
 #include "easywebsocket/client/Types.hpp"
 #include "easywebsocket/client/TypesFwd.hpp"
 
@@ -34,7 +34,7 @@ public:
     auto build() const -> IClientPtr;
 
     // Mandatory options
-    auto setVersion(ClientVersion) -> ClientBuilder&;
+    auto setCallbackVersion(CallbackVersion) -> ClientBuilder&;
     auto setAddress(Address) -> ClientBuilder&;
     auto setPort(Port) -> ClientBuilder&;
     auto setEventHandler(IEventHandlerPtr) -> ClientBuilder&;

@@ -58,7 +58,7 @@ auto main() -> int
         .setAddress(ADDRESS)
         .setPath("/ws")
         .setPort(PORT)
-        .setVersion(cli::ClientVersion::v1_Amsterdam)
+        .setCallbackVersion(cli::CallbackVersion::v1_Amsterdam)
         .setEventHandler(clientEventHandler)
         .setMessageSenderAcceptor(clientEventHandler)
         .setSslSettings(cli::SslSettingsBuilder{}.build())

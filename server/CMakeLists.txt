@@ -7,6 +7,7 @@ project(
 )
 
 set(${PROJECT_NAME}_SRC_FILES
+    include/easywebsocket/server/CallbackVersions.hpp
     include/easywebsocket/server/Consts.hpp
     include/easywebsocket/server/EventHandlerBase.hpp
     include/easywebsocket/server/IEventHandler.hpp
@@ -15,7 +16,6 @@ set(${PROJECT_NAME}_SRC_FILES
     include/easywebsocket/server/IServer.hpp
     include/easywebsocket/server/ISessionInfo.hpp
     include/easywebsocket/server/ServerBuilder.hpp
-    include/easywebsocket/server/ServerVersions.hpp
     include/easywebsocket/server/SslSettingsBuilder.hpp
     include/easywebsocket/server/Types.hpp
     include/easywebsocket/server/TypesFwd.hpp

@@ -35,7 +35,7 @@ auto main() -> int
     auto serverBuilder = srv::ServerBuilder{};
     serverBuilder
         .setPort(PORT)
-        .setVersion(srv::ServerVersion::v1_Andromeda)
+        .setCallbackVersion(srv::CallbackVersion::v1_Andromeda)
         .setEventHandler(eventHandler)
         .setMessageSenderAcceptor(eventHandler)
         ;

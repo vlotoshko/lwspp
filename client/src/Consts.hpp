@@ -5,13 +5,13 @@
 
 #pragma once
 
-#include "easywebsocket/client/ClientVersions.hpp"
+#include "easywebsocket/client/CallbackVersions.hpp"
 #include "easywebsocket/client/Types.hpp"
 
 namespace ews::cli
 {
 
-const ClientVersion UNDEFINED_CLIENT_VERSION = ClientVersion::Undefined;
+const CallbackVersion UNDEFINED_CALLBACK_VERSION = CallbackVersion::Undefined;
 const Address UNDEFINED_ADDRESS = "UNDEFINED_ADDRESS";
 const Port UNDEFINED_PORT = static_cast<int>(0U - 1);
 const std::string UNDEFINED_FILE_PATH = "UNDEFINED_FILE_PATH";

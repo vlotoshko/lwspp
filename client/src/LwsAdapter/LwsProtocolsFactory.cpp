@@ -15,13 +15,13 @@ const lws_protocols LWS_PROTOCOL_TERM_LIST { nullptr, nullptr, 0, 0, 0, nullptr,
 
 } // namespace
 
-auto createLwsProtocols(ClientVersion version) -> LwsProtocols
+auto createLwsProtocols(CallbackVersion version) -> LwsProtocols
 {
     LwsCallback* callback = nullptr;
 
     switch (version)
     {
-    case ClientVersion::v1_Amsterdam:
+    case CallbackVersion::v1_Amsterdam:
         callback = lwsCallback_v1;
         break;
     default:

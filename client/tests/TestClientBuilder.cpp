@@ -58,11 +58,11 @@ const int KEEPALIVE_PROBES_INTERVAL = 10;
 const int LWS_LOG_LEVEL = 9;
 const int LWS_LOG_LEVEL_DISABLE = 0;
 
-auto toString(ClientVersion version) -> std::string
+auto toString(CallbackVersion version) -> std::string
 {
     switch (version)
     {
-    case ClientVersion::v1_Amsterdam:
+    case CallbackVersion::v1_Amsterdam:
         return "v1_Andromeda";
     default:
         return "Undefined";
@@ -72,7 +72,7 @@ auto toString(ClientVersion version) -> std::string
 void compareClientContexts(const ClientContext& actual, const ClientContext& expected)
 {
     // Mandatory parameters
-    REQUIRE(toString(actual.clientVersion) == toString(expected.clientVersion));
+    REQUIRE(toString(actual.callbackVersion) == toString(expected.callbackVersion));
     REQUIRE(actual.eventHandler == expected.eventHandler);
     REQUIRE(actual.address == expected.address);
     REQUIRE(actual.port == expected.port);
@@ -127,7 +127,7 @@ SCENARIO( "ClientContext setup", "[client_builder]" )
                                    .ignoreServerCaSert()
                                    .build();
             clientBuilder
-                .setVersion(ClientVersion::v1_Amsterdam)
+                .setCallbackVersion(CallbackVersion::v1_Amsterdam)
                 .setAddress(ADDRESS)
                 .setPort(PORT)
                 .setEventHandler(handler)
@@ -145,7 +145,7 @@ SCENARIO( "ClientContext setup", "[client_builder]" )
             THEN( "Client context has correct data" )
             {
                 ClientContext expected;
-                expected.clientVersion = ClientVersion::v1_Amsterdam;
+                expected.callbackVersion = CallbackVersion::v1_Amsterdam;
                 expected.address = ADDRESS;
                 expected.port = PORT;
                 expected.eventHandler = handler;
@@ -192,7 +192,7 @@ SCENARIO( "Client construction", "[client_builder]" )
         WHEN( "Address is not set" )
         {
             clientBuilder
-                .setVersion(ClientVersion::v1_Amsterdam)
+                .setCallbackVersion(CallbackVersion::v1_Amsterdam)
                 .setPort(PORT);
 
             THEN( "Exception is thrown on client build" )
@@ -205,7 +205,7 @@ SCENARIO( "Client construction", "[client_builder]" )
         WHEN( "Port is not set" )
         {
             clientBuilder
-                .setVersion(ClientVersion::v1_Amsterdam)
+                .setCallbackVersion(CallbackVersion::v1_Amsterdam)
                 .setAddress(ADDRESS);
 
             THEN( "Exception is thrown on client build" )
@@ -218,7 +218,7 @@ SCENARIO( "Client construction", "[client_builder]" )
         WHEN( "Event handler is not set" )
         {
             clientBuilder
-                .setVersion(ClientVersion::v1_Amsterdam)
+                .setCallbackVersion(CallbackVersion::v1_Amsterdam)
                 .setAddress(ADDRESS)
                 .setPort(PORT);
 
@@ -233,7 +233,7 @@ SCENARIO( "Client construction", "[client_builder]" )
         {
             auto handler = std::make_shared<EventHandlerBase>();
             clientBuilder
-                .setVersion(ClientVersion::v1_Amsterdam)
+                .setCallbackVersion(CallbackVersion::v1_Amsterdam)
                 .setAddress(ADDRESS)
                 .setPort(PORT)
                 .setEventHandler(handler);
@@ -249,7 +249,7 @@ SCENARIO( "Client construction", "[client_builder]" )
         {
             auto handler = std::make_shared<EventHandlerBase>();
             clientBuilder
-                .setVersion(ClientVersion::v1_Amsterdam)
+                .setCallbackVersion(CallbackVersion::v1_Amsterdam)
                 .setAddress(ADDRESS)
                 .setPort(PORT)
                 .setEventHandler(handler)

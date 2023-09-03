@@ -58,11 +58,11 @@ const int KEEPALIVE_PROBES_INTERVAL = 10;
 const int LWS_LOG_LEVEL = 9;
 const int LWS_LOG_LEVEL_DISABLE = 0;
 
-auto toString(ServerVersion version) -> std::string
+auto toString(CallbackVersion version) -> std::string
 {
     switch (version)
     {
-    case ServerVersion::v1_Andromeda:
+    case CallbackVersion::v1_Andromeda:
         return "v1_Andromeda";
     default:
         return "Undefined";
@@ -72,7 +72,7 @@ auto toString(ServerVersion version) -> std::string
 void compareServerContexts(const ServerContext& actual, const ServerContext& expected)
 {
     // Mandatory parameters
-    REQUIRE(toString(actual.serverVersion) == toString(expected.serverVersion));
+    REQUIRE(toString(actual.callbackVersion) == toString(expected.callbackVersion));
     REQUIRE(actual.eventHandler == expected.eventHandler);
     REQUIRE(actual.port == expected.port);
 
@@ -121,7 +121,7 @@ SCENARIO( "ServerContext setup", "[server_builder]" )
                                    .build();
 
             serverBuilder
-                .setVersion(ServerVersion::v1_Andromeda)
+                .setCallbackVersion(CallbackVersion::v1_Andromeda)
                 .setPort(PORT)
                 .setEventHandler(handler)
                 .setMessageSenderAcceptor(handler)
@@ -139,7 +139,7 @@ SCENARIO( "ServerContext setup", "[server_builder]" )
             THEN( "Server context has correct data" )
             {
                 ServerContext expected;
-                expected.serverVersion = ServerVersion::v1_Andromeda;
+                expected.callbackVersion = CallbackVersion::v1_Andromeda;
                 expected.eventHandler = handler;
                 expected.port = PORT;
                 expected.protocolName = PROTOCOL_NAME;
@@ -182,7 +182,7 @@ SCENARIO( "Server construction", "[server_builder]" )
 
         WHEN( "Port is not set" )
         {
-            serverBuilder.setVersion(ServerVersion::v1_Andromeda);
+            serverBuilder.setCallbackVersion(CallbackVersion::v1_Andromeda);
 
             THEN( "Exception is thrown on server build" )
             {
@@ -194,7 +194,7 @@ SCENARIO( "Server construction", "[server_builder]" )
         WHEN( "Event handler is not set" )
         {
             serverBuilder
-                .setVersion(ServerVersion::v1_Andromeda)
+                .setCallbackVersion(CallbackVersion::v1_Andromeda)
                 .setPort(PORT);
 
             THEN( "Exception is thrown on server build" )
@@ -208,7 +208,7 @@ SCENARIO( "Server construction", "[server_builder]" )
         {
             auto handler = std::make_shared<EventHandlerBase>();
             serverBuilder
-                .setVersion(ServerVersion::v1_Andromeda)
+                .setCallbackVersion(CallbackVersion::v1_Andromeda)
                 .setPort(PORT)
                 .setEventHandler(handler);
 
@@ -223,7 +223,7 @@ SCENARIO( "Server construction", "[server_builder]" )
         {
             auto handler = std::make_shared<EventHandlerBase>();
             serverBuilder
-                .setVersion(ServerVersion::v1_Andromeda)
+                .setCallbackVersion(CallbackVersion::v1_Andromeda)
                 .setPort(PORT)
                 .setEventHandler(handler)
                 .setMessageSenderAcceptor(handler);

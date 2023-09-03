@@ -22,7 +22,7 @@ class ServerContext
 public:
     IEventHandlerPtr eventHandler;
     IMessageSenderAcceptorPtr messageSenderAcceptor;
-    ServerVersion serverVersion = UNDEFINED_SERVER_VERSION;
+    CallbackVersion callbackVersion = UNDEFINED_CALLBACK_VERSION;
     Port port = UNDEFINED_PORT;
 
     std::string protocolName = DEFAULT_PROTOCOL_NAME;

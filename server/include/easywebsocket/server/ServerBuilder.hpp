@@ -5,7 +5,7 @@
 
 #pragma once
 
-#include "easywebsocket/server/ServerVersions.hpp"
+#include "easywebsocket/server/CallbackVersions.hpp"
 #include "easywebsocket/server/Types.hpp"
 #include "easywebsocket/server/TypesFwd.hpp"
 
@@ -34,7 +34,7 @@ public:
     auto build() const -> IServerPtr;
 
     // Mandatory options
-    auto setVersion(ServerVersion) -> ServerBuilder&;
+    auto setCallbackVersion(CallbackVersion) -> ServerBuilder&;
     auto setPort(Port) -> ServerBuilder&;
     auto setEventHandler(IEventHandlerPtr) -> ServerBuilder&;
     auto setMessageSenderAcceptor(IMessageSenderAcceptorPtr) -> ServerBuilder&;

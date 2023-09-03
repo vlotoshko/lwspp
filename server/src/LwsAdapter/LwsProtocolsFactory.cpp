@@ -17,13 +17,13 @@ const lws_protocols LWS_PROTOCOL_TERM_LIST { nullptr, nullptr, 0, 0, 0, nullptr,
 
 } // namespace
 
-auto createLwsProtocols(ServerVersion version, const std::string& protocolName) -> LwsProtocols
+auto createLwsProtocols(CallbackVersion version, const std::string& protocolName) -> LwsProtocols
 {
     LwsCallback* callback = nullptr;
 
     switch (version)
     {
-    case ServerVersion::v1_Andromeda:
+    case CallbackVersion::v1_Andromeda:
         callback = lwsCallback_v1;
         break;
     default:

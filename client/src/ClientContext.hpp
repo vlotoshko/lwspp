@@ -16,7 +16,7 @@ namespace ews::cli
 class ClientContext
 {
 public:
-    ClientVersion clientVersion = UNDEFINED_CLIENT_VERSION;
+    CallbackVersion callbackVersion = UNDEFINED_CALLBACK_VERSION;
     IEventHandlerPtr eventHandler;
     IMessageSenderAcceptorPtr messageSenderAcceptor;
     Address address = UNDEFINED_ADDRESS;

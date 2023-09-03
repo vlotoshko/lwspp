@@ -85,7 +85,7 @@ SCENARIO( "Protocol name feature testing", "[protocol_name]" )
     {
         auto serverBuilder = srv::ServerBuilder{};
         serverBuilder
-            .setVersion(srv::ServerVersion::v1_Andromeda)
+            .setCallbackVersion(srv::CallbackVersion::v1_Andromeda)
             .setPort(PORT)
             .setEventHandler(srvEventHadler.ptr())
             .setMessageSenderAcceptor(srvMessageSenderAcceptor.ptr())
@@ -93,7 +93,7 @@ SCENARIO( "Protocol name feature testing", "[protocol_name]" )
 
         auto clientBuilder = cli::ClientBuilder{};
         clientBuilder
-            .setVersion(cli::ClientVersion::v1_Amsterdam)
+            .setCallbackVersion(cli::CallbackVersion::v1_Amsterdam)
             .setAddress(ADDRESS)
             .setPort(PORT)
             .setEventHandler(cliEventHadler.ptr())
@@ -218,14 +218,14 @@ SCENARIO( "Path feature testing", "[path]" )
     {
         auto serverBuilder = srv::ServerBuilder{};
         serverBuilder
-            .setVersion(srv::ServerVersion::v1_Andromeda)
+            .setCallbackVersion(srv::CallbackVersion::v1_Andromeda)
             .setPort(PORT)
             .setEventHandler(srvEventHadler.ptr())
             .setMessageSenderAcceptor(srvMessageSenderAcceptor.ptr());
 
         auto clientBuilder = cli::ClientBuilder{};
         clientBuilder
-            .setVersion(cli::ClientVersion::v1_Amsterdam)
+            .setCallbackVersion(cli::CallbackVersion::v1_Amsterdam)
             .setAddress(ADDRESS)
             .setPort(PORT)
             .setEventHandler(cliEventHadler.ptr())
@@ -342,7 +342,7 @@ SCENARIO( "Keep alive feature testing", "[.keep_alive]" )
     {
         auto clientBuilder = cli::ClientBuilder{};
         clientBuilder
-            .setVersion(cli::ClientVersion::v1_Amsterdam)
+            .setCallbackVersion(cli::CallbackVersion::v1_Amsterdam)
             .setAddress("192.168.1.7")
             .setPort(PORT)
             .setEventHandler(cliEventHadler.ptr())
