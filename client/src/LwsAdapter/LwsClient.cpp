@@ -95,7 +95,7 @@ LwsClient::LwsClient(const ClientContext& context)
     : _lwsConnectionInfo()
 {
     _callbackContext = std::make_shared<LwsCallbackContext>(context.eventHandler,
-                                                            context.messageSenderAcceptor);
+                                                            context.dataSenderAcceptor);
     _dataHolder = std::make_shared<LwsDataHolder>(context);
 
     setupLowLevelContext_();

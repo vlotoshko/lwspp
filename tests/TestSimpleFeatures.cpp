@@ -11,10 +11,10 @@
 
 #include "easywebsocket/client/ClientBuilder.hpp"
 #include "easywebsocket/client/IEventHandler.hpp"
-#include "easywebsocket/client/IMessageSenderAcceptor.hpp"
+#include "easywebsocket/client/IDataSenderAcceptor.hpp"
 
 #include "easywebsocket/server/IEventHandler.hpp"
-#include "easywebsocket/server/IMessageSenderAcceptor.hpp"
+#include "easywebsocket/server/IDataSenderAcceptor.hpp"
 #include "easywebsocket/server/ISessionInfo.hpp"
 #include "easywebsocket/server/ServerBuilder.hpp"
 
@@ -44,24 +44,24 @@ void waitForInitialization()
 }
 
 void setupServerBehavior(Mock<srv::IEventHandler>& eventHandler,
-                         Mock<srv::IMessageSenderAcceptor>& messageSenderAcceptor,
-                         srv::IMessageSenderPtr& messageSender)
+                         Mock<srv::IDataSenderAcceptor>& dataSenderAcceptor,
+                         srv::IDataSenderPtr& dataSender)
 {
     Fake(Method(eventHandler, onConnect), Method(eventHandler, onDisconnect));
 
-    When(Method(messageSenderAcceptor, acceptMessageSender))
-        .Do([&messageSender](srv::IMessageSenderPtr ms){ messageSender = ms; });
+    When(Method(dataSenderAcceptor, acceptDataSender))
+        .Do([&dataSender](srv::IDataSenderPtr ms){ dataSender = ms; });
 }
 
 void setupClientBehavior(Mock<cli::IEventHandler>& eventHandler,
-                         Mock<cli::IMessageSenderAcceptor>& messageSenderAcceptor,
-                         cli::IMessageSenderPtr& messageSender)
+                         Mock<cli::IDataSenderAcceptor>& dataSenderAcceptor,
+                         cli::IDataSenderPtr& dataSender)
 {
     Fake(Method(eventHandler, onConnect), Method(eventHandler, onError),
          Method(eventHandler, onDisconnect));
 
-    When(Method(messageSenderAcceptor, acceptMessageSender))
-        .Do([&messageSender](cli::IMessageSenderPtr ms){ messageSender = ms; });
+    When(Method(dataSenderAcceptor, acceptDataSender))
+        .Do([&dataSender](cli::IDataSenderPtr ms){ dataSender = ms; });
 }
 
 } // namespace
@@ -71,15 +71,15 @@ SCENARIO( "Protocol name feature testing", "[protocol_name]" )
 {
     auto srvEventHadler = MockedPtr<srv::IEventHandler>{};
     auto cliEventHadler = MockedPtr<cli::IEventHandler>{};
+    
+    auto srvDataSenderAcceptor = MockedPtr<srv::IDataSenderAcceptor>{};
+    auto cliDataSenderAcceptor = MockedPtr<cli::IDataSenderAcceptor>{};
 
-    auto srvMessageSenderAcceptor = MockedPtr<srv::IMessageSenderAcceptor>{};
-    auto cliMessageSenderAcceptor = MockedPtr<cli::IMessageSenderAcceptor>{};
+    srv::IDataSenderPtr srvDataSender;
+    cli::IDataSenderPtr cliDataSender;
 
-    srv::IMessageSenderPtr srvMessageSender;
-    cli::IMessageSenderPtr cliMessageSender;
-
-    setupServerBehavior(srvEventHadler.mock(), srvMessageSenderAcceptor.mock(), srvMessageSender);
-    setupClientBehavior(cliEventHadler.mock(), cliMessageSenderAcceptor.mock(), cliMessageSender);
+    setupServerBehavior(srvEventHadler.mock(), srvDataSenderAcceptor.mock(), srvDataSender);
+    setupClientBehavior(cliEventHadler.mock(), cliDataSenderAcceptor.mock(), cliDataSender);
 
     GIVEN( "Server and client" )
     {
@@ -88,7 +88,7 @@ SCENARIO( "Protocol name feature testing", "[protocol_name]" )
             .setCallbackVersion(srv::CallbackVersion::v1_Andromeda)
             .setPort(PORT)
             .setEventHandler(srvEventHadler.ptr())
-            .setMessageSenderAcceptor(srvMessageSenderAcceptor.ptr())
+            .setDataSenderAcceptor(srvDataSenderAcceptor.ptr())
             .setLwsLogLevel(DISABLE_LOG);
 
         auto clientBuilder = cli::ClientBuilder{};
@@ -97,7 +97,7 @@ SCENARIO( "Protocol name feature testing", "[protocol_name]" )
             .setAddress(ADDRESS)
             .setPort(PORT)
             .setEventHandler(cliEventHadler.ptr())
-            .setMessageSenderAcceptor(cliMessageSenderAcceptor.ptr())
+            .setDataSenderAcceptor(cliDataSenderAcceptor.ptr())
             .setLwsLogLevel(DISABLE_LOG);
 
         WHEN( "Server uses default protocol name" )
@@ -204,15 +204,15 @@ SCENARIO( "Path feature testing", "[path]" )
 {
     auto srvEventHadler = MockedPtr<srv::IEventHandler>{};
     auto cliEventHadler = MockedPtr<cli::IEventHandler>{};
+    
+    auto srvDataSenderAcceptor = MockedPtr<srv::IDataSenderAcceptor>{};
+    auto cliDataSenderAcceptor = MockedPtr<cli::IDataSenderAcceptor>{};
 
-    auto srvMessageSenderAcceptor = MockedPtr<srv::IMessageSenderAcceptor>{};
-    auto cliMessageSenderAcceptor = MockedPtr<cli::IMessageSenderAcceptor>{};
+    srv::IDataSenderPtr srvDataSender;
+    cli::IDataSenderPtr cliDataSender;
 
-    srv::IMessageSenderPtr srvMessageSender;
-    cli::IMessageSenderPtr cliMessageSender;
-
-    setupServerBehavior(srvEventHadler.mock(), srvMessageSenderAcceptor.mock(), srvMessageSender);
-    setupClientBehavior(cliEventHadler.mock(), cliMessageSenderAcceptor.mock(), cliMessageSender);
+    setupServerBehavior(srvEventHadler.mock(), srvDataSenderAcceptor.mock(), srvDataSender);
+    setupClientBehavior(cliEventHadler.mock(), cliDataSenderAcceptor.mock(), cliDataSender);
 
     GIVEN( "Server and client" )
     {
@@ -221,7 +221,7 @@ SCENARIO( "Path feature testing", "[path]" )
             .setCallbackVersion(srv::CallbackVersion::v1_Andromeda)
             .setPort(PORT)
             .setEventHandler(srvEventHadler.ptr())
-            .setMessageSenderAcceptor(srvMessageSenderAcceptor.ptr());
+            .setDataSenderAcceptor(srvDataSenderAcceptor.ptr());
 
         auto clientBuilder = cli::ClientBuilder{};
         clientBuilder
@@ -229,7 +229,7 @@ SCENARIO( "Path feature testing", "[path]" )
             .setAddress(ADDRESS)
             .setPort(PORT)
             .setEventHandler(cliEventHadler.ptr())
-            .setMessageSenderAcceptor(cliMessageSenderAcceptor.ptr());
+            .setDataSenderAcceptor(cliDataSenderAcceptor.ptr());
 
         bool actualUseSpecificBehaviour = false;
         auto onConnect = [&](srv::ISessionInfoPtr sessionInfo)
@@ -320,8 +320,8 @@ SCENARIO( "Path feature testing", "[path]" )
 SCENARIO( "Keep alive feature testing", "[.keep_alive]" )
 {
     auto cliEventHadler = MockedPtr<cli::IEventHandler>{};
-    auto cliMessageSenderAcceptor = MockedPtr<cli::IMessageSenderAcceptor>{};
-    cli::IMessageSenderPtr cliMessageSender;
+    auto cliDataSenderAcceptor = MockedPtr<cli::IDataSenderAcceptor>{};
+    cli::IDataSenderPtr cliDataSender;
 
     std::mutex mutex;
     std::condition_variable condVar;
@@ -335,8 +335,8 @@ SCENARIO( "Keep alive feature testing", "[.keep_alive]" )
 
     Fake(Method(cliEventHadler.mock(), onConnect), Method(cliEventHadler.mock(), onError));
     When(Method(cliEventHadler.mock(), onDisconnect)).Do(stopClient);
-    When(Method(cliMessageSenderAcceptor.mock(), acceptMessageSender))
-        .Do([&cliMessageSender](cli::IMessageSenderPtr ms){ cliMessageSender = ms; });
+    When(Method(cliDataSenderAcceptor.mock(), acceptDataSender))
+        .Do([&cliDataSender](cli::IDataSenderPtr ms){ cliDataSender = ms; });
 
     GIVEN( "Server and client" )
     {
@@ -346,7 +346,7 @@ SCENARIO( "Keep alive feature testing", "[.keep_alive]" )
             .setAddress("192.168.1.7")
             .setPort(PORT)
             .setEventHandler(cliEventHadler.ptr())
-            .setMessageSenderAcceptor(cliMessageSenderAcceptor.ptr());
+            .setDataSenderAcceptor(cliDataSenderAcceptor.ptr());
 
         WHEN( "Client sets up keep alive feature" )
         {

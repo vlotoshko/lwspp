@@ -8,11 +8,11 @@
 #include "catch2/catch.hpp"
 #include "easywebsocket/client/ClientBuilder.hpp"
 #include "easywebsocket/client/IEventHandler.hpp"
-#include "easywebsocket/client/IMessageSenderAcceptor.hpp"
+#include "easywebsocket/client/IDataSenderAcceptor.hpp"
 #include "easywebsocket/client/SslSettingsBuilder.hpp"
 
 #include "easywebsocket/server/IEventHandler.hpp"
-#include "easywebsocket/server/IMessageSenderAcceptor.hpp"
+#include "easywebsocket/server/IDataSenderAcceptor.hpp"
 #include "easywebsocket/server/ServerBuilder.hpp"
 #include "easywebsocket/server/SslSettingsBuilder.hpp"
 
@@ -65,44 +65,44 @@ void waitForInitialization()
 }
 
 void setupServerBehavior(Mock<srv::IEventHandler>& eventHandler,
-                         Mock<srv::IMessageSenderAcceptor>& messageSenderAcceptor,
-                         srv::IMessageSenderPtr& messageSender)
+                         Mock<srv::IDataSenderAcceptor>& dataSenderAcceptor,
+                         srv::IDataSenderPtr& dataSender)
 {
     Fake(Method(eventHandler, onConnect), Method(eventHandler, onDisconnect));
 
-    When(Method(messageSenderAcceptor, acceptMessageSender))
-        .Do([&messageSender](srv::IMessageSenderPtr ms){ messageSender = ms; });
+    When(Method(dataSenderAcceptor, acceptDataSender))
+        .Do([&dataSender](srv::IDataSenderPtr ms){ dataSender = ms; });
 }
 
 void setupClientBehavior(Mock<cli::IEventHandler>& eventHandler,
-                         Mock<cli::IMessageSenderAcceptor>& messageSenderAcceptor,
-                         cli::IMessageSenderPtr& messageSender)
+                         Mock<cli::IDataSenderAcceptor>& dataSenderAcceptor,
+                         cli::IDataSenderPtr& dataSender)
 {
     Fake(Method(eventHandler, onConnect), Method(eventHandler, onError),
          Method(eventHandler, onDisconnect));
 
     When(Method(eventHandler, onError))
         .Do([](const std::string message){ std::cout << message << std::endl; });
-    When(Method(messageSenderAcceptor, acceptMessageSender))
-        .Do([&messageSender](cli::IMessageSenderPtr ms){ messageSender = ms; });
+    When(Method(dataSenderAcceptor, acceptDataSender))
+        .Do([&dataSender](cli::IDataSenderPtr ms){ dataSender = ms; });
 }
 
 srv::ServerBuilder setupServerBuilder(srv::IEventHandlerPtr eventHandler,
-                                      srv::IMessageSenderAcceptorPtr messageSenderAcceptor)
+                                      srv::IDataSenderAcceptorPtr dataSenderAcceptor)
 {
     auto serverBuilder = srv::ServerBuilder{};
     serverBuilder
         .setCallbackVersion(srv::CallbackVersion::v1_Andromeda)
         .setPort(PORT)
         .setEventHandler(eventHandler)
-        .setMessageSenderAcceptor(messageSenderAcceptor)
+        .setDataSenderAcceptor(dataSenderAcceptor)
         .setLwsLogLevel(DISABLE_LOG);
 
     return serverBuilder;
 }
 
 cli::ClientBuilder setupClientBuilder(cli::IEventHandlerPtr eventHandler,
-                                      cli::IMessageSenderAcceptorPtr messageSenderAcceptor)
+                                      cli::IDataSenderAcceptorPtr dataSenderAcceptor)
 {
     auto builder = cli::ClientBuilder{};
     builder
@@ -110,7 +110,7 @@ cli::ClientBuilder setupClientBuilder(cli::IEventHandlerPtr eventHandler,
         .setAddress(ADDRESS)
         .setPort(PORT)
         .setEventHandler(eventHandler)
-        .setMessageSenderAcceptor(messageSenderAcceptor)
+        .setDataSenderAcceptor(dataSenderAcceptor)
         .setLwsLogLevel(DISABLE_LOG);
 
     return builder;
@@ -122,20 +122,20 @@ SCENARIO( "Test ssl enabling for server and client", "[ssl]" )
 {
     auto srvEventHadler = MockedPtr<srv::IEventHandler>{};
     auto cliEventHadler = MockedPtr<cli::IEventHandler>{};
+    
+    auto srvDataSenderAcceptor = MockedPtr<srv::IDataSenderAcceptor>{};
+    auto cliDataSenderAcceptor = MockedPtr<cli::IDataSenderAcceptor>{};
 
-    auto srvMessageSenderAcceptor = MockedPtr<srv::IMessageSenderAcceptor>{};
-    auto cliMessageSenderAcceptor = MockedPtr<cli::IMessageSenderAcceptor>{};
+    srv::IDataSenderPtr srvDataSender;
+    cli::IDataSenderPtr cliDataSender;
 
-    srv::IMessageSenderPtr srvMessageSender;
-    cli::IMessageSenderPtr cliMessageSender;
-
-    setupServerBehavior(srvEventHadler.mock(), srvMessageSenderAcceptor.mock(), srvMessageSender);
-    setupClientBehavior(cliEventHadler.mock(), cliMessageSenderAcceptor.mock(), cliMessageSender);
+    setupServerBehavior(srvEventHadler.mock(), srvDataSenderAcceptor.mock(), srvDataSender);
+    setupClientBehavior(cliEventHadler.mock(), cliDataSenderAcceptor.mock(), cliDataSender);
 
     GIVEN( "Server and client" )
     {
-        auto serverBuilder = setupServerBuilder(srvEventHadler.ptr(), srvMessageSenderAcceptor.ptr());
-        auto clientBuilder = setupClientBuilder(cliEventHadler.ptr(), cliMessageSenderAcceptor.ptr());
+        auto serverBuilder = setupServerBuilder(srvEventHadler.ptr(), srvDataSenderAcceptor.ptr());
+        auto clientBuilder = setupClientBuilder(cliEventHadler.ptr(), cliDataSenderAcceptor.ptr());
 
         WHEN( "Server uses ssl" )
         {
@@ -218,20 +218,20 @@ SCENARIO( "Test client ssl features", "[ssl]" )
 {
     auto srvEventHadler = MockedPtr<srv::IEventHandler>{};
     auto cliEventHadler = MockedPtr<cli::IEventHandler>{};
+    
+    auto srvDataSenderAcceptor = MockedPtr<srv::IDataSenderAcceptor>{};
+    auto cliDataSenderAcceptor = MockedPtr<cli::IDataSenderAcceptor>{};
 
-    auto srvMessageSenderAcceptor = MockedPtr<srv::IMessageSenderAcceptor>{};
-    auto cliMessageSenderAcceptor = MockedPtr<cli::IMessageSenderAcceptor>{};
+    srv::IDataSenderPtr srvDataSender;
+    cli::IDataSenderPtr cliDataSender;
 
-    srv::IMessageSenderPtr srvMessageSender;
-    cli::IMessageSenderPtr cliMessageSender;
-
-    setupServerBehavior(srvEventHadler.mock(), srvMessageSenderAcceptor.mock(), srvMessageSender);
-    setupClientBehavior(cliEventHadler.mock(), cliMessageSenderAcceptor.mock(), cliMessageSender);
+    setupServerBehavior(srvEventHadler.mock(), srvDataSenderAcceptor.mock(), srvDataSender);
+    setupClientBehavior(cliEventHadler.mock(), cliDataSenderAcceptor.mock(), cliDataSender);
 
     GIVEN( "Server and client" )
     {
-        auto serverBuilder = setupServerBuilder(srvEventHadler.ptr(), srvMessageSenderAcceptor.ptr());
-        auto clientBuilder = setupClientBuilder(cliEventHadler.ptr(), cliMessageSenderAcceptor.ptr());
+        auto serverBuilder = setupServerBuilder(srvEventHadler.ptr(), srvDataSenderAcceptor.ptr());
+        auto clientBuilder = setupClientBuilder(cliEventHadler.ptr(), cliDataSenderAcceptor.ptr());
 
         WHEN( "Server uses self-signed certificate" )
         {
@@ -499,20 +499,20 @@ SCENARIO( "Test server ssl features", "[ssl]" )
 {
     auto srvEventHadler = MockedPtr<srv::IEventHandler>{};
     auto cliEventHadler = MockedPtr<cli::IEventHandler>{};
+    
+    auto srvDataSenderAcceptor = MockedPtr<srv::IDataSenderAcceptor>{};
+    auto cliDataSenderAcceptor = MockedPtr<cli::IDataSenderAcceptor>{};
 
-    auto srvMessageSenderAcceptor = MockedPtr<srv::IMessageSenderAcceptor>{};
-    auto cliMessageSenderAcceptor = MockedPtr<cli::IMessageSenderAcceptor>{};
+    srv::IDataSenderPtr srvDataSender;
+    cli::IDataSenderPtr cliDataSender;
 
-    srv::IMessageSenderPtr srvMessageSender;
-    cli::IMessageSenderPtr cliMessageSender;
-
-    setupServerBehavior(srvEventHadler.mock(), srvMessageSenderAcceptor.mock(), srvMessageSender);
-    setupClientBehavior(cliEventHadler.mock(), cliMessageSenderAcceptor.mock(), cliMessageSender);
+    setupServerBehavior(srvEventHadler.mock(), srvDataSenderAcceptor.mock(), srvDataSender);
+    setupClientBehavior(cliEventHadler.mock(), cliDataSenderAcceptor.mock(), cliDataSender);
 
     GIVEN( "Server and client" )
     {
-        auto serverBuilder = setupServerBuilder(srvEventHadler.ptr(), srvMessageSenderAcceptor.ptr());
-        auto clientBuilder = setupClientBuilder(cliEventHadler.ptr(), cliMessageSenderAcceptor.ptr());
+        auto serverBuilder = setupServerBuilder(srvEventHadler.ptr(), srvDataSenderAcceptor.ptr());
+        auto clientBuilder = setupClientBuilder(cliEventHadler.ptr(), cliDataSenderAcceptor.ptr());
 
         WHEN( "Server requires valid cert from client" )
         {
@@ -623,20 +623,20 @@ SCENARIO( "Test ssl ciphers list feature", "[.ssl]" )
 {
     auto srvEventHadler = MockedPtr<srv::IEventHandler>{};
     auto cliEventHadler = MockedPtr<cli::IEventHandler>{};
+    
+    auto srvDataSenderAcceptor = MockedPtr<srv::IDataSenderAcceptor>{};
+    auto cliDataSenderAcceptor = MockedPtr<cli::IDataSenderAcceptor>{};
 
-    auto srvMessageSenderAcceptor = MockedPtr<srv::IMessageSenderAcceptor>{};
-    auto cliMessageSenderAcceptor = MockedPtr<cli::IMessageSenderAcceptor>{};
+    srv::IDataSenderPtr srvDataSender;
+    cli::IDataSenderPtr cliDataSender;
 
-    srv::IMessageSenderPtr srvMessageSender;
-    cli::IMessageSenderPtr cliMessageSender;
-
-    setupServerBehavior(srvEventHadler.mock(), srvMessageSenderAcceptor.mock(), srvMessageSender);
-    setupClientBehavior(cliEventHadler.mock(), cliMessageSenderAcceptor.mock(), cliMessageSender);
+    setupServerBehavior(srvEventHadler.mock(), srvDataSenderAcceptor.mock(), srvDataSender);
+    setupClientBehavior(cliEventHadler.mock(), cliDataSenderAcceptor.mock(), cliDataSender);
 
     GIVEN( "Server and client" )
     {
-        auto serverBuilder = setupServerBuilder(srvEventHadler.ptr(), srvMessageSenderAcceptor.ptr());
-        auto clientBuilder = setupClientBuilder(cliEventHadler.ptr(), cliMessageSenderAcceptor.ptr());
+        auto serverBuilder = setupServerBuilder(srvEventHadler.ptr(), srvDataSenderAcceptor.ptr());
+        auto clientBuilder = setupClientBuilder(cliEventHadler.ptr(), cliDataSenderAcceptor.ptr());
 
         srv::SslSettingsBuilder srvSslSettingsBuilder;
         srvSslSettingsBuilder

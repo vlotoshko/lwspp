@@ -14,10 +14,10 @@ void EventHandlerBase::onConnect(ISessionInfoPtr) noexcept
 void EventHandlerBase::onDisconnect() noexcept
 {}
 
-void EventHandlerBase::onDataReceive(const std::vector<char>& /*data*/, size_t /*bytesRemains*/) noexcept
+void EventHandlerBase::onBinaryDataReceive(const std::vector<char>& /*data*/, size_t /*bytesRemains*/) noexcept
 {}
 
-void EventHandlerBase::onMessageReceive(const std::string& /*message*/, size_t /*bytesRemains*/) noexcept
+void EventHandlerBase::onTextDataReceive(const std::string& /*message*/, size_t /*bytesRemains*/) noexcept
 {}
 
 void EventHandlerBase::onError(const std::string& /*errorMessage*/) noexcept
@@ -26,9 +26,9 @@ void EventHandlerBase::onError(const std::string& /*errorMessage*/) noexcept
 void EventHandlerBase::onWarning(const std::string& /*warningMessage*/) noexcept
 {}
 
-void EventHandlerBase::acceptMessageSender(IMessageSenderPtr messageSender) noexcept
+void EventHandlerBase::acceptDataSender(IDataSenderPtr dataSender) noexcept
 {
-    _messageSender = std::move(messageSender);
+    _dataSender = std::move(dataSender);
 }
 
 } // namespace ews::cli

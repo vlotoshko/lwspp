@@ -3,7 +3,7 @@
  * @date March, 2023
  */
 
-#include "easywebsocket/server/IMessageSender.hpp"
+#include "easywebsocket/server/IDataSender.hpp"
 
 #include "ChatMessageSender.hpp"
 
@@ -20,14 +20,14 @@ auto isCommonMessage(const Message& message) -> bool
     return message.to.sessionId == srv::ALL_SESSIONS;
 }
 
-ChatMessageSender::ChatMessageSender(srv::IMessageSenderPtr s)
-    : _messageSender(std::move(s))
+ChatMessageSender::ChatMessageSender(srv::IDataSenderPtr s)
+    : _dataSender(std::move(s))
 {}
 
 void ChatMessageSender::sendUserMessage(const Message& message)
 {
     // Message format: "MSG:<From>:<To>:MessageText"
-    if (_messageSender != nullptr)
+    if (_dataSender != nullptr)
     {
         std::string messageToSend{"MSG:<"};
         messageToSend
@@ -38,15 +38,15 @@ void ChatMessageSender::sendUserMessage(const Message& message)
                 ;
         if (message.to.sessionId == srv::ALL_SESSIONS)
         {
-            _messageSender->sendMessage(messageToSend);
+            _dataSender->sendTextData(messageToSend);
         }
         else
         {
-            _messageSender->sendMessage(message.to.sessionId, messageToSend);
+            _dataSender->sendTextData(message.to.sessionId, messageToSend);
             if (message.to.sessionId != message.from.sessionId &&
                 message.from.sessionId != srv::UNDEFINED_SESSION_ID)
             {
-                _messageSender->sendMessage(message.from.sessionId, messageToSend);
+                _dataSender->sendTextData(message.from.sessionId, messageToSend);
             }
         }
     }
@@ -55,13 +55,13 @@ void ChatMessageSender::sendUserMessage(const Message& message)
 void ChatMessageSender::sendChatHistory(const User& user, const std::vector<Message>& history)
 {
     // Message format: "HIST:<From>:<To>:MessageText"
-    if (_messageSender != nullptr)
+    if (_dataSender != nullptr)
     {
         for (const auto& message : history)
         {
             if (isCommonMessage(message) || isPrivateMessage(user, message))
             {
-                _messageSender->sendMessage(user.sessionId, std::string{"HIST:<"}
+                _dataSender->sendTextData(user.sessionId, std::string{"HIST:<"}
                                             .append(message.from.userName).append(">:<")
                                             .append(message.to.userName).append(">:")
                                             .append(message.text));
@@ -73,14 +73,14 @@ void ChatMessageSender::sendChatHistory(const User& user, const std::vector<Mess
 void ews::chat::ChatMessageSender::updateUsers(const std::map<srv::SessionId, User>& users)
 {
     // Message format: "USRUPD:User1,User2,User3,"
-    if (_messageSender != nullptr)
+    if (_dataSender != nullptr)
     {
         std::string message{"USRUPD:"};
         for (const auto& entry : users)
         {
             message.append(entry.second.userName).append(",");
         }
-        _messageSender->sendMessage(message);
+        _dataSender->sendTextData(message);
     }
 }
 

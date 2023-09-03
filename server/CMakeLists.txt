@@ -10,9 +10,9 @@ set(${PROJECT_NAME}_SRC_FILES
     include/easywebsocket/server/CallbackVersions.hpp
     include/easywebsocket/server/Consts.hpp
     include/easywebsocket/server/EventHandlerBase.hpp
+    include/easywebsocket/server/IDataSender.hpp
+    include/easywebsocket/server/IDataSenderAcceptor.hpp
     include/easywebsocket/server/IEventHandler.hpp
-    include/easywebsocket/server/IMessageSender.hpp
-    include/easywebsocket/server/IMessageSenderAcceptor.hpp
     include/easywebsocket/server/IServer.hpp
     include/easywebsocket/server/ISessionInfo.hpp
     include/easywebsocket/server/ServerBuilder.hpp
@@ -31,8 +31,8 @@ set(${PROJECT_NAME}_SRC_FILES
     src/LwsAdapter/LwsContextDeleter.hpp
     src/LwsAdapter/LwsDataHolder.cpp
     src/LwsAdapter/LwsDataHolder.hpp
-    src/LwsAdapter/LwsMessageSender.cpp
-    src/LwsAdapter/LwsMessageSender.hpp
+    src/LwsAdapter/LwsDataSender.cpp
+    src/LwsAdapter/LwsDataSender.hpp
     src/LwsAdapter/LwsProtocolsFactory.cpp
     src/LwsAdapter/LwsProtocolsFactory.hpp
     src/LwsAdapter/LwsServer.cpp
@@ -41,6 +41,7 @@ set(${PROJECT_NAME}_SRC_FILES
     src/LwsAdapter/LwsSession.hpp
     src/LwsAdapter/LwsSessions.cpp
     src/LwsAdapter/LwsSessions.hpp
+    src/LwsAdapter/LwsTypes.hpp
     src/LwsAdapter/LwsTypesFwd.hpp
 
     src/Consts.hpp

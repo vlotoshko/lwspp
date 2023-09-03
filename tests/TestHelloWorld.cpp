@@ -10,12 +10,12 @@
 
 #include "easywebsocket/client/ClientBuilder.hpp"
 #include "easywebsocket/client/IEventHandler.hpp"
-#include "easywebsocket/client/IMessageSender.hpp"
-#include "easywebsocket/client/IMessageSenderAcceptor.hpp"
+#include "easywebsocket/client/IDataSender.hpp"
+#include "easywebsocket/client/IDataSenderAcceptor.hpp"
 
 #include "easywebsocket/server/IEventHandler.hpp"
-#include "easywebsocket/server/IMessageSender.hpp"
-#include "easywebsocket/server/IMessageSenderAcceptor.hpp"
+#include "easywebsocket/server/IDataSender.hpp"
+#include "easywebsocket/server/IDataSenderAcceptor.hpp"
 #include "easywebsocket/server/ServerBuilder.hpp"
 
 // NOLINTBEGIN (readability-function-cognitive-complexity)
@@ -35,62 +35,62 @@ const std::string HELLO_SERVER = "hello server!";
 const std::string HELLO_CLIENT = "hello client!";
 
 void setupServerBehavior(Mock<srv::IEventHandler>& eventHandler,
-                         Mock<srv::IMessageSenderAcceptor>& messageSenderAcceptor,
-                         srv::IMessageSenderPtr& messageSender,
+                         Mock<srv::IDataSenderAcceptor>& dataSenderAcceptor,
+                         srv::IDataSenderPtr& dataSender,
                          std::string& incomeMessage)
 {
     auto sendHelloToClient = [&](srv::SessionId, const std::string& message, size_t /*bytesRemains*/)
     {
         incomeMessage = message;
-        messageSender->sendMessage(HELLO_CLIENT);
+        dataSender->sendTextData(HELLO_CLIENT);
     };
 
     Fake(Method(eventHandler, onConnect), Method(eventHandler, onDisconnect));
-    When(Method(eventHandler, onMessageReceive)).Do(sendHelloToClient);
+    When(Method(eventHandler, onTextDataReceive)).Do(sendHelloToClient);
 
-    When(Method(messageSenderAcceptor, acceptMessageSender))
-        .Do([&messageSender](srv::IMessageSenderPtr ms){ messageSender = ms; });
+    When(Method(dataSenderAcceptor, acceptDataSender))
+        .Do([&dataSender](srv::IDataSenderPtr ms){ dataSender = ms; });
 }
 
 void setupClientBehavior(Mock<cli::IEventHandler>& eventHandler,
-                         Mock<cli::IMessageSenderAcceptor>& messageSenderAcceptor,
-                         cli::IMessageSenderPtr& messageSender,
+                         Mock<cli::IDataSenderAcceptor>& dataSenderAcceptor,
+                         cli::IDataSenderPtr& dataSender,
                          std::string& incomeMessage)
 {
-    auto sendHelloToServer = [&messageSender](cli::ISessionInfoPtr)
+    auto sendHelloToServer = [&dataSender](cli::ISessionInfoPtr)
     {
-        messageSender->sendMessage(HELLO_SERVER);
+        dataSender->sendTextData(HELLO_SERVER);
     };
 
-    auto onMessageReceive = [&](const std::string& message, size_t /*bytesRemains*/)
+    auto onTextDataReceive = [&](const std::string& message, size_t /*bytesRemains*/)
     {
         incomeMessage = message;
     };
 
     Fake(Method(eventHandler, onDisconnect));
     When(Method(eventHandler, onConnect)).Do(sendHelloToServer);
-    When(Method(eventHandler, onMessageReceive)).Do(onMessageReceive);
+    When(Method(eventHandler, onTextDataReceive)).Do(onTextDataReceive);
 
-    When(Method(messageSenderAcceptor, acceptMessageSender))
-        .Do([&messageSender](cli::IMessageSenderPtr ms){ messageSender = ms; });
+    When(Method(dataSenderAcceptor, acceptDataSender))
+        .Do([&dataSender](cli::IDataSenderPtr ms){ dataSender = ms; });
 }
 
 srv::IServerPtr setupServer(srv::IEventHandlerPtr eventHandler,
-                            srv::IMessageSenderAcceptorPtr messageSenderAcceptor)
+                            srv::IDataSenderAcceptorPtr dataSenderAcceptor)
 {
     auto serverBuilder = srv::ServerBuilder{};
     serverBuilder
         .setCallbackVersion(srv::CallbackVersion::v1_Andromeda)
         .setPort(PORT)
         .setEventHandler(eventHandler)
-        .setMessageSenderAcceptor(messageSenderAcceptor)
+        .setDataSenderAcceptor(dataSenderAcceptor)
         .setLwsLogLevel(DISABLE_LOG);
 
     return serverBuilder.build();
 }
 
 cli::IClientPtr setupClient(cli::IEventHandlerPtr eventHandler,
-                            cli::IMessageSenderAcceptorPtr messageSenderAcceptor)
+                            cli::IDataSenderAcceptorPtr dataSenderAcceptor)
 {
     auto clientBuilder = cli::ClientBuilder{};
     clientBuilder
@@ -98,7 +98,7 @@ cli::IClientPtr setupClient(cli::IEventHandlerPtr eventHandler,
         .setAddress(ADDRESS)
         .setPort(PORT)
         .setEventHandler(eventHandler)
-        .setMessageSenderAcceptor(messageSenderAcceptor)
+        .setDataSenderAcceptor(dataSenderAcceptor)
         .setLwsLogLevel(DISABLE_LOG);
 
     return clientBuilder.build();
@@ -110,26 +110,26 @@ SCENARIO( "Clients sends 'hello world' to the server", "[hello_world]" )
 {
     auto srvEventHadler = MockedPtr<srv::IEventHandler>{};
     auto cliEventHadler = MockedPtr<cli::IEventHandler>{};
+    
+    auto srvDataSenderAcceptor = MockedPtr<srv::IDataSenderAcceptor>{};
+    auto cliDataSenderAcceptor = MockedPtr<cli::IDataSenderAcceptor>{};
 
-    auto srvMessageSenderAcceptor = MockedPtr<srv::IMessageSenderAcceptor>{};
-    auto cliMessageSenderAcceptor = MockedPtr<cli::IMessageSenderAcceptor>{};
-
-    srv::IMessageSenderPtr srvMessageSender;
-    cli::IMessageSenderPtr cliMessageSender;
+    srv::IDataSenderPtr srvDataSender;
+    cli::IDataSenderPtr cliDataSender;
 
     std::string actualServerIncomeMessage;
     std::string actualClientIncomeMessage;
 
-    setupServerBehavior(srvEventHadler.mock(), srvMessageSenderAcceptor.mock(),
-                        srvMessageSender, actualServerIncomeMessage);
+    setupServerBehavior(srvEventHadler.mock(), srvDataSenderAcceptor.mock(),
+                        srvDataSender, actualServerIncomeMessage);
 
-    setupClientBehavior(cliEventHadler.mock(), cliMessageSenderAcceptor.mock(),
-                        cliMessageSender, actualClientIncomeMessage);
+    setupClientBehavior(cliEventHadler.mock(), cliDataSenderAcceptor.mock(),
+                        cliDataSender, actualClientIncomeMessage);
 
     GIVEN( "Server and client" )
     {
-        auto server = setupServer(srvEventHadler.ptr(), srvMessageSenderAcceptor.ptr());
-        auto client = setupClient(cliEventHadler.ptr(), cliMessageSenderAcceptor.ptr());
+        auto server = setupServer(srvEventHadler.ptr(), srvDataSenderAcceptor.ptr());
+        auto client = setupClient(cliEventHadler.ptr(), cliDataSenderAcceptor.ptr());
 
         WHEN( "Client sends message to server" )
         {
@@ -143,10 +143,10 @@ SCENARIO( "Clients sends 'hello world' to the server", "[hello_world]" )
                 client.reset();
 
                 Verify(Method(srvEventHadler.mock(), onConnect),
-                       Method(srvEventHadler.mock(), onMessageReceive),
+                       Method(srvEventHadler.mock(), onTextDataReceive),
                        Method(srvEventHadler.mock(), onDisconnect)).Once();
                 Verify(Method(cliEventHadler.mock(), onConnect),
-                       Method(cliEventHadler.mock(), onMessageReceive),
+                       Method(cliEventHadler.mock(), onTextDataReceive),
                        Method(cliEventHadler.mock(), onDisconnect)).Once();
                 VerifyNoOtherInvocations(srvEventHadler.mock());
                 VerifyNoOtherInvocations(cliEventHadler.mock());

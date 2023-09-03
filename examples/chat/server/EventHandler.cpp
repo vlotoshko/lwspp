@@ -15,7 +15,7 @@ namespace
 {
 
 // Incoming message types
-enum class MessageType
+enum class DataType
 {
     HELLO,
     MSG,
@@ -38,7 +38,7 @@ auto trim(const std::string& str) -> std::string
     return str.substr(first, (last-first+1));
 }
 
-auto getMessageType(const std::string& message) -> MessageType
+auto getDataType(const std::string& message) -> DataType
 {
     auto pos = message.find_first_of(':');
 
@@ -47,16 +47,16 @@ auto getMessageType(const std::string& message) -> MessageType
         auto type = message.substr(0, pos);
         if (type == "HELLO")
         {
-            return MessageType::HELLO;
+            return DataType::HELLO;
         }
 
         if (type == "MSG")
         {
-            return MessageType::MSG;
+            return DataType::MSG;
         }
     }
 
-    return MessageType::UNKNOWN;
+    return DataType::UNKNOWN;
 }
 
 auto getUserByName(const std::map<srv::SessionId, User>& users, const std::string& userName)
@@ -119,7 +119,7 @@ auto getUserNameFromHello(const std::string& message) -> std::string
 
 } // namespace
 
-EventHandler::EventHandler() : _chatMessageSender(srv::IMessageSenderPtr{})
+EventHandler::EventHandler() : _chatMessageSender(srv::IDataSenderPtr{})
 {}
 
 void EventHandler::onConnect(ews::srv::ISessionInfoPtr sessionInfo) noexcept
@@ -134,21 +134,21 @@ void EventHandler::onDisconnect(ews::srv::SessionId sessionId) noexcept
     _chatMessageSender.updateUsers(_users);
 }
 
-void EventHandler::onMessageReceive(srv::SessionId sessionId, const std::string& messageText, size_t /*bytesRemains*/) noexcept
+void EventHandler::onTextDataReceive(srv::SessionId sessionId, const std::string& messageText, size_t /*bytesRemains*/) noexcept
 {
     // Expected messages:
     //   hello message, format: "HELLO:<Nickname>"
     //   user message common, format: "MSG:MessageText"
     //   user message private, format: "MSG:<To>: MessageText"
 
-    switch (getMessageType(messageText))
+    switch (getDataType(messageText))
     {
-    case MessageType::HELLO:
+    case DataType::HELLO:
     {
         processHelloMessage_(sessionId, messageText);
         break;
     }
-    case MessageType::MSG:
+    case DataType::MSG:
     {
         processUserMessage_(sessionId, messageText);
         break;
@@ -159,10 +159,10 @@ void EventHandler::onMessageReceive(srv::SessionId sessionId, const std::string&
     }
 }
 
-void EventHandler::acceptMessageSender(srv::IMessageSenderPtr messageSender) noexcept
+void EventHandler::acceptDataSender(srv::IDataSenderPtr messageSender) noexcept
 {
-    srv::EventHandlerBase::acceptMessageSender(messageSender);
-    _chatMessageSender = ChatMessageSender{_messageSender};
+    srv::EventHandlerBase::acceptDataSender(messageSender);
+    _chatMessageSender = ChatMessageSender{_dataSender};
 }
 
 void EventHandler::processHelloMessage_(srv::SessionId sessionId, const std::string& messageText)

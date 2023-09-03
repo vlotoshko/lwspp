@@ -131,7 +131,7 @@ SCENARIO( "ClientContext setup", "[client_builder]" )
                 .setAddress(ADDRESS)
                 .setPort(PORT)
                 .setEventHandler(handler)
-                .setMessageSenderAcceptor(handler)
+                .setDataSenderAcceptor(handler)
                 .setProtocolName(PROTOCOL_NAME)
                 .setPath(PATH)
                 .setKeepAliveTimeout(KEEPALIVE_TIMEOUT)
@@ -229,7 +229,7 @@ SCENARIO( "Client construction", "[client_builder]" )
             }
         }
 
-        WHEN( "MessageSenderAcceptor is not set" )
+        WHEN( "DataSenderAcceptor is not set" )
         {
             auto handler = std::make_shared<EventHandlerBase>();
             clientBuilder
@@ -241,7 +241,7 @@ SCENARIO( "Client construction", "[client_builder]" )
             THEN( "Exception is thrown on client build" )
             {
                 REQUIRE_THROWS_WITH(clientBuilder.build(),
-                                    "Required parameter is undefined: message sender acceptor");
+                                    "Required parameter is undefined: data sender acceptor");
             }
         }
 
@@ -253,7 +253,7 @@ SCENARIO( "Client construction", "[client_builder]" )
                 .setAddress(ADDRESS)
                 .setPort(PORT)
                 .setEventHandler(handler)
-                .setMessageSenderAcceptor(handler);
+                .setDataSenderAcceptor(handler);
 
             auto expression = [&clientBuilder] {clientBuilder.build();};
 

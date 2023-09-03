@@ -45,7 +45,7 @@ auto sendMessage(lws* wsInstance, const Message& message) -> bool
     auto* messageBegin = (unsigned char*)(message.second.data() + LWS_PRE);
     const int expectedSize = static_cast<int>(message.second.size() - LWS_PRE);
 
-    auto writeProtocol = message.first == MessageType::Text ? LWS_WRITE_TEXT : LWS_WRITE_BINARY;
+    auto writeProtocol = message.first == DataType::Text ? LWS_WRITE_TEXT : LWS_WRITE_BINARY;
     const int actualSize = lws_write(wsInstance, messageBegin, expectedSize, writeProtocol);
     return expectedSize == actualSize;
 }
@@ -114,11 +114,11 @@ auto lwsCallback_v1(
         const auto bytesRemains = static_cast<size_t>(lws_remaining_packet_payload(wsInstance));
         if (lws_frame_is_binary(wsInstance) == 1)
         {
-            eventHandler->onDataReceive(sessionId, std::vector<char>{inAsChar, inAsChar + len}, bytesRemains);
+            eventHandler->onBinaryDataReceive(sessionId, std::vector<char>{inAsChar, inAsChar + len}, bytesRemains);
         }
         else
         {
-            eventHandler->onMessageReceive(sessionId, std::string{inAsChar, len}, bytesRemains);
+            eventHandler->onTextDataReceive(sessionId, std::string{inAsChar, len}, bytesRemains);
         }
         break;
     }

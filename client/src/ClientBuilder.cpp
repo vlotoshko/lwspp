@@ -46,9 +46,9 @@ void checkContext(const ClientContext& context)
         throw UndefinedRequiredParameterException{"event handler"};
     }
 
-    if (context.messageSenderAcceptor == nullptr)
+    if (context.dataSenderAcceptor == nullptr)
     {
-        throw UndefinedRequiredParameterException{"message sender acceptor"};
+        throw UndefinedRequiredParameterException{"data sender acceptor"};
     }
 
     if (context.ssl != nullptr &&
@@ -106,9 +106,9 @@ auto ClientBuilder::setEventHandler(IEventHandlerPtr e) -> ClientBuilder&
     return *this;
 }
 
-auto ClientBuilder::setMessageSenderAcceptor(IMessageSenderAcceptorPtr a) -> ClientBuilder&
+auto ClientBuilder::setDataSenderAcceptor(IDataSenderAcceptorPtr a) -> ClientBuilder&
 {
-    _context->messageSenderAcceptor = std::move(a);
+    _context->dataSenderAcceptor = std::move(a);
     return *this;
 }
 

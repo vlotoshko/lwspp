@@ -1,6 +1,6 @@
 /**
  * @author Volodymyr Lotoshko (vlotoshko@gmail.com)
- * @date Jan, 2023
+ * @date Sep, 2023
  */
 
 #pragma once
@@ -10,9 +10,12 @@
 namespace ews::srv
 {
 
-// TODO: consider strong types using
-using Port = int;
-using SessionId = int;
-using Path = std::string;
+enum class DataType
+{
+    Text,
+    Binary
+};
+
+using Message = std::pair<DataType, std::string>;
 
 } // namespace ews::srv

@@ -4,16 +4,16 @@
  */
 
 #include "LwsAdapter/ILwsSession.hpp"
-#include "LwsAdapter/LwsMessageSender.hpp"
+#include "LwsAdapter/LwsDataSender.hpp"
 
 namespace ews::cli
 {
 
-LwsMessageSender::LwsMessageSender(const ILwsSessionPtr& s)
+LwsDataSender::LwsDataSender(const ILwsSessionPtr& s)
     : _session(s)
 {}
 
-void LwsMessageSender::sendMessage(const std::string& message)
+void LwsDataSender::sendTextData(const std::string& message)
 {
     if (auto session = _session.lock())
     {
@@ -22,7 +22,7 @@ void LwsMessageSender::sendMessage(const std::string& message)
     }
 }
 
-void LwsMessageSender::sendData(const std::vector<char>& data)
+void LwsDataSender::sendBinaryData(const std::vector<char>& data)
 {
     if (auto session = _session.lock())
     {

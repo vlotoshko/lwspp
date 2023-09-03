@@ -45,7 +45,7 @@ void LwsSession::addBinaryDataToSend(const std::vector<char>& binaryData)
     std::string payload = addPrefixToMessage(binaryData);
 
     const std::lock_guard<std::mutex> guard(_mutex);
-    _pendingData.emplace(MessageType::Binary, std::move(payload));
+    _pendingData.emplace(DataType::Binary, std::move(payload));
 }
 
 void LwsSession::addTextDataToSend(const std::string& textData)
@@ -53,7 +53,7 @@ void LwsSession::addTextDataToSend(const std::string& textData)
     std::string payload = addPrefixToMessage(textData);
 
     const std::lock_guard<std::mutex> guard(_mutex);
-    _pendingData.emplace(MessageType::Text, std::move(payload));
+    _pendingData.emplace(DataType::Text, std::move(payload));
 }
 
 auto LwsSession::getPendingData() -> std::queue<Message>&

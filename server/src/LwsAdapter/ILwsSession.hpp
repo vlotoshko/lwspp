@@ -9,6 +9,7 @@
 #include <string>
 
 #include "easywebsocket/server/Types.hpp"
+#include "LwsAdapter/LwsTypes.hpp"
 #include "LwsAdapter/LwsTypesFwd.hpp"
 
 namespace ews::srv

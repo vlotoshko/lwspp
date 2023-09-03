@@ -5,17 +5,17 @@
 
 #include <stdexcept>
 
-#include "easywebsocket/client/IMessageSenderAcceptor.hpp"
+#include "easywebsocket/client/IDataSenderAcceptor.hpp"
 
 #include "LwsAdapter/LwsCallbackContext.hpp"
-#include "LwsAdapter/LwsMessageSender.hpp"
+#include "LwsAdapter/LwsDataSender.hpp"
 
 namespace ews::cli
 {
 
-LwsCallbackContext::LwsCallbackContext(IEventHandlerPtr e, IMessageSenderAcceptorPtr a)
+LwsCallbackContext::LwsCallbackContext(IEventHandlerPtr e, IDataSenderAcceptorPtr a)
     : _eventHandler(std::move(e))
-    ,_messageSenderAcceptor(std::move(a))
+    , _dataSenderAcceptor(std::move(a))
 {}
 
 void LwsCallbackContext::setStopping()
@@ -46,8 +46,8 @@ void LwsCallbackContext::setSession(ILwsSessionPtr s)
     }
     _session = std::move(s);
 
-    auto messageSender = std::make_shared<LwsMessageSender>(_session);
-    _messageSenderAcceptor->acceptMessageSender(std::move(messageSender));
+    auto dataSender = std::make_shared<LwsDataSender>(_session);
+    _dataSenderAcceptor->acceptDataSender(std::move(dataSender));
 }
 
 void LwsCallbackContext::resetSession()

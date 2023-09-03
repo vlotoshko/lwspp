@@ -13,14 +13,14 @@ namespace ews::cli
 class IClient;
 using IClientPtr = std::shared_ptr<IClient>;
 
+class IDataSender;
+using IDataSenderPtr = std::shared_ptr<IDataSender>;
+
+class IDataSenderAcceptor;
+using IDataSenderAcceptorPtr = std::shared_ptr<IDataSenderAcceptor>;
+
 class IEventHandler;
 using IEventHandlerPtr = std::shared_ptr<IEventHandler>;
-
-class IMessageSender;
-using IMessageSenderPtr = std::shared_ptr<IMessageSender>;
-
-class IMessageSenderAcceptor;
-using IMessageSenderAcceptorPtr = std::shared_ptr<IMessageSenderAcceptor>;
 
 class ISessionInfo;
 using ISessionInfoPtr = std::shared_ptr<ISessionInfo>;

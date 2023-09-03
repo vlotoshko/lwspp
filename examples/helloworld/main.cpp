@@ -6,12 +6,12 @@
 #include <iostream>
 #include <thread>
 
-#include "easywebsocket/client/EventHandlerBase.hpp"
-#include "easywebsocket/client/IMessageSender.hpp"
 #include "easywebsocket/client/ClientBuilder.hpp"
+#include "easywebsocket/client/EventHandlerBase.hpp"
+#include "easywebsocket/client/IDataSender.hpp"
 
 #include "easywebsocket/server/EventHandlerBase.hpp"
-#include "easywebsocket/server/IMessageSender.hpp"
+#include "easywebsocket/server/IDataSender.hpp"
 #include "easywebsocket/server/ServerBuilder.hpp"
 
 using namespace ews;
@@ -21,10 +21,10 @@ class ClientEventHandler : public cli::EventHandlerBase
 public:
     void onConnect(cli::ISessionInfoPtr) noexcept override
     {
-        _messageSender->sendMessage("hello server!");
+        _dataSender->sendTextData("hello server!");
     }
 
-    void onMessageReceive(const std::string& message, size_t /*bytesRemains*/) noexcept override
+    void onTextDataReceive(const std::string& message, size_t /*bytesRemains*/) noexcept override
     {
         std::cout << "client received the message: " << message << std::endl;
     }
@@ -33,10 +33,10 @@ public:
 class ServerEventHandler : public srv::EventHandlerBase
 {
 public:
-    void onMessageReceive(srv::SessionId, const std::string& message, size_t /*bytesRemains*/) noexcept override
+    void onTextDataReceive(srv::SessionId, const std::string& message, size_t /*bytesRemains*/) noexcept override
     {
         std::cout << "server received the message: " << message << std::endl;
-        _messageSender->sendMessage("hello client!");
+        _dataSender->sendTextData("hello client!");
     }
 };
 
@@ -51,7 +51,7 @@ auto main() -> int
         .setPort(PORT)
         .setCallbackVersion(srv::CallbackVersion::v1_Andromeda)
         .setEventHandler(serverEventHandler)
-        .setMessageSenderAcceptor(serverEventHandler)
+        .setDataSenderAcceptor(serverEventHandler)
         .setLwsLogLevel(0)
         ;
     auto server = serverBuilder.build();
@@ -64,7 +64,7 @@ auto main() -> int
         .setPort(PORT)
         .setCallbackVersion(cli::CallbackVersion::v1_Amsterdam)
         .setEventHandler(clientEventHandler)
-        .setMessageSenderAcceptor(clientEventHandler)
+        .setDataSenderAcceptor(clientEventHandler)
         .setLwsLogLevel(0)
         ;
     auto client = clientBuilder.build();

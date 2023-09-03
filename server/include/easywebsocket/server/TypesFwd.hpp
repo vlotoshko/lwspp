@@ -13,11 +13,11 @@ namespace ews::srv
 class IEventHandler;
 using IEventHandlerPtr = std::shared_ptr<IEventHandler>;
 
-class IMessageSender;
-using IMessageSenderPtr = std::shared_ptr<IMessageSender>;
+class IDataSender;
+using IDataSenderPtr = std::shared_ptr<IDataSender>;
 
-class IMessageSenderAcceptor;
-using IMessageSenderAcceptorPtr = std::shared_ptr<IMessageSenderAcceptor>;
+class IDataSenderAcceptor;
+using IDataSenderAcceptorPtr = std::shared_ptr<IDataSenderAcceptor>;
 
 class IServer;
 using IServerPtr = std::shared_ptr<IServer>;

@@ -18,7 +18,7 @@ namespace ews::chat
 class ChatMessageSender
 {
 public:
-    explicit ChatMessageSender(srv::IMessageSenderPtr);
+    explicit ChatMessageSender(srv::IDataSenderPtr);
 
     void sendUserMessage(const Message&);
     void sendChatHistory(const User&, const std::vector<Message>&);
@@ -26,7 +26,7 @@ public:
     void updateUsers(const std::map<srv::SessionId, User>& users);
 
 private:
-    srv::IMessageSenderPtr _messageSender;
+    srv::IDataSenderPtr _dataSender;
 };
 
 } // namespace ews::chat

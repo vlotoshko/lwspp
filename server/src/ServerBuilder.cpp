@@ -41,9 +41,9 @@ void checkContext(const ServerContext& context)
         throw UndefinedRequiredParameterException{"event handler"};
     }
 
-    if (context.messageSenderAcceptor == nullptr)
+    if (context.dataSenderAcceptor == nullptr)
     {
-        throw UndefinedRequiredParameterException{"message sender acceptor"};
+        throw UndefinedRequiredParameterException{"data sender acceptor"};
     }
 
     if (context.ssl != nullptr &&
@@ -113,9 +113,9 @@ auto ServerBuilder::setEventHandler(IEventHandlerPtr e) -> ServerBuilder&
     return *this;
 }
 
-auto ServerBuilder::setMessageSenderAcceptor(IMessageSenderAcceptorPtr a) -> ServerBuilder&
+auto ServerBuilder::setDataSenderAcceptor(IDataSenderAcceptorPtr a) -> ServerBuilder&
 {
-    _context->messageSenderAcceptor = std::move(a);
+    _context->dataSenderAcceptor = std::move(a);
     return *this;
 }
 

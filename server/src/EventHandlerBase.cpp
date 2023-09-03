@@ -14,10 +14,10 @@ void EventHandlerBase::onConnect(ISessionInfoPtr) noexcept
 void EventHandlerBase::onDisconnect(SessionId) noexcept
 {}
 
-void EventHandlerBase::onDataReceive(SessionId, const std::vector<char>& /*data*/, size_t /*bytesRemains*/) noexcept
+void EventHandlerBase::onBinaryDataReceive(SessionId, const std::vector<char>& /*data*/, size_t /*bytesRemains*/) noexcept
 {}
 
-void EventHandlerBase::onMessageReceive(SessionId, const std::string& /*message*/, size_t /*bytesRemains*/) noexcept
+void EventHandlerBase::onTextDataReceive(SessionId, const std::string& /*message*/, size_t /*bytesRemains*/) noexcept
 {}
 
 void EventHandlerBase::onError(SessionId, const std::string& /*errorMessage*/) noexcept
@@ -26,9 +26,9 @@ void EventHandlerBase::onError(SessionId, const std::string& /*errorMessage*/) n
 void EventHandlerBase::onWarning(SessionId, const std::string& /*warningMessage*/) noexcept
 {}
 
-void EventHandlerBase::acceptMessageSender(IMessageSenderPtr messageSender) noexcept
+void EventHandlerBase::acceptDataSender(IDataSenderPtr dataSender) noexcept
 {
-    _messageSender = std::move(messageSender);
+    _dataSender = std::move(dataSender);
 }
 
 } // namespace ews::srv

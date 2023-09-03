@@ -6,9 +6,9 @@
 #include <future>
 #include <iostream>
 
-#include "easywebsocket/client/EventHandlerBase.hpp"
-#include "easywebsocket/client/IMessageSender.hpp"
 #include "easywebsocket/client/ClientBuilder.hpp"
+#include "easywebsocket/client/EventHandlerBase.hpp"
+#include "easywebsocket/client/IDataSender.hpp"
 #include "easywebsocket/client/SslSettingsBuilder.hpp"
 
 using namespace ews;
@@ -23,10 +23,10 @@ class ClientEventHandler : public cli::EventHandlerBase
 public:
     void onConnect(cli::ISessionInfoPtr) noexcept override
     {
-        _messageSender->sendMessage(SUBSCRIBE);
+        _dataSender->sendTextData(SUBSCRIBE);
     }
 
-    void onMessageReceive(const std::string& message, size_t /*bytesRemains*/) noexcept override
+    void onTextDataReceive(const std::string& message, size_t /*bytesRemains*/) noexcept override
     {
         if (_messageCounter < MESSAGES_LIMIT)
         {
@@ -60,7 +60,7 @@ auto main() -> int
         .setPort(PORT)
         .setCallbackVersion(cli::CallbackVersion::v1_Amsterdam)
         .setEventHandler(clientEventHandler)
-        .setMessageSenderAcceptor(clientEventHandler)
+        .setDataSenderAcceptor(clientEventHandler)
         .setSslSettings(cli::SslSettingsBuilder{}.build())
         .setLwsLogLevel(0)
         ;

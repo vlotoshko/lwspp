@@ -124,7 +124,7 @@ SCENARIO( "ServerContext setup", "[server_builder]" )
                 .setCallbackVersion(CallbackVersion::v1_Andromeda)
                 .setPort(PORT)
                 .setEventHandler(handler)
-                .setMessageSenderAcceptor(handler)
+                .setDataSenderAcceptor(handler)
                 .setProtocolName(PROTOCOL_NAME)
                 .setKeepAliveTimeout(KEEPALIVE_TIMEOUT)
                 .setKeepAliveProbes(KEEPALIVE_PROBES)
@@ -204,7 +204,7 @@ SCENARIO( "Server construction", "[server_builder]" )
             }
         }
 
-        WHEN( "MessageSenderAcceptor is not set" )
+        WHEN( "DataSenderAcceptor is not set" )
         {
             auto handler = std::make_shared<EventHandlerBase>();
             serverBuilder
@@ -215,7 +215,7 @@ SCENARIO( "Server construction", "[server_builder]" )
             THEN( "Exception is thrown on server build" )
             {
                 REQUIRE_THROWS_WITH(serverBuilder.build(),
-                                    "Required parameter is undefined: message sender acceptor");
+                                    "Required parameter is undefined: data sender acceptor");
             }
         }
 
@@ -226,7 +226,7 @@ SCENARIO( "Server construction", "[server_builder]" )
                 .setCallbackVersion(CallbackVersion::v1_Andromeda)
                 .setPort(PORT)
                 .setEventHandler(handler)
-                .setMessageSenderAcceptor(handler);
+                .setDataSenderAcceptor(handler);
 
             auto expression = [&serverBuilder] {serverBuilder.build();};
 

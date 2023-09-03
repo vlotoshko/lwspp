@@ -6,14 +6,14 @@
 #include <libwebsockets.h>
 #include <thread>
 
-#include "easywebsocket/server/IMessageSenderAcceptor.hpp"
+#include "easywebsocket/server/IDataSenderAcceptor.hpp"
 
 #include "LwsAdapter/ILwsCallbackNotifier.hpp"
 #include "LwsAdapter/ILwsSession.hpp"
 #include "LwsAdapter/LwsCallbackContext.hpp"
 #include "LwsAdapter/LwsContextDeleter.hpp"
 #include "LwsAdapter/LwsDataHolder.hpp"
-#include "LwsAdapter/LwsMessageSender.hpp"
+#include "LwsAdapter/LwsDataSender.hpp"
 #include "LwsAdapter/LwsServer.hpp"
 #include "LwsAdapter/LwsSessions.hpp"
 #include "ServerContext.hpp"
@@ -152,8 +152,8 @@ LwsServer::LwsServer(const ServerContext& context)
     _lowLevelContext = setupLowLeverContext(_callbackContext, _dataHolder);
 
     auto notifier = std::make_shared<LwsCallbackNotifier>(_dataHolder, _lowLevelContext);
-    auto sender = std::make_shared<LwsMessageSender>(sessions, std::move(notifier));
-    context.messageSenderAcceptor->acceptMessageSender(std::move(sender));
+    auto sender = std::make_shared<LwsDataSender>(sessions, std::move(notifier));
+    context.dataSenderAcceptor->acceptDataSender(std::move(sender));
 }
 
 LwsServer::~LwsServer()

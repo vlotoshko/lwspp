@@ -10,10 +10,10 @@ set(${PROJECT_NAME}_SRC_FILES
     include/easywebsocket/client/CallbackVersions.hpp
     include/easywebsocket/client/ClientBuilder.hpp
     include/easywebsocket/client/IClient.hpp
+    include/easywebsocket/client/IDataSender.hpp
+    include/easywebsocket/client/IDataSenderAcceptor.hpp
     include/easywebsocket/client/EventHandlerBase.hpp
     include/easywebsocket/client/IEventHandler.hpp
-    include/easywebsocket/client/IMessageSender.hpp
-    include/easywebsocket/client/IMessageSenderAcceptor.hpp
     include/easywebsocket/client/ISessionInfo.hpp
     include/easywebsocket/client/SslSettingsBuilder.hpp
     include/easywebsocket/client/Types.hpp
@@ -30,12 +30,13 @@ set(${PROJECT_NAME}_SRC_FILES
     src/LwsAdapter/LwsContextDeleter.hpp
     src/LwsAdapter/LwsDataHolder.cpp
     src/LwsAdapter/LwsDataHolder.hpp
-    src/LwsAdapter/LwsMessageSender.cpp
-    src/LwsAdapter/LwsMessageSender.hpp
+    src/LwsAdapter/LwsDataSender.cpp
+    src/LwsAdapter/LwsDataSender.hpp
     src/LwsAdapter/LwsProtocolsFactory.cpp
     src/LwsAdapter/LwsProtocolsFactory.hpp
     src/LwsAdapter/LwsSession.cpp
     src/LwsAdapter/LwsSession.hpp
+    src/LwsAdapter/LwsTypes.hpp
     src/LwsAdapter/LwsTypesFwd.hpp
 
     src/Client.cpp

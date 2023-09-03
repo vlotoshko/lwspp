@@ -21,7 +21,7 @@ class ServerContext
 {
 public:
     IEventHandlerPtr eventHandler;
-    IMessageSenderAcceptorPtr messageSenderAcceptor;
+    IDataSenderAcceptorPtr dataSenderAcceptor;
     CallbackVersion callbackVersion = UNDEFINED_CALLBACK_VERSION;
     Port port = UNDEFINED_PORT;
 
