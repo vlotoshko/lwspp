@@ -15,7 +15,7 @@ namespace ews::srv
 {
 
 /**
- * @brief The LwsDataHolder class holds the set of data low level context points on
+ * @brief The LwsDataHolder class manages a set of data low level context points on
  */
 struct LwsDataHolder
 {

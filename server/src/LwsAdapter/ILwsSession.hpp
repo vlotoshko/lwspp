@@ -14,6 +14,9 @@
 namespace ews::srv
 {
 
+/**
+ * @brief The ILwsSession class represents the connection to the client.
+ */
 class ILwsSession
 {
 public:
@@ -30,9 +33,9 @@ public:
     virtual auto getSessionId() const -> SessionId = 0;
     virtual auto getLwsInstance() -> LwsInstanceRawPtr = 0;
 
-    virtual void addBinaryData(const std::vector<char>&) = 0;
-    virtual void addTextData(const std::string&) = 0;
-    virtual auto getMessages() -> std::queue<Message>& = 0;
+    virtual void addBinaryDataToSend(const std::vector<char>&) = 0;
+    virtual void addTextDataToSend(const std::string&) = 0;
+    virtual auto getPendingData() -> std::queue<Message>& = 0;
 };
 
 } // namespace ews::srv

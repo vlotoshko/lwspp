@@ -34,7 +34,7 @@ auto LwsSession::getLwsInstance() -> LwsInstanceRawPtr
     return _wsInstance;
 }
 
-void LwsSession::addBinaryData(const std::vector<char>& binaryData)
+void LwsSession::addBinaryDataToSend(const std::vector<char>& binaryData)
 {
     std::string payload = addPrefixToMessage(binaryData);
 
@@ -42,7 +42,7 @@ void LwsSession::addBinaryData(const std::vector<char>& binaryData)
     _messages.emplace(MessageType::Binary, std::move(payload));
 }
 
-void LwsSession::addTextData(const std::string& textData)
+void LwsSession::addTextDataToSend(const std::string& textData)
 {
     std::string payload = addPrefixToMessage(textData);
 
@@ -50,7 +50,7 @@ void LwsSession::addTextData(const std::string& textData)
     _messages.emplace(MessageType::Text, std::move(payload));
 }
 
-auto LwsSession::getMessages() -> std::queue<Message>&
+auto LwsSession::getPendingData() -> std::queue<Message>&
 {
     if (_messagesToSend.empty())
     {

@@ -10,6 +10,10 @@
 namespace ews::srv
 {
 
+/**
+ * @brief The ILwsCallbackNotifier class notifies the lws service that there are
+ * pending data to send
+ */
 class ILwsCallbackNotifier
 {
 public:
@@ -23,8 +27,10 @@ public:
     auto operator=(ILwsCallbackNotifier&&) noexcept -> ILwsCallbackNotifier& = default;
 
 public:
-    virtual void sendSessionMessages(const ILwsSessionPtr&) = 0;
-    virtual void sendPendingMessages() = 0;
+    // Notifies that pending data was added to send to the specific session.
+    virtual void notifyPendingDataAdded(const ILwsSessionPtr&) = 0;
+    // Notifies that pending data was added to send to the all sessions.
+    virtual void notifyPendingDataAdded() = 0;
 };
 
 } // namespace ews::srv

@@ -20,9 +20,9 @@ public:
 
     auto getLwsInstance() -> LwsInstanceRawPtr override;
 
-    void addBinaryData(const std::vector<char>&) override;
-    void addTextData(const std::string&) override;
-    auto getMessages() -> std::queue<Message>& override;
+    void addBinaryDataToSend(const std::vector<char>&) override;
+    void addTextDataToSend(const std::string&) override;
+    auto getPendingData() -> std::queue<Message>& override;
 
 private:
     LwsInstanceRawPtr _wsInstance;

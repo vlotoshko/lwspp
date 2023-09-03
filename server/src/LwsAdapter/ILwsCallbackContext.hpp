@@ -11,6 +11,9 @@
 namespace ews::srv
 {
 
+/**
+ * @brief The ILwsCallbackContext class provides data required by LwsCallback functions
+ */
 class ILwsCallbackContext
 {
 public:

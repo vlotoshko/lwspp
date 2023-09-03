@@ -17,7 +17,7 @@ void LwsMessageSender::sendMessage(const std::string& message)
 {
     if (auto session = _session.lock())
     {
-        session->addTextData(message);
+        session->addTextDataToSend(message);
         lws_callback_on_writable(session->getLwsInstance());
     }
 }
@@ -26,7 +26,7 @@ void LwsMessageSender::sendData(const std::vector<char>& data)
 {
     if (auto session = _session.lock())
     {
-        session->addBinaryData(data);
+        session->addBinaryDataToSend(data);
         lws_callback_on_writable(session->getLwsInstance());
     }
 }

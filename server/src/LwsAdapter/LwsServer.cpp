@@ -33,12 +33,12 @@ public:
         , _lowLevelContext(c)
     {}
 
-    void sendSessionMessages(const ILwsSessionPtr& session) override
+    void notifyPendingDataAdded(const ILwsSessionPtr& session) override
     {
         lws_callback_on_writable(session->getLwsInstance());
     }
 
-    void sendPendingMessages() override
+    void notifyPendingDataAdded() override
     {
         if (auto context = _lowLevelContext.lock())
         {

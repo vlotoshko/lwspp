@@ -5,8 +5,6 @@
 
 #pragma once
 
-#include <future>
-
 #include "easywebsocket/server/ISessionInfo.hpp"
 
 namespace ews::srv

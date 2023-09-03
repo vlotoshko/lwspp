@@ -13,6 +13,9 @@
 namespace ews::srv
 {
 
+/**
+ * @brief The ILwsSessions class represents a container for storing and accessing all ILwsSession instances.
+ */
 class ILwsSessions
 {
 public:

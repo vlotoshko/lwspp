@@ -81,7 +81,7 @@ auto lwsCallback_v1(
         auto sessions = callbackContext.getSessions();
         if (auto session = sessions->get(sessionId))
         {
-            auto& messages = session->getMessages();
+            auto& messages = session->getPendingData();
             if (!messages.empty() && !callbackContext.isStopping())
             {
                 auto& message = messages.front();

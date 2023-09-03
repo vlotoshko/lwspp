@@ -14,6 +14,9 @@
 namespace ews::cli
 {
 
+/**
+ * @brief The ILwsSession class represents the connection to the server.
+ */
 class ILwsSession
 {
 public:
@@ -29,9 +32,9 @@ public:
 public:
     virtual auto getLwsInstance() -> LwsInstanceRawPtr = 0;
 
-    virtual void addBinaryData(const std::vector<char>&) = 0;
-    virtual void addTextData(const std::string&) = 0;
-    virtual auto getMessages() -> std::queue<Message>& = 0;
+    virtual void addBinaryDataToSend(const std::vector<char>&) = 0;
+    virtual void addTextDataToSend(const std::string&) = 0;
+    virtual auto getPendingData() -> std::queue<Message>& = 0;
 };
 
 } // namespace ews::cli

@@ -20,8 +20,8 @@ void LwsMessageSender::sendMessage(SessionId sessionId, const std::string& messa
 {
     if (auto session = _sessions->get(sessionId))
     {
-        session->addTextData(message);
-        _notifier->sendSessionMessages(session);
+        session->addTextDataToSend(message);
+        _notifier->notifyPendingDataAdded(session);
     }
 }
 
@@ -29,8 +29,8 @@ void LwsMessageSender::sendData(SessionId sessionId, const std::vector<char>& da
 {
     if (auto session = _sessions->get(sessionId))
     {
-        session->addBinaryData(data);
-        _notifier->sendSessionMessages(session);
+        session->addBinaryDataToSend(data);
+        _notifier->notifyPendingDataAdded(session);
     }
 }
 
@@ -40,14 +40,14 @@ void LwsMessageSender::sendMessage(const std::string& message)
     {
         if (entry != nullptr)
         {
-            entry->addTextData(message);
+            entry->addTextDataToSend(message);
         }
         else
         {
             // TODO: log warning
         }
     }
-    _notifier->sendPendingMessages();
+    _notifier->notifyPendingDataAdded();
 }
 
 void LwsMessageSender::sendData(const std::vector<char>& data)
@@ -56,14 +56,14 @@ void LwsMessageSender::sendData(const std::vector<char>& data)
     {
         if (entry != nullptr)
         {
-            entry->addBinaryData(data);
+            entry->addBinaryDataToSend(data);
         }
         else
         {
             // TODO: log warning
         }
     }
-    _notifier->sendPendingMessages();
+    _notifier->notifyPendingDataAdded();
 }
 
 } // namespace ews::srv
