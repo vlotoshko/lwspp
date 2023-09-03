@@ -14,9 +14,10 @@ namespace ews::srv
 {
 
 /**
- * @brief The Server class is the wrapper for the interlnal LwsServer implementation
- * @note The server starts listening on construction and stops listening on destruction
- * @note The server spawns a separate thread for the listening
+ * @brief The Server class wraps the internal LwsServer implementation.
+ *
+ * The server starts listening upon construction and stops listening upon destruction.
+ * It operates within a separate thread to handle incoming connections.
  */
 class Server : public IServer
 {

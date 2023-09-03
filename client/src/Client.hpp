@@ -14,9 +14,10 @@ namespace ews::cli
 {
 
 /**
- * @brief The Client class is the wrapper for the interlnal LwsClient implementation
- * @note The client connects on construction and disconnects on destruction
- * @note The client spawns a separate thread to connect to a server
+ * @brief The Client class wraps the internal LwsClient implementation.
+ *
+ * The client automatically connects upon construction and disconnects upon destruction.
+ * It operates within a separate thread to establish and maintain the connection with the server.
  */
 class Client : public IClient
 {

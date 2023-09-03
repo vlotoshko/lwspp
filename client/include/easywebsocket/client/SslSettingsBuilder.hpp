@@ -12,6 +12,10 @@
 namespace ews::cli
 {
 
+/**
+ * @brief The SslSettingsBuilder class constructs SSL settings that can be utilized by the
+ * client builder to build a client supporting SSL connections.
+ */
 class SslSettingsBuilder
 {
 public:
@@ -31,7 +35,11 @@ public:
     auto setCertFilepath(std::string) -> SslSettingsBuilder&;
     auto setCaCertFilepath(std::string) -> SslSettingsBuilder&;
     auto setPrivateKeyPassword(std::string) -> SslSettingsBuilder&;
+
+    // For more information please look for the struct lws_context_creation_info description
+    // List of valid ciphers to use ON TLS1.2 AND LOWER ONLY
     auto setCiphersList(std::string) -> SslSettingsBuilder&;
+    // List of valid ciphers to use ON TLS1.3 AND ABOVE
     auto setCiphersListTls13(std::string) -> SslSettingsBuilder&;
 
     auto allowSelfSignedServerCert() -> SslSettingsBuilder&;

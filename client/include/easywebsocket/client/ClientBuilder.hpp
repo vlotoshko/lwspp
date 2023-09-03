@@ -15,8 +15,8 @@ namespace ews::cli
 class ClientContext;
 
 /**
- * @brief The ClientBuilder class builds the client instance. Some options are mandatory to set.
- *  Builder throws an exception if any of the mandatory options are not set.
+ * @brief The ClientBuilder class is responsible for constructing client instances.
+ * Some options are mandatory and must be set; otherwise, the builder will throw an exception.
  */
 class ClientBuilder
 {

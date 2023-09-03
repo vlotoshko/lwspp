@@ -63,6 +63,12 @@ auto SslSettingsBuilder::setCiphersList(std::string ciphersList) -> SslSettingsB
     return *this;
 }
 
+auto SslSettingsBuilder::setCiphersListTls13(std::string ciphersList) -> SslSettingsBuilder&
+{
+    _settings->ciphersListTls13 = std::move(ciphersList);
+    return *this;
+}
+
 auto SslSettingsBuilder::allowSelfSignedServerCert() -> SslSettingsBuilder&
 {
     _settings->allowSelfSignedServerCert = true;
@@ -84,12 +90,6 @@ auto SslSettingsBuilder::skipServerCertHostnameCheck() -> SslSettingsBuilder&
 auto SslSettingsBuilder::ignoreServerCaSert() -> SslSettingsBuilder&
 {
     _settings->ignoreServerCaSert = true;
-    return *this;
-}
-
-auto SslSettingsBuilder::setCiphersListTls13(std::string ciphersList) -> SslSettingsBuilder&
-{
-    _settings->ciphersListTls13 = std::move(ciphersList);
     return *this;
 }
 

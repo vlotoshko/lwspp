@@ -8,6 +8,9 @@
 namespace ews::cli
 {
 
+/**
+ * @brief The ISessionInfo class provides the information about the connected session
+ */
 class ISessionInfo
 {
 public:

@@ -3,7 +3,7 @@
  * @date Jun, 2023
  */
 
-#include "SessionInfoExternal.hpp"
+#include "SessionInfo.hpp"
 
 namespace ews::cli
 {

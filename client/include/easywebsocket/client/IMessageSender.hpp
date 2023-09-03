@@ -12,7 +12,8 @@ namespace ews::cli
 {
 
 /**
- * @brief The IMessageSender class sends messages to the server
+ * @brief The IMessageSender class sends data to the server.
+ * The instance of IMessageSender can be obtained using IMessageSenderAcceptor when building the client.
  */
 class IMessageSender
 {
@@ -27,9 +28,10 @@ public:
     auto operator=(IMessageSender&&) noexcept -> IMessageSender& = default;
 
 public:
-    // Sends a message to a server
+    // Sends text data to the server. The provided text data should be valid UTF-8 text.
     virtual void sendMessage(const std::string&) = 0;
-    // Sends a message to a server
+
+    // Sends binary data to the server
     virtual void sendData(const std::vector<char>&) = 0;
 };
 

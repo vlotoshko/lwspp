@@ -12,10 +12,7 @@
 namespace ews::cli
 {
 
-/**
- * @brief The SessionInfoExternal class
- */
-class SessionInfoExternal : public ISessionInfo
+class SessionInfo : public ISessionInfo
 {
 };
 

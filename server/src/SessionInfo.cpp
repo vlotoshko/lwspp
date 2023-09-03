@@ -3,22 +3,22 @@
  * @date Jun, 2023
  */
 
-#include "SessionInfoExternal.hpp"
+#include "SessionInfo.hpp"
 
 namespace ews::srv
 {
 
-SessionInfoExternal::SessionInfoExternal(SessionId sessionId, Path path)
+SessionInfo::SessionInfo(SessionId sessionId, Path path)
     : _sessionId(sessionId)
     , _path(std::move(path))
 {}
 
-auto SessionInfoExternal::getSessionId() -> SessionId
+auto SessionInfo::getSessionId() -> SessionId
 {
     return _sessionId;
 }
 
-auto SessionInfoExternal::getPath() -> const Path&
+auto SessionInfo::getPath() -> const Path&
 {
     return _path;
 }

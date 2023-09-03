@@ -12,10 +12,10 @@
 namespace ews::srv
 {
 
-class SessionInfoExternal : public ISessionInfo
+class SessionInfo : public ISessionInfo
 {
 public:
-    SessionInfoExternal(SessionId, Path);
+    SessionInfo(SessionId, Path);
 
 public:
     auto getSessionId() -> SessionId override;

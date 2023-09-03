@@ -11,7 +11,12 @@ namespace ews::srv
 {
 
 /**
- * @brief The IMessageSenderAcceptor class
+ * @brief Accepts an IMessageSender instance from the server builder.
+ *
+ * The server builder provides an IMessageSender instance when constructing the server.
+ * To utilize the IMessageSender, set your instance of IMessageSenderAcceptor to the server builder
+ * and obtain the IMessageSender to transfer the messages from the server to the client.
+ * Users of the library must implement this interface themselves.
  */
 class IMessageSenderAcceptor
 {

@@ -9,10 +9,12 @@ namespace ews::srv
 {
 
 /**
- * @brief The IServer class defines the server interface. Use the server factory to get the
- * instance of the server implementation
- * @note The server starts listening on construction and stops listening on destruction
- * @note The server spawns a separate thread for the listening
+ * @brief The IServer class defines the server interface for interacting with clients.
+ *
+ * Use the server builder to obtain an instance of the server implementation.
+ *
+ * @note The server starts listening upon construction and stops listening upon destruction.
+ * @note The server operates within a separate thread to handle incoming connections.
  */
 class IServer
 {

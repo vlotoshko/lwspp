@@ -13,6 +13,10 @@
 namespace ews::cli
 {
 
+/**
+ * @brief The ClientContext class is the 'high-level' context to create the
+ * 'low-level' lws_context of the libwebsocket
+ */
 class ClientContext
 {
 public:

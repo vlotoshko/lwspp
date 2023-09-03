@@ -49,8 +49,8 @@ set(${PROJECT_NAME}_SRC_FILES
     src/Server.hpp
     src/ServerContext.hpp
     src/ServerBuilder.cpp
-    src/SessionInfoExternal.cpp
-    src/SessionInfoExternal.hpp
+    src/SessionInfo.cpp
+    src/SessionInfo.hpp
     src/SslSettings.hpp
     src/SslSettingsBuilder.cpp
     src/TypesFwd.hpp

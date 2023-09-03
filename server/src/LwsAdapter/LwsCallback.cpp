@@ -11,7 +11,7 @@
 #include "LwsAdapter/ILwsSessions.hpp"
 #include "LwsAdapter/LwsCallback.hpp"
 #include "LwsAdapter/LwsSession.hpp"
-#include "SessionInfoExternal.hpp"
+#include "SessionInfo.hpp"
 
 namespace ews::srv
 {
@@ -72,7 +72,7 @@ auto lwsCallback_v1(
         sessions->add(std::make_shared<LwsSession>(sessionId, wsInstance));
 
         auto sessionInfo =
-            std::make_shared<SessionInfoExternal>(sessionId, getSessionPath(wsInstance));
+            std::make_shared<SessionInfo>(sessionId, getSessionPath(wsInstance));
         eventHandler->onConnect(sessionInfo);
         break;
     }

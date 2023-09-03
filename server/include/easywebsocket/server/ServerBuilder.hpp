@@ -15,8 +15,8 @@ namespace ews::srv
 class ServerContext;
 
 /**
- * @brief The ServerBuilder class builds the server instance. Some options are mandatory to set.
- *  Builder throws an exception if any of the mandatory options are not set.
+ * @brief The ServerBuilder class is responsible for constructing server instances.
+ * Some options are mandatory and must be set; otherwise, the builder will throw an exception.
  */
 class ServerBuilder
 {

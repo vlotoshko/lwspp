@@ -10,7 +10,11 @@
 
 namespace ews::srv
 {
-
+/**
+ * @brief The EventHandlerBase class serves as a convenient base class for implementing the IEventHandler interface.
+ * It provides stubs for all overridden methods in the IEventHandler interface and also implements
+ * the IMessageSenderAcceptor to obtain the IMessageSender.
+ */
 class EventHandlerBase : public IEventHandler, public IMessageSenderAcceptor
 {
 public:

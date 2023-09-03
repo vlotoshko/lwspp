@@ -7,11 +7,15 @@
 
 namespace ews::cli
 {
+
 /**
- * @brief The IClient class defines the client interface. Use the client factory to get the
- * instance of the client implementation
- * @note The client connects on construction and disconnects on destruction
- * @note The client spawns a separate thread to connect to a server
+ * @brief The IClient class defines the client interface for interacting with a server.
+ *
+ * Use the client builder to obtain an instance of the client implementation.
+ *
+ * @note The client automatically connects upon construction and disconnects upon destruction.
+ * @note The client operates within a separate thread to establish and maintain the connection
+ * with the server.
  */
 class IClient
 {

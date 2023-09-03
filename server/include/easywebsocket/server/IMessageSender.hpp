@@ -14,7 +14,8 @@ namespace ews::srv
 {
 
 /**
- * @brief The IMessageSender class sends messages to the server's client
+ * @brief The IMessageSender class sends data to the client.
+ * The instance of IMessageSender can be obtained using IMessageSenderAcceptor when building the server.
  */
 class IMessageSender
 {
@@ -29,14 +30,18 @@ public:
     auto operator=(IMessageSender&&) noexcept -> IMessageSender& = default;
 
 public:
-    // Sends a message to a specific client
+    // Sends text data to the specified client identified by SessionId.
+    // The provided text data should be valid UTF-8 text.
     virtual void sendMessage(SessionId, const std::string&) = 0;
-    // Sends a message to a specific client
+
+    // Sends binary data to the specified client identified by SessionId.
     virtual void sendData(SessionId, const std::vector<char>&) = 0;
 
-    // Sends a message to all clients
+    // Sends text data to all connected clients.
+    //The provided text data should be valid UTF-8 text.
     virtual void sendMessage(const std::string&) = 0;
-    // Sends a message to all clients
+
+    // Sends binary data to all connected clients.
     virtual void sendData(const std::vector<char>&) = 0;
 };
 
