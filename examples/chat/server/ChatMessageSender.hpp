@@ -27,7 +27,7 @@
 #include <map>
 #include <vector>
 
-#include "easywebsocket/server/TypesFwd.hpp"
+#include "easywebsockets/server/TypesFwd.hpp"
 
 #include "Types.hpp"
 

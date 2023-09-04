@@ -27,7 +27,7 @@
 #include <map>
 #include <mutex>
 
-#include "easywebsocket/server/Types.hpp"
+#include "easywebsockets/server/Types.hpp"
 #include "LwsAdapter/ILwsSessions.hpp"
 
 namespace ews::srv

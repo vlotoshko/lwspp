@@ -25,7 +25,7 @@
 #include <iostream>
 #include <vector>
 
-#include "easywebsocket/client/IEventHandler.hpp"
+#include "easywebsockets/client/IEventHandler.hpp"
 #include "LwsAdapter/ILwsCallbackContext.hpp"
 #include "LwsAdapter/LwsCallback.hpp"
 #include "LwsAdapter/LwsSession.hpp"

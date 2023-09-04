@@ -25,15 +25,15 @@
 #include <thread>
 
 #include "catch2/catch.hpp"
-#include "easywebsocket/client/ClientBuilder.hpp"
-#include "easywebsocket/client/IEventHandler.hpp"
-#include "easywebsocket/client/IDataSenderAcceptor.hpp"
-#include "easywebsocket/client/SslSettingsBuilder.hpp"
+#include "easywebsockets/client/ClientBuilder.hpp"
+#include "easywebsockets/client/IEventHandler.hpp"
+#include "easywebsockets/client/IDataSenderAcceptor.hpp"
+#include "easywebsockets/client/SslSettingsBuilder.hpp"
 
-#include "easywebsocket/server/IEventHandler.hpp"
-#include "easywebsocket/server/IDataSenderAcceptor.hpp"
-#include "easywebsocket/server/ServerBuilder.hpp"
-#include "easywebsocket/server/SslSettingsBuilder.hpp"
+#include "easywebsockets/server/IEventHandler.hpp"
+#include "easywebsockets/server/IDataSenderAcceptor.hpp"
+#include "easywebsockets/server/ServerBuilder.hpp"
+#include "easywebsockets/server/SslSettingsBuilder.hpp"
 
 #include "MockedPtr.hpp"
 #include "Utils.hpp"

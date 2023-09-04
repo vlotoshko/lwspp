@@ -26,7 +26,7 @@
 
 #include <vector>
 
-#include "easywebsocket/server/Types.hpp"
+#include "easywebsockets/server/Types.hpp"
 #include "LwsAdapter/LwsTypesFwd.hpp"
 
 namespace ews::srv

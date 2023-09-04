@@ -24,12 +24,29 @@
 
 #pragma once
 
-#include "easywebsocket/server/Types.hpp"
+#include "easywebsockets/server/Types.hpp"
 
 namespace ews::srv
 {
 
-const SessionId UNDEFINED_SESSION_ID = static_cast<int>(0U - 1);
-const SessionId ALL_SESSIONS = static_cast<int>(0U - 2);
+/**
+ * @brief The ISessionInfo class provides the information about the connected session
+ */
+class ISessionInfo
+{
+public:
+    ISessionInfo() = default;
+    virtual ~ISessionInfo() = default;
+
+    ISessionInfo(ISessionInfo&&) = default;
+    auto operator=(ISessionInfo&&) noexcept -> ISessionInfo& = default;
+
+    ISessionInfo(const ISessionInfo&) = delete;
+    auto operator=(const ISessionInfo&) noexcept -> ISessionInfo& = delete;
+
+public:
+    virtual auto getSessionId() -> SessionId = 0;
+    virtual auto getPath() -> const Path& = 0;
+};
 
 } // namespace ews::srv

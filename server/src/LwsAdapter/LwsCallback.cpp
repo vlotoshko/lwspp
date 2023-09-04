@@ -24,7 +24,7 @@
 
 #include <iostream>
 
-#include "easywebsocket/server/IEventHandler.hpp"
+#include "easywebsockets/server/IEventHandler.hpp"
 #include "Consts.hpp"
 #include "LwsAdapter/ILwsCallbackContext.hpp"
 #include "LwsAdapter/ILwsSessions.hpp"

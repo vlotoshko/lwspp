@@ -22,8 +22,8 @@
  * IN THE SOFTWARE.
  */
 
-#include "easywebsocket/server/Consts.hpp"
-#include "easywebsocket/server/ISessionInfo.hpp"
+#include "easywebsockets/server/Consts.hpp"
+#include "easywebsockets/server/ISessionInfo.hpp"
 
 #include "EventHandler.hpp"
 

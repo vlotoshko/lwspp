@@ -26,7 +26,7 @@
 
 #include <future>
 
-#include "easywebsocket/client/IClient.hpp"
+#include "easywebsockets/client/IClient.hpp"
 #include "TypesFwd.hpp"
 
 namespace ews::cli

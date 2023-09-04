@@ -28,14 +28,14 @@
 #include "catch2/catch.hpp"
 #include "MockedPtr.hpp"
 
-#include "easywebsocket/client/ClientBuilder.hpp"
-#include "easywebsocket/client/IEventHandler.hpp"
-#include "easywebsocket/client/IDataSenderAcceptor.hpp"
+#include "easywebsockets/client/ClientBuilder.hpp"
+#include "easywebsockets/client/IEventHandler.hpp"
+#include "easywebsockets/client/IDataSenderAcceptor.hpp"
 
-#include "easywebsocket/server/IEventHandler.hpp"
-#include "easywebsocket/server/IDataSenderAcceptor.hpp"
-#include "easywebsocket/server/ISessionInfo.hpp"
-#include "easywebsocket/server/ServerBuilder.hpp"
+#include "easywebsockets/server/IEventHandler.hpp"
+#include "easywebsockets/server/IDataSenderAcceptor.hpp"
+#include "easywebsockets/server/ISessionInfo.hpp"
+#include "easywebsockets/server/ServerBuilder.hpp"
 
 // NOLINTBEGIN (readability-function-cognitive-complexity)
 namespace ews::tests

@@ -24,8 +24,8 @@
 
 #pragma once
 
-#include "easywebsocket/server/IEventHandler.hpp"
-#include "easywebsocket/server/IDataSenderAcceptor.hpp"
+#include "easywebsockets/server/IEventHandler.hpp"
+#include "easywebsockets/server/IDataSenderAcceptor.hpp"
 
 namespace ews::srv
 {

@@ -24,7 +24,7 @@
 
 #include <stdexcept>
 
-#include "easywebsocket/client/IDataSenderAcceptor.hpp"
+#include "easywebsockets/client/IDataSenderAcceptor.hpp"
 
 #include "LwsAdapter/LwsCallbackContext.hpp"
 #include "LwsAdapter/LwsDataSender.hpp"

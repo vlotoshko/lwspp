@@ -27,7 +27,7 @@
 #include <queue>
 #include <string>
 
-#include "easywebsocket/server/Types.hpp"
+#include "easywebsockets/server/Types.hpp"
 #include "LwsAdapter/LwsTypes.hpp"
 #include "LwsAdapter/LwsTypesFwd.hpp"
 

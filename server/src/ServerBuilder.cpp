@@ -24,7 +24,7 @@
 
 #include <stdexcept>
 
-#include "easywebsocket/server/ServerBuilder.hpp"
+#include "easywebsockets/server/ServerBuilder.hpp"
 #include "Server.hpp"
 #include "ServerContext.hpp"
 #include "SslSettings.hpp"

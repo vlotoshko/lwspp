@@ -25,13 +25,13 @@
 #include <iostream>
 #include <thread>
 
-#include "easywebsocket/client/ClientBuilder.hpp"
-#include "easywebsocket/client/EventHandlerBase.hpp"
-#include "easywebsocket/client/IDataSender.hpp"
+#include "easywebsockets/client/ClientBuilder.hpp"
+#include "easywebsockets/client/EventHandlerBase.hpp"
+#include "easywebsockets/client/IDataSender.hpp"
 
-#include "easywebsocket/server/EventHandlerBase.hpp"
-#include "easywebsocket/server/IDataSender.hpp"
-#include "easywebsocket/server/ServerBuilder.hpp"
+#include "easywebsockets/server/EventHandlerBase.hpp"
+#include "easywebsockets/server/IDataSender.hpp"
+#include "easywebsockets/server/ServerBuilder.hpp"
 
 using namespace ews;
 
@@ -88,7 +88,7 @@ auto main() -> int
         ;
     auto client = clientBuilder.build();
 
-    // Give some time for the client and server to exchange with the messages
+    // Give some time for the client and server to exchange messages.
     const auto timeout = 100U;
     std::this_thread::sleep_for(std::chrono::milliseconds(timeout));
 

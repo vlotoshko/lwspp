@@ -27,7 +27,7 @@
 #include <map>
 #include <vector>
 
-#include "easywebsocket/server/EventHandlerBase.hpp"
+#include "easywebsockets/server/EventHandlerBase.hpp"
 
 #include "ChatMessageSender.hpp"
 #include "Types.hpp"

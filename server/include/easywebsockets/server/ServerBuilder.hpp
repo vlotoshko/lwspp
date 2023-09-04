@@ -24,54 +24,55 @@
 
 #pragma once
 
-#include "easywebsocket/client/CallbackVersions.hpp"
-#include "easywebsocket/client/Types.hpp"
-#include "easywebsocket/client/TypesFwd.hpp"
+#include "easywebsockets/server/CallbackVersions.hpp"
+#include "easywebsockets/server/Types.hpp"
+#include "easywebsockets/server/TypesFwd.hpp"
 
-namespace ews::cli
+namespace ews::srv
 {
 
-class ClientContext;
+class ServerContext;
 
 /**
- * @brief The ClientBuilder class is responsible for constructing client instances.
+ * @brief The ServerBuilder class is responsible for constructing server instances.
  * Some options are mandatory and must be set; otherwise, the builder will throw an exception.
  */
-class ClientBuilder
+class ServerBuilder
 {
 public:
-    ClientBuilder();
-    ~ClientBuilder();
+    ServerBuilder();
+    ~ServerBuilder();
 
-    ClientBuilder(ClientBuilder&&) noexcept;
-    auto operator=(ClientBuilder&&) noexcept -> ClientBuilder&;
+    ServerBuilder(ServerBuilder&&) noexcept;
+    auto operator=(ServerBuilder&&) noexcept -> ServerBuilder&;
 
-    ClientBuilder(const ClientBuilder&) = delete;
-    auto operator=(const ClientBuilder&) -> ClientBuilder& = delete;
+    ServerBuilder(const ServerBuilder&) = delete;
+    auto operator=(const ServerBuilder&) -> ServerBuilder& = delete;
 
 public:
-    auto build() const -> IClientPtr;
+    auto build() const -> IServerPtr;
 
     // Mandatory options
-    auto setCallbackVersion(CallbackVersion) -> ClientBuilder&;
-    auto setAddress(Address) -> ClientBuilder&;
-    auto setPort(Port) -> ClientBuilder&;
-    auto setEventHandler(IEventHandlerPtr) -> ClientBuilder&;
-    auto setDataSenderAcceptor(IDataSenderAcceptorPtr) -> ClientBuilder&;
+    auto setCallbackVersion(CallbackVersion) -> ServerBuilder&;
+    auto setPort(Port) -> ServerBuilder&;
+    auto setEventHandler(IEventHandlerPtr) -> ServerBuilder&;
+    auto setDataSenderAcceptor(IDataSenderAcceptorPtr) -> ServerBuilder&;
 
     // Non mandatory options
-    auto setProtocolName(std::string) -> ClientBuilder&;
-    auto setPath(Path) -> ClientBuilder&;
-    auto setSslSettings(SslSettingsPtr) -> ClientBuilder&;
-    auto setKeepAliveTimeout(int) -> ClientBuilder&;
-    auto setKeepAliveProbes(int) -> ClientBuilder&;
-    auto setKeepAliveProbesInterval(int) -> ClientBuilder&;
-    auto setLwsLogLevel(int) -> ClientBuilder&;
+    auto setProtocolName(std::string) -> ServerBuilder&;
+    auto setKeepAliveTimeout(int) -> ServerBuilder&;
+    auto setKeepAliveProbes(int) -> ServerBuilder&;
+    auto setKeepAliveProbesInterval(int) -> ServerBuilder&;
+    auto setSslSettings(SslSettingsPtr) -> ServerBuilder&;
+    auto setVhostName(std::string) -> ServerBuilder&;
+    auto setServerString(std::string) -> ServerBuilder&;
+    auto setLwsLogLevel(int) -> ServerBuilder&;
+
 
 private:
-    std::unique_ptr<ClientContext> _context;
+    std::unique_ptr<ServerContext> _context;
 
-    friend class TestClientBuilder;
+    friend class TestServerBuilder;
 };
 
-} // namespace ews::cli
+} // namespace ews::srv

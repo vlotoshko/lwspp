@@ -25,9 +25,9 @@
 #include <csignal>
 #include <future>
 
-#include "easywebsocket/server/ServerBuilder.hpp"
-#include "easywebsocket/server/Types.hpp"
-#include "easywebsocket/server/TypesFwd.hpp"
+#include "easywebsockets/server/ServerBuilder.hpp"
+#include "easywebsockets/server/Types.hpp"
+#include "easywebsockets/server/TypesFwd.hpp"
 
 #include "EventHandler.hpp"
 

@@ -24,33 +24,41 @@
 
 #pragma once
 
-#include "easywebsocket/client/TypesFwd.hpp"
+#include <string>
+#include <vector>
 
-namespace ews::cli
+#include "easywebsockets/server/Types.hpp"
+#include "easywebsockets/server/TypesFwd.hpp"
+
+namespace ews::srv
 {
 
 /**
- * @brief Accepts an IDataSender instance from the client builder.
- *
- * The client builder provides an IDataSender instance when constructing the client.
- * To utilize the IDataSender, set your instance of IDataSenderAcceptor to the client builder
- * and obtain the IDataSender to transfer the data from the client to the server.
+ * @brief The IEventHandler class defines an interface for implementing server behavior.
  * Users of the library must implement this interface themselves.
  */
-class IDataSenderAcceptor
+class IEventHandler
 {
 public:
-    IDataSenderAcceptor() = default;
-    virtual ~IDataSenderAcceptor() = default;
+    IEventHandler() = default;
+    virtual ~IEventHandler() = default;
 
-    IDataSenderAcceptor(const IDataSenderAcceptor&) = default;
-    auto operator=(const IDataSenderAcceptor&) noexcept -> IDataSenderAcceptor& = default;
+    IEventHandler(IEventHandler&&) = default;
+    auto operator=(IEventHandler&&) noexcept -> IEventHandler& = default;
 
-    IDataSenderAcceptor(IDataSenderAcceptor&&) = default;
-    auto operator=(IDataSenderAcceptor&&) noexcept -> IDataSenderAcceptor& = default;
+    IEventHandler(const IEventHandler&) = delete;
+    auto operator=(const IEventHandler&) noexcept -> IEventHandler& = delete;
 
 public:
-    virtual void acceptDataSender(IDataSenderPtr) noexcept = 0;
+    // Invoked when the server receives binary data from the client.
+    virtual void onBinaryDataReceive(SessionId, const std::vector<char>& data, size_t bytesRemains) noexcept = 0;
+    // Invoked when the server receives text data from the client. This method expects valid UTF-8 text.
+    virtual void onTextDataReceive(SessionId, const std::string& message, size_t bytesRemains) noexcept = 0;
+
+    virtual void onConnect(ISessionInfoPtr) noexcept = 0;
+    virtual void onDisconnect(SessionId) noexcept = 0;
+    virtual void onError(SessionId, const std::string& errorMessage) noexcept = 0;
+    virtual void onWarning(SessionId, const std::string& errorMessage) noexcept = 0;
 };
 
-} // namespace ews::cli
+} // namespace ews::srv

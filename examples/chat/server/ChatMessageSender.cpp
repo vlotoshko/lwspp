@@ -22,7 +22,7 @@
  * IN THE SOFTWARE.
  */
 
-#include "easywebsocket/server/IDataSender.hpp"
+#include "easywebsockets/server/IDataSender.hpp"
 
 #include "ChatMessageSender.hpp"
 

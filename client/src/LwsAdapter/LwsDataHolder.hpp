@@ -24,7 +24,7 @@
 
 #pragma once
 
-#include "easywebsocket/client/Types.hpp"
+#include "easywebsockets/client/Types.hpp"
 #include "LwsAdapter/LwsTypesFwd.hpp"
 #include "TypesFwd.hpp"
 

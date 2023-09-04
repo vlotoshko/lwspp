@@ -24,7 +24,7 @@
 
 #pragma once
 
-#include "easywebsocket/client/IDataSender.hpp"
+#include "easywebsockets/client/IDataSender.hpp"
 
 #include "LwsAdapter/LwsTypesFwd.hpp"
 

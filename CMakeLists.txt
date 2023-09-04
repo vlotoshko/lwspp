@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.9)
 project(
-    easywebsocket
+    easywebsockets
     VERSION 0.0.1
     DESCRIPTION "EasyWebsockets - C++ wrapper for the libwebsockets library"
     LANGUAGES C CXX
@@ -9,8 +9,8 @@ project(
 set(CMAKE_CXX_FLAGS "-Wall -Wextra -Wpedantic")
 set(CMAKE_EXE_LINKER_FLAGS ${LINKER_FLAGS})
 
-option(OPTION_BUILD_CLIENT "Build easywebsocket client library" ON)
-option(OPTION_BUILD_SERVER "Build easywebsocket server library" ON)
+option(OPTION_BUILD_CLIENT "Build easywebsockets client library" ON)
+option(OPTION_BUILD_SERVER "Build easywebsockets server library" ON)
 option(OPTION_BUILD_EXAMPLES "Build examples" ON)
 option(OPTION_BUILD_INTEGRATION_TESTS  "Build integration tests application" ON)
 set(INSTALL_TESTS "" CACHE PATH "Path to install tests after build")

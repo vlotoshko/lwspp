@@ -22,7 +22,7 @@
  * IN THE SOFTWARE.
  */
 
-#include "easywebsocket/client/SslSettingsBuilder.hpp"
+#include "easywebsockets/client/SslSettingsBuilder.hpp"
 
 #include "SslSettings.hpp"
 

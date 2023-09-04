@@ -26,8 +26,8 @@
 
 #include <string>
 
-#include "easywebsocket/server/Consts.hpp"
-#include "easywebsocket/server/Types.hpp"
+#include "easywebsockets/server/Consts.hpp"
+#include "easywebsockets/server/Types.hpp"
 
 namespace ews::chat
 {

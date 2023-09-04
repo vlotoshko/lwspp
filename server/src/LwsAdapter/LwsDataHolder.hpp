@@ -26,7 +26,7 @@
 
 #include <string>
 
-#include "easywebsocket/server/Types.hpp"
+#include "easywebsockets/server/Types.hpp"
 #include "LwsAdapter/LwsTypesFwd.hpp"
 #include "TypesFwd.hpp"
 

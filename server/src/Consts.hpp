@@ -26,8 +26,8 @@
 
 #include <string>
 
-#include "easywebsocket/server/CallbackVersions.hpp"
-#include "easywebsocket/server/Types.hpp"
+#include "easywebsockets/server/CallbackVersions.hpp"
+#include "easywebsockets/server/Types.hpp"
 
 namespace ews::srv
 {

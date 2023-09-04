@@ -24,9 +24,9 @@
 
 #include "catch2/catch.hpp"
 
-#include "easywebsocket/client/ClientBuilder.hpp"
-#include "easywebsocket/client/EventHandlerBase.hpp"
-#include "easywebsocket/client/SslSettingsBuilder.hpp"
+#include "easywebsockets/client/ClientBuilder.hpp"
+#include "easywebsockets/client/EventHandlerBase.hpp"
+#include "easywebsockets/client/SslSettingsBuilder.hpp"
 #include "ClientContext.hpp"
 #include "SslSettings.hpp"
 

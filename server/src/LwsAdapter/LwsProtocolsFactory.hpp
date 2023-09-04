@@ -24,7 +24,7 @@
 
 #pragma once
 
-#include "easywebsocket/server/CallbackVersions.hpp"
+#include "easywebsockets/server/CallbackVersions.hpp"
 #include "LwsAdapter/LwsTypesFwd.hpp"
 
 namespace ews::srv

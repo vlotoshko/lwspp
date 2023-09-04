@@ -25,7 +25,7 @@
 #include <libwebsockets.h>
 #include <thread>
 
-#include "easywebsocket/server/IDataSenderAcceptor.hpp"
+#include "easywebsockets/server/IDataSenderAcceptor.hpp"
 
 #include "LwsAdapter/ILwsCallbackNotifier.hpp"
 #include "LwsAdapter/ILwsSession.hpp"

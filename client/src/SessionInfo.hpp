@@ -24,7 +24,7 @@
 
 #pragma once
 
-#include "easywebsocket/client/ISessionInfo.hpp"
+#include "easywebsockets/client/ISessionInfo.hpp"
 
 namespace ews::cli
 {

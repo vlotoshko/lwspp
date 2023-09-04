@@ -26,7 +26,7 @@
 
 #include <string>
 
-#include "easywebsocket/server/TypesFwd.hpp"
+#include "easywebsockets/server/TypesFwd.hpp"
 #include "Consts.hpp"
 
 namespace ews::srv

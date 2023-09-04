@@ -26,13 +26,14 @@
 
 #include <string>
 
-#include "easywebsocket/server/TypesFwd.hpp"
+#include "easywebsockets/client/TypesFwd.hpp"
 
-namespace ews::srv
+namespace ews::cli
 {
+
 /**
  * @brief The SslSettingsBuilder class constructs SSL settings that can be utilized by the
- * server builder to build a server supporting SSL connections.
+ * client builder to build a client supporting SSL connections.
  */
 class SslSettingsBuilder
 {
@@ -53,7 +54,6 @@ public:
     auto setCertFilepath(std::string) -> SslSettingsBuilder&;
     auto setCaCertFilepath(std::string) -> SslSettingsBuilder&;
     auto setPrivateKeyPassword(std::string) -> SslSettingsBuilder&;
-    auto requireValidClientCert() -> SslSettingsBuilder&;
 
     // For more information please look for the struct lws_context_creation_info description
     // List of valid ciphers to use ON TLS1.2 AND LOWER ONLY
@@ -61,8 +61,13 @@ public:
     // List of valid ciphers to use ON TLS1.3 AND ABOVE
     auto setCiphersListTls13(std::string) -> SslSettingsBuilder&;
 
+    auto allowSelfSignedServerCert() -> SslSettingsBuilder&;
+    auto allowExpiredServerCert() -> SslSettingsBuilder&;
+    auto skipServerCertHostnameCheck() -> SslSettingsBuilder&;
+    auto ignoreServerCaSert() -> SslSettingsBuilder&;
+
 private:
     std::unique_ptr<SslSettings> _settings;
 };
 
-} // namespace ews::srv
+} // namespace ews::cli

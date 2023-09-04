@@ -7,18 +7,18 @@ project(
 )
 
 set(${PROJECT_NAME}_SRC_FILES
-    include/easywebsocket/server/CallbackVersions.hpp
-    include/easywebsocket/server/Consts.hpp
-    include/easywebsocket/server/EventHandlerBase.hpp
-    include/easywebsocket/server/IDataSender.hpp
-    include/easywebsocket/server/IDataSenderAcceptor.hpp
-    include/easywebsocket/server/IEventHandler.hpp
-    include/easywebsocket/server/IServer.hpp
-    include/easywebsocket/server/ISessionInfo.hpp
-    include/easywebsocket/server/ServerBuilder.hpp
-    include/easywebsocket/server/SslSettingsBuilder.hpp
-    include/easywebsocket/server/Types.hpp
-    include/easywebsocket/server/TypesFwd.hpp
+    include/easywebsockets/server/CallbackVersions.hpp
+    include/easywebsockets/server/Consts.hpp
+    include/easywebsockets/server/EventHandlerBase.hpp
+    include/easywebsockets/server/IDataSender.hpp
+    include/easywebsockets/server/IDataSenderAcceptor.hpp
+    include/easywebsockets/server/IEventHandler.hpp
+    include/easywebsockets/server/IServer.hpp
+    include/easywebsockets/server/ISessionInfo.hpp
+    include/easywebsockets/server/ServerBuilder.hpp
+    include/easywebsockets/server/SslSettingsBuilder.hpp
+    include/easywebsockets/server/Types.hpp
+    include/easywebsockets/server/TypesFwd.hpp
 
     src/LwsAdapter/ILwsCallbackContext.hpp
     src/LwsAdapter/ILwsCallbackNotifier.hpp
@@ -73,6 +73,6 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
 )
 
 install(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION lib)
-install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/easywebsocket DESTINATION include)
+install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/easywebsockets DESTINATION include)
 
 add_subdirectory(tests)

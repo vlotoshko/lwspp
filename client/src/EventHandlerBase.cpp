@@ -22,7 +22,7 @@
  * IN THE SOFTWARE.
  */
 
-#include "easywebsocket/client/EventHandlerBase.hpp"
+#include "easywebsockets/client/EventHandlerBase.hpp"
 
 namespace ews::cli
 {

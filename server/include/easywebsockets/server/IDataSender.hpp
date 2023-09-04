@@ -24,32 +24,44 @@
 
 #pragma once
 
-#include "easywebsocket/client/IDataSenderAcceptor.hpp"
-#include "easywebsocket/client/IEventHandler.hpp"
+#include <string>
+#include <vector>
 
-namespace ews::cli
+#include "easywebsockets/server/Types.hpp"
+
+namespace ews::srv
 {
 
 /**
- * @brief The EventHandlerBase class serves as a convenient base class for implementing the IEventHandler interface.
- * It provides stubs for all overridden methods in the IEventHandler interface and also implements
- * the IDataSenderAcceptor to obtain the IDataSender.
+ * @brief The IDataSender class sends data to the client.
+ * The instance of IDataSender can be obtained using IDataSenderAcceptor when building the server.
  */
-class EventHandlerBase : public IEventHandler, public IDataSenderAcceptor
+class IDataSender
 {
 public:
-    void onConnect(ISessionInfoPtr) noexcept override;
-    void onDisconnect() noexcept override;
+    IDataSender() = default;
+    virtual ~IDataSender() = default;
 
-    void onBinaryDataReceive(const std::vector<char>& data, size_t bytesRemains) noexcept override;
-    void onTextDataReceive(const std::string& message, size_t bytesRemains) noexcept override;
-    void onError(const std::string& errorMessage) noexcept override;
-    void onWarning(const std::string& warningMessage) noexcept override;
+    IDataSender(const IDataSender&) = default;
+    auto operator=(const IDataSender&) -> IDataSender& = default;
 
-    void acceptDataSender(IDataSenderPtr) noexcept override;
+    IDataSender(IDataSender&&) noexcept = default;
+    auto operator=(IDataSender&&) noexcept -> IDataSender& = default;
 
-protected:
-    IDataSenderPtr _dataSender;
+public:
+    // Sends text data to the specified client identified by SessionId.
+    // The provided text data should be valid UTF-8 text.
+    virtual void sendTextData(SessionId, const std::string&) = 0;
+
+    // Sends binary data to the specified client identified by SessionId.
+    virtual void sendBinaryData(SessionId, const std::vector<char>&) = 0;
+
+    // Sends text data to all connected clients.
+    //The provided text data should be valid UTF-8 text.
+    virtual void sendTextData(const std::string&) = 0;
+
+    // Sends binary data to all connected clients.
+    virtual void sendBinaryData(const std::vector<char>&) = 0;
 };
 
-} // namespace ews::cli
+} // namespace ews::srv
