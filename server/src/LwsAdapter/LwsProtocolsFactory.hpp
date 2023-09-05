@@ -1,5 +1,5 @@
 /*
- * EasyWebsockets - C++ wrapper for the libwebsockets library
+ * lwspp - C++ wrapper for the libwebsockets library
  *
  * Copyright (C) 2023 - 2023 Volodymyr Lotoshko <vlotoshko@gmail.com>
  *
@@ -24,7 +24,7 @@
 
 #pragma once
 
-#include "easywebsockets/server/CallbackVersions.hpp"
+#include "lwspp/server/CallbackVersions.hpp"
 #include "LwsAdapter/LwsTypesFwd.hpp"
 
 namespace ews::srv

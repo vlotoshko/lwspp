@@ -1,5 +1,5 @@
 /*
- * EasyWebsockets - C++ wrapper for the libwebsockets library
+ * lwspp - C++ wrapper for the libwebsockets library
  *
  * Copyright (C) 2023 - 2023 Volodymyr Lotoshko <vlotoshko@gmail.com>
  *
@@ -26,7 +26,7 @@
 
 #include <future>
 
-#include "easywebsockets/server/IServer.hpp"
+#include "lwspp/server/IServer.hpp"
 #include "TypesFwd.hpp"
 
 namespace ews::srv

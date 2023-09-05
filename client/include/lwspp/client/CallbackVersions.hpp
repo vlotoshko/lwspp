@@ -1,5 +1,5 @@
 /*
- * EasyWebsockets - C++ wrapper for the libwebsockets library
+ * lwspp - C++ wrapper for the libwebsockets library
  *
  * Copyright (C) 2023 - 2023 Volodymyr Lotoshko <vlotoshko@gmail.com>
  *
@@ -24,27 +24,28 @@
 
 #pragma once
 
-#include <memory>
-
-namespace ews::srv
+namespace ews::cli
 {
 
-class IEventHandler;
-using IEventHandlerPtr = std::shared_ptr<IEventHandler>;
+/**
+ * @brief Enumerates the versions of the lws_callback_function service callback.
+ *
+ * This enumeration is used for maintaining backward compatibility. When changes
+ * to the callback behavior are introduced, a new version of the callback is released.
+ * Users of the library can continue to use the previous callback to maintain the
+ * same behavior as before.
+ */
+enum class CallbackVersion
+{
+    v1_Amsterdam,
 
-class IDataSender;
-using IDataSenderPtr = std::shared_ptr<IDataSender>;
+    // Reserved for future versions
+//    v2_Barcelona,
+//    v3_Chicago,
+//    v4_Dublin,
+//    v5_Eindhoven,
 
-class IDataSenderAcceptor;
-using IDataSenderAcceptorPtr = std::shared_ptr<IDataSenderAcceptor>;
+    Undefined,
+};
 
-class IServer;
-using IServerPtr = std::shared_ptr<IServer>;
-
-class ISessionInfo;
-using ISessionInfoPtr = std::shared_ptr<ISessionInfo>;
-
-class SslSettings;
-using SslSettingsPtr = std::shared_ptr<SslSettings>;
-
-} // namespace ews::srv
+} // namespace ews::cli

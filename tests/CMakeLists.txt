@@ -21,8 +21,8 @@ target_include_directories(${PROJECT_NAME}-tests PRIVATE
 )
 
 target_link_libraries(${PROJECT_NAME}-tests
-    PRIVATE easywebsockets-client
-    PRIVATE easywebsockets-server
+    PRIVATE lwspp-client
+    PRIVATE lwspp-server
     PRIVATE websockets
 )
 

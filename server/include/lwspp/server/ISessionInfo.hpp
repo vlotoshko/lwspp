@@ -1,5 +1,5 @@
 /*
- * EasyWebsockets - C++ wrapper for the libwebsockets library
+ * lwspp - C++ wrapper for the libwebsockets library
  *
  * Copyright (C) 2023 - 2023 Volodymyr Lotoshko <vlotoshko@gmail.com>
  *
@@ -24,28 +24,29 @@
 
 #pragma once
 
+#include "lwspp/server/Types.hpp"
+
 namespace ews::srv
 {
 
 /**
- * @brief The IServer class defines the server interface for interacting with clients.
- *
- * Use the server builder to obtain an instance of the server implementation.
- *
- * @note The server starts listening upon construction and stops listening upon destruction.
- * @note The server operates within a separate thread to handle incoming connections.
+ * @brief The ISessionInfo class provides the information about the connected session
  */
-class IServer
+class ISessionInfo
 {
 public:
-    IServer() = default;
-    virtual ~IServer() = default;
+    ISessionInfo() = default;
+    virtual ~ISessionInfo() = default;
 
-    IServer(IServer&&) = default;
-    auto operator=(IServer&&) noexcept -> IServer& = default;
+    ISessionInfo(ISessionInfo&&) = default;
+    auto operator=(ISessionInfo&&) noexcept -> ISessionInfo& = default;
 
-    IServer(const IServer&) = delete;
-    auto operator=(const IServer&) noexcept -> IServer& = delete;
+    ISessionInfo(const ISessionInfo&) = delete;
+    auto operator=(const ISessionInfo&) noexcept -> ISessionInfo& = delete;
+
+public:
+    virtual auto getSessionId() -> SessionId = 0;
+    virtual auto getPath() -> const Path& = 0;
 };
 
 } // namespace ews::srv

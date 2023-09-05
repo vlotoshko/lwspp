@@ -1,5 +1,5 @@
 /*
- * EasyWebsockets - C++ wrapper for the libwebsockets library
+ * lwspp - C++ wrapper for the libwebsockets library
  *
  * Copyright (C) 2023 - 2023 Volodymyr Lotoshko <vlotoshko@gmail.com>
  *
@@ -24,28 +24,31 @@
 
 #pragma once
 
-namespace ews::cli
-{
+#include "lwspp/server/IEventHandler.hpp"
+#include "lwspp/server/IDataSenderAcceptor.hpp"
 
+namespace ews::srv
+{
 /**
- * @brief Enumerates the versions of the lws_callback_function service callback.
- *
- * This enumeration is used for maintaining backward compatibility. When changes
- * to the callback behavior are introduced, a new version of the callback is released.
- * Users of the library can continue to use the previous callback to maintain the
- * same behavior as before.
+ * @brief The EventHandlerBase class serves as a convenient base class for implementing the IEventHandler interface.
+ * It provides stubs for all overridden methods in the IEventHandler interface and also implements
+ * the IDataSenderAcceptor to obtain the IDataSender.
  */
-enum class CallbackVersion
+class EventHandlerBase : public IEventHandler, public IDataSenderAcceptor
 {
-    v1_Amsterdam,
+public:
+    void onConnect(ISessionInfoPtr) noexcept override;
+    void onDisconnect(SessionId) noexcept override;
 
-    // Reserved for future versions
-//    v2_Barcelona,
-//    v3_Chicago,
-//    v4_Dublin,
-//    v5_Eindhoven,
+    void onBinaryDataReceive(SessionId, const std::vector<char>& data, size_t bytesRemains) noexcept override;
+    void onTextDataReceive(SessionId, const std::string& message, size_t bytesRemains) noexcept override;
+    void onError(SessionId, const std::string& errorMessage) noexcept override;
+    void onWarning(SessionId, const std::string& warningMessage) noexcept override;
 
-    Undefined,
+    void acceptDataSender(IDataSenderPtr) noexcept override;
+
+protected:
+    IDataSenderPtr _dataSender;
 };
 
-} // namespace ews::cli
+} // namespace ews::srv

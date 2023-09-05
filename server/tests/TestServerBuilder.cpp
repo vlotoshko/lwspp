@@ -1,5 +1,5 @@
 /*
- * EasyWebsockets - C++ wrapper for the libwebsockets library
+ * lwspp - C++ wrapper for the libwebsockets library
  *
  * Copyright (C) 2023 - 2023 Volodymyr Lotoshko <vlotoshko@gmail.com>
  *
@@ -24,9 +24,9 @@
 
 #include "catch2/catch.hpp"
 
-#include "easywebsockets/server/EventHandlerBase.hpp"
-#include "easywebsockets/server/ServerBuilder.hpp"
-#include "easywebsockets/server/SslSettingsBuilder.hpp"
+#include "lwspp/server/EventHandlerBase.hpp"
+#include "lwspp/server/ServerBuilder.hpp"
+#include "lwspp/server/SslSettingsBuilder.hpp"
 #include "ServerContext.hpp"
 #include "SslSettings.hpp"
 

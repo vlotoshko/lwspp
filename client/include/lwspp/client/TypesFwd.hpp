@@ -1,5 +1,5 @@
 /*
- * EasyWebsockets - C++ wrapper for the libwebsockets library
+ * lwspp - C++ wrapper for the libwebsockets library
  *
  * Copyright (C) 2023 - 2023 Volodymyr Lotoshko <vlotoshko@gmail.com>
  *
@@ -24,32 +24,27 @@
 
 #pragma once
 
-#include "easywebsockets/client/IDataSenderAcceptor.hpp"
-#include "easywebsockets/client/IEventHandler.hpp"
+#include <memory>
 
 namespace ews::cli
 {
 
-/**
- * @brief The EventHandlerBase class serves as a convenient base class for implementing the IEventHandler interface.
- * It provides stubs for all overridden methods in the IEventHandler interface and also implements
- * the IDataSenderAcceptor to obtain the IDataSender.
- */
-class EventHandlerBase : public IEventHandler, public IDataSenderAcceptor
-{
-public:
-    void onConnect(ISessionInfoPtr) noexcept override;
-    void onDisconnect() noexcept override;
+class IClient;
+using IClientPtr = std::shared_ptr<IClient>;
 
-    void onBinaryDataReceive(const std::vector<char>& data, size_t bytesRemains) noexcept override;
-    void onTextDataReceive(const std::string& message, size_t bytesRemains) noexcept override;
-    void onError(const std::string& errorMessage) noexcept override;
-    void onWarning(const std::string& warningMessage) noexcept override;
+class IDataSender;
+using IDataSenderPtr = std::shared_ptr<IDataSender>;
 
-    void acceptDataSender(IDataSenderPtr) noexcept override;
+class IDataSenderAcceptor;
+using IDataSenderAcceptorPtr = std::shared_ptr<IDataSenderAcceptor>;
 
-protected:
-    IDataSenderPtr _dataSender;
-};
+class IEventHandler;
+using IEventHandlerPtr = std::shared_ptr<IEventHandler>;
+
+class ISessionInfo;
+using ISessionInfoPtr = std::shared_ptr<ISessionInfo>;
+
+class SslSettings;
+using SslSettingsPtr = std::shared_ptr<SslSettings>;
 
 } // namespace ews::cli

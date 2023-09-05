@@ -1,5 +1,5 @@
 /*
- * EasyWebsockets - C++ wrapper for the libwebsockets library
+ * lwspp - C++ wrapper for the libwebsockets library
  *
  * Copyright (C) 2023 - 2023 Volodymyr Lotoshko <vlotoshko@gmail.com>
  *
@@ -27,37 +27,31 @@
 #include <string>
 #include <vector>
 
-#include "easywebsockets/client/TypesFwd.hpp"
-
 namespace ews::cli
 {
 
 /**
- * @brief The IEventHandler class defines an interface for implementing client behavior.
- * Users of the library must implement this interface themselves.
+ * @brief The IDataSender class sends data to the server.
+ * The instance of IDataSender can be obtained using IDataSenderAcceptor when building the client.
  */
-class IEventHandler
+class IDataSender
 {
 public:
-    IEventHandler() = default;
-    virtual ~IEventHandler() = default;
+    IDataSender() = default;
+    virtual ~IDataSender() = default;
 
-    IEventHandler(IEventHandler&&) = default;
-    auto operator=(IEventHandler&&) noexcept -> IEventHandler& = default;
+    IDataSender(const IDataSender&) = default;
+    auto operator=(const IDataSender&) -> IDataSender& = default;
 
-    IEventHandler(const IEventHandler&) = delete;
-    auto operator=(const IEventHandler&) noexcept -> IEventHandler& = delete;
+    IDataSender(IDataSender&&) noexcept = default;
+    auto operator=(IDataSender&&) noexcept -> IDataSender& = default;
 
 public:
-    // Invoked when the client receives binary data from the server.
-    virtual void onBinaryDataReceive(const std::vector<char>& data, size_t bytesRemains) noexcept = 0;
-    // Invoked when the client receives text data from the server. This method expects valid UTF-8 text.
-    virtual void onTextDataReceive(const std::string& message, size_t bytesRemains) noexcept = 0;
+    // Sends text data to the server. The provided text data should be valid UTF-8 text.
+    virtual void sendTextData(const std::string&) = 0;
 
-    virtual void onConnect(ISessionInfoPtr) noexcept = 0;
-    virtual void onDisconnect() noexcept = 0;
-    virtual void onError(const std::string& errorMessage) noexcept = 0;
-    virtual void onWarning(const std::string& errorMessage) noexcept = 0;
+    // Sends binary data to the server
+    virtual void sendBinaryData(const std::vector<char>&) = 0;
 };
 
 } // namespace ews::cli

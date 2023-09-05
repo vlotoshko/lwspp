@@ -1,5 +1,5 @@
 /*
- * EasyWebsockets - C++ wrapper for the libwebsockets library
+ * lwspp - C++ wrapper for the libwebsockets library
  *
  * Copyright (C) 2023 - 2023 Volodymyr Lotoshko <vlotoshko@gmail.com>
  *
@@ -25,15 +25,15 @@
 #include <thread>
 
 #include "catch2/catch.hpp"
-#include "easywebsockets/client/ClientBuilder.hpp"
-#include "easywebsockets/client/IEventHandler.hpp"
-#include "easywebsockets/client/IDataSenderAcceptor.hpp"
-#include "easywebsockets/client/SslSettingsBuilder.hpp"
+#include "lwspp/client/ClientBuilder.hpp"
+#include "lwspp/client/IEventHandler.hpp"
+#include "lwspp/client/IDataSenderAcceptor.hpp"
+#include "lwspp/client/SslSettingsBuilder.hpp"
 
-#include "easywebsockets/server/IEventHandler.hpp"
-#include "easywebsockets/server/IDataSenderAcceptor.hpp"
-#include "easywebsockets/server/ServerBuilder.hpp"
-#include "easywebsockets/server/SslSettingsBuilder.hpp"
+#include "lwspp/server/IEventHandler.hpp"
+#include "lwspp/server/IDataSenderAcceptor.hpp"
+#include "lwspp/server/ServerBuilder.hpp"
+#include "lwspp/server/SslSettingsBuilder.hpp"
 
 #include "MockedPtr.hpp"
 #include "Utils.hpp"

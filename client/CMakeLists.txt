@@ -7,17 +7,17 @@ project(
 )
 
 set(${PROJECT_NAME}_SRC_FILES
-    include/easywebsockets/client/CallbackVersions.hpp
-    include/easywebsockets/client/ClientBuilder.hpp
-    include/easywebsockets/client/IClient.hpp
-    include/easywebsockets/client/IDataSender.hpp
-    include/easywebsockets/client/IDataSenderAcceptor.hpp
-    include/easywebsockets/client/EventHandlerBase.hpp
-    include/easywebsockets/client/IEventHandler.hpp
-    include/easywebsockets/client/ISessionInfo.hpp
-    include/easywebsockets/client/SslSettingsBuilder.hpp
-    include/easywebsockets/client/Types.hpp
-    include/easywebsockets/client/TypesFwd.hpp
+    include/lwspp/client/CallbackVersions.hpp
+    include/lwspp/client/ClientBuilder.hpp
+    include/lwspp/client/IClient.hpp
+    include/lwspp/client/IDataSender.hpp
+    include/lwspp/client/IDataSenderAcceptor.hpp
+    include/lwspp/client/EventHandlerBase.hpp
+    include/lwspp/client/IEventHandler.hpp
+    include/lwspp/client/ISessionInfo.hpp
+    include/lwspp/client/SslSettingsBuilder.hpp
+    include/lwspp/client/Types.hpp
+    include/lwspp/client/TypesFwd.hpp
 
     src/LwsAdapter/ILwsCallbackContext.hpp
     src/LwsAdapter/ILwsSession.hpp
@@ -68,6 +68,6 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
 )
 
 install(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION lib)
-install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/easywebsockets DESTINATION include)
+install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/lwspp DESTINATION include)
 
 add_subdirectory(tests)

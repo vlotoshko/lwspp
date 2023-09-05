@@ -1,5 +1,5 @@
 /*
- * EasyWebsockets - C++ wrapper for the libwebsockets library
+ * lwspp - C++ wrapper for the libwebsockets library
  *
  * Copyright (C) 2023 - 2023 Volodymyr Lotoshko <vlotoshko@gmail.com>
  *
@@ -28,14 +28,14 @@
 #include "catch2/catch.hpp"
 #include "MockedPtr.hpp"
 
-#include "easywebsockets/client/ClientBuilder.hpp"
-#include "easywebsockets/client/IEventHandler.hpp"
-#include "easywebsockets/client/IDataSenderAcceptor.hpp"
+#include "lwspp/client/ClientBuilder.hpp"
+#include "lwspp/client/IEventHandler.hpp"
+#include "lwspp/client/IDataSenderAcceptor.hpp"
 
-#include "easywebsockets/server/IEventHandler.hpp"
-#include "easywebsockets/server/IDataSenderAcceptor.hpp"
-#include "easywebsockets/server/ISessionInfo.hpp"
-#include "easywebsockets/server/ServerBuilder.hpp"
+#include "lwspp/server/IEventHandler.hpp"
+#include "lwspp/server/IDataSenderAcceptor.hpp"
+#include "lwspp/server/ISessionInfo.hpp"
+#include "lwspp/server/ServerBuilder.hpp"
 
 // NOLINTBEGIN (readability-function-cognitive-complexity)
 namespace ews::tests

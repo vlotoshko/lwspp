@@ -1,5 +1,5 @@
 /*
- * EasyWebsockets - C++ wrapper for the libwebsockets library
+ * lwspp - C++ wrapper for the libwebsockets library
  *
  * Copyright (C) 2023 - 2023 Volodymyr Lotoshko <vlotoshko@gmail.com>
  *
@@ -24,29 +24,32 @@
 
 #pragma once
 
+#include "lwspp/client/IDataSenderAcceptor.hpp"
+#include "lwspp/client/IEventHandler.hpp"
+
 namespace ews::cli
 {
 
 /**
- * @brief The IClient class defines the client interface for interacting with a server.
- *
- * Use the client builder to obtain an instance of the client implementation.
- *
- * @note The client automatically connects upon construction and disconnects upon destruction.
- * @note The client operates within a separate thread to establish and maintain the connection
- * with the server.
+ * @brief The EventHandlerBase class serves as a convenient base class for implementing the IEventHandler interface.
+ * It provides stubs for all overridden methods in the IEventHandler interface and also implements
+ * the IDataSenderAcceptor to obtain the IDataSender.
  */
-class IClient
+class EventHandlerBase : public IEventHandler, public IDataSenderAcceptor
 {
 public:
-    IClient() = default;
-    virtual ~IClient() = default;
+    void onConnect(ISessionInfoPtr) noexcept override;
+    void onDisconnect() noexcept override;
 
-    IClient(IClient&&) = default;
-    auto operator=(IClient&&) noexcept -> IClient& = default;
+    void onBinaryDataReceive(const std::vector<char>& data, size_t bytesRemains) noexcept override;
+    void onTextDataReceive(const std::string& message, size_t bytesRemains) noexcept override;
+    void onError(const std::string& errorMessage) noexcept override;
+    void onWarning(const std::string& warningMessage) noexcept override;
 
-    IClient(const IClient&) = delete;
-    auto operator=(const IClient&) noexcept -> IClient& = delete;
+    void acceptDataSender(IDataSenderPtr) noexcept override;
+
+protected:
+    IDataSenderPtr _dataSender;
 };
 
 } // namespace ews::cli

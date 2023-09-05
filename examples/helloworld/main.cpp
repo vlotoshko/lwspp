@@ -1,5 +1,5 @@
 /*
- * EasyWebsockets - C++ wrapper for the libwebsockets library
+ * lwspp - C++ wrapper for the libwebsockets library
  *
  * Copyright (C) 2023 - 2023 Volodymyr Lotoshko <vlotoshko@gmail.com>
  *
@@ -25,13 +25,13 @@
 #include <iostream>
 #include <thread>
 
-#include "easywebsockets/client/ClientBuilder.hpp"
-#include "easywebsockets/client/EventHandlerBase.hpp"
-#include "easywebsockets/client/IDataSender.hpp"
+#include "lwspp/client/ClientBuilder.hpp"
+#include "lwspp/client/EventHandlerBase.hpp"
+#include "lwspp/client/IDataSender.hpp"
 
-#include "easywebsockets/server/EventHandlerBase.hpp"
-#include "easywebsockets/server/IDataSender.hpp"
-#include "easywebsockets/server/ServerBuilder.hpp"
+#include "lwspp/server/EventHandlerBase.hpp"
+#include "lwspp/server/IDataSender.hpp"
+#include "lwspp/server/ServerBuilder.hpp"
 
 using namespace ews;
 

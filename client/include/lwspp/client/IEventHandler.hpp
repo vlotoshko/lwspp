@@ -1,5 +1,5 @@
 /*
- * EasyWebsockets - C++ wrapper for the libwebsockets library
+ * lwspp - C++ wrapper for the libwebsockets library
  *
  * Copyright (C) 2023 - 2023 Volodymyr Lotoshko <vlotoshko@gmail.com>
  *
@@ -27,14 +27,13 @@
 #include <string>
 #include <vector>
 
-#include "easywebsockets/server/Types.hpp"
-#include "easywebsockets/server/TypesFwd.hpp"
+#include "lwspp/client/TypesFwd.hpp"
 
-namespace ews::srv
+namespace ews::cli
 {
 
 /**
- * @brief The IEventHandler class defines an interface for implementing server behavior.
+ * @brief The IEventHandler class defines an interface for implementing client behavior.
  * Users of the library must implement this interface themselves.
  */
 class IEventHandler
@@ -50,15 +49,15 @@ public:
     auto operator=(const IEventHandler&) noexcept -> IEventHandler& = delete;
 
 public:
-    // Invoked when the server receives binary data from the client.
-    virtual void onBinaryDataReceive(SessionId, const std::vector<char>& data, size_t bytesRemains) noexcept = 0;
-    // Invoked when the server receives text data from the client. This method expects valid UTF-8 text.
-    virtual void onTextDataReceive(SessionId, const std::string& message, size_t bytesRemains) noexcept = 0;
+    // Invoked when the client receives binary data from the server.
+    virtual void onBinaryDataReceive(const std::vector<char>& data, size_t bytesRemains) noexcept = 0;
+    // Invoked when the client receives text data from the server. This method expects valid UTF-8 text.
+    virtual void onTextDataReceive(const std::string& message, size_t bytesRemains) noexcept = 0;
 
     virtual void onConnect(ISessionInfoPtr) noexcept = 0;
-    virtual void onDisconnect(SessionId) noexcept = 0;
-    virtual void onError(SessionId, const std::string& errorMessage) noexcept = 0;
-    virtual void onWarning(SessionId, const std::string& errorMessage) noexcept = 0;
+    virtual void onDisconnect() noexcept = 0;
+    virtual void onError(const std::string& errorMessage) noexcept = 0;
+    virtual void onWarning(const std::string& errorMessage) noexcept = 0;
 };
 
-} // namespace ews::srv
+} // namespace ews::cli

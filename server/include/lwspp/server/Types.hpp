@@ -1,5 +1,5 @@
 /*
- * EasyWebsockets - C++ wrapper for the libwebsockets library
+ * lwspp - C++ wrapper for the libwebsockets library
  *
  * Copyright (C) 2023 - 2023 Volodymyr Lotoshko <vlotoshko@gmail.com>
  *
@@ -24,23 +24,14 @@
 
 #pragma once
 
-namespace ews::cli
+#include <string>
+
+namespace ews::srv
 {
 
-/**
- * @brief The ISessionInfo class provides the information about the connected session
- */
-class ISessionInfo
-{
-public:
-    ISessionInfo() = default;
-    virtual ~ISessionInfo() = default;
+// TODO: consider strong types using
+using Port = int;
+using SessionId = int;
+using Path = std::string;
 
-    ISessionInfo(ISessionInfo&&) = default;
-    auto operator=(ISessionInfo&&) noexcept -> ISessionInfo& = default;
-
-    ISessionInfo(const ISessionInfo&) = delete;
-    auto operator=(const ISessionInfo&) noexcept -> ISessionInfo& = delete;
-};
-
-} // namespace ews::cli
+} // namespace ews::srv

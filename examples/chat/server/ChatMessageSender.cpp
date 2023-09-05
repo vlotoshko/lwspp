@@ -1,5 +1,5 @@
 /*
- * EasyWebsockets - C++ wrapper for the libwebsockets library
+ * lwspp - C++ wrapper for the libwebsockets library
  *
  * Copyright (C) 2023 - 2023 Volodymyr Lotoshko <vlotoshko@gmail.com>
  *
@@ -22,7 +22,7 @@
  * IN THE SOFTWARE.
  */
 
-#include "easywebsockets/server/IDataSender.hpp"
+#include "lwspp/server/IDataSender.hpp"
 
 #include "ChatMessageSender.hpp"
 

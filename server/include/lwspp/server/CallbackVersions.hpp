@@ -1,5 +1,5 @@
 /*
- * EasyWebsockets - C++ wrapper for the libwebsockets library
+ * lwspp - C++ wrapper for the libwebsockets library
  *
  * Copyright (C) 2023 - 2023 Volodymyr Lotoshko <vlotoshko@gmail.com>
  *
@@ -24,29 +24,28 @@
 
 #pragma once
 
-#include "easywebsockets/server/Types.hpp"
-
 namespace ews::srv
 {
 
 /**
- * @brief The ISessionInfo class provides the information about the connected session
+ * @brief Enumerates the versions of the lws_callback_function service callback.
+ *
+ * This enumeration is used for maintaining backward compatibility. When changes
+ * to the callback behavior are introduced, a new version of the callback is released.
+ * Users of the library can continue to use the previous callback to maintain the
+ * same behavior as before.
  */
-class ISessionInfo
+enum class CallbackVersion
 {
-public:
-    ISessionInfo() = default;
-    virtual ~ISessionInfo() = default;
+    v1_Andromeda,
 
-    ISessionInfo(ISessionInfo&&) = default;
-    auto operator=(ISessionInfo&&) noexcept -> ISessionInfo& = default;
+    // Reserved for future versions
+//    v2_BlackHole,
+//    v3_Chaos,
+//    v4_DarkEnergy,
+//    v5_Entropy,
 
-    ISessionInfo(const ISessionInfo&) = delete;
-    auto operator=(const ISessionInfo&) noexcept -> ISessionInfo& = delete;
-
-public:
-    virtual auto getSessionId() -> SessionId = 0;
-    virtual auto getPath() -> const Path& = 0;
+    Undefined,
 };
 
 } // namespace ews::srv

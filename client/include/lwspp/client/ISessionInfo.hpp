@@ -1,5 +1,5 @@
 /*
- * EasyWebsockets - C++ wrapper for the libwebsockets library
+ * lwspp - C++ wrapper for the libwebsockets library
  *
  * Copyright (C) 2023 - 2023 Volodymyr Lotoshko <vlotoshko@gmail.com>
  *
@@ -24,31 +24,23 @@
 
 #pragma once
 
-#include "easywebsockets/server/IEventHandler.hpp"
-#include "easywebsockets/server/IDataSenderAcceptor.hpp"
-
-namespace ews::srv
+namespace ews::cli
 {
+
 /**
- * @brief The EventHandlerBase class serves as a convenient base class for implementing the IEventHandler interface.
- * It provides stubs for all overridden methods in the IEventHandler interface and also implements
- * the IDataSenderAcceptor to obtain the IDataSender.
+ * @brief The ISessionInfo class provides the information about the connected session
  */
-class EventHandlerBase : public IEventHandler, public IDataSenderAcceptor
+class ISessionInfo
 {
 public:
-    void onConnect(ISessionInfoPtr) noexcept override;
-    void onDisconnect(SessionId) noexcept override;
+    ISessionInfo() = default;
+    virtual ~ISessionInfo() = default;
 
-    void onBinaryDataReceive(SessionId, const std::vector<char>& data, size_t bytesRemains) noexcept override;
-    void onTextDataReceive(SessionId, const std::string& message, size_t bytesRemains) noexcept override;
-    void onError(SessionId, const std::string& errorMessage) noexcept override;
-    void onWarning(SessionId, const std::string& warningMessage) noexcept override;
+    ISessionInfo(ISessionInfo&&) = default;
+    auto operator=(ISessionInfo&&) noexcept -> ISessionInfo& = default;
 
-    void acceptDataSender(IDataSenderPtr) noexcept override;
-
-protected:
-    IDataSenderPtr _dataSender;
+    ISessionInfo(const ISessionInfo&) = delete;
+    auto operator=(const ISessionInfo&) noexcept -> ISessionInfo& = delete;
 };
 
-} // namespace ews::srv
+} // namespace ews::cli

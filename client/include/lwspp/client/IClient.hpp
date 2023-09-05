@@ -1,5 +1,5 @@
 /*
- * EasyWebsockets - C++ wrapper for the libwebsockets library
+ * lwspp - C++ wrapper for the libwebsockets library
  *
  * Copyright (C) 2023 - 2023 Volodymyr Lotoshko <vlotoshko@gmail.com>
  *
@@ -24,34 +24,29 @@
 
 #pragma once
 
-#include <string>
-#include <vector>
-
 namespace ews::cli
 {
 
 /**
- * @brief The IDataSender class sends data to the server.
- * The instance of IDataSender can be obtained using IDataSenderAcceptor when building the client.
+ * @brief The IClient class defines the client interface for interacting with a server.
+ *
+ * Use the client builder to obtain an instance of the client implementation.
+ *
+ * @note The client automatically connects upon construction and disconnects upon destruction.
+ * @note The client operates within a separate thread to establish and maintain the connection
+ * with the server.
  */
-class IDataSender
+class IClient
 {
 public:
-    IDataSender() = default;
-    virtual ~IDataSender() = default;
+    IClient() = default;
+    virtual ~IClient() = default;
 
-    IDataSender(const IDataSender&) = default;
-    auto operator=(const IDataSender&) -> IDataSender& = default;
+    IClient(IClient&&) = default;
+    auto operator=(IClient&&) noexcept -> IClient& = default;
 
-    IDataSender(IDataSender&&) noexcept = default;
-    auto operator=(IDataSender&&) noexcept -> IDataSender& = default;
-
-public:
-    // Sends text data to the server. The provided text data should be valid UTF-8 text.
-    virtual void sendTextData(const std::string&) = 0;
-
-    // Sends binary data to the server
-    virtual void sendBinaryData(const std::vector<char>&) = 0;
+    IClient(const IClient&) = delete;
+    auto operator=(const IClient&) noexcept -> IClient& = delete;
 };
 
 } // namespace ews::cli

@@ -1,5 +1,5 @@
 /*
- * EasyWebsockets - C++ wrapper for the libwebsockets library
+ * lwspp - C++ wrapper for the libwebsockets library
  *
  * Copyright (C) 2023 - 2023 Volodymyr Lotoshko <vlotoshko@gmail.com>
  *
@@ -24,7 +24,7 @@
 
 #include <stdexcept>
 
-#include "easywebsockets/client/ClientBuilder.hpp"
+#include "lwspp/client/ClientBuilder.hpp"
 #include "Client.hpp"
 #include "ClientContext.hpp"
 #include "SslSettings.hpp"

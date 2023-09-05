@@ -1,5 +1,5 @@
 /*
- * EasyWebsockets - C++ wrapper for the libwebsockets library
+ * lwspp - C++ wrapper for the libwebsockets library
  *
  * Copyright (C) 2023 - 2023 Volodymyr Lotoshko <vlotoshko@gmail.com>
  *
@@ -24,33 +24,28 @@
 
 #pragma once
 
-#include "easywebsockets/client/TypesFwd.hpp"
-
-namespace ews::cli
+namespace ews::srv
 {
 
 /**
- * @brief Accepts an IDataSender instance from the client builder.
+ * @brief The IServer class defines the server interface for interacting with clients.
  *
- * The client builder provides an IDataSender instance when constructing the client.
- * To utilize the IDataSender, set your instance of IDataSenderAcceptor to the client builder
- * and obtain the IDataSender to transfer the data from the client to the server.
- * Users of the library must implement this interface themselves.
+ * Use the server builder to obtain an instance of the server implementation.
+ *
+ * @note The server starts listening upon construction and stops listening upon destruction.
+ * @note The server operates within a separate thread to handle incoming connections.
  */
-class IDataSenderAcceptor
+class IServer
 {
 public:
-    IDataSenderAcceptor() = default;
-    virtual ~IDataSenderAcceptor() = default;
+    IServer() = default;
+    virtual ~IServer() = default;
 
-    IDataSenderAcceptor(const IDataSenderAcceptor&) = default;
-    auto operator=(const IDataSenderAcceptor&) noexcept -> IDataSenderAcceptor& = default;
+    IServer(IServer&&) = default;
+    auto operator=(IServer&&) noexcept -> IServer& = default;
 
-    IDataSenderAcceptor(IDataSenderAcceptor&&) = default;
-    auto operator=(IDataSenderAcceptor&&) noexcept -> IDataSenderAcceptor& = default;
-
-public:
-    virtual void acceptDataSender(IDataSenderPtr) noexcept = 0;
+    IServer(const IServer&) = delete;
+    auto operator=(const IServer&) noexcept -> IServer& = delete;
 };
 
-} // namespace ews::cli
+} // namespace ews::srv

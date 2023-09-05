@@ -1,5 +1,5 @@
 /*
- * EasyWebsockets - C++ wrapper for the libwebsockets library
+ * lwspp - C++ wrapper for the libwebsockets library
  *
  * Copyright (C) 2023 - 2023 Volodymyr Lotoshko <vlotoshko@gmail.com>
  *
@@ -24,27 +24,12 @@
 
 #pragma once
 
-#include <memory>
+#include "lwspp/server/Types.hpp"
 
-namespace ews::cli
+namespace ews::srv
 {
 
-class IClient;
-using IClientPtr = std::shared_ptr<IClient>;
+const SessionId UNDEFINED_SESSION_ID = static_cast<int>(0U - 1);
+const SessionId ALL_SESSIONS = static_cast<int>(0U - 2);
 
-class IDataSender;
-using IDataSenderPtr = std::shared_ptr<IDataSender>;
-
-class IDataSenderAcceptor;
-using IDataSenderAcceptorPtr = std::shared_ptr<IDataSenderAcceptor>;
-
-class IEventHandler;
-using IEventHandlerPtr = std::shared_ptr<IEventHandler>;
-
-class ISessionInfo;
-using ISessionInfoPtr = std::shared_ptr<ISessionInfo>;
-
-class SslSettings;
-using SslSettingsPtr = std::shared_ptr<SslSettings>;
-
-} // namespace ews::cli
+} // namespace ews::srv

@@ -1,5 +1,5 @@
 /*
- * EasyWebsockets - C++ wrapper for the libwebsockets library
+ * lwspp - C++ wrapper for the libwebsockets library
  *
  * Copyright (C) 2023 - 2023 Volodymyr Lotoshko <vlotoshko@gmail.com>
  *
@@ -24,14 +24,27 @@
 
 #pragma once
 
-#include <string>
+#include <memory>
 
 namespace ews::srv
 {
 
-// TODO: consider strong types using
-using Port = int;
-using SessionId = int;
-using Path = std::string;
+class IEventHandler;
+using IEventHandlerPtr = std::shared_ptr<IEventHandler>;
+
+class IDataSender;
+using IDataSenderPtr = std::shared_ptr<IDataSender>;
+
+class IDataSenderAcceptor;
+using IDataSenderAcceptorPtr = std::shared_ptr<IDataSenderAcceptor>;
+
+class IServer;
+using IServerPtr = std::shared_ptr<IServer>;
+
+class ISessionInfo;
+using ISessionInfoPtr = std::shared_ptr<ISessionInfo>;
+
+class SslSettings;
+using SslSettingsPtr = std::shared_ptr<SslSettings>;
 
 } // namespace ews::srv
