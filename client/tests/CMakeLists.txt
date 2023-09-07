@@ -14,8 +14,14 @@ target_include_directories(${PROJECT_NAME}-tests PRIVATE
     ${PROJECT_SOURCE_DIR}/src
 )
 
+if(OPTION_BUILD_STATIC)
+    set(TARGET_LWSPP_CLIENT ${TARGET_LWSPP_CLIENT_STATIC})
+else()
+    set(TARGET_LWSPP_CLIENT ${TARGET_LWSPP_CLIENT_SHARED})
+endif()
+
 target_link_libraries(${PROJECT_NAME}-tests
-    PRIVATE lwspp-client
+    PRIVATE ${TARGET_LWSPP_CLIENT}
     PRIVATE websockets
 )
 

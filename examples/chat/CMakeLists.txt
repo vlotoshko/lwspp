@@ -1,4 +1,11 @@
 cmake_minimum_required(VERSION 3.9)
+
+if("${PROJECT_NAME}" STREQUAL "")
+    set(PROJECT_NAME lwspp)
+    set(STANDALONE_PROJECT TRUE)
+endif()
+
+
 project(
     ${PROJECT_NAME}-chat
     VERSION 0.0.1
@@ -25,8 +32,18 @@ target_include_directories(${PROJECT_NAME} PRIVATE
     ${WebsocketServer_INCLUDE_DIR}
 )
 
+if(STANDALONE_PROJECT)
+    set(TARGET_LWSPP_SERVER lwspp-server)
+else()
+    if(OPTION_BUILD_STATIC)
+        set(TARGET_LWSPP_SERVER ${TARGET_LWSPP_SERVER_STATIC})
+    else()
+        set(TARGET_LWSPP_SERVER ${TARGET_LWSPP_SERVER_SHARED})
+    endif()
+endif()
+
 target_link_libraries(${PROJECT_NAME}
-    PRIVATE lwspp-server
+    PRIVATE ${TARGET_LWSPP_SERVER}
     PRIVATE websockets
 )
 

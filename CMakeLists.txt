@@ -6,9 +6,11 @@ project(
     LANGUAGES C CXX
 )
 
-set(CMAKE_CXX_FLAGS "-Wall -Wextra -Wpedantic")
+set(CMAKE_CXX_FLAGS "-Wall -Wextra -Wpedantic -fPIC")
 set(CMAKE_EXE_LINKER_FLAGS ${LINKER_FLAGS})
 
+option(OPTION_BUILD_STATIC "Build static lwspp libraries" ON)
+option(OPTION_BUILD_SHARED "Build shared lwspp libraries" ON)
 option(OPTION_BUILD_CLIENT "Build lwspp client library" ON)
 option(OPTION_BUILD_SERVER "Build lwspp server library" ON)
 option(OPTION_BUILD_EXAMPLES "Build examples" ON)
@@ -19,8 +21,12 @@ set(WEBSOCKETS_GITHUB_TAG "" CACHE STRING
     "If set the websocket library of the correspondent version from github will be downloaded and used.
 Example of version: v4.3.0")
 
+if(NOT OPTION_BUILD_STATIC AND NOT OPTION_BUILD_SHARED)
+    message(FATAL_ERROR "Nothing to build. Please specify what libraries to build - static, shared, or both.")
+endif()
+
 if(NOT OPTION_BUILD_CLIENT AND NOT OPTION_BUILD_SERVER)
-    message(FATAL_ERROR "Nothing to build. Please specify what to build - server, client, or both.")
+    message(FATAL_ERROR "Nothing to build. Please specify what libraries to build - server, client, or both.")
 endif()
 
 if(OPTION_BUILD_INTEGRATION_TESTS AND (NOT OPTION_BUILD_CLIENT OR NOT OPTION_BUILD_SERVER))
@@ -38,19 +44,20 @@ if(NOT ${WEBSOCKETS_GITHUB_TAG} STREQUAL "")
     set(WEBSOCKETS_DIR ${CMAKE_BINARY_DIR}/websockets/${WEBSOCKETS_GITHUB_TAG})
     set(WEBSOCKETS_HEADERS ${WEBSOCKETS_DIR}/include)
 
+    # Download libwebsockets sources
     add_subdirectory(websockets EXCLUDE_FROM_ALL)
 
-    # Configure websockets
+    # Configure libwebsockets
     execute_process(
         COMMAND ${CMAKE_COMMAND} ${CMAKE_SOURCE_DIR}/websockets
         -DWEBSOCKETS_GITHUB_TAG=${WEBSOCKETS_GITHUB_TAG}
         -DWEBSOCKETS_DIR=${WEBSOCKETS_DIR}
         WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/websockets)
 
-    # Build websockets
+    # Build libwebsockets
     execute_process(COMMAND ${CMAKE_COMMAND} --build ${CMAKE_BINARY_DIR}/websockets)
 
-    # Install websockets
+    # Install libwebsockets
     execute_process(COMMAND ${CMAKE_COMMAND} --install ${CMAKE_BINARY_DIR}/websockets)
 endif()
 
