@@ -38,7 +38,9 @@
 #include "lwspp/server/ServerBuilder.hpp"
 
 // NOLINTBEGIN (readability-function-cognitive-complexity)
-namespace ews::tests
+namespace lwspp
+{
+namespace tests
 {
 
 using namespace fakeit;
@@ -385,5 +387,6 @@ SCENARIO( "Keep alive feature testing", "[.keep_alive]" )
     } // GIVEN
 }
 
-} // namespace ews::tests
+} // namespace tests
+} // namespace lwspp
 // NOLINTEND (readability-function-cognitive-complexity)

@@ -24,7 +24,9 @@
 
 #include "lwspp/server/EventHandlerBase.hpp"
 
-namespace ews::srv
+namespace lwspp
+{
+namespace srv
 {
 
 void EventHandlerBase::onConnect(ISessionInfoPtr) noexcept
@@ -50,4 +52,5 @@ void EventHandlerBase::acceptDataSender(IDataSenderPtr dataSender) noexcept
     _dataSender = std::move(dataSender);
 }
 
-} // namespace ews::srv
+} // namespace srv
+} // namespace lwspp

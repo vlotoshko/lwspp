@@ -26,7 +26,9 @@
 
 #include "LwsAdapter/LwsTypesFwd.hpp"
 
-namespace ews::srv
+namespace lwspp
+{
+namespace srv
 {
 
 /**
@@ -52,4 +54,5 @@ public:
     virtual void notifyPendingDataAdded() = 0;
 };
 
-} // namespace ews::srv
+} // namespace srv
+} // namespace lwspp

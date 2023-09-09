@@ -30,7 +30,9 @@
 #include "LwsAdapter/LwsTypes.hpp"
 #include "LwsAdapter/LwsTypesFwd.hpp"
 
-namespace ews::cli
+namespace lwspp
+{
+namespace cli
 {
 
 /**
@@ -56,4 +58,5 @@ public:
     virtual auto getPendingData() -> std::queue<Message>& = 0;
 };
 
-} // namespace ews::cli
+} // namespace cli
+} // namespace lwspp

@@ -29,7 +29,9 @@
 #include "lwspp/server/Consts.hpp"
 #include "lwspp/server/Types.hpp"
 
-namespace ews::chat
+namespace lwspp
+{
+namespace chat
 {
 
 struct User
@@ -45,4 +47,5 @@ struct Message
     std::string text;
 };
 
-} // namespace ews::chat
+} // namespace chat
+} // namespace lwspp

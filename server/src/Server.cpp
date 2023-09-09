@@ -25,7 +25,9 @@
 #include "LwsAdapter/LwsServer.hpp"
 #include "Server.hpp"
 
-namespace ews::srv
+namespace lwspp
+{
+namespace srv
 {
 
 Server::Server(const ServerContext& context)
@@ -50,4 +52,5 @@ Server::~Server()
     _serverStop.wait();
 }
 
-} // namespace ews::srv
+} // namespace srv
+} // namespace lwspp

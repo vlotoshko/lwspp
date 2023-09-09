@@ -29,7 +29,9 @@
 
 #include "lwspp/server/Types.hpp"
 
-namespace ews::srv
+namespace lwspp
+{
+namespace srv
 {
 
 /**
@@ -64,4 +66,5 @@ public:
     virtual void sendBinaryData(const std::vector<char>&) = 0;
 };
 
-} // namespace ews::srv
+} // namespace srv
+} // namespace lwspp

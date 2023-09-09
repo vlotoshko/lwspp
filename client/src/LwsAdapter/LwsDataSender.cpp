@@ -25,7 +25,9 @@
 #include "LwsAdapter/ILwsSession.hpp"
 #include "LwsAdapter/LwsDataSender.hpp"
 
-namespace ews::cli
+namespace lwspp
+{
+namespace cli
 {
 
 LwsDataSender::LwsDataSender(const ILwsSessionPtr& s)
@@ -50,4 +52,5 @@ void LwsDataSender::sendBinaryData(const std::vector<char>& data)
     }
 }
 
-} // namespace ews::cli
+} // namespace cli
+} // namespace lwspp

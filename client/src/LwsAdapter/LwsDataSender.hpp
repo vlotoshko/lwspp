@@ -28,7 +28,9 @@
 
 #include "LwsAdapter/LwsTypesFwd.hpp"
 
-namespace ews::cli
+namespace lwspp
+{
+namespace cli
 {
 
 class LwsDataSender : public IDataSender
@@ -43,4 +45,5 @@ private:
     ILwsSessionWeak _session;
 };
 
-} // namespace ews::cli
+} // namespace cli
+} // namespace lwspp

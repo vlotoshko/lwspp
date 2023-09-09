@@ -27,7 +27,9 @@
 #include "lwspp/client/IDataSenderAcceptor.hpp"
 #include "lwspp/client/IEventHandler.hpp"
 
-namespace ews::cli
+namespace lwspp
+{
+namespace cli
 {
 
 /**
@@ -52,4 +54,5 @@ protected:
     IDataSenderPtr _dataSender;
 };
 
-} // namespace ews::cli
+} // namespace cli
+} // namespace lwspp

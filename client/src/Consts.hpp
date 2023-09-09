@@ -27,7 +27,9 @@
 #include "lwspp/client/CallbackVersions.hpp"
 #include "lwspp/client/Types.hpp"
 
-namespace ews::cli
+namespace lwspp
+{
+namespace cli
 {
 
 const CallbackVersion UNDEFINED_CALLBACK_VERSION = CallbackVersion::Undefined;
@@ -41,4 +43,5 @@ const std::string DEFAULT_PROTOCOL_NAME;
 // 7 = LLL_ERR | LLL_WARN | LLL_NOTICE - default value for the libwebsockets 4.3.2
 const int DEFAULT_LWS_LOG_LEVEL = 7;
 
-} // namespace ews::cli
+} // namespace cli
+} // namespace lwspp

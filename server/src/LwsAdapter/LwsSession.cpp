@@ -24,7 +24,9 @@
 
 #include "LwsAdapter/LwsSession.hpp"
 
-namespace ews::srv
+namespace lwspp
+{
+namespace srv
 {
 
 namespace
@@ -85,4 +87,5 @@ auto LwsSession::getPendingData() -> std::queue<Message>&
     return _pendingDataToSend;
 }
 
-} // namespace ews::srv
+} // namespace srv
+} // namespace lwspp

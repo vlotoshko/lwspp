@@ -26,7 +26,9 @@
 #include "LwsAdapter/LwsProtocolsFactory.hpp"
 #include "ServerContext.hpp"
 
-namespace ews::srv
+namespace lwspp
+{
+namespace srv
 {
 
 LwsDataHolder::LwsDataHolder(const ServerContext& context)
@@ -42,4 +44,5 @@ LwsDataHolder::LwsDataHolder(const ServerContext& context)
     , keepAliveProbes(context.keepAliveProbes)
 {}
 
-} // namespace ews::srv
+} // namespace srv
+} // namespace lwspp

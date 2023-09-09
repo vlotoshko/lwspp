@@ -27,7 +27,9 @@
 #include "lwspp/server/IEventHandler.hpp"
 #include "lwspp/server/IDataSenderAcceptor.hpp"
 
-namespace ews::srv
+namespace lwspp
+{
+namespace srv
 {
 /**
  * @brief The EventHandlerBase class serves as a convenient base class for implementing the IEventHandler interface.
@@ -51,4 +53,5 @@ protected:
     IDataSenderPtr _dataSender;
 };
 
-} // namespace ews::srv
+} // namespace srv
+} // namespace lwspp

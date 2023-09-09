@@ -26,7 +26,9 @@
 
 #include "SslSettings.hpp"
 
-namespace ews::cli
+namespace lwspp
+{
+namespace cli
 {
 
 SslSettingsBuilder::SslSettingsBuilder() : _settings(new SslSettings{})
@@ -112,4 +114,5 @@ auto SslSettingsBuilder::ignoreServerCaSert() -> SslSettingsBuilder&
     return *this;
 }
 
-} // namespace ews::cli
+} // namespace cli
+} // namespace lwspp

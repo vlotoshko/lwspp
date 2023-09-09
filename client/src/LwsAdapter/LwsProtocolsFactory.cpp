@@ -25,7 +25,9 @@
 #include "LwsAdapter/LwsCallback.hpp"
 #include "LwsAdapter/LwsProtocolsFactory.hpp"
 
-namespace ews::cli
+namespace lwspp
+{
+namespace cli
 {
 namespace
 {
@@ -62,4 +64,5 @@ auto createLwsProtocols(CallbackVersion version) -> LwsProtocols
     };
 }
 
-} // namespace ews::cli
+} // namespace cli
+} // namespace lwspp

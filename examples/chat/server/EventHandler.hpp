@@ -32,7 +32,9 @@
 #include "ChatMessageSender.hpp"
 #include "Types.hpp"
 
-namespace ews::chat
+namespace lwspp
+{
+namespace chat
 {
 
 class EventHandler : public srv::EventHandlerBase
@@ -57,4 +59,5 @@ private:
     std::map<srv::SessionId, User> _users;
 };
 
-} // namespace ews::chat
+} // namespace chat
+} // namespace lwspp

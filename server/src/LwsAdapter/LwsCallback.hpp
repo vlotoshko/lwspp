@@ -26,7 +26,9 @@
 
 #include <libwebsockets.h>
 
-namespace ews::srv
+namespace lwspp
+{
+namespace srv
 {
 
 /**
@@ -48,4 +50,5 @@ auto lwsCallback_v1(
         size_t len)
 -> int;
 
-} // namespace ews::srv
+} // namespace srv
+} // namespace lwspp

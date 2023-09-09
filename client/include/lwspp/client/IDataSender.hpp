@@ -27,9 +27,10 @@
 #include <string>
 #include <vector>
 
-namespace ews::cli
+namespace lwspp
 {
-
+namespace cli
+{
 /**
  * @brief The IDataSender class sends data to the server.
  * The instance of IDataSender can be obtained using IDataSenderAcceptor when building the client.
@@ -54,4 +55,5 @@ public:
     virtual void sendBinaryData(const std::vector<char>&) = 0;
 };
 
-} // namespace ews::cli
+} // namespace cli
+} // namespace lwspp

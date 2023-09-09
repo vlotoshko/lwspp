@@ -30,7 +30,9 @@
 
 #include "LwsAdapter/ILwsSession.hpp"
 
-namespace ews::srv
+namespace lwspp
+{
+namespace srv
 {
 
 class LwsSession : public ILwsSession
@@ -53,4 +55,5 @@ private:
     std::mutex _mutex;
 };
 
-} // namespace ews::srv
+} // namespace srv
+} // namespace lwspp

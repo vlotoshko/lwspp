@@ -24,7 +24,9 @@
 
 #pragma once
 
-namespace ews::srv
+namespace lwspp
+{
+namespace srv
 {
 
 /**
@@ -48,4 +50,5 @@ public:
     auto operator=(const IServer&) noexcept -> IServer& = delete;
 };
 
-} // namespace ews::srv
+} // namespace srv
+} // namespace lwspp

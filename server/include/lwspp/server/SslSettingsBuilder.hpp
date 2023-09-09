@@ -28,8 +28,11 @@
 
 #include "lwspp/server/TypesFwd.hpp"
 
-namespace ews::srv
+namespace lwspp
 {
+namespace srv
+{
+
 /**
  * @brief The SslSettingsBuilder class constructs SSL settings that can be utilized by the
  * server builder to build a server supporting SSL connections.
@@ -65,4 +68,5 @@ private:
     std::unique_ptr<SslSettings> _settings;
 };
 
-} // namespace ews::srv
+} // namespace srv
+} // namespace lwspp

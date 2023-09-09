@@ -47,7 +47,7 @@ auto main() -> int
 {
     signal(SIGINT, signalHandler);
 
-    using namespace ews;
+    using namespace lwspp;
     const srv::Port PORT = 9000;
 
     auto eventHandler = std::make_shared<chat::EventHandler>();

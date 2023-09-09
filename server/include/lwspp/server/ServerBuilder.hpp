@@ -28,7 +28,9 @@
 #include "lwspp/server/Types.hpp"
 #include "lwspp/server/TypesFwd.hpp"
 
-namespace ews::srv
+namespace lwspp
+{
+namespace srv
 {
 
 class ServerContext;
@@ -75,4 +77,5 @@ private:
     friend class TestServerBuilder;
 };
 
-} // namespace ews::srv
+} // namespace srv
+} // namespace lwspp

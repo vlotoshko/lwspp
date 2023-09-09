@@ -24,7 +24,9 @@
 
 #pragma once
 
-namespace ews::cli
+namespace lwspp
+{
+namespace cli
 {
 
 /**
@@ -49,4 +51,5 @@ public:
     auto operator=(const IClient&) noexcept -> IClient& = delete;
 };
 
-} // namespace ews::cli
+} // namespace cli
+} // namespace lwspp

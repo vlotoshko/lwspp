@@ -29,7 +29,9 @@
 #include "LwsAdapter/LwsCallbackContext.hpp"
 #include "LwsAdapter/LwsDataSender.hpp"
 
-namespace ews::cli
+namespace lwspp
+{
+namespace cli
 {
 
 LwsCallbackContext::LwsCallbackContext(IEventHandlerPtr e, IDataSenderAcceptorPtr a)
@@ -74,4 +76,5 @@ void LwsCallbackContext::resetSession()
     _session.reset();
 }
 
-} // namespace ews::cli
+} // namespace cli
+} // namespace lwspp

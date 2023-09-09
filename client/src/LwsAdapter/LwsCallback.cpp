@@ -31,7 +31,9 @@
 #include "LwsAdapter/LwsSession.hpp"
 #include "SessionInfo.hpp"
 
-namespace ews::cli
+namespace lwspp
+{
+namespace cli
 {
 namespace
 {
@@ -144,4 +146,5 @@ auto lwsCallback_v1(
     return 0;
 }
 
-} // namespace ews::cli
+} // namespace cli
+} // namespace lwspp

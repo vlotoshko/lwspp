@@ -24,6 +24,9 @@
 
 #include "SessionInfo.hpp"
 
-namespace ews::cli
+namespace lwspp
 {
-} // namespace ews::cli
+namespace cli
+{
+} // namespace cli
+} // namespace lwspp

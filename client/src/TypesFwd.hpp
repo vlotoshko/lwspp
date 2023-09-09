@@ -26,7 +26,9 @@
 
 #include <memory>
 
-namespace ews::cli
+namespace lwspp
+{
+namespace cli
 {
 
 class ClientContext;
@@ -37,4 +39,5 @@ using LwsClientPtr = std::shared_ptr<LwsClient>;
 class SslSettings;
 using SslSettingsPtr = std::shared_ptr<SslSettings>;
 
-} // namespace ews::cli
+} // namespace cli
+} // namespace lwspp

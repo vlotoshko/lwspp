@@ -26,7 +26,9 @@
 
 #include <string>
 
-namespace ews::cli
+namespace lwspp
+{
+namespace cli
 {
 
 // TODO: consider strong types using
@@ -34,4 +36,5 @@ using Address = std::string;
 using Port = int;
 using Path = std::string;
 
-} // namespace ews::cli
+} // namespace cli
+} // namespace lwspp

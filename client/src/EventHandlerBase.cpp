@@ -24,7 +24,9 @@
 
 #include "lwspp/client/EventHandlerBase.hpp"
 
-namespace ews::cli
+namespace lwspp
+{
+namespace cli
 {
 
 void EventHandlerBase::onConnect(ISessionInfoPtr) noexcept
@@ -50,4 +52,5 @@ void EventHandlerBase::acceptDataSender(IDataSenderPtr dataSender) noexcept
     _dataSender = std::move(dataSender);
 }
 
-} // namespace ews::cli
+} // namespace cli
+} // namespace lwspp

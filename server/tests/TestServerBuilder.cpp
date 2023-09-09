@@ -30,7 +30,9 @@
 #include "ServerContext.hpp"
 #include "SslSettings.hpp"
 
-namespace ews::srv
+namespace lwspp
+{
+namespace srv
 {
 
 class TestServerBuilder
@@ -49,10 +51,13 @@ private:
     const ServerBuilder& _serverBuilder;
 };
 
-} // namespace ews::srv
+} // namespace srv
+} // namespace lwspp
 
 // NOLINTBEGIN (readability-function-cognitive-complexity)
-namespace ews::tests
+namespace lwspp
+{
+namespace tests
 {
 using namespace srv;
 
@@ -308,5 +313,6 @@ SCENARIO( "Server construction", "[server_builder]" )
     } // GIVEN
 } // SCENARIO
 
-} // namespace ews::tests
+} // namespace tests
+} // namespace lwspp
 // NOLINTEND (readability-function-cognitive-complexity)

@@ -30,7 +30,9 @@
 #include "lwspp/server/Types.hpp"
 #include "lwspp/server/TypesFwd.hpp"
 
-namespace ews::srv
+namespace lwspp
+{
+namespace srv
 {
 
 /**
@@ -61,4 +63,5 @@ public:
     virtual void onWarning(SessionId, const std::string& errorMessage) noexcept = 0;
 };
 
-} // namespace ews::srv
+} // namespace srv
+} // namespace lwspp

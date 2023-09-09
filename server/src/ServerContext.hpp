@@ -29,7 +29,9 @@
 #include "lwspp/server/TypesFwd.hpp"
 #include "Consts.hpp"
 
-namespace ews::srv
+namespace lwspp
+{
+namespace srv
 {
 
 /**
@@ -54,4 +56,5 @@ public:
     SslSettingsPtr ssl;
 };
 
-} // namespace ews::srv
+} // namespace srv
+} // namespace lwspp

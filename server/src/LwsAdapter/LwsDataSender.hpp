@@ -28,7 +28,9 @@
 
 #include "LwsAdapter/LwsTypesFwd.hpp"
 
-namespace ews::srv
+namespace lwspp
+{
+namespace srv
 {
 
 class LwsDataSender : public IDataSender
@@ -47,4 +49,5 @@ private:
     ILwsCallbackNotifierPtr _notifier;
 };
 
-} // namespace ews::srv
+} // namespace srv
+} // namespace lwspp

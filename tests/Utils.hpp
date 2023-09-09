@@ -27,9 +27,12 @@
 #include <string>
 
 
-namespace ews::tests
+namespace lwspp
+{
+namespace tests
 {
 
 auto getExecDirectory() -> std::string;
 
-} // namespace ews::tests
+} // namespace tests
+} // namespace lwspp

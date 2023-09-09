@@ -26,7 +26,9 @@
 
 #include "Consts.hpp"
 
-namespace ews::srv
+namespace lwspp
+{
+namespace srv
 {
 
 class SslSettings
@@ -41,4 +43,5 @@ public:
     std::string ciphersListTls13;
 };
 
-} // namespace ews::srv
+} // namespace srv
+} // namespace lwspp

@@ -28,7 +28,9 @@
 
 #include "libwebsockets.h"
 
-namespace ews::srv
+namespace lwspp
+{
+namespace srv
 {
 
 class LwsContextDeleter
@@ -40,4 +42,5 @@ public:
     }
 };
 
-} // namespace ews::srv
+} // namespace srv
+} // namespace lwspp

@@ -28,7 +28,9 @@
 #include "LwsAdapter/LwsTypesFwd.hpp"
 #include "TypesFwd.hpp"
 
-namespace ews::cli
+namespace lwspp
+{
+namespace cli
 {
 
 /**
@@ -51,4 +53,5 @@ struct LwsDataHolder
     int keepAliveProbes = 0;
 };
 
-} // namespace ews::cli
+} // namespace cli
+} // namespace lwspp

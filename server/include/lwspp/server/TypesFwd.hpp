@@ -26,7 +26,9 @@
 
 #include <memory>
 
-namespace ews::srv
+namespace lwspp
+{
+namespace srv
 {
 
 class IEventHandler;
@@ -47,4 +49,5 @@ using ISessionInfoPtr = std::shared_ptr<ISessionInfo>;
 class SslSettings;
 using SslSettingsPtr = std::shared_ptr<SslSettings>;
 
-} // namespace ews::srv
+} // namespace srv
+} // namespace lwspp

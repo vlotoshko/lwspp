@@ -27,7 +27,9 @@
 #include "lwspp/server/TypesFwd.hpp"
 #include "LwsAdapter/LwsTypesFwd.hpp"
 
-namespace ews::srv
+namespace lwspp
+{
+namespace srv
 {
 
 /**
@@ -53,4 +55,5 @@ public:
     virtual auto getEventHandler() -> IEventHandlerPtr = 0;
 };
 
-} // namespace ews::srv
+} // namespace srv
+} // namespace lwspp

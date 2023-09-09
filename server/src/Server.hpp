@@ -29,7 +29,9 @@
 #include "lwspp/server/IServer.hpp"
 #include "TypesFwd.hpp"
 
-namespace ews::srv
+namespace lwspp
+{
+namespace srv
 {
 
 /**
@@ -55,4 +57,5 @@ private:
     std::future<void> _serverStop;
 };
 
-} // namespace ews::srv
+} // namespace srv
+} // namespace lwspp

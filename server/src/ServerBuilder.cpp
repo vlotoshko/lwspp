@@ -29,9 +29,10 @@
 #include "ServerContext.hpp"
 #include "SslSettings.hpp"
 
-namespace ews::srv
+namespace lwspp
 {
-
+namespace srv
+{
 namespace
 {
 
@@ -186,4 +187,5 @@ auto ServerBuilder::setKeepAliveProbesInterval(int interval) -> ServerBuilder&
     return *this;
 }
 
-} // namespace ews::srv
+} // namespace srv
+} // namespace lwspp

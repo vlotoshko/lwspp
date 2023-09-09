@@ -26,7 +26,9 @@
 
 #include "fakeit.hpp"
 
-namespace ews::tests
+namespace lwspp
+{
+namespace tests
 {
 
 template<typename Interface>
@@ -52,4 +54,5 @@ private:
     std::shared_ptr<Interface> _ptr;
 };
 
-} // namespace ews::tests
+} // namespace tests
+} // namespace lwspp

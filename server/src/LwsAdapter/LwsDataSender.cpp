@@ -27,7 +27,9 @@
 #include "LwsAdapter/ILwsSessions.hpp"
 #include "LwsAdapter/LwsDataSender.hpp"
 
-namespace ews::srv
+namespace lwspp
+{
+namespace srv
 {
 
 LwsDataSender::LwsDataSender(ILwsSessionsPtr s, ILwsCallbackNotifierPtr n)
@@ -85,4 +87,5 @@ void LwsDataSender::sendBinaryData(const std::vector<char>& data)
     _notifier->notifyPendingDataAdded();
 }
 
-} // namespace ews::srv
+} // namespace srv
+} // namespace lwspp

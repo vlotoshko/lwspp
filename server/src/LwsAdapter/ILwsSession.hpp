@@ -31,7 +31,9 @@
 #include "LwsAdapter/LwsTypes.hpp"
 #include "LwsAdapter/LwsTypesFwd.hpp"
 
-namespace ews::srv
+namespace lwspp
+{
+namespace srv
 {
 
 /**
@@ -58,4 +60,5 @@ public:
     virtual auto getPendingData() -> std::queue<Message>& = 0;
 };
 
-} // namespace ews::srv
+} // namespace srv
+} // namespace lwspp

@@ -29,7 +29,9 @@
 #include "ClientContext.hpp"
 #include "SslSettings.hpp"
 
-namespace ews::cli
+namespace lwspp
+{
+namespace cli
 {
 
 namespace
@@ -191,4 +193,5 @@ auto ClientBuilder::setLwsLogLevel(int logLevel) -> ClientBuilder&
     return *this;
 }
 
-} // namespace ews::cli
+} // namespace cli
+} // namespace lwspp

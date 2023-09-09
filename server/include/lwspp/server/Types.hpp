@@ -26,7 +26,9 @@
 
 #include <string>
 
-namespace ews::srv
+namespace lwspp
+{
+namespace srv
 {
 
 // TODO: consider strong types using
@@ -34,4 +36,5 @@ using Port = int;
 using SessionId = int;
 using Path = std::string;
 
-} // namespace ews::srv
+} // namespace srv
+} // namespace lwspp

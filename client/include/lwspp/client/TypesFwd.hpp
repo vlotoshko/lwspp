@@ -26,7 +26,9 @@
 
 #include <memory>
 
-namespace ews::cli
+namespace lwspp
+{
+namespace cli
 {
 
 class IClient;
@@ -47,4 +49,5 @@ using ISessionInfoPtr = std::shared_ptr<ISessionInfo>;
 class SslSettings;
 using SslSettingsPtr = std::shared_ptr<SslSettings>;
 
-} // namespace ews::cli
+} // namespace cli
+} // namespace lwspp

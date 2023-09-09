@@ -38,9 +38,10 @@
 #include "ServerContext.hpp"
 #include "SslSettings.hpp"
 
-namespace ews::srv
+namespace lwspp
 {
-
+namespace srv
+{
 namespace
 {
 
@@ -232,4 +233,5 @@ void LwsServer::waitForServerStopped_()
     _isStoppedCV.wait(guard, [this]{ return _state == State::Stopped || _state == State::Initial; });
 }
 
-} // namespace ews::srv
+} // namespace srv
+} // namespace lwspp

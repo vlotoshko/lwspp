@@ -25,7 +25,9 @@
 #include "Client.hpp"
 #include "LwsAdapter/LwsClient.hpp"
 
-namespace ews::cli
+namespace lwspp
+{
+namespace cli
 {
 
 Client::Client(const ClientContext& context)
@@ -50,4 +52,5 @@ Client::~Client()
     _clientStop.wait();
 }
 
-} // namespace ews::cli
+} // namespace cli
+} // namespace lwspp

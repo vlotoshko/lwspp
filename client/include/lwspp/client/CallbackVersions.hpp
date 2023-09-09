@@ -24,7 +24,9 @@
 
 #pragma once
 
-namespace ews::cli
+namespace lwspp
+{
+namespace cli
 {
 
 /**
@@ -48,4 +50,5 @@ enum class CallbackVersion
     Undefined,
 };
 
-} // namespace ews::cli
+} // namespace cli
+} // namespace lwspp

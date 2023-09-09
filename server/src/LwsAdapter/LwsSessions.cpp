@@ -25,7 +25,9 @@
 #include "LwsAdapter/ILwsSession.hpp"
 #include "LwsAdapter/LwsSessions.hpp"
 
-namespace ews::srv
+namespace lwspp
+{
+namespace srv
 {
 
 void LwsSessions::add(ILwsSessionPtr session)
@@ -73,4 +75,5 @@ auto LwsSessions::getAllSessions() -> std::vector<ILwsSessionPtr>
     return _cachedSessions;
 }
 
-} // namespace ews::srv
+} // namespace srv
+} // namespace lwspp

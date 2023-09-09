@@ -26,7 +26,9 @@
 
 #include "SslSettings.hpp"
 
-namespace ews::srv
+namespace lwspp
+{
+namespace srv
 {
 
 SslSettingsBuilder::SslSettingsBuilder() : _settings(new SslSettings{})
@@ -94,4 +96,5 @@ auto SslSettingsBuilder::setCiphersListTls13(std::string ciphersList) -> SslSett
     return *this;
 }
 
-} // namespace ews::srv
+} // namespace srv
+} // namespace lwspp

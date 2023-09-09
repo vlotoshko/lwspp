@@ -32,7 +32,9 @@
 #include "LwsAdapter/LwsSession.hpp"
 #include "SessionInfo.hpp"
 
-namespace ews::srv
+namespace lwspp
+{
+namespace srv
 {
 namespace
 {
@@ -154,4 +156,5 @@ auto lwsCallback_v1(
     return 0;
 }
 
-} // namespace ews::srv
+} // namespace srv
+} // namespace lwspp

@@ -26,7 +26,9 @@
 
 #include "Consts.hpp"
 
-namespace ews::cli
+namespace lwspp
+{
+namespace cli
 {
 
 class SslSettings
@@ -45,4 +47,5 @@ public:
     bool ignoreServerCaSert = false;
 };
 
-} // namespace ews::cli
+} // namespace cli
+} // namespace lwspp

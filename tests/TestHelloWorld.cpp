@@ -38,7 +38,9 @@
 #include "lwspp/server/ServerBuilder.hpp"
 
 // NOLINTBEGIN (readability-function-cognitive-complexity)
-namespace ews::tests
+namespace lwspp
+{
+namespace tests
 {
 
 using namespace fakeit;
@@ -177,5 +179,6 @@ SCENARIO( "Clients sends 'hello world' to the server", "[hello_world]" )
     } // GIVEN
 } // SCENARIO
 
-} // namespace ews::tests
+} // namespace tests
+} // namespace lwspp
 // NOLINTEND (readability-function-cognitive-complexity)

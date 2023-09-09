@@ -29,7 +29,9 @@
 #include "lwspp/client/IClient.hpp"
 #include "TypesFwd.hpp"
 
-namespace ews::cli
+namespace lwspp
+{
+namespace cli
 {
 
 /**
@@ -55,4 +57,5 @@ private:
     std::future<void> _clientStop;
 };
 
-} // namespace ews::cli
+} // namespace cli
+} // namespace lwspp

@@ -26,7 +26,9 @@
 #include "LwsAdapter/LwsProtocolsFactory.hpp"
 #include "ClientContext.hpp"
 
-namespace ews::cli
+namespace lwspp
+{
+namespace cli
 {
 
 LwsDataHolder::LwsDataHolder(const ClientContext& context)
@@ -42,4 +44,5 @@ LwsDataHolder::LwsDataHolder(const ClientContext& context)
     , keepAliveProbes(context.keepAliveProbes)
 {}
 
-} // namespace ews::cli
+} // namespace cli
+} // namespace lwspp

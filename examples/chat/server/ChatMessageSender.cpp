@@ -26,7 +26,9 @@
 
 #include "ChatMessageSender.hpp"
 
-namespace ews::chat
+namespace lwspp
+{
+namespace chat
 {
 
 auto isPrivateMessage(const User& user, const Message& message) -> bool
@@ -89,7 +91,7 @@ void ChatMessageSender::sendChatHistory(const User& user, const std::vector<Mess
     }
 }
 
-void ews::chat::ChatMessageSender::updateUsers(const std::map<srv::SessionId, User>& users)
+void ChatMessageSender::updateUsers(const std::map<srv::SessionId, User>& users)
 {
     // Message format: "USRUPD:User1,User2,User3,"
     if (_dataSender != nullptr)
@@ -103,4 +105,5 @@ void ews::chat::ChatMessageSender::updateUsers(const std::map<srv::SessionId, Us
     }
 }
 
-} // namespace ews::chat
+} // namespace chat
+} // namespace lwspp

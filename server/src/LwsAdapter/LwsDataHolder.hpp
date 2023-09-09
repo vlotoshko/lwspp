@@ -30,7 +30,9 @@
 #include "LwsAdapter/LwsTypesFwd.hpp"
 #include "TypesFwd.hpp"
 
-namespace ews::srv
+namespace lwspp
+{
+namespace srv
 {
 
 /**
@@ -53,4 +55,5 @@ struct LwsDataHolder
     int keepAliveProbes = 0;
 };
 
-} // namespace ews::srv
+} // namespace srv
+} // namespace lwspp

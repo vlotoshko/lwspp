@@ -26,11 +26,14 @@
 
 #include "lwspp/client/ISessionInfo.hpp"
 
-namespace ews::cli
+namespace lwspp
+{
+namespace cli
 {
 
 class SessionInfo : public ISessionInfo
 {
 };
 
-} // namespace ews::cli
+} // namespace cli
+} // namespace lwspp

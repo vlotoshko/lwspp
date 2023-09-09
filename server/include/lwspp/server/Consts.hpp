@@ -26,10 +26,13 @@
 
 #include "lwspp/server/Types.hpp"
 
-namespace ews::srv
+namespace lwspp
+{
+namespace srv
 {
 
 const SessionId UNDEFINED_SESSION_ID = static_cast<int>(0U - 1);
 const SessionId ALL_SESSIONS = static_cast<int>(0U - 2);
 
-} // namespace ews::srv
+} // namespace srv
+} // namespace lwspp

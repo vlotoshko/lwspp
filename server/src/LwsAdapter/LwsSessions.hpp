@@ -30,7 +30,9 @@
 #include "lwspp/server/Types.hpp"
 #include "LwsAdapter/ILwsSessions.hpp"
 
-namespace ews::srv
+namespace lwspp
+{
+namespace srv
 {
 
 class LwsSessions : public ILwsSessions
@@ -48,4 +50,5 @@ private:
     bool _cacheExpired = true;
 };
 
-} // namespace ews::srv
+} // namespace srv
+} // namespace lwspp

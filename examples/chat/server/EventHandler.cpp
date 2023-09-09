@@ -27,7 +27,9 @@
 
 #include "EventHandler.hpp"
 
-namespace ews::chat
+namespace lwspp
+{
+namespace chat
 {
 
 namespace
@@ -141,13 +143,13 @@ auto getUserNameFromHello(const std::string& message) -> std::string
 EventHandler::EventHandler() : _chatMessageSender(srv::IDataSenderPtr{})
 {}
 
-void EventHandler::onConnect(ews::srv::ISessionInfoPtr sessionInfo) noexcept
+void EventHandler::onConnect(lwspp::srv::ISessionInfoPtr sessionInfo) noexcept
 {
     const User user = {sessionInfo->getSessionId(), UNKNOWN_USERN_NAME};
     _users[sessionInfo->getSessionId()] = user;
 }
 
-void EventHandler::onDisconnect(ews::srv::SessionId sessionId) noexcept
+void EventHandler::onDisconnect(lwspp::srv::SessionId sessionId) noexcept
 {
     _users.erase(sessionId);
     _chatMessageSender.updateUsers(_users);
@@ -223,4 +225,5 @@ void EventHandler::processUserMessage_(srv::SessionId sessionId, const std::stri
     _history.emplace_back(std::move(message));
 }
 
-} // namespace ews::chat
+} // namespace chat
+} // namespace lwspp

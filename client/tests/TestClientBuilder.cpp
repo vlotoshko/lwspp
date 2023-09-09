@@ -30,7 +30,9 @@
 #include "ClientContext.hpp"
 #include "SslSettings.hpp"
 
-namespace ews::cli
+namespace lwspp
+{
+namespace cli
 {
 
 class TestClientBuilder
@@ -49,10 +51,13 @@ private:
     const ClientBuilder& _clientBuilder;
 };
 
-} // namespace ews::cli
+} // namespace cli
+} // namespace lwspp
 
 // NOLINTBEGIN (readability-function-cognitive-complexity)
-namespace ews::tests
+namespace lwspp
+{
+namespace tests
 {
 using namespace cli;
 
@@ -336,5 +341,6 @@ SCENARIO( "Client construction", "[client_builder]" )
     } // GIVEN
 } // SCENARIO
 
-} // namespace ews::tests
+} // namespace tests
+} // namespace lwspp
 // NOLINTEND (readability-function-cognitive-complexity)

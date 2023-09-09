@@ -36,7 +36,9 @@
 
 #include "Utils.hpp"
 
-namespace ews::tests
+namespace lwspp
+{
+namespace tests
 {
 
 auto getDirectoryFromFilePath(const std::string& filePath) -> std::string;
@@ -86,4 +88,5 @@ auto getDirectoryFromFilePath(const std::string& filePath) -> std::string
     return std::string{};
 }
 
-} // namespace ews::tests
+} // namespace tests
+} // namespace lwspp

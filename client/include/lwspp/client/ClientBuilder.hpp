@@ -28,7 +28,9 @@
 #include "lwspp/client/Types.hpp"
 #include "lwspp/client/TypesFwd.hpp"
 
-namespace ews::cli
+namespace lwspp
+{
+namespace cli
 {
 
 class ClientContext;
@@ -74,4 +76,5 @@ private:
     friend class TestClientBuilder;
 };
 
-} // namespace ews::cli
+} // namespace cli
+} // namespace lwspp

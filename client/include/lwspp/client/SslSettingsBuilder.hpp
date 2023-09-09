@@ -28,7 +28,9 @@
 
 #include "lwspp/client/TypesFwd.hpp"
 
-namespace ews::cli
+namespace lwspp
+{
+namespace cli
 {
 
 /**
@@ -70,4 +72,5 @@ private:
     std::unique_ptr<SslSettings> _settings;
 };
 
-} // namespace ews::cli
+} // namespace cli
+} // namespace lwspp

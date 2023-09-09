@@ -24,7 +24,9 @@
 
 #pragma once
 
-namespace ews::cli
+namespace lwspp
+{
+namespace cli
 {
 
 /**
@@ -43,4 +45,5 @@ public:
     auto operator=(const ISessionInfo&) noexcept -> ISessionInfo& = delete;
 };
 
-} // namespace ews::cli
+} // namespace cli
+} // namespace lwspp

@@ -29,7 +29,9 @@
 
 #include "lwspp/client/TypesFwd.hpp"
 
-namespace ews::cli
+namespace lwspp
+{
+namespace cli
 {
 
 /**
@@ -60,4 +62,5 @@ public:
     virtual void onWarning(const std::string& errorMessage) noexcept = 0;
 };
 
-} // namespace ews::cli
+} // namespace cli
+} // namespace lwspp

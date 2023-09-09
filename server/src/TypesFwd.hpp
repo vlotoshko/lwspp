@@ -26,7 +26,9 @@
 
 #include <memory>
 
-namespace ews::srv
+namespace lwspp
+{
+namespace srv
 {
 
 class ServerContext;
@@ -37,4 +39,5 @@ using LwsServerPtr = std::shared_ptr<LwsServer>;
 class SslSettings;
 using SslSettingsPtr = std::shared_ptr<SslSettings>;
 
-} // namespace ews::srv
+} // namespace srv
+} // namespace lwspp

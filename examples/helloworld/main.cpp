@@ -33,7 +33,7 @@
 #include "lwspp/server/IDataSender.hpp"
 #include "lwspp/server/ServerBuilder.hpp"
 
-using namespace ews;
+using namespace lwspp;
 
 class ClientEventHandler : public cli::EventHandlerBase
 {

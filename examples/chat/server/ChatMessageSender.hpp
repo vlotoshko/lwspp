@@ -31,7 +31,9 @@
 
 #include "Types.hpp"
 
-namespace ews::chat
+namespace lwspp
+{
+namespace chat
 {
 
 class ChatMessageSender
@@ -48,4 +50,5 @@ private:
     srv::IDataSenderPtr _dataSender;
 };
 
-} // namespace ews::chat
+} // namespace chat
+} // namespace lwspp

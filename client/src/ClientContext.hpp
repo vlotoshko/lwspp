@@ -29,7 +29,9 @@
 #include "lwspp/client/TypesFwd.hpp"
 #include "Consts.hpp"
 
-namespace ews::cli
+namespace lwspp
+{
+namespace cli
 {
 
 /**
@@ -54,4 +56,5 @@ public:
     SslSettingsPtr ssl;
 };
 
-} // namespace ews::cli
+} // namespace cli
+} // namespace lwspp

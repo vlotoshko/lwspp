@@ -28,7 +28,9 @@
 #include <memory>
 #include <vector>
 
-namespace ews::srv
+namespace lwspp
+{
+namespace srv
 {
 
 class ILwsCallbackContext;
@@ -55,4 +57,5 @@ using LowLevelContextWeak = std::weak_ptr<lws_context>;
 using LwsProtocols = std::vector<lws_protocols>;
 using LwsCallback = lws_callback_function;
 
-} // namespace ews::srv
+} // namespace srv
+} // namespace lwspp

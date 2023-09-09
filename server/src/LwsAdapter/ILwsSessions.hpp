@@ -29,7 +29,9 @@
 #include "lwspp/server/Types.hpp"
 #include "LwsAdapter/LwsTypesFwd.hpp"
 
-namespace ews::srv
+namespace lwspp
+{
+namespace srv
 {
 
 /**
@@ -54,4 +56,5 @@ public:
     virtual auto getAllSessions() -> std::vector<ILwsSessionPtr> = 0;
 };
 
-} // namespace ews::srv
+} // namespace srv
+} // namespace lwspp

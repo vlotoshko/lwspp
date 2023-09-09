@@ -24,7 +24,9 @@
 
 #include "SessionInfo.hpp"
 
-namespace ews::srv
+namespace lwspp
+{
+namespace srv
 {
 
 SessionInfo::SessionInfo(SessionId sessionId, Path path)
@@ -44,4 +46,5 @@ auto SessionInfo::getPath() -> const Path&
 
 
 
-} // namespace ews::srv
+} // namespace srv
+} // namespace lwspp

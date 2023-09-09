@@ -28,7 +28,9 @@
 #include <memory>
 #include <vector>
 
-namespace ews::cli
+namespace lwspp
+{
+namespace cli
 {
 
 class ILwsCallbackContext;
@@ -48,4 +50,5 @@ using LwsProtocols = std::vector<lws_protocols>;
 using LwsCallback = lws_callback_function;
 using LwsConnectInfo = lws_client_connect_info;
 
-} // namespace ews::cli
+} // namespace cli
+} // namespace lwspp

@@ -26,7 +26,9 @@
 
 #include "lwspp/server/ISessionInfo.hpp"
 
-namespace ews::srv
+namespace lwspp
+{
+namespace srv
 {
 
 class SessionInfo : public ISessionInfo
@@ -43,4 +45,5 @@ private:
     Path _path;
 };
 
-} // namespace ews::srv
+} // namespace srv
+} // namespace lwspp

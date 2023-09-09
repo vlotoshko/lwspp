@@ -30,7 +30,7 @@
 #include "lwspp/client/IDataSender.hpp"
 #include "lwspp/client/SslSettingsBuilder.hpp"
 
-using namespace ews;
+using namespace lwspp;
 
 const cli::Port PORT = 9443;
 const cli::Address ADDRESS = "stream.binance.com";

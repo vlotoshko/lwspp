@@ -24,7 +24,9 @@
 
 #pragma once
 
-namespace ews::srv
+namespace lwspp
+{
+namespace srv
 {
 
 /**
@@ -48,4 +50,5 @@ enum class CallbackVersion
     Undefined,
 };
 
-} // namespace ews::srv
+} // namespace srv
+} // namespace lwspp

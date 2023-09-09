@@ -26,7 +26,9 @@
 
 #include <string>
 
-namespace ews::srv
+namespace lwspp
+{
+namespace srv
 {
 
 enum class DataType
@@ -37,4 +39,5 @@ enum class DataType
 
 using Message = std::pair<DataType, std::string>;
 
-} // namespace ews::srv
+} // namespace srv
+} // namespace lwspp

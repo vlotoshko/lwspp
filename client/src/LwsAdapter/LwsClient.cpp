@@ -32,7 +32,9 @@
 #include "LwsAdapter/LwsDataHolder.hpp"
 #include "SslSettings.hpp"
 
-namespace ews::cli
+namespace lwspp
+{
+namespace cli
 {
 namespace
 {
@@ -221,4 +223,5 @@ void LwsClient::waitForClientStopping_()
     _isStoppedCV.wait(guard, [this]{ return _state == State::Stopped || _state == State::Initial; });
 }
 
-} // namespace ews::cli
+} // namespace cli
+} // namespace lwspp
