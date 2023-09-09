@@ -33,20 +33,16 @@ target_include_directories(${PROJECT_NAME} PRIVATE
 
 if(STANDALONE_PROJECT)
     set(TARGET_LWSPP_CLIENT lwspp-client)
-    set(TARGET_LWSPP_SERVER lwspp-server)
 else()
     if(OPTION_BUILD_STATIC)
         set(TARGET_LWSPP_CLIENT ${TARGET_LWSPP_CLIENT_STATIC})
-        set(TARGET_LWSPP_SERVER ${TARGET_LWSPP_SERVER_STATIC})
     else()
         set(TARGET_LWSPP_CLIENT ${TARGET_LWSPP_CLIENT_SHARED})
-        set(TARGET_LWSPP_SERVER ${TARGET_LWSPP_SERVER_SHARED})
     endif()
 endif()
 
 target_link_libraries(${PROJECT_NAME}
     PRIVATE ${TARGET_LWSPP_CLIENT}
-    PRIVATE ${TARGET_LWSPP_SERVER}
     PRIVATE websockets
 )
 
