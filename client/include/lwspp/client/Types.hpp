@@ -36,5 +36,17 @@ using Address = std::string;
 using Port = int;
 using Path = std::string;
 
+struct DataPacket
+{
+    // Pointer to the beginning of the data in the packet.
+    const char* data = nullptr;
+
+    // Length of the data packet.
+    size_t length = 0;
+
+    // Remaining length of data in subsequent packets.
+    size_t remains = 0;
+};
+
 } // namespace cli
 } // namespace lwspp

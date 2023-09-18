@@ -155,23 +155,25 @@ void EventHandler::onDisconnect(lwspp::srv::SessionId sessionId) noexcept
     _chatMessageSender.updateUsers(_users);
 }
 
-void EventHandler::onTextDataReceive(srv::SessionId sessionId, const std::string& messageText, size_t /*bytesRemains*/) noexcept
+void EventHandler::onTextDataReceive(srv::SessionId sessionId, const srv::DataPacket& dataPacket) noexcept
 {
     // Expected messages:
     //   hello message, format: "HELLO:<Nickname>"
     //   user message common, format: "MSG:MessageText"
     //   user message private, format: "MSG:<To>: MessageText"
 
-    switch (getDataType(messageText))
+    auto message = std::string{dataPacket.data, dataPacket.length};
+
+    switch (getDataType(message))
     {
     case DataType::HELLO:
     {
-        processHelloMessage_(sessionId, messageText);
+        processHelloMessage_(sessionId, message);
         break;
     }
     case DataType::MSG:
     {
-        processUserMessage_(sessionId, messageText);
+        processUserMessage_(sessionId, message);
         break;
     }
     default:

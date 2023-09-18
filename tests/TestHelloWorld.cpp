@@ -60,9 +60,9 @@ void setupServerBehavior(Mock<srv::IEventHandler>& eventHandler,
                          srv::IDataSenderPtr& dataSender,
                          std::string& incomeMessage)
 {
-    auto sendHelloToClient = [&](srv::SessionId, const std::string& message, size_t /*bytesRemains*/)
+    auto sendHelloToClient = [&](srv::SessionId, const srv::DataPacket& dataPacket)
     {
-        incomeMessage = message;
+        incomeMessage = std::string{dataPacket.data, dataPacket.length};
         dataSender->sendTextData(HELLO_CLIENT);
     };
 
@@ -83,9 +83,9 @@ void setupClientBehavior(Mock<cli::IEventHandler>& eventHandler,
         dataSender->sendTextData(HELLO_SERVER);
     };
 
-    auto onTextDataReceive = [&](const std::string& message, size_t /*bytesRemains*/)
+    auto onTextDataReceive = [&](const cli::DataPacket& dataPacket)
     {
-        incomeMessage = message;
+        incomeMessage = std::string{dataPacket.data, dataPacket.length};
     };
 
     Fake(Method(eventHandler, onDisconnect));

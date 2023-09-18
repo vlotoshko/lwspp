@@ -122,14 +122,14 @@ auto lwsCallback_v1(
     case LWS_CALLBACK_CLIENT_RECEIVE:
     {
         const auto* inAsChar = reinterpret_cast<const char *>(in);
-        const auto bytesRemains = static_cast<size_t>(lws_remaining_packet_payload(wsInstance));
+        const auto remains = static_cast<size_t>(lws_remaining_packet_payload(wsInstance));
         if (lws_frame_is_binary(wsInstance) == 1)
         {
-            eventHandler->onBinaryDataReceive(std::vector<char>{inAsChar, inAsChar + len}, bytesRemains);
+            eventHandler->onBinaryDataReceive(DataPacket{inAsChar, len, remains});
         }
         else
         {
-            eventHandler->onTextDataReceive(std::string{inAsChar, len}, bytesRemains);
+            eventHandler->onTextDataReceive(DataPacket{inAsChar, len, remains});
         }
         break;
     }

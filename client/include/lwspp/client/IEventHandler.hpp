@@ -27,6 +27,7 @@
 #include <string>
 #include <vector>
 
+#include "lwspp/client/Types.hpp"
 #include "lwspp/client/TypesFwd.hpp"
 
 namespace lwspp
@@ -52,9 +53,10 @@ public:
 
 public:
     // Invoked when the client receives binary data from the server.
-    virtual void onBinaryDataReceive(const std::vector<char>& data, size_t bytesRemains) noexcept = 0;
+    virtual void onBinaryDataReceive(const DataPacket&) noexcept = 0;
+
     // Invoked when the client receives text data from the server. This method expects valid UTF-8 text.
-    virtual void onTextDataReceive(const std::string& message, size_t bytesRemains) noexcept = 0;
+    virtual void onTextDataReceive(const DataPacket&) noexcept = 0;
 
     virtual void onConnect(ISessionInfoPtr) noexcept = 0;
     virtual void onDisconnect() noexcept = 0;

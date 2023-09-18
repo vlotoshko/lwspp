@@ -64,10 +64,11 @@ void setupServerBehavior(Mock<srv::IEventHandler>& eventHandler,
                          srv::IDataSenderPtr& dataSender,
                          std::vector<char>& incomeData)
 {
-    auto sendHelloToClient = [&](srv::SessionId, const std::vector<char>& data, size_t bytesRemains)
+    auto sendHelloToClient = [&](srv::SessionId, const srv::DataPacket& dataPacket)
     {
-        incomeData.insert(incomeData.end(), data.begin(), data.end());
-        if (bytesRemains == 0)
+        incomeData.reserve(incomeData.size() + dataPacket.length);
+        incomeData.insert(incomeData.end(), dataPacket.data, dataPacket.data + dataPacket.length);
+        if (dataPacket.remains == 0)
         {
             dataSender->sendBinaryData(HELLO_CLIENT_BINARY);
         }
@@ -90,9 +91,10 @@ void setupClientBehavior(Mock<cli::IEventHandler>& eventHandler,
         dataSender->sendBinaryData(HELLO_SERVER_BINARY);
     };
 
-    auto onBinaryDataReceive = [&](const std::vector<char>& data, size_t /*bytesRemains*/)
+    auto onBinaryDataReceive = [&](const cli::DataPacket& dataPacket)
     {
-        incomeData.insert(incomeData.end(), data.begin(), data.end());
+        incomeData.reserve(incomeData.size() + dataPacket.length);
+        incomeData.insert(incomeData.end(), dataPacket.data, dataPacket.data + dataPacket.length);
     };
 
     Fake(Method(eventHandler, onDisconnect));

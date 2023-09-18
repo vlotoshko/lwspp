@@ -53,9 +53,9 @@ public:
 
 public:
     // Invoked when the server receives binary data from the client.
-    virtual void onBinaryDataReceive(SessionId, const std::vector<char>& data, size_t bytesRemains) noexcept = 0;
+    virtual void onBinaryDataReceive(SessionId, const DataPacket&) noexcept = 0;
     // Invoked when the server receives text data from the client. This method expects valid UTF-8 text.
-    virtual void onTextDataReceive(SessionId, const std::string& message, size_t bytesRemains) noexcept = 0;
+    virtual void onTextDataReceive(SessionId, const DataPacket&) noexcept = 0;
 
     virtual void onConnect(ISessionInfoPtr) noexcept = 0;
     virtual void onDisconnect(SessionId) noexcept = 0;

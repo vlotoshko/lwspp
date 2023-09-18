@@ -43,18 +43,18 @@ public:
         _dataSender->sendTextData("hello server!");
     }
 
-    void onTextDataReceive(const std::string& message, size_t /*bytesRemains*/) noexcept override
+    void onTextDataReceive(const cli::DataPacket& dataPacket) noexcept override
     {
-        std::cout << "client received the message: " << message << std::endl;
+        std::cout << "client received the message: " << std::string{dataPacket.data, dataPacket.length} << std::endl;
     }
 };
 
 class ServerEventHandler : public srv::EventHandlerBase
 {
 public:
-    void onTextDataReceive(srv::SessionId, const std::string& message, size_t /*bytesRemains*/) noexcept override
+    void onTextDataReceive(srv::SessionId, const srv::DataPacket& dataPacket) noexcept override
     {
-        std::cout << "server received the message: " << message << std::endl;
+        std::cout << "server received the message: " << std::string{dataPacket.data, dataPacket.length}  << std::endl;
         _dataSender->sendTextData("hello client!");
     }
 };

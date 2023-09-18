@@ -45,11 +45,11 @@ public:
         _dataSender->sendTextData(SUBSCRIBE);
     }
 
-    void onTextDataReceive(const std::string& message, size_t /*bytesRemains*/) noexcept override
+    void onTextDataReceive(const cli::DataPacket& dataPacket) noexcept override
     {
         if (_messageCounter < MESSAGES_LIMIT)
         {
-            std::cout << "client received the message: " << message << std::endl;
+            std::cout << "client received the message: " << std::string{dataPacket.data, dataPacket.length} << std::endl;
         }
 
         if (++_messageCounter == MESSAGES_LIMIT)

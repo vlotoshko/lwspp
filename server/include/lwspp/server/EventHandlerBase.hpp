@@ -42,8 +42,8 @@ public:
     void onConnect(ISessionInfoPtr) noexcept override;
     void onDisconnect(SessionId) noexcept override;
 
-    void onBinaryDataReceive(SessionId, const std::vector<char>& data, size_t bytesRemains) noexcept override;
-    void onTextDataReceive(SessionId, const std::string& message, size_t bytesRemains) noexcept override;
+    void onBinaryDataReceive(SessionId, const DataPacket&) noexcept override;
+    void onTextDataReceive(SessionId, const DataPacket&) noexcept override;
     void onError(SessionId, const std::string& errorMessage) noexcept override;
     void onWarning(SessionId, const std::string& warningMessage) noexcept override;
 

@@ -35,10 +35,10 @@ void EventHandlerBase::onConnect(ISessionInfoPtr) noexcept
 void EventHandlerBase::onDisconnect() noexcept
 {}
 
-void EventHandlerBase::onBinaryDataReceive(const std::vector<char>& /*data*/, size_t /*bytesRemains*/) noexcept
+void EventHandlerBase::onBinaryDataReceive(const DataPacket&) noexcept
 {}
 
-void EventHandlerBase::onTextDataReceive(const std::string& /*message*/, size_t /*bytesRemains*/) noexcept
+void EventHandlerBase::onTextDataReceive(const DataPacket&) noexcept
 {}
 
 void EventHandlerBase::onError(const std::string& /*errorMessage*/) noexcept
