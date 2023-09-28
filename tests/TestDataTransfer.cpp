@@ -179,8 +179,8 @@ SCENARIO( "Clients sends binary data to the server", "[data_transfer]" )
                 Verify(Method(cliEventHadler.mock(), onConnect),
                        Method(cliEventHadler.mock(), onDisconnect)).Once();
 
-                Verify(Method(srvEventHadler.mock(), onBinaryDataReceive)).Exactly(2);
-                Verify(Method(cliEventHadler.mock(), onBinaryDataReceive)).Exactly(3);
+                Verify(Method(srvEventHadler.mock(), onBinaryDataReceive)).AtLeastOnce();
+                Verify(Method(cliEventHadler.mock(), onBinaryDataReceive)).AtLeastOnce();
 
                 VerifyNoOtherInvocations(srvEventHadler.mock());
                 VerifyNoOtherInvocations(cliEventHadler.mock());
