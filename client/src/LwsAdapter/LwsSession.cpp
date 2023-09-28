@@ -39,7 +39,7 @@ auto addPrefixToMessage(const Container& message) -> std::string
     std::string result;
     // NOTE: resize can throw bad alloc if message is too large
     result.resize(LWS_PRE + message.size());
-    std::copy(message.cbegin(), message.cend(), result.data() + LWS_PRE);
+    std::copy(message.cbegin(), message.cend(), &result[0] + LWS_PRE);
     return result;
 }
 
