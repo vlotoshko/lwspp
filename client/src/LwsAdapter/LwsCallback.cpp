@@ -22,7 +22,6 @@
  * IN THE SOFTWARE.
  */
 
-#include <iostream>
 #include <vector>
 
 #include "lwspp/client/IEventHandler.hpp"

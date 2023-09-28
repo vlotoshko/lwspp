@@ -22,8 +22,6 @@
  * IN THE SOFTWARE.
  */
 
-#include <iostream>
-
 #include "lwspp/server/IEventHandler.hpp"
 #include "Consts.hpp"
 #include "LwsAdapter/ILwsCallbackContext.hpp"
