@@ -60,10 +60,10 @@ if(NOT "${INSTALL_EXAMPLES}" STREQUAL "")
         )
     endif()
 
-    add_custom_target(${PROJECT_NAME}_install DEPENDS ${PROJECT_NAME})
+    add_custom_target(install-${PROJECT_NAME} DEPENDS ${PROJECT_NAME})
 
     add_custom_command(
-        TARGET ${PROJECT_NAME}_install
+        TARGET install-${PROJECT_NAME}
         COMMAND "${CMAKE_COMMAND}"
         --install "${CMAKE_BINARY_DIR}"
         --component ${PROJECT_NAME}
