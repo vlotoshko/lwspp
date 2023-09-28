@@ -159,7 +159,7 @@ void EventHandler::onTextDataReceive(srv::SessionId sessionId, const srv::DataPa
 {
     // Expected messages:
     //   hello message, format: "HELLO:<Nickname>"
-    //   user message common, format: "MSG:MessageText"
+    //   user message public, format: "MSG:MessageText"
     //   user message private, format: "MSG:<To>: MessageText"
 
     auto message = std::string{dataPacket.data, dataPacket.length};

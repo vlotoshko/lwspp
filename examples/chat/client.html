@@ -31,8 +31,8 @@
         <br>
 
         <div class="container">
-            <div>Common chat</div>
-            <div><textarea readonly id="output_common" cols="55" rows="20"></textarea></div>
+            <div>Public chat</div>
+            <div><textarea readonly id="output_public" cols="55" rows="20"></textarea></div>
             <div>Private chat</div>
             <div><textarea readonly id="output_private" cols="55" rows="10"></textarea></div>
         </div>
@@ -68,7 +68,7 @@
             var loginBtn = document.getElementById("loginBtn");
             var ws = new WebSocket("ws://localhost:0");
 
-            var output_common = document.getElementById("output_common");
+            var output_public = document.getElementById("output_public");
             var output_private = document.getElementById("output_private");
             var input_message = document.getElementById("input_message");
             var inputBtn = document.getElementById("inputBtn");
@@ -80,7 +80,7 @@
                 ws.close();
                 ws = new WebSocket("ws://" + address.value + ":" + port.value);
 
-                output_common.value = "";
+                output_public.value = "";
                 output_private.value = "";
 
                 ws.onmessage = function(evt) {
@@ -171,7 +171,7 @@
                                 }
                             }
                             msg += '\n';
-                            output_common.value += msg;
+                            output_public.value += msg;
                         }
                         else if (from == nickname.innerHTML ||
                                  from == "SYS" || to == nickname.innerHTML) {

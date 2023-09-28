@@ -36,7 +36,7 @@ auto isPrivateMessage(const User& user, const Message& message) -> bool
     return message.from.userName == user.userName ||  message.to.userName == user.userName;
 }
 
-auto isCommonMessage(const Message& message) -> bool
+auto isPublicMessage(const Message& message) -> bool
 {
     return message.to.sessionId == srv::ALL_SESSIONS;
 }
@@ -80,7 +80,7 @@ void ChatMessageSender::sendChatHistory(const User& user, const std::vector<Mess
     {
         for (const auto& message : history)
         {
-            if (isCommonMessage(message) || isPrivateMessage(user, message))
+            if (isPublicMessage(message) || isPrivateMessage(user, message))
             {
                 _dataSender->sendTextData(user.sessionId, std::string{"HIST:<"}
                                             .append(message.from.userName).append(">:<")
