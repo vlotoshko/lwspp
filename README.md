@@ -6,9 +6,9 @@ lwspp is a C++ project that serves as a wrapper for the libwebsockets library, w
   <a href='https://github.com/vlotoshko/lwspp/releases'>
     <img alt="Release" src="https://img.shields.io/github/v/release/vlotoshko/lwspp?label=version&style=for-the-badge">
   </a>  
-  <a href='https://github.com/vlotoshko/lwspp/releases'>
-    <img alt="Downloads" src="https://img.shields.io/github/downloads/vlotoshko/lwspp/total?logo=github&style=for-the-badge">
-  </a>
+<!--   <a href='https://github.com/vlotoshko/lwspp/releases'>
+    <img alt="Downloads" src="https://img.shields.io/github/downloads/vlotoshko/lwspp/total?style=for-the-badge&logo=github">
+  </a> -->
   <a href="LICENSE">
     <img alt="License" src="https://img.shields.io/github/license/vlotoshko/lwspp?style=for-the-badge">
   </a>
