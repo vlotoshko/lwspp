@@ -83,6 +83,20 @@ else()
     unset(TARGET_LWSPP_SERVER_SHARED CACHE)
 endif()
 
+if(APPLE)
+    if(OPTION_BUILD_STATIC)
+        target_link_libraries(${TARGET_LWSPP_SERVER_STATIC}
+            PRIVATE websockets
+        )
+    endif()
+
+    if(OPTION_BUILD_SHARED)
+        target_link_libraries(${TARGET_LWSPP_SERVER_SHARED}
+            PRIVATE websockets
+        )
+    endif()
+endif()
+
 set_target_properties(${TARGET_LWSPP_SERVER_STATIC} ${TARGET_LWSPP_SERVER_SHARED} PROPERTIES
     CXX_STANDARD 17
     CXX_STANDARD_REQUIRED ON

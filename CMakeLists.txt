@@ -42,6 +42,10 @@ endif()
 unset(WEBSOCKETS_LIBRARY CACHE)
 add_library(websockets INTERFACE)
 
+if(APPLE)
+    set(WEBSOCKETS_HEADERS /opt/local/include)
+endif()
+
 if(NOT ${WEBSOCKETS_GITHUB_TAG} STREQUAL "")
     set(WEBSOCKETS_DIR ${CMAKE_BINARY_DIR}/websockets/${WEBSOCKETS_GITHUB_TAG})
     set(WEBSOCKETS_HEADERS ${WEBSOCKETS_DIR}/include)

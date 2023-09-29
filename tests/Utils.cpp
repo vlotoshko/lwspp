@@ -28,6 +28,13 @@
 #include <climits>
 #include <unistd.h>
 
+#elif __APPLE__
+
+#include <array>
+#include <climits>
+#include <mach-o/dyld.h>
+#include <stdexcept>
+
 #elif _WIN32
 
 #include <windows.h>
@@ -54,6 +61,22 @@ auto getExecDirectory() -> std::string
     return getDirectoryFromFilePath(execPath);
 }
 
+#elif __APPLE__
+
+auto getExecDirectory() -> std::string
+{
+    std::array<char, PATH_MAX> path{};
+    uint32_t size = path.size();
+
+    if (_NSGetExecutablePath(&path[0], &size) == 0)
+    {
+        auto execPath = std::string {path.data(), ((size > 0) ? size : 0)};
+        return getDirectoryFromFilePath(execPath);
+    }
+
+    throw std::runtime_error("Cannot get exec directory");
+}
+
 #elif _WIN32
 
 auto getExecDirectory() -> std::string
@@ -63,6 +86,7 @@ auto getExecDirectory() -> std::string
 
     return getDirectoryFromFilePath(execPath);
 }
+
 #else
 
 auto getExecDirectory() -> std::string
