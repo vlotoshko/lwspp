@@ -1,6 +1,15 @@
-# lwspp: C++ wrapper for libwebsockets
+# lwspp: C++ libraries for WebSocket protocol support
 
-lwspp is a C++ project that serves as a wrapper for the libwebsockets library, which is written in C. lwspp provides high-level C++ libraries for WebSocket protocol support, including client and server implementations.
+lwspp provides high-level abstractions for both client and server implementations of the WebSocket protocol. This allows users to easily integrate WebSocket functionality into their C++ projects. 
+
+lwspp serves as a wrapper for the [libwebsockets](https://libwebsockets.org/) library.
+
+lwspp is divided into two main libraries:
+
+- **lwspp-client**: A C++ library that simplifies WebSocket client implementation.
+- **lwspp-server**: A C++ library that simplifies WebSocket server implementation.
+
+Users can choose the library that suits their needs based on whether they are developing a WebSocket client or server application.
 
 <p align="center">
   <a href='https://github.com/vlotoshko/lwspp/releases'>
@@ -15,7 +24,6 @@ lwspp is a C++ project that serves as a wrapper for the libwebsockets library, w
 </p>
 
 <p align="center">
-  <a href="#overview">Overview</a> •
   <a href="#getting-started">Getting Started</a> •
   <a href="#usage">Usage</a> •
   <a href="#examples">Examples</a> •
@@ -23,17 +31,6 @@ lwspp is a C++ project that serves as a wrapper for the libwebsockets library, w
   <a href="#contributing">Contributing</a> •
   <a href="#license">License</a>
 </p>
-
-## Overview
-
-lwspp is designed to simplify the use of libwebsockets in C++ projects. It provides high-level abstractions for both client and server implementations of the WebSocket protocol. This allows users to easily integrate WebSocket functionality into their C++ projects.
-
-lwspp is divided into two main libraries:
-
-- **lwspp-client**: A high-level C++ library that simplifies WebSocket client implementation.
-- **lwspp-server**: A high-level C++ library that simplifies WebSocket server implementation.
-
-Users can choose the library that suits their needs based on whether they are developing a WebSocket client or server application.
 
 ## Getting Started
 
