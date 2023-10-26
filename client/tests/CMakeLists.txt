@@ -26,7 +26,7 @@ target_link_libraries(${PROJECT_NAME}-tests
 )
 
 set_target_properties(${PROJECT_NAME}-tests PROPERTIES
-    CXX_STANDARD 17
+    CXX_STANDARD 14
     CXX_STANDARD_REQUIRED ON
     CXX_EXTENSIONS OFF
     LINKER_LANGUAGE CXX

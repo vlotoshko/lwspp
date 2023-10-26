@@ -238,7 +238,6 @@ The lwspp project was built and tested on the following operating systems up to 
   - [x] openSUSE Leap 15.4
   - [x] macOS Ventura 13.4
     - The libwebsockets library was installed using MacPorts.
-    - The lwspp library was compiled using the g++11 compiler: `cmake -D CMAKE_CXX_COMPILER=g++-11 ..`.
 
 Please note that compatibility with newer operating system versions or different library versions may vary.
 
