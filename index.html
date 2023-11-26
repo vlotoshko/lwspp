@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>lwspp: C++ libraries for WebSocket protocol support | lwspp</title>
+<meta name="generator" content="Jekyll v3.9.3" />
+<meta property="og:title" content="lwspp: C++ libraries for WebSocket protocol support" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="C++ libraries for WebSocket protocol support" />
+<meta property="og:description" content="C++ libraries for WebSocket protocol support" />
+<link rel="canonical" href="https://vlotoshko.github.io/lwspp/" />
+<meta property="og:url" content="https://vlotoshko.github.io/lwspp/" />
+<meta property="og:site_name" content="lwspp" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="lwspp: C++ libraries for WebSocket protocol support" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebSite","description":"C++ libraries for WebSocket protocol support","headline":"lwspp: C++ libraries for WebSocket protocol support","name":"lwspp","url":"https://vlotoshko.github.io/lwspp/"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="stylesheet" href="/lwspp/assets/css/style.css?v=bf61f0c22e06cc6e6c7c06f4351991187022eff8">
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- Setup Google Analytics -->
+
+
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/lwspp/favicon.ico" -->
+
+<!-- end custom head snippets -->
+
+  </head>
+  <body>
+    <div class="container-lg px-3 my-5 markdown-body">
+      <h1><a href="https://vlotoshko.github.io/lwspp/">lwspp</a></h1>
+      <h1 id="lwspp-c-libraries-for-websocket-protocol-support">lwspp: C++ libraries for WebSocket protocol support</h1>
+
+<p>lwspp provides high-level abstractions for both client and server implementations of the WebSocket protocol. This allows users to easily integrate WebSocket functionality into their C++ projects.</p>
+
+<p>lwspp serves as a wrapper for the <a href="https://libwebsockets.org/">libwebsockets</a> library.</p>
+
+<p>lwspp is divided into two main libraries:</p>
+
+<ul>
+  <li><strong>lwspp-client</strong>: A C++ library that simplifies WebSocket client implementation.</li>
+  <li><strong>lwspp-server</strong>: A C++ library that simplifies WebSocket server implementation.</li>
+</ul>
+
+<p>Users can choose the library that suits their needs based on whether they are developing a WebSocket client or server application.</p>
+
+<p align="center">
+  <a href="https://github.com/vlotoshko/lwspp/releases">
+    <img alt="Release" src="https://img.shields.io/github/v/release/vlotoshko/lwspp?label=version&amp;style=for-the-badge" />
+  </a>  
+<!--   <a href='https://github.com/vlotoshko/lwspp/releases'>
+    <img alt="Downloads" src="https://img.shields.io/github/downloads/vlotoshko/lwspp/total?style=for-the-badge&logo=github">
+  </a> -->
+  <a href="LICENSE">
+    <img alt="License" src="https://img.shields.io/github/license/vlotoshko/lwspp?style=for-the-badge" />
+  </a>
+</p>
+
+<p align="center">
+  <a href="#getting-started">Getting Started</a> •
+  <a href="#usage">Usage</a> •
+  <a href="#examples">Examples</a> •
+  <a href="#operating-systems">Operating Systems</a> •
+  <a href="#contributing">Contributing</a> •
+  <a href="#license">License</a>
+</p>
+
+<h2 id="getting-started">Getting Started</h2>
+
+<h3 id="prerequisites">Prerequisites</h3>
+
+<p>lwspp depends on the following library:</p>
+
+<ul>
+  <li><a href="https://libwebsockets.org/">libwebsockets</a> - the core WebSocket library written in C.</li>
+</ul>
+
+<p>Follow the installation instructions for libwebsockets to ensure it is properly installed on your system.</p>
+
+<p>Before building the lwspp project with the <em>WEBSOCKETS_GITHUB_TAG</em> option, please ensure that the following prerequisites are met:</p>
+
+<ul>
+  <li>Git - must be installed on your system to download the libwebsockets library from GitHub.</li>
+</ul>
+
+<h3 id="installation">Installation</h3>
+
+<p>The installation steps for integrating lwspp into your C++ project are as follows:</p>
+
+<ol>
+  <li>
+    <p>Clone the lwspp repository:</p>
+
+    <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone https://github.com/vlotoshko/lwspp.git
+</code></pre></div>    </div>
+  </li>
+  <li>Navigate to the lwspp project directory:
+    <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd </span>lwspp
+</code></pre></div>    </div>
+  </li>
+  <li>Create a directory for building and change to it:
+    <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">mkdir </span>build
+<span class="nb">cd </span>build
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Configure project and build lwspp:</p>
+
+    <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cmake ..
+make
+</code></pre></div>    </div>
+  </li>
+  <li>Finally, install lwspp into the system:
+    <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>make <span class="nb">install</span>
+</code></pre></div>    </div>
+    <p>These steps should help you integrate lwspp into your C++ project successfully.</p>
+  </li>
+</ol>
+
+<h4 id="compilation-options">Compilation Options</h4>
+
+<p>lwspp offers a variety of compilation options to tailor the build process according to your specific requirements. You can configure these options using CMake when generating the build system for your project. Below are the available compilation options:</p>
+
+<ul>
+  <li>
+    <p><strong>Build lwspp Client Library</strong> (<code class="language-plaintext highlighter-rouge">OPTION_BUILD_CLIENT</code>): Enable or disable the build of the lwspp client library. (Default: <strong>ON</strong>)</p>
+  </li>
+  <li>
+    <p><strong>Build lwspp Server Library</strong> (<code class="language-plaintext highlighter-rouge">OPTION_BUILD_SERVER</code>): Enable or disable the build of the lwspp server library. (Default: <strong>ON</strong>)</p>
+  </li>
+  <li>
+    <p><strong>Build Shared Libraries</strong> (<code class="language-plaintext highlighter-rouge">OPTION_BUILD_SHARED</code>): Enable or disable the build of shared lwspp libraries. (Default: <strong>ON</strong>)</p>
+  </li>
+  <li>
+    <p><strong>Build Static Libraries</strong> (<code class="language-plaintext highlighter-rouge">OPTION_BUILD_STATIC</code>): Enable or disable the build of static lwspp libraries. (Default: <strong>OFF</strong>)</p>
+  </li>
+  <li>
+    <p><strong>Build Example Applications</strong> (<code class="language-plaintext highlighter-rouge">OPTION_BUILD_EXAMPLES</code>): Enable or disable the build of example applications. (Default: <strong>OFF</strong>)</p>
+  </li>
+  <li>
+    <p><strong>Build Integration Tests Application</strong> (<code class="language-plaintext highlighter-rouge">OPTION_BUILD_INTEGRATION_TESTS</code>): Enable or disable the build of the integration tests application. (Default: <strong>OFF</strong>)</p>
+  </li>
+  <li>
+    <p><strong>Install Tests Directory</strong> (<code class="language-plaintext highlighter-rouge">INSTALL_TESTS</code>): Specify the directory where the tests should be installed. If you set this option, it will add the target  <strong>install-lwspp-tests</strong>. (Default: <strong>”“</strong>)</p>
+  </li>
+  <li>
+    <p><strong>Install Examples Directory</strong> (<code class="language-plaintext highlighter-rouge">INSTALL_EXAMPLES</code>): Specify the path where examples should be installed after the build. Setting this option adds the corresponding <strong>install-‘project name’</strong> target for each example. (Default: <strong>”“</strong>)</p>
+  </li>
+  <li>
+    <p><strong>Websockets GitHub Tag</strong> (<code class="language-plaintext highlighter-rouge">WEBSOCKETS_GITHUB_TAG</code>): If set, the libwebsockets library of the corresponding version from GitHub will be downloaded, built, and used. Example of tag: v4.3.0. (Default: <strong>”“</strong>)</p>
+  </li>
+  <li>
+    <p><strong>Websockets Library Path</strong> (<code class="language-plaintext highlighter-rouge">WEBSOCKETS_LIBRARY</code>): Shows the path to the libwebsockets library that will be linked when building the project. This variable helps you identify the version of the library currently in use.</p>
+  </li>
+</ul>
+
+<p>You can configure these options using CMake’s -D flag when generating your project’s build system. For example, to enable the building and installing of example applications, you can use:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>   cmake <span class="nt">-D</span> <span class="nv">OPTION_BUILD_EXAMPLES</span><span class="o">=</span>ON <span class="nt">-D</span> <span class="nv">INSTALL_EXAMPLES</span><span class="o">=</span>./bin ..
+   make install-lwspp-binance install-lwspp-chat install-lwspp-helloworld
+</code></pre></div></div>
+<p>After running the <em>‘make’</em> command, the example applications will be built and installed in the <em>’./bin’</em> directory.</p>
+
+<p>Please be aware that the installed binaries of the example applications and tests depend on the lwspp libraries being installed in your system (as outlined in step 5 of the installation guide).</p>
+
+<h2 id="usage">Usage</h2>
+
+<p>This project provides distinct include directories for client and server integration, namely ‘lwspp/client/’ (using the ‘cli’ namespace) and ‘lwspp/server/’ (using the ‘srv’ namespace), respectively. You can configure and create both the client and server using their respective builders. Upon construction, both the client and server initiate connections/listening, and upon destruction, they gracefully terminate connections/stop listening. They each operate in a separate thread to manage connections and data transfers.</p>
+
+<h3 id="server-configuration">Server Configuration</h3>
+
+<p>To set up and create a WebSocket server, you’ll use the Server Builder, located at lwspp/server/ServerBuilder.hpp. The Server Builder has several mandatory options that must be configured before building the server; otherwise, it will throw an exception.</p>
+
+<p>The mandatory options for the server builder include:</p>
+
+<ol>
+  <li><strong>Port</strong>: Specify the port on which the server will listen.</li>
+  <li><strong>Callback Version</strong>: The libwebsockets library requires a specific callback to handle events and data. lwspp provides this callback. To ensure backward compatibility, you can set the previous callback to maintain the same behavior.</li>
+  <li><strong>Data Sender Acceptor</strong>: When constructing the server, the server builder provides a Data Sender. To obtain this Data Sender, implement the IDataSenderAcceptor interface. Users of the library should implement this interface to manage data sent from the server to clients.</li>
+  <li><strong>Event Handler</strong>: The Event Handler defines the server’s behavior. You should implement the desired server behavior using the IEventHandler interface.</li>
+</ol>
+
+<p>For most use cases, the <strong>EvenHandlerBase</strong> class can be a convenient starting point for implementing your event handler. This class not only implements the <em>IEventHandler</em> interface, which includes stubs for all its methods but also implements the <em>IDataSenderAcceptor</em> interface. This means you can easily obtain the Data Sender required for sending data from the server.</p>
+
+<p>The <strong>EvenHandlerBase</strong> class provides a basic framework for event handling and data transmission. You can extend and customize its behavior to suit your specific server requirements. This approach saves you time and effort when developing WebSocket server functionality.</p>
+
+<h3 id="client-configuration">Client Configuration</h3>
+
+<p>The client configuration closely resembles the server configuration. As mentioned earlier, it is defined in a separate include directory ‘lwspp/client/’ and uses the ‘cli’ namespace. Additionally, it requires an additional mandatory option - <strong>address</strong>.</p>
+
+<h3 id="more-information">More Information</h3>
+
+<p>For more detailed usage instructions and insights, refer to the <a href="examples">examples</a>, <a href="tests">test cases</a>, or header file descriptions.</p>
+
+<h2 id="examples">Examples</h2>
+
+<h3 id="the-hello-world-example">The Hello World example</h3>
+
+<p>In this straightforward example, both the client and server are configured and constructed. The client’s behavior involves sending the message ‘hello server’ upon connection, while the server’s behavior includes sending the message ‘hello client’ upon receiving a message from a client.</p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
+#include &lt;thread&gt;
+</span>
+<span class="cp">#include "lwspp/client/ClientBuilder.hpp"
+#include "lwspp/client/EventHandlerBase.hpp"
+#include "lwspp/client/IDataSender.hpp"
+</span>
+<span class="cp">#include "lwspp/server/EventHandlerBase.hpp"
+#include "lwspp/server/IDataSender.hpp"
+#include "lwspp/server/ServerBuilder.hpp"
+</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">lwspp</span><span class="p">;</span>
+
+<span class="k">class</span> <span class="nc">ClientEventHandler</span> <span class="o">:</span> <span class="k">public</span> <span class="n">cli</span><span class="o">::</span><span class="n">EventHandlerBase</span>
+<span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="kt">void</span> <span class="n">onConnect</span><span class="p">(</span><span class="n">cli</span><span class="o">::</span><span class="n">ISessionInfoPtr</span><span class="p">)</span> <span class="k">noexcept</span> <span class="k">override</span>
+    <span class="p">{</span>
+        <span class="n">_dataSender</span><span class="o">-&gt;</span><span class="n">sendTextData</span><span class="p">(</span><span class="s">"hello server!"</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">onTextDataReceive</span><span class="p">(</span><span class="k">const</span> <span class="n">cli</span><span class="o">::</span><span class="n">DataPacket</span><span class="o">&amp;</span> <span class="n">dataPacket</span><span class="p">)</span> <span class="k">noexcept</span> <span class="k">override</span>
+    <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"client received the message: "</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">{</span><span class="n">dataPacket</span><span class="p">.</span><span class="n">data</span><span class="p">,</span> <span class="n">dataPacket</span><span class="p">.</span><span class="n">length</span><span class="p">}</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="k">class</span> <span class="nc">ServerEventHandler</span> <span class="o">:</span> <span class="k">public</span> <span class="n">srv</span><span class="o">::</span><span class="n">EventHandlerBase</span>
+<span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="kt">void</span> <span class="n">onTextDataReceive</span><span class="p">(</span><span class="n">srv</span><span class="o">::</span><span class="n">SessionId</span><span class="p">,</span> <span class="k">const</span> <span class="n">srv</span><span class="o">::</span><span class="n">DataPacket</span><span class="o">&amp;</span> <span class="n">dataPacket</span><span class="p">)</span> <span class="k">noexcept</span> <span class="k">override</span>
+    <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"server received the message: "</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">{</span><span class="n">dataPacket</span><span class="p">.</span><span class="n">data</span><span class="p">,</span> <span class="n">dataPacket</span><span class="p">.</span><span class="n">length</span><span class="p">}</span>  <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+        <span class="n">_dataSender</span><span class="o">-&gt;</span><span class="n">sendTextData</span><span class="p">(</span><span class="s">"hello client!"</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="k">auto</span> <span class="n">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">int</span>
+<span class="p">{</span>
+    <span class="k">const</span> <span class="n">srv</span><span class="o">::</span><span class="n">Port</span> <span class="n">PORT</span> <span class="o">=</span> <span class="mi">9000</span><span class="p">;</span>
+
+    <span class="c1">// Configure and build server</span>
+    <span class="k">auto</span> <span class="n">serverEventHandler</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">ServerEventHandler</span><span class="o">&gt;</span><span class="p">();</span>
+    <span class="k">auto</span> <span class="n">serverBuilder</span> <span class="o">=</span> <span class="n">srv</span><span class="o">::</span><span class="n">ServerBuilder</span><span class="p">{};</span>
+    <span class="n">serverBuilder</span>
+        <span class="p">.</span><span class="n">setPort</span><span class="p">(</span><span class="n">PORT</span><span class="p">)</span>
+        <span class="p">.</span><span class="n">setCallbackVersion</span><span class="p">(</span><span class="n">srv</span><span class="o">::</span><span class="n">CallbackVersion</span><span class="o">::</span><span class="n">v1_Andromeda</span><span class="p">)</span>
+        <span class="p">.</span><span class="n">setEventHandler</span><span class="p">(</span><span class="n">serverEventHandler</span><span class="p">)</span>
+        <span class="p">.</span><span class="n">setDataSenderAcceptor</span><span class="p">(</span><span class="n">serverEventHandler</span><span class="p">)</span>
+        <span class="p">.</span><span class="n">setLwsLogLevel</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="p">;</span>
+    <span class="k">auto</span> <span class="n">server</span> <span class="o">=</span> <span class="n">serverBuilder</span><span class="p">.</span><span class="n">build</span><span class="p">();</span>
+
+    <span class="c1">// Configure and build client</span>
+    <span class="k">auto</span> <span class="n">clientEventHandler</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">ClientEventHandler</span><span class="o">&gt;</span><span class="p">();</span>
+    <span class="k">auto</span> <span class="n">clientBuilder</span> <span class="o">=</span> <span class="n">cli</span><span class="o">::</span><span class="n">ClientBuilder</span><span class="p">{};</span>
+    <span class="n">clientBuilder</span>
+        <span class="p">.</span><span class="n">setAddress</span><span class="p">(</span><span class="s">"localhost"</span><span class="p">)</span>
+        <span class="p">.</span><span class="n">setPort</span><span class="p">(</span><span class="n">PORT</span><span class="p">)</span>
+        <span class="p">.</span><span class="n">setCallbackVersion</span><span class="p">(</span><span class="n">cli</span><span class="o">::</span><span class="n">CallbackVersion</span><span class="o">::</span><span class="n">v1_Amsterdam</span><span class="p">)</span>
+        <span class="p">.</span><span class="n">setEventHandler</span><span class="p">(</span><span class="n">clientEventHandler</span><span class="p">)</span>
+        <span class="p">.</span><span class="n">setDataSenderAcceptor</span><span class="p">(</span><span class="n">clientEventHandler</span><span class="p">)</span>
+        <span class="p">.</span><span class="n">setLwsLogLevel</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="p">;</span>
+    <span class="k">auto</span> <span class="n">client</span> <span class="o">=</span> <span class="n">clientBuilder</span><span class="p">.</span><span class="n">build</span><span class="p">();</span>
+
+    <span class="c1">// Give some time for the client and server to exchange messages.</span>
+    <span class="k">const</span> <span class="k">auto</span> <span class="n">timeout</span> <span class="o">=</span> <span class="mi">100U</span><span class="p">;</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">milliseconds</span><span class="p">(</span><span class="n">timeout</span><span class="p">));</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<h3 id="examples-directory">Examples directory</h3>
+
+<p>In the <a href="examples">examples</a> directory, you can find the source code for some sample applications:</p>
+
+<ol>
+  <li><strong>binance</strong>: This example represents a client that establishes a connection to the Binance server using SSL, receives a few messages from the server and then disconnects.</li>
+  <li><strong>chat</strong>: A more complex example that consists of a simple HTML-based client and a chat server. The chat server supports the following features:
+    <ul>
+      <li>user nicknames</li>
+      <li>private and public messages</li>
+      <li>message history</li>
+    </ul>
+  </li>
+  <li><strong>helloworld</strong>: This is the previously mentioned “Hello World” <a href="#the-hello-world-example">example</a>.</li>
+</ol>
+
+<h2 id="operating-systems">Operating Systems</h2>
+
+<p>The lwspp project was built and tested on the following operating systems up to <em>September 29, 2023</em>:</p>
+<ul class="task-list">
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" checked="checked" />Ubuntu 22.04 LTS</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" checked="checked" />Red Hat Enterprise Linux (RHEL) 9.2
+    <ul>
+      <li>The path ‘/usr/local/lib’ was appended to the LD_LIBRARY_PATH to enable the system to locate the lwspp library.</li>
+    </ul>
+  </li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" checked="checked" />openSUSE Leap 15.4</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" checked="checked" />macOS Ventura 13.4
+    <ul>
+      <li>The libwebsockets library was installed using MacPorts.</li>
+    </ul>
+  </li>
+</ul>
+
+<p>Please note that compatibility with newer operating system versions or different library versions may vary.</p>
+
+<h2 id="contributing">Contributing</h2>
+
+<p>Contributions are welcome and essential to improving the lwspp project. Whether you have a suggestion for improvement, want to fix a bug, or add a new feature, your contributions are <strong>greatly appreciated</strong>.</p>
+
+<p>Here’s how you can contribute:</p>
+
+<ol>
+  <li>Fork the Project</li>
+  <li>Create your Feature Branch (<code class="language-plaintext highlighter-rouge">git checkout -b feature/AmazingFeature</code>)</li>
+  <li>Commit your Changes (<code class="language-plaintext highlighter-rouge">git commit -m 'Add some AmazingFeature'</code>)</li>
+  <li>Push to the Branch (<code class="language-plaintext highlighter-rouge">git push origin feature/AmazingFeature</code>)</li>
+  <li>Open a Pull Request</li>
+</ol>
+
+<p>Thank you for being part of the open-source community!</p>
+
+<h2 id="license">License</h2>
+
+<p>Distributed under the MIT License. See <a href="/lwspp/LICENSE">LICENSE</a> for more information.</p>
+
+      <div class="footer border-top border-gray-light mt-5 pt-3 text-right text-gray">
+        This site is open source. <a href="https://github.com/vlotoshko/lwspp/edit/main/README.md">Improve this page</a>.
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/4.1.0/anchor.min.js" integrity="sha256-lZaRhKri35AyJSypXXs4o6OPFTbTmUoltBbDCbdzegg=" crossorigin="anonymous"></script>
+    <script>anchors.add();</script>
+  </body>
+</html>
+
