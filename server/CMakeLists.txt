@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.9)
 project(
     ${PROJECT_NAME}-server
-    VERSION 0.0.1
+    VERSION 0.0.0
     DESCRIPTION "Websocket server library"
     LANGUAGES C CXX
 )

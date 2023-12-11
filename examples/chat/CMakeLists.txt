@@ -8,7 +8,7 @@ endif()
 
 project(
     ${PROJECT_NAME}-chat
-    VERSION 0.0.1
+    VERSION 0.0.0
     DESCRIPTION "Websocket server for chat"
     LANGUAGES C CXX
 )

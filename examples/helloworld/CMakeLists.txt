@@ -8,8 +8,7 @@ endif()
 
 project(
     ${PROJECT_NAME}-helloworld
-
-    VERSION 0.0.1
+    VERSION 0.0.0
     LANGUAGES C CXX
 )
 
