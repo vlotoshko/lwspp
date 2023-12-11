@@ -96,8 +96,8 @@ auto getExecDirectory() -> std::string
 
 #endif
 
-// expected input: <direcory path>/<file name>
-// returns: <direcory path>/
+// expected input: <directory path>/<file name>
+// returns: <directory path>/
 auto getDirectoryFromFilePath(const std::string& filePath) -> std::string
 {
     auto pos = filePath.rfind('/');
