@@ -58,9 +58,9 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
 )
 
 if(NOT "${INSTALL_EXAMPLES}" STREQUAL "")
-    if(NOT ${WEBSOCKETS_DIR} STREQUAL "")
+    if(NOT ${WEBSOCKETS_CUSTOM_DIR} STREQUAL "")
         set_target_properties(${PROJECT_NAME} PROPERTIES
-            INSTALL_RPATH "${WEBSOCKETS_DIR}/lib"
+            INSTALL_RPATH "${WEBSOCKETS_CUSTOM_DIR}/lib"
         )
     endif()
 

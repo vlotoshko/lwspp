@@ -20,16 +20,14 @@ endif()
 option(OPTION_BUILD_CLIENT "Enable or disable the build of the lwspp client library." ON)
 option(OPTION_BUILD_SERVER "Enable or disable the build of the lwspp server library." ON)
 option(OPTION_BUILD_SHARED "Enable or disable the build of shared lwspp libraries." ON)
-option(OPTION_BUILD_STATIC "Enable or disable the build of static lwspp libraries." OFF)
+option(OPTION_BUILD_STATIC "Enable or disable the build of static lwspp libraries." ON)
 option(OPTION_BUILD_EXAMPLES "Enable or disable the build of example applications." OFF)
 option(OPTION_BUILD_INTEGRATION_TESTS  "Enable or disable the build of the integration tests application." OFF)
 set(INSTALL_TESTS "" CACHE PATH "Specify the directory where the tests should be installed.
 If you set this option, it will add the target install-lwspp-tests.")
 set(INSTALL_EXAMPLES "" CACHE PATH "Specify the path where examples should be installed after the build.
 Setting this option adds the corresponding install-'project name' target for each example.")
-set(WEBSOCKETS_GITHUB_TAG "" CACHE STRING
-    "If set, the libwebsockets library of the corresponding version from GitHub will be downloaded, built, and used.
-Example of tag: v4.3.0")
+set(WEBSOCKETS_CUSTOM_DIR "" CACHE PATH "The custom libwebsockets library location. Expected that the directories ./include and ./lib are exsist.")
 
 if (NOT OPTION_BUILD_CLIENT AND NOT OPTION_BUILD_SERVER)
     message(FATAL_ERROR "No libraries selected for building. Please specify 'client', 'server', or both.")
@@ -47,40 +45,21 @@ if (OPTION_BUILD_EXAMPLES AND (NOT OPTION_BUILD_CLIENT OR NOT OPTION_BUILD_SERVE
     message(FATAL_ERROR "Example applications require both 'client' and 'server' libraries to be built.")
 endif()
 
-unset(WEBSOCKETS_LIBRARY CACHE)
-add_library(websockets INTERFACE)
-
 if(APPLE)
     set(WEBSOCKETS_HEADERS /opt/local/include)
 endif()
 
-if(NOT ${WEBSOCKETS_GITHUB_TAG} STREQUAL "")
-    set(WEBSOCKETS_DIR ${CMAKE_BINARY_DIR}/websockets/${WEBSOCKETS_GITHUB_TAG})
-    set(WEBSOCKETS_HEADERS ${WEBSOCKETS_DIR}/include)
-
-    # Download libwebsockets sources
-    add_subdirectory(websockets EXCLUDE_FROM_ALL)
-
-    # Configure libwebsockets
-    execute_process(
-        COMMAND ${CMAKE_COMMAND} ${CMAKE_SOURCE_DIR}/websockets
-        -DWEBSOCKETS_GITHUB_TAG=${WEBSOCKETS_GITHUB_TAG}
-        -DWEBSOCKETS_DIR=${WEBSOCKETS_DIR}
-        WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/websockets)
-
-    # Build libwebsockets
-    execute_process(COMMAND ${CMAKE_COMMAND} --build ${CMAKE_BINARY_DIR}/websockets)
-
-    # Install libwebsockets
-    execute_process(COMMAND ${CMAKE_COMMAND} --install ${CMAKE_BINARY_DIR}/websockets)
-endif()
-
-if(NOT ${WEBSOCKETS_GITHUB_TAG} STREQUAL "")
-    find_library(WEBSOCKETS_LIBRARY websockets PATHS "${WEBSOCKETS_DIR}/lib" REQUIRED NO_DEFAULT_PATH)
+unset(WEBSOCKETS_LIBRARY CACHE)
+if(NOT "${WEBSOCKETS_CUSTOM_DIR}" STREQUAL "")
+    set(WEBSOCKETS_HEADERS ${WEBSOCKETS_CUSTOM_DIR}/include)
+    find_library(WEBSOCKETS_LIBRARY websockets PATHS "${WEBSOCKETS_CUSTOM_DIR}/lib" REQUIRED NO_DEFAULT_PATH)
 else()
     find_library(WEBSOCKETS_LIBRARY websockets REQUIRED)
 endif()
 
+message(STATUS "Found libwebsockets library: " ${WEBSOCKETS_LIBRARY})
+
+add_library(websockets INTERFACE)
 target_link_libraries(websockets INTERFACE ${WEBSOCKETS_LIBRARY})
 
 if(OPTION_BUILD_CLIENT)
