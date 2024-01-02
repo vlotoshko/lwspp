@@ -107,7 +107,6 @@ set_target_properties(${TARGET_LWSPP_SERVER_STATIC} ${TARGET_LWSPP_SERVER_SHARED
     OUTPUT_NAME ${PROJECT_NAME}
 )
 
-install(TARGETS ${TARGET_LWSPP_SERVER_STATIC} ${TARGET_LWSPP_SERVER_SHARED} LIBRARY DESTINATION lib)
-install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/lwspp DESTINATION include)
+include(cmake/install.cmake)
 
 add_subdirectory(tests)
