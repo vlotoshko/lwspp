@@ -54,7 +54,7 @@ auto createLwsProtocols(CallbackVersion version) -> LwsProtocols
         {
             "/",
             callback,
-            0, // per session data size, not used
+            0, // per connection data size, not used
             0, // rx buffer size
             static_cast<unsigned int>(version), // id
             nullptr, // pointer on user data

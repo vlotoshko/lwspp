@@ -31,8 +31,8 @@ namespace lwspp
 namespace srv
 {
 
-const SessionId UNDEFINED_SESSION_ID = static_cast<int>(0U - 1);
-const SessionId ALL_SESSIONS = static_cast<int>(0U - 2);
+const ConnectionId UNDEFINED_CONNECTION_ID = static_cast<int>(0U - 1);
+const ConnectionId ALL_CONNECTIONS = static_cast<int>(0U - 2);
 
 } // namespace srv
 } // namespace lwspp

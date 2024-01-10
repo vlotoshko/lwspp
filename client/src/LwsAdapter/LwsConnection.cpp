@@ -22,7 +22,7 @@
  * IN THE SOFTWARE.
  */
 
-#include "LwsAdapter/LwsSession.hpp"
+#include "LwsAdapter/LwsConnection.hpp"
 
 namespace lwspp
 {
@@ -45,16 +45,16 @@ auto addPrefixToMessage(const Container& message) -> std::string
 
 } // namespace
 
-LwsSession::LwsSession(LwsInstanceRawPtr instance)
+LwsConnection::LwsConnection(LwsInstanceRawPtr instance)
     : _wsInstance(instance)
 {}
 
-auto LwsSession::getLwsInstance() -> LwsInstanceRawPtr
+auto LwsConnection::getLwsInstance() -> LwsInstanceRawPtr
 {
     return _wsInstance;
 }
 
-void LwsSession::addBinaryDataToSend(const std::vector<char>& binaryData)
+void LwsConnection::addBinaryDataToSend(const std::vector<char>& binaryData)
 {
     std::string payload = addPrefixToMessage(binaryData);
 
@@ -62,7 +62,7 @@ void LwsSession::addBinaryDataToSend(const std::vector<char>& binaryData)
     _messages.emplace(DataType::Binary, std::move(payload));
 }
 
-void LwsSession::addTextDataToSend(const std::string& textData)
+void LwsConnection::addTextDataToSend(const std::string& textData)
 {
     std::string payload = addPrefixToMessage(textData);
 
@@ -70,7 +70,7 @@ void LwsSession::addTextDataToSend(const std::string& textData)
     _messages.emplace(DataType::Text, std::move(payload));
 }
 
-auto LwsSession::getPendingData() -> std::queue<Message>&
+auto LwsConnection::getPendingData() -> std::queue<Message>&
 {
     if (_messagesToSend.empty())
     {

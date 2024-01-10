@@ -14,11 +14,11 @@ set(${PROJECT_NAME}_SRC_FILES
     include/lwspp/server/CallbackVersions.hpp
     include/lwspp/server/Consts.hpp
     include/lwspp/server/EventHandlerBase.hpp
+    include/lwspp/server/IConnectionInfo.hpp
     include/lwspp/server/IDataSender.hpp
     include/lwspp/server/IDataSenderAcceptor.hpp
     include/lwspp/server/IEventHandler.hpp
     include/lwspp/server/IServer.hpp
-    include/lwspp/server/ISessionInfo.hpp
     include/lwspp/server/ServerBuilder.hpp
     include/lwspp/server/SslSettingsBuilder.hpp
     include/lwspp/server/Types.hpp
@@ -26,12 +26,16 @@ set(${PROJECT_NAME}_SRC_FILES
 
     src/LwsAdapter/ILwsCallbackContext.hpp
     src/LwsAdapter/ILwsCallbackNotifier.hpp
-    src/LwsAdapter/ILwsSession.hpp
-    src/LwsAdapter/ILwsSessions.hpp
+    src/LwsAdapter/ILwsConnection.hpp
+    src/LwsAdapter/ILwsConnections.hpp
     src/LwsAdapter/LwsCallback.cpp
     src/LwsAdapter/LwsCallback.hpp
     src/LwsAdapter/LwsCallbackContext.cpp
     src/LwsAdapter/LwsCallbackContext.hpp
+    src/LwsAdapter/LwsConnection.cpp
+    src/LwsAdapter/LwsConnection.hpp
+    src/LwsAdapter/LwsConnections.cpp
+    src/LwsAdapter/LwsConnections.hpp
     src/LwsAdapter/LwsContextDeleter.hpp
     src/LwsAdapter/LwsDataHolder.cpp
     src/LwsAdapter/LwsDataHolder.hpp
@@ -41,21 +45,17 @@ set(${PROJECT_NAME}_SRC_FILES
     src/LwsAdapter/LwsProtocolsFactory.hpp
     src/LwsAdapter/LwsServer.cpp
     src/LwsAdapter/LwsServer.hpp
-    src/LwsAdapter/LwsSession.cpp
-    src/LwsAdapter/LwsSession.hpp
-    src/LwsAdapter/LwsSessions.cpp
-    src/LwsAdapter/LwsSessions.hpp
     src/LwsAdapter/LwsTypes.hpp
     src/LwsAdapter/LwsTypesFwd.hpp
 
+    src/ConnectionInfo.cpp
+    src/ConnectionInfo.hpp
     src/Consts.hpp
     src/EventHandlerBase.cpp
     src/Server.cpp
     src/Server.hpp
     src/ServerContext.hpp
     src/ServerBuilder.cpp
-    src/SessionInfo.cpp
-    src/SessionInfo.hpp
     src/SslSettings.hpp
     src/SslSettingsBuilder.cpp
     src/TypesFwd.hpp

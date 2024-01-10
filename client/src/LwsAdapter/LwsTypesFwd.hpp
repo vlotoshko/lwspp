@@ -36,9 +36,9 @@ namespace cli
 class ILwsCallbackContext;
 using ILwsCallbackContextPtr = std::shared_ptr<ILwsCallbackContext>;
 
-class ILwsSession;
-using ILwsSessionPtr = std::shared_ptr<ILwsSession>;
-using ILwsSessionWeak = std::weak_ptr<ILwsSession>;
+class ILwsConnection;
+using ILwsConnectionPtr = std::shared_ptr<ILwsConnection>;
+using ILwsConnectionWeak = std::weak_ptr<ILwsConnection>;
 
 struct LwsDataHolder;
 using LwsDataHolderPtr = std::shared_ptr<LwsDataHolder>;

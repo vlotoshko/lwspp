@@ -22,43 +22,58 @@
  * IN THE SOFTWARE.
  */
 
-#pragma once
-
-#include <queue>
-#include <string>
-
-#include "lwspp/server/Types.hpp"
-#include "LwsAdapter/LwsTypes.hpp"
-#include "LwsAdapter/LwsTypesFwd.hpp"
+#include "LwsAdapter/ILwsConnection.hpp"
+#include "LwsAdapter/LwsConnections.hpp"
 
 namespace lwspp
 {
 namespace srv
 {
 
-/**
- * @brief The ILwsSession class represents the connection to the client.
- */
-class ILwsSession
+void LwsConnections::add(ILwsConnectionPtr connection)
 {
-public:
-    ILwsSession() = default;
-    virtual ~ILwsSession() = default;
+    const std::lock_guard<std::mutex> guard(_mutex);
+    _connections.insert({connection->getConnectionId(), connection});
+    _cacheExpired = true;
+}
 
-    ILwsSession(const ILwsSession&) = default;
-    auto operator=(const ILwsSession&) -> ILwsSession& = default;
+void LwsConnections::remove(ConnectionId connectionId)
+{
+    const std::lock_guard<std::mutex> guard(_mutex);
+    _connections.erase(connectionId);
+    _cacheExpired = true;
+}
 
-    ILwsSession(ILwsSession&&) noexcept = default;
-    auto operator=(ILwsSession&&) noexcept -> ILwsSession& = default;
+auto LwsConnections::get(ConnectionId connectionId) -> ILwsConnectionPtr
+{
+    const std::lock_guard<std::mutex> guard(_mutex);
+    auto it = _connections.find(connectionId);
+    if (it != _connections.end())
+    {
+        return it->second;
+    }
+    return ILwsConnectionPtr{};
+}
 
-public:
-    virtual auto getSessionId() const -> SessionId = 0;
-    virtual auto getLwsInstance() -> LwsInstanceRawPtr = 0;
+auto LwsConnections::getAllConnections() -> std::vector<ILwsConnectionPtr>
+{
+    if (_cacheExpired)
+    {
+        _cachedConnections.clear();
+        _cachedConnections.reserve(_connections.size());
+        const std::lock_guard<std::mutex> guard(_mutex);
+        if (_cacheExpired)
+        {
+            for(auto& entry : _connections)
+            {
+                _cachedConnections.push_back(entry.second);
+            }
+            _cacheExpired = false;
+        }
+    }
 
-    virtual void addBinaryDataToSend(const std::vector<char>&) = 0;
-    virtual void addTextDataToSend(const std::string&) = 0;
-    virtual auto getPendingData() -> std::queue<Message>& = 0;
-};
+    return _cachedConnections;
+}
 
 } // namespace srv
 } // namespace lwspp

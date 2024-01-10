@@ -22,57 +22,69 @@
  * IN THE SOFTWARE.
  */
 
-#include "LwsAdapter/ILwsSession.hpp"
-#include "LwsAdapter/LwsSessions.hpp"
+#include "LwsAdapter/LwsConnection.hpp"
 
 namespace lwspp
 {
 namespace srv
 {
 
-void LwsSessions::add(ILwsSessionPtr session)
+namespace
 {
-    const std::lock_guard<std::mutex> guard(_mutex);
-    _sessions.insert({session->getSessionId(), session});
-    _cacheExpired = true;
+
+// NOTE: Additional space with the size of LWS_PRE should be added in the front of the data
+// For more information please read lws_write description
+template <typename Container>
+auto addPrefixToMessage(const Container& message) -> std::string
+{
+    std::string result;
+    // NOTE: resize can throw bad alloc if message is too large
+    result.resize(LWS_PRE + message.size());
+    std::copy(message.cbegin(), message.cend(), &result[0] + LWS_PRE);
+    return result;
 }
 
-void LwsSessions::remove(SessionId sessionId)
+} // namespace
+
+LwsConnection::LwsConnection(ConnectionId connectionId, LwsInstanceRawPtr instance)
+    : _connectionId(connectionId)
+    , _wsInstance(instance)
+{}
+
+auto LwsConnection::getConnectionId() const -> ConnectionId
 {
-    const std::lock_guard<std::mutex> guard(_mutex);
-    _sessions.erase(sessionId);
-    _cacheExpired = true;
+    return _connectionId;
 }
 
-auto LwsSessions::get(SessionId sessionId) -> ILwsSessionPtr
+auto LwsConnection::getLwsInstance() -> LwsInstanceRawPtr
 {
+    return _wsInstance;
+}
+
+void LwsConnection::addBinaryDataToSend(const std::vector<char>& binaryData)
+{
+    std::string payload = addPrefixToMessage(binaryData);
+
     const std::lock_guard<std::mutex> guard(_mutex);
-    auto it = _sessions.find(sessionId);
-    if (it != _sessions.end())
+    _pendingData.emplace(DataType::Binary, std::move(payload));
+}
+
+void LwsConnection::addTextDataToSend(const std::string& textData)
+{
+    std::string payload = addPrefixToMessage(textData);
+
+    const std::lock_guard<std::mutex> guard(_mutex);
+    _pendingData.emplace(DataType::Text, std::move(payload));
+}
+
+auto LwsConnection::getPendingData() -> std::queue<Message>&
+{
+    if (_pendingDataToSend.empty())
     {
-        return it->second;
-    }
-    return ILwsSessionPtr{};
-}
-
-auto LwsSessions::getAllSessions() -> std::vector<ILwsSessionPtr>
-{
-    if (_cacheExpired)
-    {
-        _cachedSessions.clear();
-        _cachedSessions.reserve(_sessions.size());
         const std::lock_guard<std::mutex> guard(_mutex);
-        if (_cacheExpired)
-        {
-            for(auto& entry : _sessions)
-            {
-                _cachedSessions.push_back(entry.second);
-            }
-            _cacheExpired = false;
-        }
+        _pendingDataToSend.swap(_pendingData);
     }
-
-    return _cachedSessions;
+    return _pendingDataToSend;
 }
 
 } // namespace srv

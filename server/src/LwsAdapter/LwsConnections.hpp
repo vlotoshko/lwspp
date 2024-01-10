@@ -24,33 +24,31 @@
 
 #pragma once
 
+#include <map>
 #include <mutex>
-#include <queue>
 
-#include "LwsAdapter/ILwsSession.hpp"
+#include "lwspp/server/Types.hpp"
+#include "LwsAdapter/ILwsConnections.hpp"
 
 namespace lwspp
 {
-namespace cli
+namespace srv
 {
 
-class LwsSession : public ILwsSession
+class LwsConnections : public ILwsConnections
 {
 public:
-    LwsSession(LwsInstanceRawPtr);
-
-    auto getLwsInstance() -> LwsInstanceRawPtr override;
-
-    void addBinaryDataToSend(const std::vector<char>&) override;
-    void addTextDataToSend(const std::string&) override;
-    auto getPendingData() -> std::queue<Message>& override;
+    void add(ILwsConnectionPtr) override;
+    void remove(ConnectionId) override;
+    auto get(ConnectionId) -> ILwsConnectionPtr override;
+    auto getAllConnections() -> std::vector<ILwsConnectionPtr> override;
 
 private:
-    LwsInstanceRawPtr _wsInstance;
-    std::queue<Message> _messages;
-    std::queue<Message> _messagesToSend;
+    std::map<ConnectionId, ILwsConnectionPtr> _connections;
+    std::vector<ILwsConnectionPtr> _cachedConnections;
+    bool _cacheExpired = true;
     std::mutex _mutex;
 };
 
-} // namespace cli
+} // namespace srv
 } // namespace lwspp

@@ -24,26 +24,32 @@
 
 #pragma once
 
+#include "lwspp/server/Types.hpp"
+
 namespace lwspp
 {
-namespace cli
+namespace srv
 {
 
 /**
- * @brief The ISessionInfo class provides the information about the connected session
+ * @brief The IConnectionInfo class provides the information about the connection
  */
-class ISessionInfo
+class IConnectionInfo
 {
 public:
-    ISessionInfo() = default;
-    virtual ~ISessionInfo() = default;
+    IConnectionInfo() = default;
+    virtual ~IConnectionInfo() = default;
 
-    ISessionInfo(ISessionInfo&&) = default;
-    auto operator=(ISessionInfo&&) noexcept -> ISessionInfo& = default;
+    IConnectionInfo(IConnectionInfo&&) = default;
+    auto operator=(IConnectionInfo&&) noexcept -> IConnectionInfo& = default;
 
-    ISessionInfo(const ISessionInfo&) = delete;
-    auto operator=(const ISessionInfo&) noexcept -> ISessionInfo& = delete;
+    IConnectionInfo(const IConnectionInfo&) = delete;
+    auto operator=(const IConnectionInfo&) noexcept -> IConnectionInfo& = delete;
+
+public:
+    virtual auto getConnectionId() -> ConnectionId = 0;
+    virtual auto getPath() -> const Path& = 0;
 };
 
-} // namespace cli
+} // namespace srv
 } // namespace lwspp

@@ -33,7 +33,7 @@ namespace srv
 
 // TODO: consider strong types using
 using Port = int;
-using SessionId = int;
+using ConnectionId = int;
 using Path = std::string;
 
 struct DataPacket

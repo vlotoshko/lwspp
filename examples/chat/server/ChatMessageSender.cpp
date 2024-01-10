@@ -38,7 +38,7 @@ auto isPrivateMessage(const User& user, const Message& message) -> bool
 
 auto isPublicMessage(const Message& message) -> bool
 {
-    return message.to.sessionId == srv::ALL_SESSIONS;
+    return message.to.connectionId == srv::ALL_CONNECTIONS;
 }
 
 ChatMessageSender::ChatMessageSender(srv::IDataSenderPtr s)
@@ -57,17 +57,17 @@ void ChatMessageSender::sendUserMessage(const Message& message)
                 .append(message.to.userName).append(">:")
                 .append(message.text)
                 ;
-        if (message.to.sessionId == srv::ALL_SESSIONS)
+        if (message.to.connectionId == srv::ALL_CONNECTIONS)
         {
             _dataSender->sendTextData(messageToSend);
         }
         else
         {
-            _dataSender->sendTextData(message.to.sessionId, messageToSend);
-            if (message.to.sessionId != message.from.sessionId &&
-                message.from.sessionId != srv::UNDEFINED_SESSION_ID)
+            _dataSender->sendTextData(message.to.connectionId, messageToSend);
+            if (message.to.connectionId != message.from.connectionId &&
+                message.from.connectionId != srv::UNDEFINED_CONNECTION_ID)
             {
-                _dataSender->sendTextData(message.from.sessionId, messageToSend);
+                _dataSender->sendTextData(message.from.connectionId, messageToSend);
             }
         }
     }
@@ -82,7 +82,7 @@ void ChatMessageSender::sendChatHistory(const User& user, const std::vector<Mess
         {
             if (isPublicMessage(message) || isPrivateMessage(user, message))
             {
-                _dataSender->sendTextData(user.sessionId, std::string{"HIST:<"}
+                _dataSender->sendTextData(user.connectionId, std::string{"HIST:<"}
                                             .append(message.from.userName).append(">:<")
                                             .append(message.to.userName).append(">:")
                                             .append(message.text));
@@ -91,7 +91,7 @@ void ChatMessageSender::sendChatHistory(const User& user, const std::vector<Mess
     }
 }
 
-void ChatMessageSender::updateUsers(const std::map<srv::SessionId, User>& users)
+void ChatMessageSender::updateUsers(const std::map<srv::ConnectionId, User>& users)
 {
     // Message format: "USRUPD:User1,User2,User3,"
     if (_dataSender != nullptr)

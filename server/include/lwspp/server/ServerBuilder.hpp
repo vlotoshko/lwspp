@@ -70,7 +70,6 @@ public:
     auto setServerString(std::string) -> ServerBuilder&;
     auto setLwsLogLevel(int) -> ServerBuilder&;
 
-
 private:
     std::unique_ptr<ServerContext> _context;
 

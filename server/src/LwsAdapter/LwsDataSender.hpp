@@ -36,16 +36,16 @@ namespace srv
 class LwsDataSender : public IDataSender
 {
 public:
-    LwsDataSender(ILwsSessionsPtr s, ILwsCallbackNotifierPtr n);
+    LwsDataSender(ILwsConnectionsPtr s, ILwsCallbackNotifierPtr n);
 
-    void sendTextData(SessionId sessionId, const std::string&) override;
-    void sendBinaryData(SessionId sessionId, const std::vector<char>&) override;
+    void sendTextData(ConnectionId, const std::string&) override;
+    void sendBinaryData(ConnectionId, const std::vector<char>&) override;
 
     void sendTextData(const std::string&) override;
     void sendBinaryData(const std::vector<char>&) override;
 
 private:
-    ILwsSessionsPtr _sessions;
+    ILwsConnectionsPtr _connections;
     ILwsCallbackNotifierPtr _notifier;
 };
 

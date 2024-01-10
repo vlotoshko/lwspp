@@ -25,10 +25,10 @@
 #include "lwspp/server/IEventHandler.hpp"
 #include "Consts.hpp"
 #include "LwsAdapter/ILwsCallbackContext.hpp"
-#include "LwsAdapter/ILwsSessions.hpp"
+#include "LwsAdapter/ILwsConnections.hpp"
 #include "LwsAdapter/LwsCallback.hpp"
-#include "LwsAdapter/LwsSession.hpp"
-#include "SessionInfo.hpp"
+#include "LwsAdapter/LwsConnection.hpp"
+#include "ConnectionInfo.hpp"
 
 namespace lwspp
 {
@@ -36,7 +36,7 @@ namespace srv
 {
 namespace
 {
-// The libwebsockets closes current session if callback returns -1
+// The libwebsockets closes current connection if callback returns -1
 const int CLOSE_SESSION = -1;
 
 auto getCallbackContext(lws* wsInstance) -> ILwsCallbackContext&
@@ -45,12 +45,12 @@ auto getCallbackContext(lws* wsInstance) -> ILwsCallbackContext&
     return *(reinterpret_cast<ILwsCallbackContext *>(contextData));
 }
 
-auto getSessionId(lws* wsInstance) -> SessionId
+auto getConnectionId(lws* wsInstance) -> ConnectionId
 {
     return lws_get_socket_fd(wsInstance);
 }
 
-auto getSessionPath(lws* wsInstance) -> Path
+auto getConnectionPath(lws* wsInstance) -> Path
 {
     std::array<char, MAX_PATH_SIZE> buffer{};
     lws_hdr_copy(wsInstance, buffer.data(), MAX_PATH_SIZE, WSI_TOKEN_GET_URI);
@@ -81,26 +81,26 @@ auto lwsCallback_v1(
 {
     auto& callbackContext = getCallbackContext(wsInstance);
     auto eventHandler = callbackContext.getEventHandler();
-    auto sessionId = getSessionId(wsInstance);
+    auto connectionId = getConnectionId(wsInstance);
 
     switch(reason)
     {
     case LWS_CALLBACK_ESTABLISHED:
     {
-        auto sessions = callbackContext.getSessions();
-        sessions->add(std::make_shared<LwsSession>(sessionId, wsInstance));
+        auto connections = callbackContext.getConnections();
+        connections->add(std::make_shared<LwsConnection>(connectionId, wsInstance));
 
-        auto sessionInfo =
-            std::make_shared<SessionInfo>(sessionId, getSessionPath(wsInstance));
-        eventHandler->onConnect(sessionInfo);
+        auto connectionInfo =
+            std::make_shared<ConnectionInfo>(connectionId, getConnectionPath(wsInstance));
+        eventHandler->onConnect(connectionInfo);
         break;
     }
     case LWS_CALLBACK_SERVER_WRITEABLE:
     {
-        auto sessions = callbackContext.getSessions();
-        if (auto session = sessions->get(sessionId))
+        auto connections = callbackContext.getConnections();
+        if (auto connection = connections->get(connectionId))
         {
-            auto& messages = session->getPendingData();
+            auto& messages = connection->getPendingData();
             if (!messages.empty() && !callbackContext.isStopping())
             {
                 auto& message = messages.front();
@@ -114,15 +114,15 @@ auto lwsCallback_v1(
                 }
                 else
                 {
-                    eventHandler->onError(sessionId, "Error writing data to socket");
+                    eventHandler->onError(connectionId, "Error writing data to socket");
                 }
             }
         }
         else
         {
             // Never should be here
-            eventHandler->onWarning(sessionId, "Referring to unknown or deleted session. "
-                                               "Dropping connection for this session");
+            eventHandler->onWarning(connectionId, "Referring to unknown or deleted connection. "
+                                                  "Dropping this connection");
             return CLOSE_SESSION;
         }
         break;
@@ -133,19 +133,19 @@ auto lwsCallback_v1(
         const auto remains = static_cast<size_t>(lws_remaining_packet_payload(wsInstance));
         if (lws_frame_is_binary(wsInstance) == 1)
         {
-            eventHandler->onBinaryDataReceive(sessionId, DataPacket{inAsChar, len, remains});
+            eventHandler->onBinaryDataReceive(connectionId, DataPacket{inAsChar, len, remains});
         }
         else
         {
-            eventHandler->onTextDataReceive(sessionId, DataPacket{inAsChar, len, remains});
+            eventHandler->onTextDataReceive(connectionId, DataPacket{inAsChar, len, remains});
         }
         break;
     }
     case LWS_CALLBACK_CLOSED:
     {
-        auto sessions = callbackContext.getSessions();
-        sessions->remove(sessionId);
-        eventHandler->onDisconnect(sessionId);
+        auto connections = callbackContext.getConnections();
+        connections->remove(connectionId);
+        eventHandler->onDisconnect(connectionId);
         break;
     }
     default:

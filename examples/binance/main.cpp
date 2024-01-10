@@ -40,7 +40,7 @@ const int MESSAGES_LIMIT = 5;
 class ClientEventHandler : public cli::EventHandlerBase
 {
 public:
-    void onConnect(cli::ISessionInfoPtr) noexcept override
+    void onConnect(cli::IConnectionInfoPtr) noexcept override
     {
         _dataSender->sendTextData(SUBSCRIBE);
     }

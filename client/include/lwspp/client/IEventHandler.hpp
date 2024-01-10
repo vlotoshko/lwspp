@@ -58,7 +58,7 @@ public:
     // Invoked when the client receives text data from the server. This method expects valid UTF-8 text.
     virtual void onTextDataReceive(const DataPacket&) noexcept = 0;
 
-    virtual void onConnect(ISessionInfoPtr) noexcept = 0;
+    virtual void onConnect(IConnectionInfoPtr) noexcept = 0;
     virtual void onDisconnect() noexcept = 0;
     virtual void onError(const std::string& errorMessage) noexcept = 0;
     virtual void onWarning(const std::string& errorMessage) noexcept = 0;

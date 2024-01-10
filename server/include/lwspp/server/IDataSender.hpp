@@ -51,12 +51,12 @@ public:
     auto operator=(IDataSender&&) noexcept -> IDataSender& = default;
 
 public:
-    // Sends text data to the specified client identified by SessionId.
+    // Sends text data to the specified client identified by ConnectionId.
     // The provided text data should be valid UTF-8 text.
-    virtual void sendTextData(SessionId, const std::string&) = 0;
+    virtual void sendTextData(ConnectionId, const std::string&) = 0;
 
-    // Sends binary data to the specified client identified by SessionId.
-    virtual void sendBinaryData(SessionId, const std::vector<char>&) = 0;
+    // Sends binary data to the specified client identified by ConnectionId.
+    virtual void sendBinaryData(ConnectionId, const std::vector<char>&) = 0;
 
     // Sends text data to all connected clients.
     //The provided text data should be valid UTF-8 text.

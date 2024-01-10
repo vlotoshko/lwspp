@@ -36,13 +36,13 @@ namespace cli
 class LwsDataSender : public IDataSender
 {
 public:
-    explicit LwsDataSender(const ILwsSessionPtr&);
+    explicit LwsDataSender(const ILwsConnectionPtr&);
 
     void sendTextData(const std::string&) override;
     void sendBinaryData(const std::vector<char>&) override;
 
 private:
-    ILwsSessionWeak _session;
+    ILwsConnectionWeak _connection;
 };
 
 } // namespace cli

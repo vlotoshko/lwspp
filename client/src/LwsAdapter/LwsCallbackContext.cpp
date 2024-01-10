@@ -54,26 +54,26 @@ auto LwsCallbackContext::getEventHandler() -> IEventHandlerPtr
     return _eventHandler;
 }
 
-auto LwsCallbackContext::getSession() -> ILwsSessionPtr
+auto LwsCallbackContext::getConnection() -> ILwsConnectionPtr
 {
-    return _session;
+    return _connection;
 }
 
-void LwsCallbackContext::setSession(ILwsSessionPtr s)
+void LwsCallbackContext::setConnection(ILwsConnectionPtr s)
 {
     if (s == nullptr)
     {
-        throw std::runtime_error{"unaintialized lws session found"};
+        throw std::runtime_error{"unaintialized lws connection found"};
     }
-    _session = std::move(s);
+    _connection = std::move(s);
 
-    auto dataSender = std::make_shared<LwsDataSender>(_session);
+    auto dataSender = std::make_shared<LwsDataSender>(_connection);
     _dataSenderAcceptor->acceptDataSender(std::move(dataSender));
 }
 
-void LwsCallbackContext::resetSession()
+void LwsCallbackContext::resetConnection()
 {
-    _session.reset();
+    _connection.reset();
 }
 
 } // namespace cli

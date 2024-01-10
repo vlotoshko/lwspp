@@ -29,22 +29,22 @@ namespace lwspp
 namespace srv
 {
 
-void EventHandlerBase::onConnect(ISessionInfoPtr) noexcept
+void EventHandlerBase::onConnect(IConnectionInfoPtr) noexcept
 {}
 
-void EventHandlerBase::onDisconnect(SessionId) noexcept
+void EventHandlerBase::onDisconnect(ConnectionId) noexcept
 {}
 
-void EventHandlerBase::onBinaryDataReceive(SessionId, const DataPacket&) noexcept
+void EventHandlerBase::onBinaryDataReceive(ConnectionId, const DataPacket&) noexcept
 {}
 
-void EventHandlerBase::onTextDataReceive(SessionId, const DataPacket&) noexcept
+void EventHandlerBase::onTextDataReceive(ConnectionId, const DataPacket&) noexcept
 {}
 
-void EventHandlerBase::onError(SessionId, const std::string& /*errorMessage*/) noexcept
+void EventHandlerBase::onError(ConnectionId, const std::string& /*errorMessage*/) noexcept
 {}
 
-void EventHandlerBase::onWarning(SessionId, const std::string& /*warningMessage*/) noexcept
+void EventHandlerBase::onWarning(ConnectionId, const std::string& /*warningMessage*/) noexcept
 {}
 
 void EventHandlerBase::acceptDataSender(IDataSenderPtr dataSender) noexcept

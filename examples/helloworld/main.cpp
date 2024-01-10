@@ -38,7 +38,7 @@ using namespace lwspp;
 class ClientEventHandler : public cli::EventHandlerBase
 {
 public:
-    void onConnect(cli::ISessionInfoPtr) noexcept override
+    void onConnect(cli::IConnectionInfoPtr) noexcept override
     {
         _dataSender->sendTextData("hello server!");
     }
@@ -52,7 +52,7 @@ public:
 class ServerEventHandler : public srv::EventHandlerBase
 {
 public:
-    void onTextDataReceive(srv::SessionId, const srv::DataPacket& dataPacket) noexcept override
+    void onTextDataReceive(srv::ConnectionId, const srv::DataPacket& dataPacket) noexcept override
     {
         std::cout << "server received the message: " << std::string{dataPacket.data, dataPacket.length}  << std::endl;
         _dataSender->sendTextData("hello client!");

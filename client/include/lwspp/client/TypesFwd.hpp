@@ -43,8 +43,8 @@ using IDataSenderAcceptorPtr = std::shared_ptr<IDataSenderAcceptor>;
 class IEventHandler;
 using IEventHandlerPtr = std::shared_ptr<IEventHandler>;
 
-class ISessionInfo;
-using ISessionInfoPtr = std::shared_ptr<ISessionInfo>;
+class IConnectionInfo;
+using IConnectionInfoPtr = std::shared_ptr<IConnectionInfo>;
 
 class SslSettings;
 using SslSettingsPtr = std::shared_ptr<SslSettings>;

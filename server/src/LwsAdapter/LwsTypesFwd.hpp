@@ -39,11 +39,11 @@ using ILwsCallbackContextPtr = std::shared_ptr<ILwsCallbackContext>;
 class ILwsCallbackNotifier;
 using ILwsCallbackNotifierPtr = std::shared_ptr<ILwsCallbackNotifier>;
 
-class ILwsSession;
-using ILwsSessionPtr = std::shared_ptr<ILwsSession>;
+class ILwsConnection;
+using ILwsConnectionPtr = std::shared_ptr<ILwsConnection>;
 
-class ILwsSessions;
-using ILwsSessionsPtr = std::shared_ptr<ILwsSessions>;
+class ILwsConnections;
+using ILwsConnectionsPtr = std::shared_ptr<ILwsConnections>;
 
 using LwsInstanceRawPtr = lws*;
 

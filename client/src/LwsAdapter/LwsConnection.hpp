@@ -22,29 +22,35 @@
  * IN THE SOFTWARE.
  */
 
-#include "SessionInfo.hpp"
+#pragma once
+
+#include <mutex>
+#include <queue>
+
+#include "LwsAdapter/ILwsConnection.hpp"
 
 namespace lwspp
 {
-namespace srv
+namespace cli
 {
 
-SessionInfo::SessionInfo(SessionId sessionId, Path path)
-    : _sessionId(sessionId)
-    , _path(std::move(path))
-{}
-
-auto SessionInfo::getSessionId() -> SessionId
+class LwsConnection : public ILwsConnection
 {
-    return _sessionId;
-}
+public:
+    explicit LwsConnection(LwsInstanceRawPtr);
 
-auto SessionInfo::getPath() -> const Path&
-{
-    return _path;
-}
+    auto getLwsInstance() -> LwsInstanceRawPtr override;
 
+    void addBinaryDataToSend(const std::vector<char>&) override;
+    void addTextDataToSend(const std::string&) override;
+    auto getPendingData() -> std::queue<Message>& override;
 
+private:
+    LwsInstanceRawPtr _wsInstance;
+    std::queue<Message> _messages;
+    std::queue<Message> _messagesToSend;
+    std::mutex _mutex;
+};
 
-} // namespace srv
+} // namespace cli
 } // namespace lwspp

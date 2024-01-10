@@ -24,39 +24,37 @@
 
 #pragma once
 
-#include <queue>
-#include <string>
+#include <vector>
 
-#include "LwsAdapter/LwsTypes.hpp"
+#include "lwspp/server/Types.hpp"
 #include "LwsAdapter/LwsTypesFwd.hpp"
 
 namespace lwspp
 {
-namespace cli
+namespace srv
 {
 
 /**
- * @brief The ILwsSession class represents the connection to the server.
+ * @brief The ILwsConnections class represents a container for storing and accessing all ILwsConnection instances.
  */
-class ILwsSession
+class ILwsConnections
 {
 public:
-    ILwsSession() = default;
-    virtual ~ILwsSession() = default;
+    ILwsConnections() = default;
+    virtual ~ILwsConnections() = default;
 
-    ILwsSession(const ILwsSession&) = default;
-    auto operator=(const ILwsSession&) -> ILwsSession& = default;
+    ILwsConnections(const ILwsConnections&) = default;
+    auto operator=(const ILwsConnections&) -> ILwsConnections& = default;
 
-    ILwsSession(ILwsSession&&) noexcept = default;
-    auto operator=(ILwsSession&&) noexcept -> ILwsSession& = default;
+    ILwsConnections(ILwsConnections&&) noexcept = default;
+    auto operator=(ILwsConnections&&) noexcept -> ILwsConnections& = default;
 
 public:
-    virtual auto getLwsInstance() -> LwsInstanceRawPtr = 0;
-
-    virtual void addBinaryDataToSend(const std::vector<char>&) = 0;
-    virtual void addTextDataToSend(const std::string&) = 0;
-    virtual auto getPendingData() -> std::queue<Message>& = 0;
+    virtual void add(ILwsConnectionPtr) = 0;
+    virtual void remove(ConnectionId) = 0;
+    virtual auto get(ConnectionId) -> ILwsConnectionPtr = 0;
+    virtual auto getAllConnections() -> std::vector<ILwsConnectionPtr> = 0;
 };
 
-} // namespace cli
+} // namespace srv
 } // namespace lwspp

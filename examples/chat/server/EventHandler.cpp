@@ -23,7 +23,7 @@
  */
 
 #include "lwspp/server/Consts.hpp"
-#include "lwspp/server/ISessionInfo.hpp"
+#include "lwspp/server/IConnectionInfo.hpp"
 
 #include "EventHandler.hpp"
 
@@ -44,9 +44,9 @@ enum class DataType
 };
 
 const std::string UNKNOWN_USERN_NAME = "UNKNOWN_USER_NAME";
-const User UNKNOWN_USER = User{srv::UNDEFINED_SESSION_ID, "UNKNOWN"};
-const User SYSTEM = User{srv::UNDEFINED_SESSION_ID, "SYS"};
-const User ALL_USERS = User{srv::ALL_SESSIONS, "ALL"};
+const User UNKNOWN_USER = User{srv::UNDEFINED_CONNECTION_ID, "UNKNOWN"};
+const User SYSTEM = User{srv::UNDEFINED_CONNECTION_ID, "SYS"};
+const User ALL_USERS = User{srv::ALL_CONNECTIONS, "ALL"};
 
 auto trim(const std::string& str) -> std::string
 {
@@ -80,7 +80,7 @@ auto getDataType(const std::string& message) -> DataType
     return DataType::UNKNOWN;
 }
 
-auto getUserByName(const std::map<srv::SessionId, User>& users, const std::string& userName)
+auto getUserByName(const std::map<srv::ConnectionId, User>& users, const std::string& userName)
 -> User
 {
     for (const auto& entry : users)
@@ -95,7 +95,7 @@ auto getUserByName(const std::map<srv::SessionId, User>& users, const std::strin
 }
 
 // Trying to retrieve recipient name if message is private
-auto parseIncomingMessage(const std::map<srv::SessionId, User>& users, const std::string& message)
+auto parseIncomingMessage(const std::map<srv::ConnectionId, User>& users, const std::string& message)
 -> std::tuple<User, std::string>
 {
     const std::string messagePrefix = "MSG:<";
@@ -110,7 +110,7 @@ auto parseIncomingMessage(const std::map<srv::SessionId, User>& users, const std
         auto rawMessage = message.substr(nameEnd + 2, message.length() - 1);
 
         auto user = getUserByName(users, userName);
-        if(user.sessionId != UNKNOWN_USER.sessionId)
+        if(user.connectionId != UNKNOWN_USER.connectionId)
         {
             return std::make_pair(user, trim(rawMessage));
         }
@@ -143,19 +143,19 @@ auto getUserNameFromHello(const std::string& message) -> std::string
 EventHandler::EventHandler() : _chatMessageSender(srv::IDataSenderPtr{})
 {}
 
-void EventHandler::onConnect(lwspp::srv::ISessionInfoPtr sessionInfo) noexcept
+void EventHandler::onConnect(lwspp::srv::IConnectionInfoPtr connectionInfo) noexcept
 {
-    const User user = {sessionInfo->getSessionId(), UNKNOWN_USERN_NAME};
-    _users[sessionInfo->getSessionId()] = user;
+    const User user = {connectionInfo->getConnectionId(), UNKNOWN_USERN_NAME};
+    _users[connectionInfo->getConnectionId()] = user;
 }
 
-void EventHandler::onDisconnect(lwspp::srv::SessionId sessionId) noexcept
+void EventHandler::onDisconnect(lwspp::srv::ConnectionId connectionId) noexcept
 {
-    _users.erase(sessionId);
+    _users.erase(connectionId);
     _chatMessageSender.updateUsers(_users);
 }
 
-void EventHandler::onTextDataReceive(srv::SessionId sessionId, const srv::DataPacket& dataPacket) noexcept
+void EventHandler::onTextDataReceive(srv::ConnectionId connectionId, const srv::DataPacket& dataPacket) noexcept
 {
     // Expected messages:
     //   hello message, format: "HELLO:<Nickname>"
@@ -168,12 +168,12 @@ void EventHandler::onTextDataReceive(srv::SessionId sessionId, const srv::DataPa
     {
     case DataType::HELLO:
     {
-        processHelloMessage_(sessionId, message);
+        processHelloMessage_(connectionId, message);
         break;
     }
     case DataType::MSG:
     {
-        processUserMessage_(sessionId, message);
+        processUserMessage_(connectionId, message);
         break;
     }
     default:
@@ -188,15 +188,15 @@ void EventHandler::acceptDataSender(srv::IDataSenderPtr messageSender) noexcept
     _chatMessageSender = ChatMessageSender{_dataSender};
 }
 
-void EventHandler::processHelloMessage_(srv::SessionId sessionId, const std::string& messageText)
+void EventHandler::processHelloMessage_(srv::ConnectionId connectionId, const std::string& messageText)
 {
     auto userName = getUserNameFromHello(messageText);
     if (!userName.empty())
     {
         auto userWithThisName = getUserByName(_users, userName);
-        if(userWithThisName.sessionId == UNKNOWN_USER.sessionId)
+        if(userWithThisName.connectionId == UNKNOWN_USER.connectionId)
         {
-            auto& user = _users[sessionId];
+            auto& user = _users[connectionId];
             user.userName = userName;
             _chatMessageSender.updateUsers(_users);
             _chatMessageSender.sendChatHistory(user, _history);
@@ -205,24 +205,24 @@ void EventHandler::processHelloMessage_(srv::SessionId sessionId, const std::str
         {
             auto sendText =
                     std::string{"nickname '"}.append(userName).append("' is already in use");
-            auto message = Message{SYSTEM, _users[sessionId], sendText};
+            auto message = Message{SYSTEM, _users[connectionId], sendText};
             _chatMessageSender.sendUserMessage(message);
         }
     }
     else
     {
-        _chatMessageSender.sendUserMessage(Message{SYSTEM, _users[sessionId],
+        _chatMessageSender.sendUserMessage(Message{SYSTEM, _users[connectionId],
                                                    "error: empty nickname"});
     }
 }
 
-void EventHandler::processUserMessage_(srv::SessionId sessionId, const std::string& messageText)
+void EventHandler::processUserMessage_(srv::ConnectionId connectionId, const std::string& messageText)
 {
     User recipient;
     std::string rawMessage;
     std::tie(recipient, rawMessage) = parseIncomingMessage(_users, messageText);
 
-    auto message = Message{_users[sessionId], recipient, rawMessage};
+    auto message = Message{_users[connectionId], recipient, rawMessage};
     _chatMessageSender.sendUserMessage(message);
     _history.emplace_back(std::move(message));
 }

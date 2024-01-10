@@ -27,8 +27,8 @@
 #include "lwspp/client/IEventHandler.hpp"
 #include "LwsAdapter/ILwsCallbackContext.hpp"
 #include "LwsAdapter/LwsCallback.hpp"
-#include "LwsAdapter/LwsSession.hpp"
-#include "SessionInfo.hpp"
+#include "LwsAdapter/LwsConnection.hpp"
+#include "ConnectionInfo.hpp"
 
 namespace lwspp
 {
@@ -36,7 +36,7 @@ namespace cli
 {
 namespace
 {
-// The libwebsockets closes current session if callback returns -1
+// The libwebsockets closes current connection if callback returns -1
 const int CLOSE_SESSION = -1;
 
 auto getCallbackContext(lws* wsInstance) -> ILwsCallbackContext&
@@ -83,15 +83,15 @@ auto lwsCallback_v1(
     }
     case LWS_CALLBACK_CLIENT_ESTABLISHED:
     {
-        callbackContext.setSession(std::make_shared<LwsSession>(wsInstance));
-        eventHandler->onConnect(std::make_shared<SessionInfo>());
+        callbackContext.setConnection(std::make_shared<LwsConnection>(wsInstance));
+        eventHandler->onConnect(std::make_shared<ConnectionInfo>());
         break;
     }
     case LWS_CALLBACK_CLIENT_WRITEABLE:
     {
-        if (auto session = callbackContext.getSession())
+        if (auto connection = callbackContext.getConnection())
         {
-            auto& messages = session->getPendingData();
+            auto& messages = connection->getPendingData();
             if (!messages.empty() && !callbackContext.isStopping())
             {
                 auto& message = messages.front();
@@ -112,8 +112,8 @@ auto lwsCallback_v1(
         else
         {
             // Never should be here
-            eventHandler->onWarning("Referring to unknown or deleted session. "
-                                    "Dropping connection for this session");
+            eventHandler->onWarning("Referring to unknown or deleted connection. "
+                                    "Dropping this connection");
             return CLOSE_SESSION;
         }
         break;
@@ -134,7 +134,7 @@ auto lwsCallback_v1(
     }
     case LWS_CALLBACK_CLIENT_CLOSED:
     {
-        callbackContext.resetSession();
+        callbackContext.resetConnection();
         eventHandler->onDisconnect();
         break;
     }

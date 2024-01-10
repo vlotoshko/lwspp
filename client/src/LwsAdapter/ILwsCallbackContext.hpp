@@ -51,9 +51,9 @@ public:
     virtual void setStopping() = 0;
     virtual auto isStopping() const -> bool = 0;
 
-    virtual auto getSession() -> ILwsSessionPtr = 0;
-    virtual void setSession(ILwsSessionPtr) = 0;
-    virtual void resetSession() = 0;
+    virtual auto getConnection() -> ILwsConnectionPtr = 0;
+    virtual void setConnection(ILwsConnectionPtr) = 0;
+    virtual void resetConnection() = 0;
 
     virtual auto getEventHandler() -> IEventHandlerPtr = 0;
 };

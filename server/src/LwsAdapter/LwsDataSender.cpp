@@ -23,8 +23,8 @@
  */
 
 #include "LwsAdapter/ILwsCallbackNotifier.hpp"
-#include "LwsAdapter/ILwsSession.hpp"
-#include "LwsAdapter/ILwsSessions.hpp"
+#include "LwsAdapter/ILwsConnection.hpp"
+#include "LwsAdapter/ILwsConnections.hpp"
 #include "LwsAdapter/LwsDataSender.hpp"
 
 namespace lwspp
@@ -32,32 +32,32 @@ namespace lwspp
 namespace srv
 {
 
-LwsDataSender::LwsDataSender(ILwsSessionsPtr s, ILwsCallbackNotifierPtr n)
-    : _sessions(std::move(s))
+LwsDataSender::LwsDataSender(ILwsConnectionsPtr s, ILwsCallbackNotifierPtr n)
+    : _connections(std::move(s))
     , _notifier(std::move(n))
 {}
 
-void LwsDataSender::sendTextData(SessionId sessionId, const std::string& message)
+void LwsDataSender::sendTextData(ConnectionId connectionId, const std::string& message)
 {
-    if (auto session = _sessions->get(sessionId))
+    if (auto connection = _connections->get(connectionId))
     {
-        session->addTextDataToSend(message);
-        _notifier->notifyPendingDataAdded(session);
+        connection->addTextDataToSend(message);
+        _notifier->notifyPendingDataAdded(connection);
     }
 }
 
-void LwsDataSender::sendBinaryData(SessionId sessionId, const std::vector<char>& data)
+void LwsDataSender::sendBinaryData(ConnectionId connectionId, const std::vector<char>& data)
 {
-    if (auto session = _sessions->get(sessionId))
+    if (auto connection = _connections->get(connectionId))
     {
-        session->addBinaryDataToSend(data);
-        _notifier->notifyPendingDataAdded(session);
+        connection->addBinaryDataToSend(data);
+        _notifier->notifyPendingDataAdded(connection);
     }
 }
 
 void LwsDataSender::sendTextData(const std::string& message)
 {
-    for(auto& entry : _sessions->getAllSessions())
+    for(auto& entry : _connections->getAllConnections())
     {
         if (entry != nullptr)
         {
@@ -73,7 +73,7 @@ void LwsDataSender::sendTextData(const std::string& message)
 
 void LwsDataSender::sendBinaryData(const std::vector<char>& data)
 {
-    for(auto& entry : _sessions->getAllSessions())
+    for(auto& entry : _connections->getAllConnections())
     {
         if (entry != nullptr)
         {

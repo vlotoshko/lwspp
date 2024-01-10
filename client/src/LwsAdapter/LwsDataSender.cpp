@@ -22,7 +22,7 @@
  * IN THE SOFTWARE.
  */
 
-#include "LwsAdapter/ILwsSession.hpp"
+#include "LwsAdapter/ILwsConnection.hpp"
 #include "LwsAdapter/LwsDataSender.hpp"
 
 namespace lwspp
@@ -30,25 +30,25 @@ namespace lwspp
 namespace cli
 {
 
-LwsDataSender::LwsDataSender(const ILwsSessionPtr& s)
-    : _session(s)
+LwsDataSender::LwsDataSender(const ILwsConnectionPtr& s)
+    : _connection(s)
 {}
 
 void LwsDataSender::sendTextData(const std::string& message)
 {
-    if (auto session = _session.lock())
+    if (auto connection = _connection.lock())
     {
-        session->addTextDataToSend(message);
-        lws_callback_on_writable(session->getLwsInstance());
+        connection->addTextDataToSend(message);
+        lws_callback_on_writable(connection->getLwsInstance());
     }
 }
 
 void LwsDataSender::sendBinaryData(const std::vector<char>& data)
 {
-    if (auto session = _session.lock())
+    if (auto connection = _connection.lock())
     {
-        session->addBinaryDataToSend(data);
-        lws_callback_on_writable(session->getLwsInstance());
+        connection->addBinaryDataToSend(data);
+        lws_callback_on_writable(connection->getLwsInstance());
     }
 }
 

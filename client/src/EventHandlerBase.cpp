@@ -29,7 +29,7 @@ namespace lwspp
 namespace cli
 {
 
-void EventHandlerBase::onConnect(ISessionInfoPtr) noexcept
+void EventHandlerBase::onConnect(IConnectionInfoPtr) noexcept
 {}
 
 void EventHandlerBase::onDisconnect() noexcept

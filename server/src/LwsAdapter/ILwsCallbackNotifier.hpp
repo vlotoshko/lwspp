@@ -48,9 +48,9 @@ public:
     auto operator=(ILwsCallbackNotifier&&) noexcept -> ILwsCallbackNotifier& = default;
 
 public:
-    // Notifies that pending data was added to send to the specific session.
-    virtual void notifyPendingDataAdded(const ILwsSessionPtr&) = 0;
-    // Notifies that pending data was added to send to the all sessions.
+    // Notifies that pending data was added to send to the specific connection.
+    virtual void notifyPendingDataAdded(const ILwsConnectionPtr&) = 0;
+    // Notifies that pending data was added to send to the all connections.
     virtual void notifyPendingDataAdded() = 0;
 };
 

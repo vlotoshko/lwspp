@@ -39,13 +39,13 @@ namespace srv
 class EventHandlerBase : public IEventHandler, public IDataSenderAcceptor
 {
 public:
-    void onConnect(ISessionInfoPtr) noexcept override;
-    void onDisconnect(SessionId) noexcept override;
+    void onConnect(IConnectionInfoPtr) noexcept override;
+    void onDisconnect(ConnectionId) noexcept override;
 
-    void onBinaryDataReceive(SessionId, const DataPacket&) noexcept override;
-    void onTextDataReceive(SessionId, const DataPacket&) noexcept override;
-    void onError(SessionId, const std::string& errorMessage) noexcept override;
-    void onWarning(SessionId, const std::string& warningMessage) noexcept override;
+    void onBinaryDataReceive(ConnectionId, const DataPacket&) noexcept override;
+    void onTextDataReceive(ConnectionId, const DataPacket&) noexcept override;
+    void onError(ConnectionId, const std::string& errorMessage) noexcept override;
+    void onWarning(ConnectionId, const std::string& warningMessage) noexcept override;
 
     void acceptDataSender(IDataSenderPtr) noexcept override;
 

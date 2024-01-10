@@ -24,31 +24,35 @@
 
 #pragma once
 
-#include "lwspp/server/Types.hpp"
+#include <mutex>
+#include <string>
+#include <queue>
+
+#include "LwsAdapter/ILwsConnection.hpp"
 
 namespace lwspp
 {
 namespace srv
 {
 
-/**
- * @brief The ISessionInfo class provides the information about the connected session
- */
-class ISessionInfo
+class LwsConnection : public ILwsConnection
 {
 public:
-    ISessionInfo() = default;
-    virtual ~ISessionInfo() = default;
+    LwsConnection(ConnectionId, LwsInstanceRawPtr);
+    
+    auto getConnectionId() const -> ConnectionId override;
+    auto getLwsInstance() -> LwsInstanceRawPtr override;
 
-    ISessionInfo(ISessionInfo&&) = default;
-    auto operator=(ISessionInfo&&) noexcept -> ISessionInfo& = default;
+    void addBinaryDataToSend(const std::vector<char>&) override;
+    void addTextDataToSend(const std::string&) override;
+    auto getPendingData() -> std::queue<Message>& override;
 
-    ISessionInfo(const ISessionInfo&) = delete;
-    auto operator=(const ISessionInfo&) noexcept -> ISessionInfo& = delete;
-
-public:
-    virtual auto getSessionId() -> SessionId = 0;
-    virtual auto getPath() -> const Path& = 0;
+private:
+    ConnectionId _connectionId;
+    LwsInstanceRawPtr _wsInstance;
+    std::queue<Message> _pendingData;
+    std::queue<Message> _pendingDataToSend;
+    std::mutex _mutex;
 };
 
 } // namespace srv

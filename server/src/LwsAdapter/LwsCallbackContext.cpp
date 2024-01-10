@@ -29,9 +29,9 @@ namespace lwspp
 namespace srv
 {
 
-LwsCallbackContext::LwsCallbackContext(IEventHandlerPtr e, ILwsSessionsPtr s)
+LwsCallbackContext::LwsCallbackContext(IEventHandlerPtr e, ILwsConnectionsPtr s)
     : _eventHandler(std::move(e))
-    , _sessions(std::move(s))
+    , _connections(std::move(s))
 {}
 
 void LwsCallbackContext::setStopping()
@@ -44,9 +44,9 @@ auto LwsCallbackContext::isStopping() const -> bool
     return _isStopping;
 }
 
-auto LwsCallbackContext::getSessions() -> ILwsSessionsPtr
+auto LwsCallbackContext::getConnections() -> ILwsConnectionsPtr
 {
-    return _sessions;
+    return _connections;
 }
 
 auto LwsCallbackContext::getEventHandler() -> IEventHandlerPtr

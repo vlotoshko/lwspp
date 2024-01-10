@@ -36,7 +36,7 @@ namespace chat
 
 struct User
 {
-    srv::SessionId sessionId = srv::UNDEFINED_SESSION_ID;
+    srv::ConnectionId connectionId = srv::UNDEFINED_CONNECTION_ID;
     std::string userName;
 };
 

@@ -22,11 +22,28 @@
  * IN THE SOFTWARE.
  */
 
-#include "SessionInfo.hpp"
+#pragma once
+
+#include "lwspp/server/IConnectionInfo.hpp"
 
 namespace lwspp
 {
-namespace cli
+namespace srv
 {
-} // namespace cli
+
+class ConnectionInfo : public IConnectionInfo
+{
+public:
+    ConnectionInfo(ConnectionId, Path);
+
+public:
+    auto getConnectionId() -> ConnectionId override;
+    auto getPath() -> const Path& override;
+
+private:
+    ConnectionId _connectionId;
+    Path _path;
+};
+
+} // namespace srv
 } // namespace lwspp

@@ -50,7 +50,7 @@ public:
 public:
     virtual void setStopping() = 0;
     virtual auto isStopping() const -> bool = 0;
-    virtual auto getSessions() -> ILwsSessionsPtr = 0;
+    virtual auto getConnections() -> ILwsConnectionsPtr = 0;
 
     virtual auto getEventHandler() -> IEventHandlerPtr = 0;
 };

@@ -24,14 +24,14 @@
 
 #pragma once
 
-#include "lwspp/client/ISessionInfo.hpp"
+#include "lwspp/client/IConnectionInfo.hpp"
 
 namespace lwspp
 {
 namespace cli
 {
 
-class SessionInfo : public ISessionInfo
+class ConnectionInfo : public IConnectionInfo
 {
 };
 

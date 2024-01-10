@@ -40,7 +40,7 @@ namespace cli
 class EventHandlerBase : public IEventHandler, public IDataSenderAcceptor
 {
 public:
-    void onConnect(ISessionInfoPtr) noexcept override;
+    void onConnect(IConnectionInfoPtr) noexcept override;
     void onDisconnect() noexcept override;
 
     void onBinaryDataReceive(const DataPacket&) noexcept override;

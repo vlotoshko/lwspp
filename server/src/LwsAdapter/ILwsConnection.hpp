@@ -24,9 +24,11 @@
 
 #pragma once
 
-#include <vector>
+#include <queue>
+#include <string>
 
 #include "lwspp/server/Types.hpp"
+#include "LwsAdapter/LwsTypes.hpp"
 #include "LwsAdapter/LwsTypesFwd.hpp"
 
 namespace lwspp
@@ -35,25 +37,27 @@ namespace srv
 {
 
 /**
- * @brief The ILwsSessions class represents a container for storing and accessing all ILwsSession instances.
+ * @brief The ILwsConnection class represents the connection to the client.
  */
-class ILwsSessions
+class ILwsConnection
 {
 public:
-    ILwsSessions() = default;
-    virtual ~ILwsSessions() = default;
+    ILwsConnection() = default;
+    virtual ~ILwsConnection() = default;
 
-    ILwsSessions(const ILwsSessions&) = default;
-    auto operator=(const ILwsSessions&) -> ILwsSessions& = default;
+    ILwsConnection(const ILwsConnection&) = default;
+    auto operator=(const ILwsConnection&) -> ILwsConnection& = default;
 
-    ILwsSessions(ILwsSessions&&) noexcept = default;
-    auto operator=(ILwsSessions&&) noexcept -> ILwsSessions& = default;
+    ILwsConnection(ILwsConnection&&) noexcept = default;
+    auto operator=(ILwsConnection&&) noexcept -> ILwsConnection& = default;
 
 public:
-    virtual void add(ILwsSessionPtr) = 0;
-    virtual void remove(SessionId) = 0;
-    virtual auto get(SessionId) -> ILwsSessionPtr = 0;
-    virtual auto getAllSessions() -> std::vector<ILwsSessionPtr> = 0;
+    virtual auto getConnectionId() const -> ConnectionId = 0;
+    virtual auto getLwsInstance() -> LwsInstanceRawPtr = 0;
+
+    virtual void addBinaryDataToSend(const std::vector<char>&) = 0;
+    virtual void addTextDataToSend(const std::string&) = 0;
+    virtual auto getPendingData() -> std::queue<Message>& = 0;
 };
 
 } // namespace srv

@@ -24,36 +24,39 @@
 
 #pragma once
 
-#include <mutex>
-#include <string>
 #include <queue>
+#include <string>
 
-#include "LwsAdapter/ILwsSession.hpp"
+#include "LwsAdapter/LwsTypes.hpp"
+#include "LwsAdapter/LwsTypesFwd.hpp"
 
 namespace lwspp
 {
-namespace srv
+namespace cli
 {
 
-class LwsSession : public ILwsSession
+/**
+ * @brief The ILwsConnection class represents the connection to the server.
+ */
+class ILwsConnection
 {
 public:
-    LwsSession(SessionId, LwsInstanceRawPtr);
+    ILwsConnection() = default;
+    virtual ~ILwsConnection() = default;
 
-    auto getSessionId() const -> SessionId override;
-    auto getLwsInstance() -> LwsInstanceRawPtr override;
+    ILwsConnection(const ILwsConnection&) = default;
+    auto operator=(const ILwsConnection&) -> ILwsConnection& = default;
 
-    void addBinaryDataToSend(const std::vector<char>&) override;
-    void addTextDataToSend(const std::string&) override;
-    auto getPendingData() -> std::queue<Message>& override;
+    ILwsConnection(ILwsConnection&&) noexcept = default;
+    auto operator=(ILwsConnection&&) noexcept -> ILwsConnection& = default;
 
-private:
-    SessionId _sessionId;
-    LwsInstanceRawPtr _wsInstance;
-    std::queue<Message> _pendingData;
-    std::queue<Message> _pendingDataToSend;
-    std::mutex _mutex;
+public:
+    virtual auto getLwsInstance() -> LwsInstanceRawPtr = 0;
+
+    virtual void addBinaryDataToSend(const std::vector<char>&) = 0;
+    virtual void addTextDataToSend(const std::string&) = 0;
+    virtual auto getPendingData() -> std::queue<Message>& = 0;
 };
 
-} // namespace srv
+} // namespace cli
 } // namespace lwspp

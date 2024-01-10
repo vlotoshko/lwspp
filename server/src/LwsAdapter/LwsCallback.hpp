@@ -35,7 +35,7 @@ namespace srv
  * @brief lwsCallback_v1 is the LwsCallback function that defines the core behavoir of the server.
  * @param wsi - Opaque websocket instance pointer
  * @param reason - The reason for the call
- * @param userData - Pointer to per-session user data allocated by library
+ * @param userData - Pointer to per-connection user data allocated by library
  * @param in - Pointer used for some callback reasons
  * @param size - Length set for some callback reasons
  * @return some int, the value of this int is not documented

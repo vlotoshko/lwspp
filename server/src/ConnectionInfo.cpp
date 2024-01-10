@@ -22,28 +22,27 @@
  * IN THE SOFTWARE.
  */
 
-#pragma once
-
-#include "lwspp/server/ISessionInfo.hpp"
+#include "ConnectionInfo.hpp"
 
 namespace lwspp
 {
 namespace srv
 {
 
-class SessionInfo : public ISessionInfo
+ConnectionInfo::ConnectionInfo(ConnectionId connectionId, Path path)
+    : _connectionId(connectionId)
+    , _path(std::move(path))
+{}
+
+auto ConnectionInfo::getConnectionId() -> ConnectionId
 {
-public:
-    SessionInfo(SessionId, Path);
+    return _connectionId;
+}
 
-public:
-    auto getSessionId() -> SessionId override;
-    auto getPath() -> const Path& override;
-
-private:
-    SessionId _sessionId;
-    Path _path;
-};
+auto ConnectionInfo::getPath() -> const Path&
+{
+    return _path;
+}
 
 } // namespace srv
 } // namespace lwspp

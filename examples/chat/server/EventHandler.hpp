@@ -41,22 +41,22 @@ class EventHandler : public srv::EventHandlerBase
 {
 public:
     EventHandler();
-
-    void onConnect(srv::ISessionInfoPtr) noexcept override;
-    void onDisconnect(srv::SessionId) noexcept override;
-    void onTextDataReceive(srv::SessionId, const srv::DataPacket&) noexcept override;
+    
+    void onConnect(srv::IConnectionInfoPtr) noexcept override;
+    void onDisconnect(srv::ConnectionId) noexcept override;
+    void onTextDataReceive(srv::ConnectionId, const srv::DataPacket&) noexcept override;
 
     void acceptDataSender(srv::IDataSenderPtr) noexcept override;
 
 private:
-    void processHelloMessage_(srv::SessionId, const std::string& message);
-    void processUserMessage_(srv::SessionId, const std::string& message);
+    void processHelloMessage_(srv::ConnectionId, const std::string& message);
+    void processUserMessage_(srv::ConnectionId, const std::string& message);
 
 private:
     ChatMessageSender _chatMessageSender;
     std::vector<Message> _history;
-
-    std::map<srv::SessionId, User> _users;
+    
+    std::map<srv::ConnectionId, User> _users;
 };
 
 } // namespace chat

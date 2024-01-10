@@ -34,17 +34,17 @@ namespace srv
 class LwsCallbackContext : public ILwsCallbackContext
 {
 public:
-    LwsCallbackContext(IEventHandlerPtr, ILwsSessionsPtr);
+    LwsCallbackContext(IEventHandlerPtr, ILwsConnectionsPtr);
 
     void setStopping() override;
     auto isStopping() const -> bool override;
-    auto getSessions() -> ILwsSessionsPtr override;
+    auto getConnections() -> ILwsConnectionsPtr override;
 
     auto getEventHandler() -> IEventHandlerPtr override;
 
 private:
     IEventHandlerPtr _eventHandler;
-    ILwsSessionsPtr _sessions;
+    ILwsConnectionsPtr _connections;
 
     bool _isStopping = false;
 };

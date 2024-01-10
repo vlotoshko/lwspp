@@ -28,13 +28,13 @@
 #include "lwspp/server/IDataSenderAcceptor.hpp"
 
 #include "LwsAdapter/ILwsCallbackNotifier.hpp"
-#include "LwsAdapter/ILwsSession.hpp"
+#include "LwsAdapter/ILwsConnection.hpp"
 #include "LwsAdapter/LwsCallbackContext.hpp"
+#include "LwsAdapter/LwsConnections.hpp"
 #include "LwsAdapter/LwsContextDeleter.hpp"
 #include "LwsAdapter/LwsDataHolder.hpp"
 #include "LwsAdapter/LwsDataSender.hpp"
 #include "LwsAdapter/LwsServer.hpp"
-#include "LwsAdapter/LwsSessions.hpp"
 #include "ServerContext.hpp"
 #include "SslSettings.hpp"
 
@@ -52,10 +52,10 @@ public:
         : _dataHolder(d)
         , _lowLevelContext(c)
     {}
-
-    void notifyPendingDataAdded(const ILwsSessionPtr& session) override
+    
+    void notifyPendingDataAdded(const ILwsConnectionPtr& connection) override
     {
-        lws_callback_on_writable(session->getLwsInstance());
+        lws_callback_on_writable(connection->getLwsInstance());
     }
 
     void notifyPendingDataAdded() override
@@ -166,13 +166,13 @@ auto setupLowLeverContext(const ILwsCallbackContextPtr& callbackContext, const L
 
 LwsServer::LwsServer(const ServerContext& context)
 {
-    auto sessions = std::make_shared<LwsSessions>();
-    _callbackContext = std::make_shared<LwsCallbackContext>(context.eventHandler, sessions);
+    auto connections = std::make_shared<LwsConnections>();
+    _callbackContext = std::make_shared<LwsCallbackContext>(context.eventHandler, connections);
     _dataHolder = std::make_shared<LwsDataHolder>(context);
     _lowLevelContext = setupLowLeverContext(_callbackContext, _dataHolder);
 
     auto notifier = std::make_shared<LwsCallbackNotifier>(_dataHolder, _lowLevelContext);
-    auto sender = std::make_shared<LwsDataSender>(sessions, std::move(notifier));
+    auto sender = std::make_shared<LwsDataSender>(connections, std::move(notifier));
     context.dataSenderAcceptor->acceptDataSender(std::move(sender));
 }
 

@@ -64,7 +64,7 @@ void setupServerBehavior(Mock<srv::IEventHandler>& eventHandler,
                          srv::IDataSenderPtr& dataSender,
                          std::vector<char>& incomeData)
 {
-    auto sendHelloToClient = [&](srv::SessionId, const srv::DataPacket& dataPacket)
+    auto sendHelloToClient = [&](srv::ConnectionId, const srv::DataPacket& dataPacket)
     {
         incomeData.reserve(incomeData.size() + dataPacket.length);
         incomeData.insert(incomeData.end(), dataPacket.data, dataPacket.data + dataPacket.length);
@@ -86,7 +86,7 @@ void setupClientBehavior(Mock<cli::IEventHandler>& eventHandler,
                          cli::IDataSenderPtr& dataSender,
                          std::vector<char>& incomeData)
 {
-    auto sendHelloToServer = [&dataSender](cli::ISessionInfoPtr)
+    auto sendHelloToServer = [&dataSender](cli::IConnectionInfoPtr)
     {
         dataSender->sendBinaryData(HELLO_SERVER_BINARY);
     };

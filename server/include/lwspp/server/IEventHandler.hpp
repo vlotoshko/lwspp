@@ -25,7 +25,6 @@
 #pragma once
 
 #include <string>
-#include <vector>
 
 #include "lwspp/server/Types.hpp"
 #include "lwspp/server/TypesFwd.hpp"
@@ -53,14 +52,14 @@ public:
 
 public:
     // Invoked when the server receives binary data from the client.
-    virtual void onBinaryDataReceive(SessionId, const DataPacket&) noexcept = 0;
+    virtual void onBinaryDataReceive(ConnectionId, const DataPacket&) noexcept = 0;
     // Invoked when the server receives text data from the client. This method expects valid UTF-8 text.
-    virtual void onTextDataReceive(SessionId, const DataPacket&) noexcept = 0;
+    virtual void onTextDataReceive(ConnectionId, const DataPacket&) noexcept = 0;
 
-    virtual void onConnect(ISessionInfoPtr) noexcept = 0;
-    virtual void onDisconnect(SessionId) noexcept = 0;
-    virtual void onError(SessionId, const std::string& errorMessage) noexcept = 0;
-    virtual void onWarning(SessionId, const std::string& errorMessage) noexcept = 0;
+    virtual void onConnect(IConnectionInfoPtr) noexcept = 0;
+    virtual void onDisconnect(ConnectionId) noexcept = 0;
+    virtual void onError(ConnectionId, const std::string& errorMessage) noexcept = 0;
+    virtual void onWarning(ConnectionId, const std::string& errorMessage) noexcept = 0;
 };
 
 } // namespace srv

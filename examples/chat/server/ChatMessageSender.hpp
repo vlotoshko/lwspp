@@ -44,7 +44,7 @@ public:
     void sendUserMessage(const Message&);
     void sendChatHistory(const User&, const std::vector<Message>&);
 
-    void updateUsers(const std::map<srv::SessionId, User>& users);
+    void updateUsers(const std::map<srv::ConnectionId, User>& users);
 
 private:
     srv::IDataSenderPtr _dataSender;

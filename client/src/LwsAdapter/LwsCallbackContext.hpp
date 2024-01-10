@@ -38,17 +38,17 @@ public:
 
     void setStopping() override;
     auto isStopping() const -> bool override;
-
-    auto getSession() -> ILwsSessionPtr override;
-    void setSession(ILwsSessionPtr) override;
-    void resetSession() override;
+    
+    auto getConnection() -> ILwsConnectionPtr override;
+    void setConnection(ILwsConnectionPtr) override;
+    void resetConnection() override;
 
     auto getEventHandler() -> IEventHandlerPtr override;
 
 private:
     IEventHandlerPtr _eventHandler;
     IDataSenderAcceptorPtr _dataSenderAcceptor;
-    ILwsSessionPtr _session;
+    ILwsConnectionPtr _connection;
 
     bool _isStopping = false;
 };

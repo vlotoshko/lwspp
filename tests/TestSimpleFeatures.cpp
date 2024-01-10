@@ -34,7 +34,7 @@
 
 #include "lwspp/server/IEventHandler.hpp"
 #include "lwspp/server/IDataSenderAcceptor.hpp"
-#include "lwspp/server/ISessionInfo.hpp"
+#include "lwspp/server/IConnectionInfo.hpp"
 #include "lwspp/server/ServerBuilder.hpp"
 
 // NOLINTBEGIN (readability-function-cognitive-complexity)
@@ -253,9 +253,9 @@ SCENARIO( "Path feature testing", "[path]" )
             .setDataSenderAcceptor(cliDataSenderAcceptor.ptr());
 
         bool actualUseSpecificBehaviour = false;
-        auto onConnect = [&](srv::ISessionInfoPtr sessionInfo)
+        auto onConnect = [&](srv::IConnectionInfoPtr connectionInfo)
         {
-            if (sessionInfo != nullptr && sessionInfo->getPath() == SPECIFIC_PATH)
+            if (connectionInfo != nullptr && connectionInfo->getPath() == SPECIFIC_PATH)
             {
                 actualUseSpecificBehaviour = true;
             }

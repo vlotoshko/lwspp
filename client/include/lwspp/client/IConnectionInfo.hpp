@@ -24,31 +24,26 @@
 
 #pragma once
 
-#include <map>
-#include <mutex>
-
-#include "lwspp/server/Types.hpp"
-#include "LwsAdapter/ILwsSessions.hpp"
-
 namespace lwspp
 {
-namespace srv
+namespace cli
 {
 
-class LwsSessions : public ILwsSessions
+/**
+ * @brief The IConnectionInfo class provides the information about the connection
+ */
+class IConnectionInfo
 {
 public:
-    void add(ILwsSessionPtr) override;
-    void remove(SessionId) override;
-    auto get(SessionId) -> ILwsSessionPtr override;
-    auto getAllSessions() -> std::vector<ILwsSessionPtr> override;
+    IConnectionInfo() = default;
+    virtual ~IConnectionInfo() = default;
 
-private:
-    std::map<SessionId, ILwsSessionPtr> _sessions;
-    std::mutex _mutex;
-    std::vector<ILwsSessionPtr> _cachedSessions;
-    bool _cacheExpired = true;
+    IConnectionInfo(IConnectionInfo&&) = default;
+    auto operator=(IConnectionInfo&&) noexcept -> IConnectionInfo& = default;
+
+    IConnectionInfo(const IConnectionInfo&) = delete;
+    auto operator=(const IConnectionInfo&) noexcept -> IConnectionInfo& = delete;
 };
 
-} // namespace srv
+} // namespace cli
 } // namespace lwspp
