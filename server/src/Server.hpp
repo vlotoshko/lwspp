@@ -26,8 +26,8 @@
 
 #include <future>
 
-#include "lwspp/server/IServer.hpp"
 #include "TypesFwd.hpp"
+#include "lwspp/server/IServer.hpp"
 
 namespace lwspp
 {

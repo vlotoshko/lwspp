@@ -1,15 +1,10 @@
 set(TESTS_TARGET_SRC_FILES
-    framework/catch2/catch.hpp
-    framework/fakeit.hpp
-    main.cpp
-
     TestClientBuilder.cpp
 )
 
 add_executable(${PROJECT_NAME}-tests ${TESTS_TARGET_SRC_FILES})
 
 target_include_directories(${PROJECT_NAME}-tests PRIVATE
-    ${PROJECT_SOURCE_DIR}/tests/framework
     ${PROJECT_SOURCE_DIR}/include
     ${PROJECT_SOURCE_DIR}/src
 )
@@ -20,7 +15,10 @@ else()
     set(TARGET_LWSPP_CLIENT ${TARGET_LWSPP_CLIENT_SHARED})
 endif()
 
+find_package(Catch2 REQUIRED)
+
 target_link_libraries(${PROJECT_NAME}-tests
+    PRIVATE Catch2::Catch2WithMain
     PRIVATE ${TARGET_LWSPP_CLIENT}
     PRIVATE websockets
 )

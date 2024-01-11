@@ -1,7 +1,4 @@
 set(TESTS_TARGET_SRC_FILES
-    framework/catch2/catch.hpp
-    framework/fakeit.hpp
-    main.cpp
     MockedPtr.hpp
     Utils.cpp
     Utils.hpp
@@ -28,7 +25,12 @@ else()
     set(TARGET_LWSPP_SERVER ${TARGET_LWSPP_SERVER_SHARED})
 endif()
 
+find_package(Catch2 REQUIRED)
+find_package(FakeIt REQUIRED)
+
 target_link_libraries(${PROJECT_NAME}-tests
+    PRIVATE Catch2::Catch2WithMain
+    PRIVATE FakeIt::FakeIt-catch
     PRIVATE ${TARGET_LWSPP_CLIENT}
     PRIVATE ${TARGET_LWSPP_SERVER}
     PRIVATE websockets

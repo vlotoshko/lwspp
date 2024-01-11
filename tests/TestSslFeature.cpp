@@ -26,12 +26,12 @@
 
 #include "catch2/catch.hpp"
 #include "lwspp/client/ClientBuilder.hpp"
-#include "lwspp/client/IEventHandler.hpp"
 #include "lwspp/client/IDataSenderAcceptor.hpp"
+#include "lwspp/client/IEventHandler.hpp"
 #include "lwspp/client/SslSettingsBuilder.hpp"
 
-#include "lwspp/server/IEventHandler.hpp"
 #include "lwspp/server/IDataSenderAcceptor.hpp"
+#include "lwspp/server/IEventHandler.hpp"
 #include "lwspp/server/ServerBuilder.hpp"
 #include "lwspp/server/SslSettingsBuilder.hpp"
 

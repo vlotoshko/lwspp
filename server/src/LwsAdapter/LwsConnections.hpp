@@ -27,8 +27,8 @@
 #include <map>
 #include <mutex>
 
-#include "lwspp/server/Types.hpp"
 #include "LwsAdapter/ILwsConnections.hpp"
+#include "lwspp/server/Types.hpp"
 
 namespace lwspp
 {

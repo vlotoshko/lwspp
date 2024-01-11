@@ -24,10 +24,10 @@
 
 #include <stdexcept>
 
-#include "lwspp/client/ClientBuilder.hpp"
 #include "Client.hpp"
 #include "ClientContext.hpp"
 #include "SslSettings.hpp"
+#include "lwspp/client/ClientBuilder.hpp"
 
 namespace lwspp
 {

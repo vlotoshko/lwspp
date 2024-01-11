@@ -26,8 +26,8 @@
 
 #include <future>
 
-#include "lwspp/client/IClient.hpp"
 #include "TypesFwd.hpp"
+#include "lwspp/client/IClient.hpp"
 
 namespace lwspp
 {

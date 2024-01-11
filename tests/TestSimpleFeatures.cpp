@@ -29,12 +29,12 @@
 #include "MockedPtr.hpp"
 
 #include "lwspp/client/ClientBuilder.hpp"
-#include "lwspp/client/IEventHandler.hpp"
 #include "lwspp/client/IDataSenderAcceptor.hpp"
+#include "lwspp/client/IEventHandler.hpp"
 
-#include "lwspp/server/IEventHandler.hpp"
-#include "lwspp/server/IDataSenderAcceptor.hpp"
 #include "lwspp/server/IConnectionInfo.hpp"
+#include "lwspp/server/IDataSenderAcceptor.hpp"
+#include "lwspp/server/IEventHandler.hpp"
 #include "lwspp/server/ServerBuilder.hpp"
 
 // NOLINTBEGIN (readability-function-cognitive-complexity)

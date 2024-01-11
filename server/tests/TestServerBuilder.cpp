@@ -24,11 +24,11 @@
 
 #include "catch2/catch.hpp"
 
+#include "ServerContext.hpp"
+#include "SslSettings.hpp"
 #include "lwspp/server/EventHandlerBase.hpp"
 #include "lwspp/server/ServerBuilder.hpp"
 #include "lwspp/server/SslSettingsBuilder.hpp"
-#include "ServerContext.hpp"
-#include "SslSettings.hpp"
 
 namespace lwspp
 {

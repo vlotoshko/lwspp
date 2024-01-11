@@ -22,13 +22,12 @@
  * IN THE SOFTWARE.
  */
 
-#include <vector>
 
-#include "lwspp/client/IEventHandler.hpp"
+#include "ConnectionInfo.hpp"
 #include "LwsAdapter/ILwsCallbackContext.hpp"
 #include "LwsAdapter/LwsCallback.hpp"
 #include "LwsAdapter/LwsConnection.hpp"
-#include "ConnectionInfo.hpp"
+#include "lwspp/client/IEventHandler.hpp"
 
 namespace lwspp
 {

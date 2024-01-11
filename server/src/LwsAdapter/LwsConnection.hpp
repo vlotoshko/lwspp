@@ -25,8 +25,8 @@
 #pragma once
 
 #include <mutex>
-#include <string>
 #include <queue>
+#include <string>
 
 #include "LwsAdapter/ILwsConnection.hpp"
 

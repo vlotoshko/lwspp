@@ -22,9 +22,9 @@
  * IN THE SOFTWARE.
  */
 
+#include "ClientContext.hpp"
 #include "LwsAdapter/LwsDataHolder.hpp"
 #include "LwsAdapter/LwsProtocolsFactory.hpp"
-#include "ClientContext.hpp"
 
 namespace lwspp
 {
