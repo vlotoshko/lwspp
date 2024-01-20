@@ -25,7 +25,7 @@
 #include <libwebsockets.h>
 #include <thread>
 
-#include "lwspp/server/IDataSenderAcceptor.hpp"
+#include "lwspp/server/IActorAcceptor.hpp"
 
 #include "LwsAdapter/ILwsCallbackNotifier.hpp"
 #include "LwsAdapter/ILwsConnection.hpp"
@@ -33,7 +33,7 @@
 #include "LwsAdapter/LwsConnections.hpp"
 #include "LwsAdapter/LwsContextDeleter.hpp"
 #include "LwsAdapter/LwsDataHolder.hpp"
-#include "LwsAdapter/LwsDataSender.hpp"
+#include "LwsAdapter/LwsActor.hpp"
 #include "LwsAdapter/LwsServer.hpp"
 #include "ServerContext.hpp"
 #include "SslSettings.hpp"
@@ -68,6 +68,12 @@ public:
                     context.get(), dataHolder->protocols.data());
             }
         }
+    }
+
+    void notifyCloseConnection(const ILwsConnectionPtr& connection) override
+    {
+        connection->markToClose();
+        lws_callback_on_writable(connection->getLwsInstance());
     }
 
 private:
@@ -172,8 +178,8 @@ LwsServer::LwsServer(const ServerContext& context)
     _lowLevelContext = setupLowLeverContext(_callbackContext, _dataHolder);
 
     auto notifier = std::make_shared<LwsCallbackNotifier>(_dataHolder, _lowLevelContext);
-    auto sender = std::make_shared<LwsDataSender>(connections, std::move(notifier));
-    context.dataSenderAcceptor->acceptDataSender(std::move(sender));
+    auto sender = std::make_shared<LwsActor>(connections, std::move(notifier));
+    context.actorAcceptor->acceptActor(std::move(sender));
 }
 
 LwsServer::~LwsServer()

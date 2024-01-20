@@ -22,5 +22,38 @@
  * IN THE SOFTWARE.
  */
 
-#define CATCH_CONFIG_MAIN
-#include "catch2/catch.hpp"
+#pragma once
+
+#include <string>
+#include <vector>
+
+namespace lwspp
+{
+namespace cli
+{
+/**
+ * @brief The IActor class defines an interface to perform actions with the client.
+ * The instance of IActor can be obtained using IActorAcceptor when building the client.
+ */
+class IActor
+{
+public:
+    IActor() = default;
+    virtual ~IActor() = default;
+
+    IActor(const IActor&) = default;
+    auto operator=(const IActor&) -> IActor& = default;
+
+    IActor(IActor&&) noexcept = default;
+    auto operator=(IActor&&) noexcept -> IActor& = default;
+
+public:
+    // Sends text data to the server. The provided text data should be valid UTF-8 text.
+    virtual void sendTextData(const std::string&) = 0;
+
+    // Sends binary data to the server
+    virtual void sendBinaryData(const std::vector<char>&) = 0;
+};
+
+} // namespace cli
+} // namespace lwspp

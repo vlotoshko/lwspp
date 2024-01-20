@@ -24,19 +24,19 @@
 
 #include <stdexcept>
 
-#include "lwspp/client/IDataSenderAcceptor.hpp"
+#include "lwspp/client/IActorAcceptor.hpp"
 
 #include "LwsAdapter/LwsCallbackContext.hpp"
-#include "LwsAdapter/LwsDataSender.hpp"
+#include "LwsAdapter/LwsActor.hpp"
 
 namespace lwspp
 {
 namespace cli
 {
 
-LwsCallbackContext::LwsCallbackContext(IEventHandlerPtr e, IDataSenderAcceptorPtr a)
+LwsCallbackContext::LwsCallbackContext(IEventHandlerPtr e, IActorAcceptorPtr a)
     : _eventHandler(std::move(e))
-    , _dataSenderAcceptor(std::move(a))
+    , _actorAcceptor(std::move(a))
 {}
 
 void LwsCallbackContext::setStopping()
@@ -67,8 +67,8 @@ void LwsCallbackContext::setConnection(ILwsConnectionPtr s)
     }
     _connection = std::move(s);
 
-    auto dataSender = std::make_shared<LwsDataSender>(_connection);
-    _dataSenderAcceptor->acceptDataSender(std::move(dataSender));
+    auto actor = std::make_shared<LwsActor>(_connection);
+    _actorAcceptor->acceptActor(std::move(actor));
 }
 
 void LwsCallbackContext::resetConnection()

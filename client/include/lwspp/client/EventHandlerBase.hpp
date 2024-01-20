@@ -24,7 +24,7 @@
 
 #pragma once
 
-#include "lwspp/client/IDataSenderAcceptor.hpp"
+#include "lwspp/client/IActorAcceptor.hpp"
 #include "lwspp/client/IEventHandler.hpp"
 
 namespace lwspp
@@ -35,9 +35,9 @@ namespace cli
 /**
  * @brief The EventHandlerBase class serves as a convenient base class for implementing the IEventHandler interface.
  * It provides stubs for all overridden methods in the IEventHandler interface and also implements
- * the IDataSenderAcceptor to obtain the IDataSender.
+ * the IActorAcceptor to obtain the IActor.
  */
-class EventHandlerBase : public IEventHandler, public IDataSenderAcceptor
+class EventHandlerBase : public IEventHandler, public IActorAcceptor
 {
 public:
     void onConnect(IConnectionInfoPtr) noexcept override;
@@ -47,11 +47,11 @@ public:
     void onTextDataReceive(const DataPacket&) noexcept override;
     void onError(const std::string& errorMessage) noexcept override;
     void onWarning(const std::string& warningMessage) noexcept override;
-
-    void acceptDataSender(IDataSenderPtr) noexcept override;
+    
+    void acceptActor(IActorPtr) noexcept override;
 
 protected:
-    IDataSenderPtr _dataSender;
+    IActorPtr _actor;
 };
 
 } // namespace cli

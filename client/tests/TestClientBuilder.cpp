@@ -155,7 +155,7 @@ SCENARIO( "ClientContext setup", "[client_builder]" )
                 .setAddress(ADDRESS)
                 .setPort(PORT)
                 .setEventHandler(handler)
-                .setDataSenderAcceptor(handler)
+                .setActorAcceptor(handler)
                 .setProtocolName(PROTOCOL_NAME)
                 .setPath(PATH)
                 .setKeepAliveTimeout(KEEPALIVE_TIMEOUT)
@@ -253,7 +253,7 @@ SCENARIO( "Client construction", "[client_builder]" )
             }
         }
 
-        WHEN( "DataSenderAcceptor is not set" )
+        WHEN( "ActorAcceptor is not set" )
         {
             auto handler = std::make_shared<EventHandlerBase>();
             clientBuilder
@@ -277,7 +277,7 @@ SCENARIO( "Client construction", "[client_builder]" )
                 .setAddress(ADDRESS)
                 .setPort(PORT)
                 .setEventHandler(handler)
-                .setDataSenderAcceptor(handler);
+                .setActorAcceptor(handler);
 
             auto expression = [&clientBuilder] {clientBuilder.build();};
 

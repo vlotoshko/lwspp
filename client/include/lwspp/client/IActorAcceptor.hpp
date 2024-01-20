@@ -22,35 +22,38 @@
  * IN THE SOFTWARE.
  */
 
-#include "LwsAdapter/ILwsConnection.hpp"
-#include "LwsAdapter/LwsDataSender.hpp"
+#pragma once
+
+#include "lwspp/client/TypesFwd.hpp"
 
 namespace lwspp
 {
 namespace cli
 {
 
-LwsDataSender::LwsDataSender(const ILwsConnectionPtr& s)
-    : _connection(s)
-{}
-
-void LwsDataSender::sendTextData(const std::string& message)
+/**
+ * @brief Accepts an IActor instance from the client builder.
+ *
+ * The client builder provides an IActor instance when constructing the client.
+ * To utilize the IActor, set your instance of IActorAcceptor to the client builder
+ * and obtain the IActor to perform actions defined by the IActor interface.
+ * Users of the library must implement this interface themselves.
+ */
+class IActorAcceptor
 {
-    if (auto connection = _connection.lock())
-    {
-        connection->addTextDataToSend(message);
-        lws_callback_on_writable(connection->getLwsInstance());
-    }
-}
+public:
+    IActorAcceptor() = default;
+    virtual ~IActorAcceptor() = default;
 
-void LwsDataSender::sendBinaryData(const std::vector<char>& data)
-{
-    if (auto connection = _connection.lock())
-    {
-        connection->addBinaryDataToSend(data);
-        lws_callback_on_writable(connection->getLwsInstance());
-    }
-}
+    IActorAcceptor(const IActorAcceptor&) = default;
+    auto operator=(const IActorAcceptor&) noexcept -> IActorAcceptor& = default;
+
+    IActorAcceptor(IActorAcceptor&&) = default;
+    auto operator=(IActorAcceptor&&) noexcept -> IActorAcceptor& = default;
+
+public:
+    virtual void acceptActor(IActorPtr) noexcept = 0;
+};
 
 } // namespace cli
 } // namespace lwspp

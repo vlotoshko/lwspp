@@ -22,18 +22,18 @@
  * IN THE SOFTWARE.
  */
 
-#include <thread>
+#include <future>
 
 #include "catch2/catch.hpp"
 #include "MockedPtr.hpp"
 
 #include "lwspp/client/ClientBuilder.hpp"
-#include "lwspp/client/IDataSender.hpp"
-#include "lwspp/client/IDataSenderAcceptor.hpp"
+#include "lwspp/client/IActor.hpp"
+#include "lwspp/client/IActorAcceptor.hpp"
 #include "lwspp/client/IEventHandler.hpp"
 
-#include "lwspp/server/IDataSender.hpp"
-#include "lwspp/server/IDataSenderAcceptor.hpp"
+#include "lwspp/server/IActor.hpp"
+#include "lwspp/server/IActorAcceptor.hpp"
 #include "lwspp/server/IEventHandler.hpp"
 #include "lwspp/server/ServerBuilder.hpp"
 
@@ -51,67 +51,67 @@ namespace
 const srv::Port PORT = 9000;
 const cli::Address ADDRESS = "localhost";
 const int DISABLE_LOG = 0;
+const std::chrono::milliseconds TIMEOUT{100};
 
 const std::string HELLO_SERVER = "hello server!";
 const std::string HELLO_CLIENT = "hello client!";
 
 void setupServerBehavior(Mock<srv::IEventHandler>& eventHandler,
-                         Mock<srv::IDataSenderAcceptor>& dataSenderAcceptor,
-                         srv::IDataSenderPtr& dataSender,
+                         Mock<srv::IActorAcceptor>& actorAcceptor,
+                         srv::IActorPtr& actor,
                          std::string& incomeMessage)
 {
     auto sendHelloToClient = [&](srv::ConnectionId, const srv::DataPacket& dataPacket)
     {
         incomeMessage = std::string{dataPacket.data, dataPacket.length};
-        dataSender->sendTextData(HELLO_CLIENT);
+        actor->sendTextData(HELLO_CLIENT);
     };
 
     Fake(Method(eventHandler, onConnect), Method(eventHandler, onDisconnect));
     When(Method(eventHandler, onTextDataReceive)).Do(sendHelloToClient);
-
-    When(Method(dataSenderAcceptor, acceptDataSender))
-        .Do([&dataSender](srv::IDataSenderPtr ms){ dataSender = ms; });
+    
+    When(Method(actorAcceptor, acceptActor)).Do([&actor](srv::IActorPtr a){ actor = a; });
 }
 
 void setupClientBehavior(Mock<cli::IEventHandler>& eventHandler,
-                         Mock<cli::IDataSenderAcceptor>& dataSenderAcceptor,
-                         cli::IDataSenderPtr& dataSender,
-                         std::string& incomeMessage)
+                         Mock<cli::IActorAcceptor>& actorAcceptor,
+                         cli::IActorPtr& actor,
+                         std::promise<std::string>& incomeMessage)
 {
-    auto sendHelloToServer = [&dataSender](cli::IConnectionInfoPtr)
+    auto sendHelloToServer = [&actor](cli::IConnectionInfoPtr)
     {
-        dataSender->sendTextData(HELLO_SERVER);
+        actor->sendTextData(HELLO_SERVER);
     };
 
     auto onTextDataReceive = [&](const cli::DataPacket& dataPacket)
     {
-        incomeMessage = std::string{dataPacket.data, dataPacket.length};
+        incomeMessage.set_value(std::string{dataPacket.data, dataPacket.length});
     };
 
     Fake(Method(eventHandler, onDisconnect));
     When(Method(eventHandler, onConnect)).Do(sendHelloToServer);
     When(Method(eventHandler, onTextDataReceive)).Do(onTextDataReceive);
-
-    When(Method(dataSenderAcceptor, acceptDataSender))
-        .Do([&dataSender](cli::IDataSenderPtr ms){ dataSender = ms; });
+    
+    When(Method(actorAcceptor, acceptActor))
+        .Do([&actor](cli::IActorPtr a){ actor = a; });
 }
 
 srv::IServerPtr setupServer(srv::IEventHandlerPtr eventHandler,
-                            srv::IDataSenderAcceptorPtr dataSenderAcceptor)
+                            srv::IActorAcceptorPtr actorAcceptor)
 {
     auto serverBuilder = srv::ServerBuilder{};
     serverBuilder
         .setCallbackVersion(srv::CallbackVersion::v1_Andromeda)
         .setPort(PORT)
         .setEventHandler(eventHandler)
-        .setDataSenderAcceptor(dataSenderAcceptor)
+        .setActorAcceptor(actorAcceptor)
         .setLwsLogLevel(DISABLE_LOG);
 
     return serverBuilder.build();
 }
 
 cli::IClientPtr setupClient(cli::IEventHandlerPtr eventHandler,
-                            cli::IDataSenderAcceptorPtr dataSenderAcceptor)
+                            cli::IActorAcceptorPtr actorAcceptor)
 {
     auto clientBuilder = cli::ClientBuilder{};
     clientBuilder
@@ -119,7 +119,7 @@ cli::IClientPtr setupClient(cli::IEventHandlerPtr eventHandler,
         .setAddress(ADDRESS)
         .setPort(PORT)
         .setEventHandler(eventHandler)
-        .setDataSenderAcceptor(dataSenderAcceptor)
+        .setActorAcceptor(actorAcceptor)
         .setLwsLogLevel(DISABLE_LOG);
 
     return clientBuilder.build();
@@ -127,38 +127,42 @@ cli::IClientPtr setupClient(cli::IEventHandlerPtr eventHandler,
 
 } // namespace
 
+//clazy:excludeall=non-pod-global-static
+
 SCENARIO( "Clients sends 'hello world' to the server", "[hello_world]" )
 {
+    std::promise<std::string> incomeMessage;
+    auto waitForMessage = incomeMessage.get_future();
+
     auto srvEventHadler = MockedPtr<srv::IEventHandler>{};
     auto cliEventHadler = MockedPtr<cli::IEventHandler>{};
     
-    auto srvDataSenderAcceptor = MockedPtr<srv::IDataSenderAcceptor>{};
-    auto cliDataSenderAcceptor = MockedPtr<cli::IDataSenderAcceptor>{};
+    auto srvActorAcceptor = MockedPtr<srv::IActorAcceptor>{};
+    auto cliActorAcceptor = MockedPtr<cli::IActorAcceptor>{};
 
-    srv::IDataSenderPtr srvDataSender;
-    cli::IDataSenderPtr cliDataSender;
+    srv::IActorPtr srvActor;
+    cli::IActorPtr cliActor;
 
     std::string actualServerIncomeMessage;
     std::string actualClientIncomeMessage;
 
-    setupServerBehavior(srvEventHadler.mock(), srvDataSenderAcceptor.mock(),
-                        srvDataSender, actualServerIncomeMessage);
+    setupServerBehavior(srvEventHadler.mock(), srvActorAcceptor.mock(),
+                        srvActor, actualServerIncomeMessage);
 
-    setupClientBehavior(cliEventHadler.mock(), cliDataSenderAcceptor.mock(),
-                        cliDataSender, actualClientIncomeMessage);
+    setupClientBehavior(cliEventHadler.mock(), cliActorAcceptor.mock(),
+                        cliActor, incomeMessage);
 
     GIVEN( "Server and client" )
     {
-        auto server = setupServer(srvEventHadler.ptr(), srvDataSenderAcceptor.ptr());
-        auto client = setupClient(cliEventHadler.ptr(), cliDataSenderAcceptor.ptr());
+        auto server = setupServer(srvEventHadler.ptr(), srvActorAcceptor.ptr());
+        auto client = setupClient(cliEventHadler.ptr(), cliActorAcceptor.ptr());
 
         WHEN( "Client sends message to server" )
         {
             THEN( "Server receives message from client and sends message back" )
             {
-                // waiting for the client and server exchange with the messages
-                const auto timeout = 100U;
-                std::this_thread::sleep_for(std::chrono::milliseconds(timeout));
+                REQUIRE(waitForMessage.wait_for(TIMEOUT) == std::future_status::ready);
+                actualClientIncomeMessage = waitForMessage.get();
 
                 server.reset();
                 client.reset();

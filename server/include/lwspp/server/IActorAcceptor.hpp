@@ -24,26 +24,36 @@
 
 #pragma once
 
-#include "lwspp/client/IDataSender.hpp"
-
-#include "LwsAdapter/LwsTypesFwd.hpp"
+#include "lwspp/server/TypesFwd.hpp"
 
 namespace lwspp
 {
-namespace cli
+namespace srv
 {
 
-class LwsDataSender : public IDataSender
+/**
+ * @brief Accepts an IActor instance from the server builder.
+ *
+ * The server builder provides an IActor instance when constructing the server.
+ * To utilize the IActor, set your instance of IActorAcceptor to the server builder
+ * and obtain the IActor to perform actions defined by the IActor interface.
+ * Users of the library must implement this interface themselves.
+ */
+class IActorAcceptor
 {
 public:
-    explicit LwsDataSender(const ILwsConnectionPtr&);
+    IActorAcceptor() = default;
+    virtual ~IActorAcceptor() = default;
 
-    void sendTextData(const std::string&) override;
-    void sendBinaryData(const std::vector<char>&) override;
+    IActorAcceptor(const IActorAcceptor&) = default;
+    auto operator=(const IActorAcceptor&) noexcept -> IActorAcceptor& = default;
 
-private:
-    ILwsConnectionWeak _connection;
+    IActorAcceptor(IActorAcceptor&&) = default;
+    auto operator=(IActorAcceptor&&) noexcept -> IActorAcceptor& = default;
+
+public:
+    virtual void acceptActor(IActorPtr) noexcept = 0;
 };
 
-} // namespace cli
+} // namespace srv
 } // namespace lwspp

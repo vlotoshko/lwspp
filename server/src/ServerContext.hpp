@@ -42,7 +42,7 @@ class ServerContext
 {
 public:
     IEventHandlerPtr eventHandler;
-    IDataSenderAcceptorPtr dataSenderAcceptor;
+    IActorAcceptorPtr actorAcceptor;
     CallbackVersion callbackVersion = UNDEFINED_CALLBACK_VERSION;
     Port port = UNDEFINED_PORT;
 

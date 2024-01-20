@@ -100,6 +100,12 @@ auto lwsCallback_v1(
         auto connections = callbackContext.getConnections();
         if (auto connection = connections->get(connectionId))
         {
+            if (connection->markedToClose())
+            {
+                lws_close_reason(wsInstance, LWS_CLOSE_STATUS_GOINGAWAY, nullptr, 0);
+                return CLOSE_SESSION;
+            }
+
             auto& messages = connection->getPendingData();
             if (!messages.empty() && !callbackContext.isStopping())
             {

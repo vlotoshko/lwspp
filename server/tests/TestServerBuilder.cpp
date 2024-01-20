@@ -148,7 +148,7 @@ SCENARIO( "ServerContext setup", "[server_builder]" )
                 .setCallbackVersion(CallbackVersion::v1_Andromeda)
                 .setPort(PORT)
                 .setEventHandler(handler)
-                .setDataSenderAcceptor(handler)
+                .setActorAcceptor(handler)
                 .setProtocolName(PROTOCOL_NAME)
                 .setKeepAliveTimeout(KEEPALIVE_TIMEOUT)
                 .setKeepAliveProbes(KEEPALIVE_PROBES)
@@ -228,7 +228,7 @@ SCENARIO( "Server construction", "[server_builder]" )
             }
         }
 
-        WHEN( "DataSenderAcceptor is not set" )
+        WHEN( "ActorAcceptor is not set" )
         {
             auto handler = std::make_shared<EventHandlerBase>();
             serverBuilder
@@ -250,7 +250,7 @@ SCENARIO( "Server construction", "[server_builder]" )
                 .setCallbackVersion(CallbackVersion::v1_Andromeda)
                 .setPort(PORT)
                 .setEventHandler(handler)
-                .setDataSenderAcceptor(handler);
+                .setActorAcceptor(handler);
 
             auto expression = [&serverBuilder] {serverBuilder.build();};
 

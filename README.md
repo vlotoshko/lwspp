@@ -124,10 +124,10 @@ The mandatory options for the server builder include:
 
 1. **Port**: Specify the port on which the server will listen.
 2. **Callback Version**: The libwebsockets library requires a specific callback to handle events and data. lwspp provides this callback. To ensure backward compatibility, you can set the previous callback to maintain the same behavior.
-3. **Data Sender Acceptor**: When constructing the server, the server builder provides a Data Sender. To obtain this Data Sender, implement the IDataSenderAcceptor interface. Users of the library should implement this interface to manage data sent from the server to clients.
+3. **Actor Acceptor**: When constructing the server, the server builder provides an IActor instance. IActor is used to perform actions defined by the the IActor interface, for example sending data from server to a client. To obtain this IActor, implement the IActorAcceptor interface. Users of the library should implement this interface to manage data sent from the server to clients.
 4. **Event Handler**: The Event Handler defines the server's behavior. You should implement the desired server behavior using the IEventHandler interface.
 
-For most use cases, the **EvenHandlerBase** class can be a convenient starting point for implementing your event handler. This class not only implements the _IEventHandler_ interface, which includes stubs for all its methods but also implements the _IDataSenderAcceptor_ interface. This means you can easily obtain the Data Sender required for sending data from the server.
+For most use cases, the **EvenHandlerBase** class can be a convenient starting point for implementing your event handler. This class not only implements the _IEventHandler_ interface, which includes stubs for all its methods but also implements the _IActorAcceptor_ interface. This means you can easily obtain the Actor required for performing actions defined by the IActor interface.
 
 The **EvenHandlerBase** class provides a basic framework for event handling and data transmission. You can extend and customize its behavior to suit your specific server requirements. This approach saves you time and effort when developing WebSocket server functionality.
 
@@ -150,10 +150,10 @@ In this straightforward example, both the client and server are configured and c
 
 #include "lwspp/client/ClientBuilder.hpp"
 #include "lwspp/client/EventHandlerBase.hpp"
-#include "lwspp/client/IDataSender.hpp"
+#include "lwspp/client/IActor.hpp"
 
 #include "lwspp/server/EventHandlerBase.hpp"
-#include "lwspp/server/IDataSender.hpp"
+#include "lwspp/server/IActor.hpp"
 #include "lwspp/server/ServerBuilder.hpp"
 
 using namespace lwspp;
@@ -161,9 +161,9 @@ using namespace lwspp;
 class ClientEventHandler : public cli::EventHandlerBase
 {
 public:
-    void onConnect(cli::ISessionInfoPtr) noexcept override
+    void onConnect(cli::IConnectionInfoPtr) noexcept override
     {
-        _dataSender->sendTextData("hello server!");
+        _actor->sendTextData("hello server!");
     }
 
     void onTextDataReceive(const cli::DataPacket& dataPacket) noexcept override
@@ -175,10 +175,10 @@ public:
 class ServerEventHandler : public srv::EventHandlerBase
 {
 public:
-    void onTextDataReceive(srv::SessionId, const srv::DataPacket& dataPacket) noexcept override
+    void onTextDataReceive(srv::ConnectionId, const srv::DataPacket& dataPacket) noexcept override
     {
         std::cout << "server received the message: " << std::string{dataPacket.data, dataPacket.length}  << std::endl;
-        _dataSender->sendTextData("hello client!");
+        _actor->sendTextData("hello client!");
     }
 };
 
@@ -193,7 +193,7 @@ auto main() -> int
         .setPort(PORT)
         .setCallbackVersion(srv::CallbackVersion::v1_Andromeda)
         .setEventHandler(serverEventHandler)
-        .setDataSenderAcceptor(serverEventHandler)
+        .setActorAcceptor(serverEventHandler)
         .setLwsLogLevel(0)
         ;
     auto server = serverBuilder.build();
@@ -206,7 +206,7 @@ auto main() -> int
         .setPort(PORT)
         .setCallbackVersion(cli::CallbackVersion::v1_Amsterdam)
         .setEventHandler(clientEventHandler)
-        .setDataSenderAcceptor(clientEventHandler)
+        .setActorAcceptor(clientEventHandler)
         .setLwsLogLevel(0)
         ;
     auto client = clientBuilder.build();

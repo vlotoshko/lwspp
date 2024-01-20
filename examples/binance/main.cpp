@@ -27,7 +27,7 @@
 
 #include "lwspp/client/ClientBuilder.hpp"
 #include "lwspp/client/EventHandlerBase.hpp"
-#include "lwspp/client/IDataSender.hpp"
+#include "lwspp/client/IActor.hpp"
 #include "lwspp/client/SslSettingsBuilder.hpp"
 
 using namespace lwspp;
@@ -42,7 +42,7 @@ class ClientEventHandler : public cli::EventHandlerBase
 public:
     void onConnect(cli::IConnectionInfoPtr) noexcept override
     {
-        _dataSender->sendTextData(SUBSCRIBE);
+        _actor->sendTextData(SUBSCRIBE);
     }
 
     void onTextDataReceive(const cli::DataPacket& dataPacket) noexcept override
@@ -79,7 +79,7 @@ auto main() -> int
         .setPort(PORT)
         .setCallbackVersion(cli::CallbackVersion::v1_Amsterdam)
         .setEventHandler(clientEventHandler)
-        .setDataSenderAcceptor(clientEventHandler)
+        .setActorAcceptor(clientEventHandler)
         .setSslSettings(cli::SslSettingsBuilder{}.build())
         .setLwsLogLevel(0)
         ;

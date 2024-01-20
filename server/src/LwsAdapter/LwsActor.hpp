@@ -24,36 +24,32 @@
 
 #pragma once
 
-#include "lwspp/client/TypesFwd.hpp"
+#include "lwspp/server/IActor.hpp"
+
+#include "LwsAdapter/LwsTypesFwd.hpp"
 
 namespace lwspp
 {
-namespace cli
+namespace srv
 {
 
-/**
- * @brief Accepts an IDataSender instance from the client builder.
- *
- * The client builder provides an IDataSender instance when constructing the client.
- * To utilize the IDataSender, set your instance of IDataSenderAcceptor to the client builder
- * and obtain the IDataSender to transfer the data from the client to the server.
- * Users of the library must implement this interface themselves.
- */
-class IDataSenderAcceptor
+class LwsActor : public IActor
 {
 public:
-    IDataSenderAcceptor() = default;
-    virtual ~IDataSenderAcceptor() = default;
+    LwsActor(ILwsConnectionsPtr s, ILwsCallbackNotifierPtr n);
 
-    IDataSenderAcceptor(const IDataSenderAcceptor&) = default;
-    auto operator=(const IDataSenderAcceptor&) noexcept -> IDataSenderAcceptor& = default;
+    void sendTextData(ConnectionId, const std::string&) override;
+    void sendBinaryData(ConnectionId, const std::vector<char>&) override;
 
-    IDataSenderAcceptor(IDataSenderAcceptor&&) = default;
-    auto operator=(IDataSenderAcceptor&&) noexcept -> IDataSenderAcceptor& = default;
+    void sendTextData(const std::string&) override;
+    void sendBinaryData(const std::vector<char>&) override;
 
-public:
-    virtual void acceptDataSender(IDataSenderPtr) noexcept = 0;
+    void closeConnection(ConnectionId) override;
+
+private:
+    ILwsConnectionsPtr _connections;
+    ILwsCallbackNotifierPtr _notifier;
 };
 
-} // namespace cli
+} // namespace srv
 } // namespace lwspp

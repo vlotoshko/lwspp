@@ -22,32 +22,35 @@
  * IN THE SOFTWARE.
  */
 
-#pragma once
-
-#include "lwspp/server/IDataSender.hpp"
-
-#include "LwsAdapter/LwsTypesFwd.hpp"
+#include "LwsAdapter/ILwsConnection.hpp"
+#include "LwsAdapter/LwsActor.hpp"
 
 namespace lwspp
 {
-namespace srv
+namespace cli
 {
 
-class LwsDataSender : public IDataSender
+LwsActor::LwsActor(const ILwsConnectionPtr& s)
+    : _connection(s)
+{}
+
+void LwsActor::sendTextData(const std::string& message)
 {
-public:
-    LwsDataSender(ILwsConnectionsPtr s, ILwsCallbackNotifierPtr n);
+    if (auto connection = _connection.lock())
+    {
+        connection->addTextDataToSend(message);
+        lws_callback_on_writable(connection->getLwsInstance());
+    }
+}
 
-    void sendTextData(ConnectionId, const std::string&) override;
-    void sendBinaryData(ConnectionId, const std::vector<char>&) override;
+void LwsActor::sendBinaryData(const std::vector<char>& data)
+{
+    if (auto connection = _connection.lock())
+    {
+        connection->addBinaryDataToSend(data);
+        lws_callback_on_writable(connection->getLwsInstance());
+    }
+}
 
-    void sendTextData(const std::string&) override;
-    void sendBinaryData(const std::vector<char>&) override;
-
-private:
-    ILwsConnectionsPtr _connections;
-    ILwsCallbackNotifierPtr _notifier;
-};
-
-} // namespace srv
+} // namespace cli
 } // namespace lwspp

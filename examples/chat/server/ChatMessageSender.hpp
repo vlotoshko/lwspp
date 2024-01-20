@@ -39,7 +39,7 @@ namespace chat
 class ChatMessageSender
 {
 public:
-    explicit ChatMessageSender(srv::IDataSenderPtr);
+    explicit ChatMessageSender(srv::IActorPtr);
 
     void sendUserMessage(const Message&);
     void sendChatHistory(const User&, const std::vector<Message>&);
@@ -47,7 +47,7 @@ public:
     void updateUsers(const std::map<srv::ConnectionId, User>& users);
 
 private:
-    srv::IDataSenderPtr _dataSender;
+    srv::IActorPtr _actor;
 };
 
 } // namespace chat

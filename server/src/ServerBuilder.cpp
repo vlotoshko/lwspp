@@ -61,7 +61,7 @@ void checkContext(const ServerContext& context)
         throw UndefinedRequiredParameterException{"event handler"};
     }
 
-    if (context.dataSenderAcceptor == nullptr)
+    if (context.actorAcceptor == nullptr)
     {
         throw UndefinedRequiredParameterException{"data sender acceptor"};
     }
@@ -133,9 +133,9 @@ auto ServerBuilder::setEventHandler(IEventHandlerPtr e) -> ServerBuilder&
     return *this;
 }
 
-auto ServerBuilder::setDataSenderAcceptor(IDataSenderAcceptorPtr a) -> ServerBuilder&
+auto ServerBuilder::setActorAcceptor(IActorAcceptorPtr a) -> ServerBuilder&
 {
-    _context->dataSenderAcceptor = std::move(a);
+    _context->actorAcceptor = std::move(a);
     return *this;
 }
 

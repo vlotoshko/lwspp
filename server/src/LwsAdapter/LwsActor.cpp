@@ -25,19 +25,19 @@
 #include "LwsAdapter/ILwsCallbackNotifier.hpp"
 #include "LwsAdapter/ILwsConnection.hpp"
 #include "LwsAdapter/ILwsConnections.hpp"
-#include "LwsAdapter/LwsDataSender.hpp"
+#include "LwsAdapter/LwsActor.hpp"
 
 namespace lwspp
 {
 namespace srv
 {
 
-LwsDataSender::LwsDataSender(ILwsConnectionsPtr s, ILwsCallbackNotifierPtr n)
+LwsActor::LwsActor(ILwsConnectionsPtr s, ILwsCallbackNotifierPtr n)
     : _connections(std::move(s))
     , _notifier(std::move(n))
 {}
 
-void LwsDataSender::sendTextData(ConnectionId connectionId, const std::string& message)
+void LwsActor::sendTextData(ConnectionId connectionId, const std::string& message)
 {
     if (auto connection = _connections->get(connectionId))
     {
@@ -46,7 +46,7 @@ void LwsDataSender::sendTextData(ConnectionId connectionId, const std::string& m
     }
 }
 
-void LwsDataSender::sendBinaryData(ConnectionId connectionId, const std::vector<char>& data)
+void LwsActor::sendBinaryData(ConnectionId connectionId, const std::vector<char>& data)
 {
     if (auto connection = _connections->get(connectionId))
     {
@@ -55,7 +55,7 @@ void LwsDataSender::sendBinaryData(ConnectionId connectionId, const std::vector<
     }
 }
 
-void LwsDataSender::sendTextData(const std::string& message)
+void LwsActor::sendTextData(const std::string& message)
 {
     for(auto& entry : _connections->getAllConnections())
     {
@@ -71,7 +71,7 @@ void LwsDataSender::sendTextData(const std::string& message)
     _notifier->notifyPendingDataAdded();
 }
 
-void LwsDataSender::sendBinaryData(const std::vector<char>& data)
+void LwsActor::sendBinaryData(const std::vector<char>& data)
 {
     for(auto& entry : _connections->getAllConnections())
     {
@@ -85,6 +85,14 @@ void LwsDataSender::sendBinaryData(const std::vector<char>& data)
         }
     }
     _notifier->notifyPendingDataAdded();
+}
+
+void LwsActor::closeConnection(ConnectionId connectionId)
+{
+    if (auto connection = _connections->get(connectionId))
+    {
+        _notifier->notifyCloseConnection(connection);
+    }
 }
 
 } // namespace srv

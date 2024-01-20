@@ -56,7 +56,7 @@ auto main() -> int
         .setPort(PORT)
         .setCallbackVersion(srv::CallbackVersion::v1_Andromeda)
         .setEventHandler(eventHandler)
-        .setDataSenderAcceptor(eventHandler)
+        .setActorAcceptor(eventHandler)
         ;
     auto server = serverBuilder.build();
 

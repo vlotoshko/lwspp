@@ -14,9 +14,9 @@ set(${PROJECT_NAME}_SRC_FILES
     include/lwspp/server/CallbackVersions.hpp
     include/lwspp/server/Consts.hpp
     include/lwspp/server/EventHandlerBase.hpp
+    include/lwspp/server/IActor.hpp
+    include/lwspp/server/IActorAcceptor.hpp
     include/lwspp/server/IConnectionInfo.hpp
-    include/lwspp/server/IDataSender.hpp
-    include/lwspp/server/IDataSenderAcceptor.hpp
     include/lwspp/server/IEventHandler.hpp
     include/lwspp/server/IServer.hpp
     include/lwspp/server/ServerBuilder.hpp
@@ -28,6 +28,8 @@ set(${PROJECT_NAME}_SRC_FILES
     src/LwsAdapter/ILwsCallbackNotifier.hpp
     src/LwsAdapter/ILwsConnection.hpp
     src/LwsAdapter/ILwsConnections.hpp
+    src/LwsAdapter/LwsActor.cpp
+    src/LwsAdapter/LwsActor.hpp
     src/LwsAdapter/LwsCallback.cpp
     src/LwsAdapter/LwsCallback.hpp
     src/LwsAdapter/LwsCallbackContext.cpp
@@ -39,8 +41,6 @@ set(${PROJECT_NAME}_SRC_FILES
     src/LwsAdapter/LwsContextDeleter.hpp
     src/LwsAdapter/LwsDataHolder.cpp
     src/LwsAdapter/LwsDataHolder.hpp
-    src/LwsAdapter/LwsDataSender.cpp
-    src/LwsAdapter/LwsDataSender.hpp
     src/LwsAdapter/LwsProtocolsFactory.cpp
     src/LwsAdapter/LwsProtocolsFactory.hpp
     src/LwsAdapter/LwsServer.cpp

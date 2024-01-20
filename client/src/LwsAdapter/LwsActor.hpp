@@ -24,35 +24,25 @@
 
 #pragma once
 
-#include <string>
-#include <vector>
+#include "lwspp/client/IActor.hpp"
+
+#include "LwsAdapter/LwsTypesFwd.hpp"
 
 namespace lwspp
 {
 namespace cli
 {
-/**
- * @brief The IDataSender class sends data to the server.
- * The instance of IDataSender can be obtained using IDataSenderAcceptor when building the client.
- */
-class IDataSender
+
+class LwsActor : public IActor
 {
 public:
-    IDataSender() = default;
-    virtual ~IDataSender() = default;
+    explicit LwsActor(const ILwsConnectionPtr&);
 
-    IDataSender(const IDataSender&) = default;
-    auto operator=(const IDataSender&) -> IDataSender& = default;
+    void sendTextData(const std::string&) override;
+    void sendBinaryData(const std::vector<char>&) override;
 
-    IDataSender(IDataSender&&) noexcept = default;
-    auto operator=(IDataSender&&) noexcept -> IDataSender& = default;
-
-public:
-    // Sends text data to the server. The provided text data should be valid UTF-8 text.
-    virtual void sendTextData(const std::string&) = 0;
-
-    // Sends binary data to the server
-    virtual void sendBinaryData(const std::vector<char>&) = 0;
+private:
+    ILwsConnectionWeak _connection;
 };
 
 } // namespace cli

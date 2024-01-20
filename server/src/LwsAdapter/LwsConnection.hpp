@@ -47,12 +47,16 @@ public:
     void addTextDataToSend(const std::string&) override;
     auto getPendingData() -> std::queue<Message>& override;
 
+    auto markedToClose() -> bool override;
+    void markToClose() override;
+
 private:
     ConnectionId _connectionId;
     LwsInstanceRawPtr _wsInstance;
     std::queue<Message> _pendingData;
     std::queue<Message> _pendingDataToSend;
     std::mutex _mutex;
+    bool _markedToClose = false;
 };
 
 } // namespace srv

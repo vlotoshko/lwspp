@@ -43,7 +43,7 @@ class ClientContext
 public:
     CallbackVersion callbackVersion = UNDEFINED_CALLBACK_VERSION;
     IEventHandlerPtr eventHandler;
-    IDataSenderAcceptorPtr dataSenderAcceptor;
+    IActorAcceptorPtr actorAcceptor;
     Address address = UNDEFINED_ADDRESS;
     Port port = UNDEFINED_PORT;
 

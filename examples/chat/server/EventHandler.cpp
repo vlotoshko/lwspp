@@ -140,7 +140,7 @@ auto getUserNameFromHello(const std::string& message) -> std::string
 
 } // namespace
 
-EventHandler::EventHandler() : _chatMessageSender(srv::IDataSenderPtr{})
+EventHandler::EventHandler() : _chatMessageSender(srv::IActorPtr{})
 {}
 
 void EventHandler::onConnect(lwspp::srv::IConnectionInfoPtr connectionInfo) noexcept
@@ -182,10 +182,10 @@ void EventHandler::onTextDataReceive(srv::ConnectionId connectionId, const srv::
     }
 }
 
-void EventHandler::acceptDataSender(srv::IDataSenderPtr messageSender) noexcept
+void EventHandler::acceptActor(srv::IActorPtr messageSender) noexcept
 {
-    srv::EventHandlerBase::acceptDataSender(messageSender);
-    _chatMessageSender = ChatMessageSender{_dataSender};
+    srv::EventHandlerBase::acceptActor(messageSender);
+    _chatMessageSender = ChatMessageSender{_actor};
 }
 
 void EventHandler::processHelloMessage_(srv::ConnectionId connectionId, const std::string& messageText)

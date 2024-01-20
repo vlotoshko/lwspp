@@ -45,8 +45,8 @@ public:
     void onConnect(srv::IConnectionInfoPtr) noexcept override;
     void onDisconnect(srv::ConnectionId) noexcept override;
     void onTextDataReceive(srv::ConnectionId, const srv::DataPacket&) noexcept override;
-
-    void acceptDataSender(srv::IDataSenderPtr) noexcept override;
+    
+    void acceptActor(srv::IActorPtr) noexcept override;
 
 private:
     void processHelloMessage_(srv::ConnectionId, const std::string& message);

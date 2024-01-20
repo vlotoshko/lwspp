@@ -34,11 +34,11 @@ namespace srv
 class IEventHandler;
 using IEventHandlerPtr = std::shared_ptr<IEventHandler>;
 
-class IDataSender;
-using IDataSenderPtr = std::shared_ptr<IDataSender>;
+class IActor;
+using IActorPtr = std::shared_ptr<IActor>;
 
-class IDataSenderAcceptor;
-using IDataSenderAcceptorPtr = std::shared_ptr<IDataSenderAcceptor>;
+class IActorAcceptor;
+using IActorAcceptorPtr = std::shared_ptr<IActorAcceptor>;
 
 class IServer;
 using IServerPtr = std::shared_ptr<IServer>;

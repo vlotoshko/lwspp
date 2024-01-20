@@ -59,7 +59,7 @@ public:
     auto setAddress(Address) -> ClientBuilder&;
     auto setPort(Port) -> ClientBuilder&;
     auto setEventHandler(IEventHandlerPtr) -> ClientBuilder&;
-    auto setDataSenderAcceptor(IDataSenderAcceptorPtr) -> ClientBuilder&;
+    auto setActorAcceptor(IActorAcceptorPtr) -> ClientBuilder&;
 
     // Non mandatory options
     auto setProtocolName(std::string) -> ClientBuilder&;

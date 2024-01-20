@@ -27,10 +27,10 @@
 
 #include "lwspp/client/ClientBuilder.hpp"
 #include "lwspp/client/EventHandlerBase.hpp"
-#include "lwspp/client/IDataSender.hpp"
+#include "lwspp/client/IActor.hpp"
 
 #include "lwspp/server/EventHandlerBase.hpp"
-#include "lwspp/server/IDataSender.hpp"
+#include "lwspp/server/IActor.hpp"
 #include "lwspp/server/ServerBuilder.hpp"
 
 using namespace lwspp;
@@ -40,7 +40,7 @@ class ClientEventHandler : public cli::EventHandlerBase
 public:
     void onConnect(cli::IConnectionInfoPtr) noexcept override
     {
-        _dataSender->sendTextData("hello server!");
+        _actor->sendTextData("hello server!");
     }
 
     void onTextDataReceive(const cli::DataPacket& dataPacket) noexcept override
@@ -55,7 +55,7 @@ public:
     void onTextDataReceive(srv::ConnectionId, const srv::DataPacket& dataPacket) noexcept override
     {
         std::cout << "server received the message: " << std::string{dataPacket.data, dataPacket.length}  << std::endl;
-        _dataSender->sendTextData("hello client!");
+        _actor->sendTextData("hello client!");
     }
 };
 
@@ -70,7 +70,7 @@ auto main() -> int
         .setPort(PORT)
         .setCallbackVersion(srv::CallbackVersion::v1_Andromeda)
         .setEventHandler(serverEventHandler)
-        .setDataSenderAcceptor(serverEventHandler)
+        .setActorAcceptor(serverEventHandler)
         .setLwsLogLevel(0)
         ;
     auto server = serverBuilder.build();
@@ -83,7 +83,7 @@ auto main() -> int
         .setPort(PORT)
         .setCallbackVersion(cli::CallbackVersion::v1_Amsterdam)
         .setEventHandler(clientEventHandler)
-        .setDataSenderAcceptor(clientEventHandler)
+        .setActorAcceptor(clientEventHandler)
         .setLwsLogLevel(0)
         ;
     auto client = clientBuilder.build();

@@ -52,6 +52,8 @@ public:
     virtual void notifyPendingDataAdded(const ILwsConnectionPtr&) = 0;
     // Notifies that pending data was added to send to the all connections.
     virtual void notifyPendingDataAdded() = 0;
+    // Notifies that this connection should be closed.
+    virtual void notifyCloseConnection(const ILwsConnectionPtr&) = 0;
 };
 
 } // namespace srv

@@ -34,7 +34,7 @@ namespace cli
 class LwsCallbackContext : public ILwsCallbackContext
 {
 public:
-    LwsCallbackContext(IEventHandlerPtr, IDataSenderAcceptorPtr);
+    LwsCallbackContext(IEventHandlerPtr, IActorAcceptorPtr);
 
     void setStopping() override;
     auto isStopping() const -> bool override;
@@ -47,7 +47,7 @@ public:
 
 private:
     IEventHandlerPtr _eventHandler;
-    IDataSenderAcceptorPtr _dataSenderAcceptor;
+    IActorAcceptorPtr _actorAcceptor;
     ILwsConnectionPtr _connection;
 
     bool _isStopping = false;

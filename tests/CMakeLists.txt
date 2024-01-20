@@ -4,6 +4,7 @@ set(TESTS_TARGET_SRC_FILES
     Utils.hpp
 
     TestDataTransfer.cpp
+    TestDisconnectClient.cpp
     TestHelloWorld.cpp
     TestSimpleFeatures.cpp
     TestSslFeature.cpp

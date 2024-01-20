@@ -31,14 +31,14 @@ namespace lwspp
 namespace cli
 {
 
+class IActor;
+using IActorPtr = std::shared_ptr<IActor>;
+
+class IActorAcceptor;
+using IActorAcceptorPtr = std::shared_ptr<IActorAcceptor>;
+
 class IClient;
 using IClientPtr = std::shared_ptr<IClient>;
-
-class IDataSender;
-using IDataSenderPtr = std::shared_ptr<IDataSender>;
-
-class IDataSenderAcceptor;
-using IDataSenderAcceptorPtr = std::shared_ptr<IDataSenderAcceptor>;
 
 class IEventHandler;
 using IEventHandlerPtr = std::shared_ptr<IEventHandler>;

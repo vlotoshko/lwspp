@@ -25,7 +25,6 @@
 #pragma once
 
 #include <string>
-#include <vector>
 
 #include "lwspp/client/Types.hpp"
 #include "lwspp/client/TypesFwd.hpp"

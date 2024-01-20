@@ -87,5 +87,15 @@ auto LwsConnection::getPendingData() -> std::queue<Message>&
     return _pendingDataToSend;
 }
 
+auto lwspp::srv::LwsConnection::markedToClose() -> bool
+{
+    return _markedToClose;
+}
+
+void LwsConnection::markToClose()
+{
+    _markedToClose = true;
+}
+
 } // namespace srv
 } // namespace lwspp

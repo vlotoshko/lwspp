@@ -58,6 +58,9 @@ public:
     virtual void addBinaryDataToSend(const std::vector<char>&) = 0;
     virtual void addTextDataToSend(const std::string&) = 0;
     virtual auto getPendingData() -> std::queue<Message>& = 0;
+
+    virtual auto markedToClose() -> bool = 0;
+    virtual void markToClose() = 0;
 };
 
 } // namespace srv

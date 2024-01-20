@@ -58,7 +58,7 @@ public:
     auto setCallbackVersion(CallbackVersion) -> ServerBuilder&;
     auto setPort(Port) -> ServerBuilder&;
     auto setEventHandler(IEventHandlerPtr) -> ServerBuilder&;
-    auto setDataSenderAcceptor(IDataSenderAcceptorPtr) -> ServerBuilder&;
+    auto setActorAcceptor(IActorAcceptorPtr) -> ServerBuilder&;
 
     // Non mandatory options
     auto setProtocolName(std::string) -> ServerBuilder&;

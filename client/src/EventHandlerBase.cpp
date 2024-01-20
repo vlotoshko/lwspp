@@ -47,9 +47,9 @@ void EventHandlerBase::onError(const std::string& /*errorMessage*/) noexcept
 void EventHandlerBase::onWarning(const std::string& /*warningMessage*/) noexcept
 {}
 
-void EventHandlerBase::acceptDataSender(IDataSenderPtr dataSender) noexcept
+void EventHandlerBase::acceptActor(IActorPtr actor) noexcept
 {
-    _dataSender = std::move(dataSender);
+    _actor = std::move(actor);
 }
 
 } // namespace cli

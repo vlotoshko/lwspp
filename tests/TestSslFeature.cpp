@@ -26,11 +26,11 @@
 
 #include "catch2/catch.hpp"
 #include "lwspp/client/ClientBuilder.hpp"
-#include "lwspp/client/IDataSenderAcceptor.hpp"
+#include "lwspp/client/IActorAcceptor.hpp"
 #include "lwspp/client/IEventHandler.hpp"
 #include "lwspp/client/SslSettingsBuilder.hpp"
 
-#include "lwspp/server/IDataSenderAcceptor.hpp"
+#include "lwspp/server/IActorAcceptor.hpp"
 #include "lwspp/server/IEventHandler.hpp"
 #include "lwspp/server/ServerBuilder.hpp"
 #include "lwspp/server/SslSettingsBuilder.hpp"
@@ -86,44 +86,44 @@ void waitForInitialization()
 }
 
 void setupServerBehavior(Mock<srv::IEventHandler>& eventHandler,
-                         Mock<srv::IDataSenderAcceptor>& dataSenderAcceptor,
-                         srv::IDataSenderPtr& dataSender)
+                         Mock<srv::IActorAcceptor>& actorAcceptor,
+                         srv::IActorPtr& actor)
 {
     Fake(Method(eventHandler, onConnect), Method(eventHandler, onDisconnect));
 
-    When(Method(dataSenderAcceptor, acceptDataSender))
-        .Do([&dataSender](srv::IDataSenderPtr ms){ dataSender = ms; });
+    When(Method(actorAcceptor, acceptActor))
+        .Do([&actor](srv::IActorPtr a){ actor = a; });
 }
 
 void setupClientBehavior(Mock<cli::IEventHandler>& eventHandler,
-                         Mock<cli::IDataSenderAcceptor>& dataSenderAcceptor,
-                         cli::IDataSenderPtr& dataSender)
+                         Mock<cli::IActorAcceptor>& actorAcceptor,
+                         cli::IActorPtr& actor)
 {
     Fake(Method(eventHandler, onConnect), Method(eventHandler, onError),
          Method(eventHandler, onDisconnect));
 
     When(Method(eventHandler, onError))
         .Do([](const std::string message){ std::cout << message << std::endl; });
-    When(Method(dataSenderAcceptor, acceptDataSender))
-        .Do([&dataSender](cli::IDataSenderPtr ms){ dataSender = ms; });
+    When(Method(actorAcceptor, acceptActor))
+        .Do([&actor](cli::IActorPtr a){ actor = a; });
 }
 
 srv::ServerBuilder setupServerBuilder(srv::IEventHandlerPtr eventHandler,
-                                      srv::IDataSenderAcceptorPtr dataSenderAcceptor)
+                                      srv::IActorAcceptorPtr actorAcceptor)
 {
     auto serverBuilder = srv::ServerBuilder{};
     serverBuilder
         .setCallbackVersion(srv::CallbackVersion::v1_Andromeda)
         .setPort(PORT)
         .setEventHandler(eventHandler)
-        .setDataSenderAcceptor(dataSenderAcceptor)
+        .setActorAcceptor(actorAcceptor)
         .setLwsLogLevel(DISABLE_LOG);
 
     return serverBuilder;
 }
 
 cli::ClientBuilder setupClientBuilder(cli::IEventHandlerPtr eventHandler,
-                                      cli::IDataSenderAcceptorPtr dataSenderAcceptor)
+                                      cli::IActorAcceptorPtr actorAcceptor)
 {
     auto builder = cli::ClientBuilder{};
     builder
@@ -131,7 +131,7 @@ cli::ClientBuilder setupClientBuilder(cli::IEventHandlerPtr eventHandler,
         .setAddress(ADDRESS)
         .setPort(PORT)
         .setEventHandler(eventHandler)
-        .setDataSenderAcceptor(dataSenderAcceptor)
+        .setActorAcceptor(actorAcceptor)
         .setLwsLogLevel(DISABLE_LOG);
 
     return builder;
@@ -144,19 +144,19 @@ SCENARIO( "Test ssl enabling for server and client", "[ssl]" )
     auto srvEventHadler = MockedPtr<srv::IEventHandler>{};
     auto cliEventHadler = MockedPtr<cli::IEventHandler>{};
     
-    auto srvDataSenderAcceptor = MockedPtr<srv::IDataSenderAcceptor>{};
-    auto cliDataSenderAcceptor = MockedPtr<cli::IDataSenderAcceptor>{};
+    auto srvActorAcceptor = MockedPtr<srv::IActorAcceptor>{};
+    auto cliActorAcceptor = MockedPtr<cli::IActorAcceptor>{};
 
-    srv::IDataSenderPtr srvDataSender;
-    cli::IDataSenderPtr cliDataSender;
+    srv::IActorPtr srvActor;
+    cli::IActorPtr cliActor;
 
-    setupServerBehavior(srvEventHadler.mock(), srvDataSenderAcceptor.mock(), srvDataSender);
-    setupClientBehavior(cliEventHadler.mock(), cliDataSenderAcceptor.mock(), cliDataSender);
+    setupServerBehavior(srvEventHadler.mock(), srvActorAcceptor.mock(), srvActor);
+    setupClientBehavior(cliEventHadler.mock(), cliActorAcceptor.mock(), cliActor);
 
     GIVEN( "Server and client" )
     {
-        auto serverBuilder = setupServerBuilder(srvEventHadler.ptr(), srvDataSenderAcceptor.ptr());
-        auto clientBuilder = setupClientBuilder(cliEventHadler.ptr(), cliDataSenderAcceptor.ptr());
+        auto serverBuilder = setupServerBuilder(srvEventHadler.ptr(), srvActorAcceptor.ptr());
+        auto clientBuilder = setupClientBuilder(cliEventHadler.ptr(), cliActorAcceptor.ptr());
 
         WHEN( "Server uses ssl" )
         {
@@ -240,19 +240,19 @@ SCENARIO( "Test client ssl features", "[ssl]" )
     auto srvEventHadler = MockedPtr<srv::IEventHandler>{};
     auto cliEventHadler = MockedPtr<cli::IEventHandler>{};
     
-    auto srvDataSenderAcceptor = MockedPtr<srv::IDataSenderAcceptor>{};
-    auto cliDataSenderAcceptor = MockedPtr<cli::IDataSenderAcceptor>{};
+    auto srvActorAcceptor = MockedPtr<srv::IActorAcceptor>{};
+    auto cliActorAcceptor = MockedPtr<cli::IActorAcceptor>{};
 
-    srv::IDataSenderPtr srvDataSender;
-    cli::IDataSenderPtr cliDataSender;
+    srv::IActorPtr srvActor;
+    cli::IActorPtr cliActor;
 
-    setupServerBehavior(srvEventHadler.mock(), srvDataSenderAcceptor.mock(), srvDataSender);
-    setupClientBehavior(cliEventHadler.mock(), cliDataSenderAcceptor.mock(), cliDataSender);
+    setupServerBehavior(srvEventHadler.mock(), srvActorAcceptor.mock(), srvActor);
+    setupClientBehavior(cliEventHadler.mock(), cliActorAcceptor.mock(), cliActor);
 
     GIVEN( "Server and client" )
     {
-        auto serverBuilder = setupServerBuilder(srvEventHadler.ptr(), srvDataSenderAcceptor.ptr());
-        auto clientBuilder = setupClientBuilder(cliEventHadler.ptr(), cliDataSenderAcceptor.ptr());
+        auto serverBuilder = setupServerBuilder(srvEventHadler.ptr(), srvActorAcceptor.ptr());
+        auto clientBuilder = setupClientBuilder(cliEventHadler.ptr(), cliActorAcceptor.ptr());
 
         WHEN( "Server uses self-signed certificate" )
         {
@@ -521,19 +521,19 @@ SCENARIO( "Test server ssl features", "[ssl]" )
     auto srvEventHadler = MockedPtr<srv::IEventHandler>{};
     auto cliEventHadler = MockedPtr<cli::IEventHandler>{};
     
-    auto srvDataSenderAcceptor = MockedPtr<srv::IDataSenderAcceptor>{};
-    auto cliDataSenderAcceptor = MockedPtr<cli::IDataSenderAcceptor>{};
+    auto srvActorAcceptor = MockedPtr<srv::IActorAcceptor>{};
+    auto cliActorAcceptor = MockedPtr<cli::IActorAcceptor>{};
 
-    srv::IDataSenderPtr srvDataSender;
-    cli::IDataSenderPtr cliDataSender;
+    srv::IActorPtr srvActor;
+    cli::IActorPtr cliActor;
 
-    setupServerBehavior(srvEventHadler.mock(), srvDataSenderAcceptor.mock(), srvDataSender);
-    setupClientBehavior(cliEventHadler.mock(), cliDataSenderAcceptor.mock(), cliDataSender);
+    setupServerBehavior(srvEventHadler.mock(), srvActorAcceptor.mock(), srvActor);
+    setupClientBehavior(cliEventHadler.mock(), cliActorAcceptor.mock(), cliActor);
 
     GIVEN( "Server and client" )
     {
-        auto serverBuilder = setupServerBuilder(srvEventHadler.ptr(), srvDataSenderAcceptor.ptr());
-        auto clientBuilder = setupClientBuilder(cliEventHadler.ptr(), cliDataSenderAcceptor.ptr());
+        auto serverBuilder = setupServerBuilder(srvEventHadler.ptr(), srvActorAcceptor.ptr());
+        auto clientBuilder = setupClientBuilder(cliEventHadler.ptr(), cliActorAcceptor.ptr());
 
         WHEN( "Server requires valid cert from client" )
         {
@@ -645,19 +645,19 @@ SCENARIO( "Test ssl ciphers list feature", "[.ssl]" )
     auto srvEventHadler = MockedPtr<srv::IEventHandler>{};
     auto cliEventHadler = MockedPtr<cli::IEventHandler>{};
     
-    auto srvDataSenderAcceptor = MockedPtr<srv::IDataSenderAcceptor>{};
-    auto cliDataSenderAcceptor = MockedPtr<cli::IDataSenderAcceptor>{};
+    auto srvActorAcceptor = MockedPtr<srv::IActorAcceptor>{};
+    auto cliActorAcceptor = MockedPtr<cli::IActorAcceptor>{};
 
-    srv::IDataSenderPtr srvDataSender;
-    cli::IDataSenderPtr cliDataSender;
+    srv::IActorPtr srvActor;
+    cli::IActorPtr cliActor;
 
-    setupServerBehavior(srvEventHadler.mock(), srvDataSenderAcceptor.mock(), srvDataSender);
-    setupClientBehavior(cliEventHadler.mock(), cliDataSenderAcceptor.mock(), cliDataSender);
+    setupServerBehavior(srvEventHadler.mock(), srvActorAcceptor.mock(), srvActor);
+    setupClientBehavior(cliEventHadler.mock(), cliActorAcceptor.mock(), cliActor);
 
     GIVEN( "Server and client" )
     {
-        auto serverBuilder = setupServerBuilder(srvEventHadler.ptr(), srvDataSenderAcceptor.ptr());
-        auto clientBuilder = setupClientBuilder(cliEventHadler.ptr(), cliDataSenderAcceptor.ptr());
+        auto serverBuilder = setupServerBuilder(srvEventHadler.ptr(), srvActorAcceptor.ptr());
+        auto clientBuilder = setupClientBuilder(cliEventHadler.ptr(), cliActorAcceptor.ptr());
 
         srv::SslSettingsBuilder srvSslSettingsBuilder;
         srvSslSettingsBuilder

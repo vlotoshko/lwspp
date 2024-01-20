@@ -24,8 +24,6 @@
 
 #pragma once
 
-#include <memory>
-
 #include "libwebsockets.h"
 
 namespace lwspp
