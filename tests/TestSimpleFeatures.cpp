@@ -22,10 +22,10 @@
  * IN THE SOFTWARE.
  */
 
+#include <catch2/catch_test_macros.hpp>
 #include <condition_variable>
 #include <thread>
 
-#include "catch2/catch.hpp"
 #include "MockedPtr.hpp"
 
 #include "lwspp/client/ClientBuilder.hpp"
@@ -90,8 +90,8 @@ void setupClientBehavior(Mock<cli::IEventHandler>& eventHandler,
 
 SCENARIO( "Protocol name feature testing", "[protocol_name]" )
 {
-    auto srvEventHadler = MockedPtr<srv::IEventHandler>{};
-    auto cliEventHadler = MockedPtr<cli::IEventHandler>{};
+    auto srvEventHandler = MockedPtr<srv::IEventHandler>{};
+    auto cliEventHandler = MockedPtr<cli::IEventHandler>{};
     
     auto srvActorAcceptor = MockedPtr<srv::IActorAcceptor>{};
     auto cliActorAcceptor = MockedPtr<cli::IActorAcceptor>{};
@@ -99,8 +99,8 @@ SCENARIO( "Protocol name feature testing", "[protocol_name]" )
     srv::IActorPtr srvActor;
     cli::IActorPtr cliActor;
 
-    setupServerBehavior(srvEventHadler.mock(), srvActorAcceptor.mock(), srvActor);
-    setupClientBehavior(cliEventHadler.mock(), cliActorAcceptor.mock(), cliActor);
+    setupServerBehavior(srvEventHandler.mock(), srvActorAcceptor.mock(), srvActor);
+    setupClientBehavior(cliEventHandler.mock(), cliActorAcceptor.mock(), cliActor);
 
     GIVEN( "Server and client" )
     {
@@ -108,7 +108,7 @@ SCENARIO( "Protocol name feature testing", "[protocol_name]" )
         serverBuilder
             .setCallbackVersion(srv::CallbackVersion::v1_Andromeda)
             .setPort(PORT)
-            .setEventHandler(srvEventHadler.ptr())
+            .setEventHandler(srvEventHandler.ptr())
             .setActorAcceptor(srvActorAcceptor.ptr())
             .setLwsLogLevel(DISABLE_LOG);
 
@@ -117,7 +117,7 @@ SCENARIO( "Protocol name feature testing", "[protocol_name]" )
             .setCallbackVersion(cli::CallbackVersion::v1_Amsterdam)
             .setAddress(ADDRESS)
             .setPort(PORT)
-            .setEventHandler(cliEventHadler.ptr())
+            .setEventHandler(cliEventHandler.ptr())
             .setActorAcceptor(cliActorAcceptor.ptr())
             .setLwsLogLevel(DISABLE_LOG);
 
@@ -135,12 +135,12 @@ SCENARIO( "Protocol name feature testing", "[protocol_name]" )
                     server.reset();
                     client.reset();
 
-                    Verify(Method(srvEventHadler.mock(), onConnect),
-                           Method(srvEventHadler.mock(), onDisconnect)).Once();
-                    Verify(Method(cliEventHadler.mock(), onConnect),
-                           Method(cliEventHadler.mock(), onDisconnect)).Once();
-                    VerifyNoOtherInvocations(srvEventHadler.mock());
-                    VerifyNoOtherInvocations(cliEventHadler.mock());
+                    Verify(Method(srvEventHandler.mock(), onConnect),
+                           Method(srvEventHandler.mock(), onDisconnect)).Once();
+                    Verify(Method(cliEventHandler.mock(), onConnect),
+                           Method(cliEventHandler.mock(), onDisconnect)).Once();
+                    VerifyNoOtherInvocations(srvEventHandler.mock());
+                    VerifyNoOtherInvocations(cliEventHandler.mock());
                 }
             }
 
@@ -154,9 +154,9 @@ SCENARIO( "Protocol name feature testing", "[protocol_name]" )
                     server.reset();
                     client.reset();
 
-                    Verify(Method(cliEventHadler.mock(), onError)).Once();
-                    VerifyNoOtherInvocations(srvEventHadler.mock());
-                    VerifyNoOtherInvocations(cliEventHadler.mock());
+                    Verify(Method(cliEventHandler.mock(), onError)).Once();
+                    VerifyNoOtherInvocations(srvEventHandler.mock());
+                    VerifyNoOtherInvocations(cliEventHandler.mock());
                 }
             }
         }
@@ -174,12 +174,12 @@ SCENARIO( "Protocol name feature testing", "[protocol_name]" )
                     server.reset();
                     client.reset();
 
-                    Verify(Method(srvEventHadler.mock(), onConnect),
-                           Method(srvEventHadler.mock(), onDisconnect)).Once();
-                    Verify(Method(cliEventHadler.mock(), onConnect),
-                           Method(cliEventHadler.mock(), onDisconnect)).Once();
-                    VerifyNoOtherInvocations(srvEventHadler.mock());
-                    VerifyNoOtherInvocations(cliEventHadler.mock());
+                    Verify(Method(srvEventHandler.mock(), onConnect),
+                           Method(srvEventHandler.mock(), onDisconnect)).Once();
+                    Verify(Method(cliEventHandler.mock(), onConnect),
+                           Method(cliEventHandler.mock(), onDisconnect)).Once();
+                    VerifyNoOtherInvocations(srvEventHandler.mock());
+                    VerifyNoOtherInvocations(cliEventHandler.mock());
                 }
             }
 
@@ -192,9 +192,9 @@ SCENARIO( "Protocol name feature testing", "[protocol_name]" )
                     server.reset();
                     client.reset();
 
-                    Verify(Method(cliEventHadler.mock(), onError)).Once();
-                    VerifyNoOtherInvocations(srvEventHadler.mock());
-                    VerifyNoOtherInvocations(cliEventHadler.mock());
+                    Verify(Method(cliEventHandler.mock(), onError)).Once();
+                    VerifyNoOtherInvocations(srvEventHandler.mock());
+                    VerifyNoOtherInvocations(cliEventHandler.mock());
                 }
             }
 
@@ -209,12 +209,12 @@ SCENARIO( "Protocol name feature testing", "[protocol_name]" )
                     server.reset();
                     client.reset();
 
-                    Verify(Method(srvEventHadler.mock(), onConnect),
-                           Method(srvEventHadler.mock(), onDisconnect)).Once();
-                    Verify(Method(cliEventHadler.mock(), onConnect),
-                           Method(cliEventHadler.mock(), onDisconnect)).Once();
-                    VerifyNoOtherInvocations(srvEventHadler.mock());
-                    VerifyNoOtherInvocations(cliEventHadler.mock());
+                    Verify(Method(srvEventHandler.mock(), onConnect),
+                           Method(srvEventHandler.mock(), onDisconnect)).Once();
+                    Verify(Method(cliEventHandler.mock(), onConnect),
+                           Method(cliEventHandler.mock(), onDisconnect)).Once();
+                    VerifyNoOtherInvocations(srvEventHandler.mock());
+                    VerifyNoOtherInvocations(cliEventHandler.mock());
                 }
             }
         }
@@ -223,8 +223,8 @@ SCENARIO( "Protocol name feature testing", "[protocol_name]" )
 
 SCENARIO( "Path feature testing", "[path]" )
 {
-    auto srvEventHadler = MockedPtr<srv::IEventHandler>{};
-    auto cliEventHadler = MockedPtr<cli::IEventHandler>{};
+    auto srvEventHandler = MockedPtr<srv::IEventHandler>{};
+    auto cliEventHandler = MockedPtr<cli::IEventHandler>{};
     
     auto srvActorAcceptor = MockedPtr<srv::IActorAcceptor>{};
     auto cliActorAcceptor = MockedPtr<cli::IActorAcceptor>{};
@@ -232,8 +232,8 @@ SCENARIO( "Path feature testing", "[path]" )
     srv::IActorPtr srvActor;
     cli::IActorPtr cliActor;
 
-    setupServerBehavior(srvEventHadler.mock(), srvActorAcceptor.mock(), srvActor);
-    setupClientBehavior(cliEventHadler.mock(), cliActorAcceptor.mock(), cliActor);
+    setupServerBehavior(srvEventHandler.mock(), srvActorAcceptor.mock(), srvActor);
+    setupClientBehavior(cliEventHandler.mock(), cliActorAcceptor.mock(), cliActor);
 
     GIVEN( "Server and client" )
     {
@@ -241,7 +241,7 @@ SCENARIO( "Path feature testing", "[path]" )
         serverBuilder
             .setCallbackVersion(srv::CallbackVersion::v1_Andromeda)
             .setPort(PORT)
-            .setEventHandler(srvEventHadler.ptr())
+            .setEventHandler(srvEventHandler.ptr())
             .setActorAcceptor(srvActorAcceptor.ptr());
 
         auto clientBuilder = cli::ClientBuilder{};
@@ -249,7 +249,7 @@ SCENARIO( "Path feature testing", "[path]" )
             .setCallbackVersion(cli::CallbackVersion::v1_Amsterdam)
             .setAddress(ADDRESS)
             .setPort(PORT)
-            .setEventHandler(cliEventHadler.ptr())
+            .setEventHandler(cliEventHandler.ptr())
             .setActorAcceptor(cliActorAcceptor.ptr());
 
         bool actualUseSpecificBehaviour = false;
@@ -261,7 +261,7 @@ SCENARIO( "Path feature testing", "[path]" )
             }
         };
 
-        When(Method(srvEventHadler.mock(), onConnect)).Do(onConnect);
+        When(Method(srvEventHandler.mock(), onConnect)).Do(onConnect);
 
         WHEN( "Client uses default uri path" )
         {
@@ -274,12 +274,12 @@ SCENARIO( "Path feature testing", "[path]" )
                 server.reset();
                 client.reset();
 
-                Verify(Method(srvEventHadler.mock(), onConnect),
-                       Method(srvEventHadler.mock(), onDisconnect)).Once();
-                Verify(Method(cliEventHadler.mock(), onConnect),
-                       Method(cliEventHadler.mock(), onDisconnect)).Once();
-                VerifyNoOtherInvocations(srvEventHadler.mock());
-                VerifyNoOtherInvocations(cliEventHadler.mock());
+                Verify(Method(srvEventHandler.mock(), onConnect),
+                       Method(srvEventHandler.mock(), onDisconnect)).Once();
+                Verify(Method(cliEventHandler.mock(), onConnect),
+                       Method(cliEventHandler.mock(), onDisconnect)).Once();
+                VerifyNoOtherInvocations(srvEventHandler.mock());
+                VerifyNoOtherInvocations(cliEventHandler.mock());
 
                 const bool expectedUseSpecificBehaviour = false;
                 REQUIRE(actualUseSpecificBehaviour == expectedUseSpecificBehaviour);
@@ -298,12 +298,12 @@ SCENARIO( "Path feature testing", "[path]" )
                 server.reset();
                 client.reset();
 
-                Verify(Method(srvEventHadler.mock(), onConnect),
-                       Method(srvEventHadler.mock(), onDisconnect)).Once();
-                Verify(Method(cliEventHadler.mock(), onConnect),
-                       Method(cliEventHadler.mock(), onDisconnect)).Once();
-                VerifyNoOtherInvocations(srvEventHadler.mock());
-                VerifyNoOtherInvocations(cliEventHadler.mock());
+                Verify(Method(srvEventHandler.mock(), onConnect),
+                       Method(srvEventHandler.mock(), onDisconnect)).Once();
+                Verify(Method(cliEventHandler.mock(), onConnect),
+                       Method(cliEventHandler.mock(), onDisconnect)).Once();
+                VerifyNoOtherInvocations(srvEventHandler.mock());
+                VerifyNoOtherInvocations(cliEventHandler.mock());
 
                 const bool expectedUseSpecificBehaviour = true;
                 REQUIRE(actualUseSpecificBehaviour == expectedUseSpecificBehaviour);
@@ -322,12 +322,12 @@ SCENARIO( "Path feature testing", "[path]" )
                 server.reset();
                 client.reset();
 
-                Verify(Method(srvEventHadler.mock(), onConnect),
-                       Method(srvEventHadler.mock(), onDisconnect)).Once();
-                Verify(Method(cliEventHadler.mock(), onConnect),
-                       Method(cliEventHadler.mock(), onDisconnect)).Once();
-                VerifyNoOtherInvocations(srvEventHadler.mock());
-                VerifyNoOtherInvocations(cliEventHadler.mock());
+                Verify(Method(srvEventHandler.mock(), onConnect),
+                       Method(srvEventHandler.mock(), onDisconnect)).Once();
+                Verify(Method(cliEventHandler.mock(), onConnect),
+                       Method(cliEventHandler.mock(), onDisconnect)).Once();
+                VerifyNoOtherInvocations(srvEventHandler.mock());
+                VerifyNoOtherInvocations(cliEventHandler.mock());
 
                 const bool expectedUseSpecificBehaviour = false;
                 REQUIRE(actualUseSpecificBehaviour == expectedUseSpecificBehaviour);
@@ -340,7 +340,7 @@ SCENARIO( "Path feature testing", "[path]" )
 // on the VM with the server.
 SCENARIO( "Keep alive feature testing", "[.keep_alive]" )
 {
-    auto cliEventHadler = MockedPtr<cli::IEventHandler>{};
+    auto cliEventHandler = MockedPtr<cli::IEventHandler>{};
     auto cliActorAcceptor = MockedPtr<cli::IActorAcceptor>{};
     cli::IActorPtr cliActor;
 
@@ -354,8 +354,8 @@ SCENARIO( "Keep alive feature testing", "[.keep_alive]" )
         condVar.notify_one();
     };
 
-    Fake(Method(cliEventHadler.mock(), onConnect), Method(cliEventHadler.mock(), onError));
-    When(Method(cliEventHadler.mock(), onDisconnect)).Do(stopClient);
+    Fake(Method(cliEventHandler.mock(), onConnect), Method(cliEventHandler.mock(), onError));
+    When(Method(cliEventHandler.mock(), onDisconnect)).Do(stopClient);
     When(Method(cliActorAcceptor.mock(), acceptActor))
         .Do([&cliActor](cli::IActorPtr ms){ cliActor = ms; });
 
@@ -366,7 +366,7 @@ SCENARIO( "Keep alive feature testing", "[.keep_alive]" )
             .setCallbackVersion(cli::CallbackVersion::v1_Amsterdam)
             .setAddress("192.168.1.7")
             .setPort(PORT)
-            .setEventHandler(cliEventHadler.ptr())
+            .setEventHandler(cliEventHandler.ptr())
             .setActorAcceptor(cliActorAcceptor.ptr());
 
         WHEN( "Client sets up keep alive feature" )
@@ -380,9 +380,9 @@ SCENARIO( "Keep alive feature testing", "[.keep_alive]" )
             std::unique_lock<std::mutex> guard(mutex);
             condVar.wait(guard, [&clientStopped]{ return clientStopped; });
 
-            Verify(Method(cliEventHadler.mock(), onConnect),
-                   Method(cliEventHadler.mock(), onDisconnect)).Once();
-            VerifyNoOtherInvocations(cliEventHadler.mock());
+            Verify(Method(cliEventHandler.mock(), onConnect),
+                   Method(cliEventHandler.mock(), onDisconnect)).Once();
+            VerifyNoOtherInvocations(cliEventHandler.mock());
         }
     } // GIVEN
 }

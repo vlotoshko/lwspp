@@ -22,7 +22,8 @@
  * IN THE SOFTWARE.
  */
 
-#include "catch2/catch.hpp"
+#include <catch2/catch_test_macros.hpp>
+#include <catch2/matchers/catch_matchers_all.hpp>
 
 #include "ClientContext.hpp"
 #include "SslSettings.hpp"
@@ -108,8 +109,8 @@ void compareClientContexts(const ClientContext& actual, const ClientContext& exp
     REQUIRE(actual.keepAliveProbes == expected.keepAliveProbes);
     REQUIRE(actual.keepAliveProbesInterval == expected.keepAliveProbesInterval);
     REQUIRE(actual.lwsLogLevel == expected.lwsLogLevel);
-    REQUIRE((actual.ssl != nullptr && expected.ssl != nullptr ||
-             actual.ssl == nullptr && expected.ssl == nullptr));
+    REQUIRE(((actual.ssl != nullptr && expected.ssl != nullptr) ||
+             (actual.ssl == nullptr && expected.ssl == nullptr)));
 
     if (actual.ssl != nullptr && expected.ssl != nullptr)
     {

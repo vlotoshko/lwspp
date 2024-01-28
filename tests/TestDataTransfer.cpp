@@ -22,9 +22,9 @@
  * IN THE SOFTWARE.
  */
 
+#include <catch2/catch_test_macros.hpp>
 #include <thread>
 
-#include "catch2/catch.hpp"
 #include "MockedPtr.hpp"
 
 #include "lwspp/client/ClientBuilder.hpp"
@@ -140,8 +140,8 @@ cli::IClientPtr setupClient(cli::IEventHandlerPtr eventHandler,
 
 SCENARIO( "Clients sends binary data to the server", "[data_transfer]" )
 {
-    auto srvEventHadler = MockedPtr<srv::IEventHandler>{};
-    auto cliEventHadler = MockedPtr<cli::IEventHandler>{};
+    auto srvEventHandler = MockedPtr<srv::IEventHandler>{};
+    auto cliEventHandler = MockedPtr<cli::IEventHandler>{};
     
     auto srvActorAcceptor = MockedPtr<srv::IActorAcceptor>{};
     auto cliActorAcceptor = MockedPtr<cli::IActorAcceptor>{};
@@ -152,16 +152,16 @@ SCENARIO( "Clients sends binary data to the server", "[data_transfer]" )
     std::vector<char> actualServerIncomeData;
     std::vector<char> actualClientIncomeData;
 
-    setupServerBehavior(srvEventHadler.mock(), srvActorAcceptor.mock(),
+    setupServerBehavior(srvEventHandler.mock(), srvActorAcceptor.mock(),
                         srvActor, actualServerIncomeData);
 
-    setupClientBehavior(cliEventHadler.mock(), cliActorAcceptor.mock(),
+    setupClientBehavior(cliEventHandler.mock(), cliActorAcceptor.mock(),
                         cliActor, actualClientIncomeData);
 
     GIVEN( "Server and client" )
     {
-        auto server = setupServer(srvEventHadler.ptr(), srvActorAcceptor.ptr());
-        auto client = setupClient(cliEventHadler.ptr(), cliActorAcceptor.ptr());
+        auto server = setupServer(srvEventHandler.ptr(), srvActorAcceptor.ptr());
+        auto client = setupClient(cliEventHandler.ptr(), cliActorAcceptor.ptr());
 
         WHEN( "Client sends binary data to the  server" )
         {
@@ -174,16 +174,16 @@ SCENARIO( "Clients sends binary data to the server", "[data_transfer]" )
                 server.reset();
                 client.reset();
 
-                Verify(Method(srvEventHadler.mock(), onConnect),
-                       Method(srvEventHadler.mock(), onDisconnect)).Once();
-                Verify(Method(cliEventHadler.mock(), onConnect),
-                       Method(cliEventHadler.mock(), onDisconnect)).Once();
+                Verify(Method(srvEventHandler.mock(), onConnect),
+                       Method(srvEventHandler.mock(), onDisconnect)).Once();
+                Verify(Method(cliEventHandler.mock(), onConnect),
+                       Method(cliEventHandler.mock(), onDisconnect)).Once();
 
-                Verify(Method(srvEventHadler.mock(), onBinaryDataReceive)).AtLeastOnce();
-                Verify(Method(cliEventHadler.mock(), onBinaryDataReceive)).AtLeastOnce();
+                Verify(Method(srvEventHandler.mock(), onBinaryDataReceive)).AtLeastOnce();
+                Verify(Method(cliEventHandler.mock(), onBinaryDataReceive)).AtLeastOnce();
 
-                VerifyNoOtherInvocations(srvEventHadler.mock());
-                VerifyNoOtherInvocations(cliEventHadler.mock());
+                VerifyNoOtherInvocations(srvEventHandler.mock());
+                VerifyNoOtherInvocations(cliEventHandler.mock());
 
                 REQUIRE(actualServerIncomeData == HELLO_SERVER_BINARY);
                 REQUIRE(actualClientIncomeData == HELLO_CLIENT_BINARY);

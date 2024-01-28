@@ -51,7 +51,7 @@ public:
     void acceptActor(IActorPtr) noexcept override;
 
 protected:
-    IActorPtr _actor;
+    IActorPtr _actor = nullptr;
 };
 
 } // namespace cli

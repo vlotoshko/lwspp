@@ -26,8 +26,8 @@
 
 #include "lwspp/client/IActorAcceptor.hpp"
 
-#include "LwsAdapter/LwsCallbackContext.hpp"
 #include "LwsAdapter/LwsActor.hpp"
+#include "LwsAdapter/LwsCallbackContext.hpp"
 
 namespace lwspp
 {

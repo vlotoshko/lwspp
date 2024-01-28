@@ -22,9 +22,10 @@
  * IN THE SOFTWARE.
  */
 
+#include <catch2/catch_test_macros.hpp>
+#include <catch2/matchers/catch_matchers_all.hpp>
 #include <thread>
 
-#include "catch2/catch.hpp"
 #include "lwspp/client/ClientBuilder.hpp"
 #include "lwspp/client/IActorAcceptor.hpp"
 #include "lwspp/client/IEventHandler.hpp"
@@ -141,8 +142,8 @@ cli::ClientBuilder setupClientBuilder(cli::IEventHandlerPtr eventHandler,
 
 SCENARIO( "Test ssl enabling for server and client", "[ssl]" )
 {
-    auto srvEventHadler = MockedPtr<srv::IEventHandler>{};
-    auto cliEventHadler = MockedPtr<cli::IEventHandler>{};
+    auto srvEventHandler = MockedPtr<srv::IEventHandler>{};
+    auto cliEventHandler = MockedPtr<cli::IEventHandler>{};
     
     auto srvActorAcceptor = MockedPtr<srv::IActorAcceptor>{};
     auto cliActorAcceptor = MockedPtr<cli::IActorAcceptor>{};
@@ -150,13 +151,13 @@ SCENARIO( "Test ssl enabling for server and client", "[ssl]" )
     srv::IActorPtr srvActor;
     cli::IActorPtr cliActor;
 
-    setupServerBehavior(srvEventHadler.mock(), srvActorAcceptor.mock(), srvActor);
-    setupClientBehavior(cliEventHadler.mock(), cliActorAcceptor.mock(), cliActor);
+    setupServerBehavior(srvEventHandler.mock(), srvActorAcceptor.mock(), srvActor);
+    setupClientBehavior(cliEventHandler.mock(), cliActorAcceptor.mock(), cliActor);
 
     GIVEN( "Server and client" )
     {
-        auto serverBuilder = setupServerBuilder(srvEventHadler.ptr(), srvActorAcceptor.ptr());
-        auto clientBuilder = setupClientBuilder(cliEventHadler.ptr(), cliActorAcceptor.ptr());
+        auto serverBuilder = setupServerBuilder(srvEventHandler.ptr(), srvActorAcceptor.ptr());
+        auto clientBuilder = setupClientBuilder(cliEventHandler.ptr(), cliActorAcceptor.ptr());
 
         WHEN( "Server uses ssl" )
         {
@@ -178,9 +179,9 @@ SCENARIO( "Test ssl enabling for server and client", "[ssl]" )
                     server.reset();
                     client.reset();
 
-                    Verify(Method(cliEventHadler.mock(), onError)).Once();
-                    VerifyNoOtherInvocations(srvEventHadler.mock());
-                    VerifyNoOtherInvocations(cliEventHadler.mock());
+                    Verify(Method(cliEventHandler.mock(), onError)).Once();
+                    VerifyNoOtherInvocations(srvEventHandler.mock());
+                    VerifyNoOtherInvocations(cliEventHandler.mock());
                 }
             }
 
@@ -200,12 +201,12 @@ SCENARIO( "Test ssl enabling for server and client", "[ssl]" )
                     server.reset();
                     client.reset();
 
-                    Verify(Method(srvEventHadler.mock(), onConnect),
-                           Method(srvEventHadler.mock(), onDisconnect)).Once();
-                    Verify(Method(cliEventHadler.mock(), onConnect),
-                           Method(cliEventHadler.mock(), onDisconnect)).Once();
-                    VerifyNoOtherInvocations(srvEventHadler.mock());
-                    VerifyNoOtherInvocations(cliEventHadler.mock());
+                    Verify(Method(srvEventHandler.mock(), onConnect),
+                           Method(srvEventHandler.mock(), onDisconnect)).Once();
+                    Verify(Method(cliEventHandler.mock(), onConnect),
+                           Method(cliEventHandler.mock(), onDisconnect)).Once();
+                    VerifyNoOtherInvocations(srvEventHandler.mock());
+                    VerifyNoOtherInvocations(cliEventHandler.mock());
                 }
             }
         }
@@ -226,9 +227,9 @@ SCENARIO( "Test ssl enabling for server and client", "[ssl]" )
                     server.reset();
                     client.reset();
 
-                    Verify(Method(cliEventHadler.mock(), onError)).Once();
-                    VerifyNoOtherInvocations(srvEventHadler.mock());
-                    VerifyNoOtherInvocations(cliEventHadler.mock());
+                    Verify(Method(cliEventHandler.mock(), onError)).Once();
+                    VerifyNoOtherInvocations(srvEventHandler.mock());
+                    VerifyNoOtherInvocations(cliEventHandler.mock());
                 }
             }
         }
@@ -237,8 +238,8 @@ SCENARIO( "Test ssl enabling for server and client", "[ssl]" )
 
 SCENARIO( "Test client ssl features", "[ssl]" )
 {
-    auto srvEventHadler = MockedPtr<srv::IEventHandler>{};
-    auto cliEventHadler = MockedPtr<cli::IEventHandler>{};
+    auto srvEventHandler = MockedPtr<srv::IEventHandler>{};
+    auto cliEventHandler = MockedPtr<cli::IEventHandler>{};
     
     auto srvActorAcceptor = MockedPtr<srv::IActorAcceptor>{};
     auto cliActorAcceptor = MockedPtr<cli::IActorAcceptor>{};
@@ -246,13 +247,13 @@ SCENARIO( "Test client ssl features", "[ssl]" )
     srv::IActorPtr srvActor;
     cli::IActorPtr cliActor;
 
-    setupServerBehavior(srvEventHadler.mock(), srvActorAcceptor.mock(), srvActor);
-    setupClientBehavior(cliEventHadler.mock(), cliActorAcceptor.mock(), cliActor);
+    setupServerBehavior(srvEventHandler.mock(), srvActorAcceptor.mock(), srvActor);
+    setupClientBehavior(cliEventHandler.mock(), cliActorAcceptor.mock(), cliActor);
 
     GIVEN( "Server and client" )
     {
-        auto serverBuilder = setupServerBuilder(srvEventHadler.ptr(), srvActorAcceptor.ptr());
-        auto clientBuilder = setupClientBuilder(cliEventHadler.ptr(), cliActorAcceptor.ptr());
+        auto serverBuilder = setupServerBuilder(srvEventHandler.ptr(), srvActorAcceptor.ptr());
+        auto clientBuilder = setupClientBuilder(cliEventHandler.ptr(), cliActorAcceptor.ptr());
 
         WHEN( "Server uses self-signed certificate" )
         {
@@ -275,9 +276,9 @@ SCENARIO( "Test client ssl features", "[ssl]" )
                     server.reset();
                     client.reset();
 
-                    Verify(Method(cliEventHadler.mock(), onError)).Once();
-                    VerifyNoOtherInvocations(srvEventHadler.mock());
-                    VerifyNoOtherInvocations(cliEventHadler.mock());
+                    Verify(Method(cliEventHandler.mock(), onError)).Once();
+                    VerifyNoOtherInvocations(srvEventHandler.mock());
+                    VerifyNoOtherInvocations(cliEventHandler.mock());
                 }
             }
 
@@ -295,12 +296,12 @@ SCENARIO( "Test client ssl features", "[ssl]" )
                     server.reset();
                     client.reset();
 
-                    Verify(Method(srvEventHadler.mock(), onConnect),
-                           Method(srvEventHadler.mock(), onDisconnect)).Once();
-                    Verify(Method(cliEventHadler.mock(), onConnect),
-                           Method(cliEventHadler.mock(), onDisconnect)).Once();
-                    VerifyNoOtherInvocations(srvEventHadler.mock());
-                    VerifyNoOtherInvocations(cliEventHadler.mock());
+                    Verify(Method(srvEventHandler.mock(), onConnect),
+                           Method(srvEventHandler.mock(), onDisconnect)).Once();
+                    Verify(Method(cliEventHandler.mock(), onConnect),
+                           Method(cliEventHandler.mock(), onDisconnect)).Once();
+                    VerifyNoOtherInvocations(srvEventHandler.mock());
+                    VerifyNoOtherInvocations(cliEventHandler.mock());
                 }
             }
         }
@@ -332,9 +333,9 @@ SCENARIO( "Test client ssl features", "[ssl]" )
                     server.reset();
                     client.reset();
 
-                    Verify(Method(cliEventHadler.mock(), onError)).Once();
-                    VerifyNoOtherInvocations(srvEventHadler.mock());
-                    VerifyNoOtherInvocations(cliEventHadler.mock());
+                    Verify(Method(cliEventHandler.mock(), onError)).Once();
+                    VerifyNoOtherInvocations(srvEventHandler.mock());
+                    VerifyNoOtherInvocations(cliEventHandler.mock());
                 }
             }
 
@@ -349,12 +350,12 @@ SCENARIO( "Test client ssl features", "[ssl]" )
                     server.reset();
                     client.reset();
 
-                    Verify(Method(srvEventHadler.mock(), onConnect),
-                           Method(srvEventHadler.mock(), onDisconnect)).Once();
-                    Verify(Method(cliEventHadler.mock(), onConnect),
-                           Method(cliEventHadler.mock(), onDisconnect)).Once();
-                    VerifyNoOtherInvocations(srvEventHadler.mock());
-                    VerifyNoOtherInvocations(cliEventHadler.mock());
+                    Verify(Method(srvEventHandler.mock(), onConnect),
+                           Method(srvEventHandler.mock(), onDisconnect)).Once();
+                    Verify(Method(cliEventHandler.mock(), onConnect),
+                           Method(cliEventHandler.mock(), onDisconnect)).Once();
+                    VerifyNoOtherInvocations(srvEventHandler.mock());
+                    VerifyNoOtherInvocations(cliEventHandler.mock());
                 }
             }
         }
@@ -385,9 +386,9 @@ SCENARIO( "Test client ssl features", "[ssl]" )
                     server.reset();
                     client.reset();
 
-                    Verify(Method(cliEventHadler.mock(), onError)).Once();
-                    VerifyNoOtherInvocations(srvEventHadler.mock());
-                    VerifyNoOtherInvocations(cliEventHadler.mock());
+                    Verify(Method(cliEventHandler.mock(), onError)).Once();
+                    VerifyNoOtherInvocations(srvEventHandler.mock());
+                    VerifyNoOtherInvocations(cliEventHandler.mock());
                 }
             }
 
@@ -402,12 +403,12 @@ SCENARIO( "Test client ssl features", "[ssl]" )
                     server.reset();
                     client.reset();
 
-                    Verify(Method(srvEventHadler.mock(), onConnect),
-                           Method(srvEventHadler.mock(), onDisconnect)).Once();
-                    Verify(Method(cliEventHadler.mock(), onConnect),
-                           Method(cliEventHadler.mock(), onDisconnect)).Once();
-                    VerifyNoOtherInvocations(srvEventHadler.mock());
-                    VerifyNoOtherInvocations(cliEventHadler.mock());
+                    Verify(Method(srvEventHandler.mock(), onConnect),
+                           Method(srvEventHandler.mock(), onDisconnect)).Once();
+                    Verify(Method(cliEventHandler.mock(), onConnect),
+                           Method(cliEventHandler.mock(), onDisconnect)).Once();
+                    VerifyNoOtherInvocations(srvEventHandler.mock());
+                    VerifyNoOtherInvocations(cliEventHandler.mock());
                 }
             }
         }
@@ -437,9 +438,9 @@ SCENARIO( "Test client ssl features", "[ssl]" )
                     server.reset();
                     client.reset();
 
-                    Verify(Method(cliEventHadler.mock(), onError)).Once();
-                    VerifyNoOtherInvocations(srvEventHadler.mock());
-                    VerifyNoOtherInvocations(cliEventHadler.mock());
+                    Verify(Method(cliEventHandler.mock(), onError)).Once();
+                    VerifyNoOtherInvocations(srvEventHandler.mock());
+                    VerifyNoOtherInvocations(cliEventHandler.mock());
                 }
             }
 
@@ -454,12 +455,12 @@ SCENARIO( "Test client ssl features", "[ssl]" )
                     server.reset();
                     client.reset();
 
-                    Verify(Method(srvEventHadler.mock(), onConnect),
-                           Method(srvEventHadler.mock(), onDisconnect)).Once();
-                    Verify(Method(cliEventHadler.mock(), onConnect),
-                           Method(cliEventHadler.mock(), onDisconnect)).Once();
-                    VerifyNoOtherInvocations(srvEventHadler.mock());
-                    VerifyNoOtherInvocations(cliEventHadler.mock());
+                    Verify(Method(srvEventHandler.mock(), onConnect),
+                           Method(srvEventHandler.mock(), onDisconnect)).Once();
+                    Verify(Method(cliEventHandler.mock(), onConnect),
+                           Method(cliEventHandler.mock(), onDisconnect)).Once();
+                    VerifyNoOtherInvocations(srvEventHandler.mock());
+                    VerifyNoOtherInvocations(cliEventHandler.mock());
                 }
             }
         }
@@ -504,12 +505,12 @@ SCENARIO( "Test client ssl features", "[ssl]" )
                     server.reset();
                     client.reset();
 
-                    Verify(Method(srvEventHadler.mock(), onConnect),
-                           Method(srvEventHadler.mock(), onDisconnect)).Once();
-                    Verify(Method(cliEventHadler.mock(), onConnect),
-                           Method(cliEventHadler.mock(), onDisconnect)).Once();
-                    VerifyNoOtherInvocations(srvEventHadler.mock());
-                    VerifyNoOtherInvocations(cliEventHadler.mock());
+                    Verify(Method(srvEventHandler.mock(), onConnect),
+                           Method(srvEventHandler.mock(), onDisconnect)).Once();
+                    Verify(Method(cliEventHandler.mock(), onConnect),
+                           Method(cliEventHandler.mock(), onDisconnect)).Once();
+                    VerifyNoOtherInvocations(srvEventHandler.mock());
+                    VerifyNoOtherInvocations(cliEventHandler.mock());
                 }
             }
         }
@@ -518,8 +519,8 @@ SCENARIO( "Test client ssl features", "[ssl]" )
 
 SCENARIO( "Test server ssl features", "[ssl]" )
 {
-    auto srvEventHadler = MockedPtr<srv::IEventHandler>{};
-    auto cliEventHadler = MockedPtr<cli::IEventHandler>{};
+    auto srvEventHandler = MockedPtr<srv::IEventHandler>{};
+    auto cliEventHandler = MockedPtr<cli::IEventHandler>{};
     
     auto srvActorAcceptor = MockedPtr<srv::IActorAcceptor>{};
     auto cliActorAcceptor = MockedPtr<cli::IActorAcceptor>{};
@@ -527,13 +528,13 @@ SCENARIO( "Test server ssl features", "[ssl]" )
     srv::IActorPtr srvActor;
     cli::IActorPtr cliActor;
 
-    setupServerBehavior(srvEventHadler.mock(), srvActorAcceptor.mock(), srvActor);
-    setupClientBehavior(cliEventHadler.mock(), cliActorAcceptor.mock(), cliActor);
+    setupServerBehavior(srvEventHandler.mock(), srvActorAcceptor.mock(), srvActor);
+    setupClientBehavior(cliEventHandler.mock(), cliActorAcceptor.mock(), cliActor);
 
     GIVEN( "Server and client" )
     {
-        auto serverBuilder = setupServerBuilder(srvEventHadler.ptr(), srvActorAcceptor.ptr());
-        auto clientBuilder = setupClientBuilder(cliEventHadler.ptr(), cliActorAcceptor.ptr());
+        auto serverBuilder = setupServerBuilder(srvEventHandler.ptr(), srvActorAcceptor.ptr());
+        auto clientBuilder = setupClientBuilder(cliEventHandler.ptr(), cliActorAcceptor.ptr());
 
         WHEN( "Server requires valid cert from client" )
         {
@@ -556,9 +557,9 @@ SCENARIO( "Test server ssl features", "[ssl]" )
                     server.reset();
                     client.reset();
 
-                    Verify(Method(cliEventHadler.mock(), onError)).Once();
-                    VerifyNoOtherInvocations(srvEventHadler.mock());
-                    VerifyNoOtherInvocations(cliEventHadler.mock());
+                    Verify(Method(cliEventHandler.mock(), onError)).Once();
+                    VerifyNoOtherInvocations(srvEventHandler.mock());
+                    VerifyNoOtherInvocations(cliEventHandler.mock());
                 }
             }
 
@@ -578,12 +579,12 @@ SCENARIO( "Test server ssl features", "[ssl]" )
                     server.reset();
                     client.reset();
 
-                    Verify(Method(srvEventHadler.mock(), onConnect),
-                           Method(srvEventHadler.mock(), onDisconnect)).Once();
-                    Verify(Method(cliEventHadler.mock(), onConnect),
-                           Method(cliEventHadler.mock(), onDisconnect)).Once();
-                    VerifyNoOtherInvocations(srvEventHadler.mock());
-                    VerifyNoOtherInvocations(cliEventHadler.mock());
+                    Verify(Method(srvEventHandler.mock(), onConnect),
+                           Method(srvEventHandler.mock(), onDisconnect)).Once();
+                    Verify(Method(cliEventHandler.mock(), onConnect),
+                           Method(cliEventHandler.mock(), onDisconnect)).Once();
+                    VerifyNoOtherInvocations(srvEventHandler.mock());
+                    VerifyNoOtherInvocations(cliEventHandler.mock());
                 }
             }
         }
@@ -625,12 +626,12 @@ SCENARIO( "Test server ssl features", "[ssl]" )
                     server.reset();
                     client.reset();
 
-                    Verify(Method(srvEventHadler.mock(), onConnect),
-                           Method(srvEventHadler.mock(), onDisconnect)).Once();
-                    Verify(Method(cliEventHadler.mock(), onConnect),
-                           Method(cliEventHadler.mock(), onDisconnect)).Once();
-                    VerifyNoOtherInvocations(srvEventHadler.mock());
-                    VerifyNoOtherInvocations(cliEventHadler.mock());
+                    Verify(Method(srvEventHandler.mock(), onConnect),
+                           Method(srvEventHandler.mock(), onDisconnect)).Once();
+                    Verify(Method(cliEventHandler.mock(), onConnect),
+                           Method(cliEventHandler.mock(), onDisconnect)).Once();
+                    VerifyNoOtherInvocations(srvEventHandler.mock());
+                    VerifyNoOtherInvocations(cliEventHandler.mock());
                 }
             }
         }
@@ -642,8 +643,8 @@ SCENARIO( "Test server ssl features", "[ssl]" )
 // they have no common ciphers set, the server's cipher is chosen
 SCENARIO( "Test ssl ciphers list feature", "[.ssl]" )
 {
-    auto srvEventHadler = MockedPtr<srv::IEventHandler>{};
-    auto cliEventHadler = MockedPtr<cli::IEventHandler>{};
+    auto srvEventHandler = MockedPtr<srv::IEventHandler>{};
+    auto cliEventHandler = MockedPtr<cli::IEventHandler>{};
     
     auto srvActorAcceptor = MockedPtr<srv::IActorAcceptor>{};
     auto cliActorAcceptor = MockedPtr<cli::IActorAcceptor>{};
@@ -651,13 +652,13 @@ SCENARIO( "Test ssl ciphers list feature", "[.ssl]" )
     srv::IActorPtr srvActor;
     cli::IActorPtr cliActor;
 
-    setupServerBehavior(srvEventHadler.mock(), srvActorAcceptor.mock(), srvActor);
-    setupClientBehavior(cliEventHadler.mock(), cliActorAcceptor.mock(), cliActor);
+    setupServerBehavior(srvEventHandler.mock(), srvActorAcceptor.mock(), srvActor);
+    setupClientBehavior(cliEventHandler.mock(), cliActorAcceptor.mock(), cliActor);
 
     GIVEN( "Server and client" )
     {
-        auto serverBuilder = setupServerBuilder(srvEventHadler.ptr(), srvActorAcceptor.ptr());
-        auto clientBuilder = setupClientBuilder(cliEventHadler.ptr(), cliActorAcceptor.ptr());
+        auto serverBuilder = setupServerBuilder(srvEventHandler.ptr(), srvActorAcceptor.ptr());
+        auto clientBuilder = setupClientBuilder(cliEventHandler.ptr(), cliActorAcceptor.ptr());
 
         srv::SslSettingsBuilder srvSslSettingsBuilder;
         srvSslSettingsBuilder
@@ -688,12 +689,12 @@ SCENARIO( "Test ssl ciphers list feature", "[.ssl]" )
                 server.reset();
                 client.reset();
 
-                Verify(Method(srvEventHadler.mock(), onConnect),
-                       Method(srvEventHadler.mock(), onDisconnect)).Once();
-                Verify(Method(cliEventHadler.mock(), onConnect),
-                       Method(cliEventHadler.mock(), onDisconnect)).Once();
-                VerifyNoOtherInvocations(srvEventHadler.mock());
-                VerifyNoOtherInvocations(cliEventHadler.mock());
+                Verify(Method(srvEventHandler.mock(), onConnect),
+                       Method(srvEventHandler.mock(), onDisconnect)).Once();
+                Verify(Method(cliEventHandler.mock(), onConnect),
+                       Method(cliEventHandler.mock(), onDisconnect)).Once();
+                VerifyNoOtherInvocations(srvEventHandler.mock());
+                VerifyNoOtherInvocations(cliEventHandler.mock());
             }
         }
 
@@ -711,9 +712,9 @@ SCENARIO( "Test ssl ciphers list feature", "[.ssl]" )
                 server.reset();
                 client.reset();
 
-                Verify(Method(cliEventHadler.mock(), onError)).Once();
-                VerifyNoOtherInvocations(srvEventHadler.mock());
-                VerifyNoOtherInvocations(cliEventHadler.mock());
+                Verify(Method(cliEventHandler.mock(), onError)).Once();
+                VerifyNoOtherInvocations(srvEventHandler.mock());
+                VerifyNoOtherInvocations(cliEventHandler.mock());
             }
         }
     } // GIVEN
