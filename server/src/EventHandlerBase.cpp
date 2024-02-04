@@ -35,6 +35,9 @@ void EventHandlerBase::onConnect(IConnectionInfoPtr) noexcept
 void EventHandlerBase::onDisconnect(ConnectionId) noexcept
 {}
 
+void EventHandlerBase::onFirstDataPacket(ConnectionId, size_t) noexcept
+{}
+
 void EventHandlerBase::onBinaryDataReceive(ConnectionId, const DataPacket&) noexcept
 {}
 

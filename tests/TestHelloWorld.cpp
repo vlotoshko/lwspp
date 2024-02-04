@@ -67,7 +67,8 @@ void setupServerBehavior(Mock<srv::IEventHandler>& eventHandler,
         actor->sendTextData(HELLO_CLIENT);
     };
 
-    Fake(Method(eventHandler, onConnect), Method(eventHandler, onDisconnect));
+    Fake(Method(eventHandler, onConnect), Method(eventHandler, onFirstDataPacket),
+         Method(eventHandler, onDisconnect));
     When(Method(eventHandler, onTextDataReceive)).Do(sendHelloToClient);
     
     When(Method(actorAcceptor, acceptActor)).Do([&actor](srv::IActorPtr a){ actor = a; });
@@ -88,7 +89,7 @@ void setupClientBehavior(Mock<cli::IEventHandler>& eventHandler,
         incomeMessage.set_value(std::string{dataPacket.data, dataPacket.length});
     };
 
-    Fake(Method(eventHandler, onDisconnect));
+    Fake(Method(eventHandler, onFirstDataPacket), Method(eventHandler, onDisconnect));
     When(Method(eventHandler, onConnect)).Do(sendHelloToServer);
     When(Method(eventHandler, onTextDataReceive)).Do(onTextDataReceive);
     
@@ -168,9 +169,11 @@ SCENARIO( "Clients sends 'hello world' to the server", "[hello_world]" )
                 client.reset();
 
                 Verify(Method(srvEventHandler.mock(), onConnect),
+                       Method(srvEventHandler.mock(), onFirstDataPacket),
                        Method(srvEventHandler.mock(), onTextDataReceive),
                        Method(srvEventHandler.mock(), onDisconnect)).Once();
                 Verify(Method(cliEventHandler.mock(), onConnect),
+                       Method(cliEventHandler.mock(), onFirstDataPacket),
                        Method(cliEventHandler.mock(), onTextDataReceive),
                        Method(cliEventHandler.mock(), onDisconnect)).Once();
                 VerifyNoOtherInvocations(srvEventHandler.mock());

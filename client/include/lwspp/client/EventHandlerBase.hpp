@@ -43,6 +43,7 @@ public:
     void onConnect(IConnectionInfoPtr) noexcept override;
     void onDisconnect() noexcept override;
 
+    void onFirstDataPacket(size_t messageLength) noexcept override;
     void onBinaryDataReceive(const DataPacket&) noexcept override;
     void onTextDataReceive(const DataPacket&) noexcept override;
     void onError(const std::string& errorMessage) noexcept override;

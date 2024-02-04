@@ -137,6 +137,12 @@ auto lwsCallback_v1(
     {
         const auto* inAsChar = reinterpret_cast<const char *>(in);
         const auto remains = static_cast<size_t>(lws_remaining_packet_payload(wsInstance));
+
+        if (lws_is_first_fragment(wsInstance) != 0)
+        {
+            eventHandler->onFirstDataPacket(connectionId, len + remains);
+        }
+
         if (lws_frame_is_binary(wsInstance) == 1)
         {
             eventHandler->onBinaryDataReceive(connectionId, DataPacket{inAsChar, len, remains});

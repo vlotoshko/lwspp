@@ -62,8 +62,14 @@ const std::vector<char> HELLO_CLIENT_BINARY(DEFAULT_LWS_BUFFER_SIZE*2 + 1024, BY
 void setupServerBehavior(Mock<srv::IEventHandler>& eventHandler,
                          Mock<srv::IActorAcceptor>& actorAcceptor,
                          srv::IActorPtr& actor,
-                         std::vector<char>& incomeData)
+                         std::vector<char>& incomeData,
+                         size_t& incomeDataLength)
 {
+    auto onFirstDataPacket = [&](srv::ConnectionId, size_t messageLength)
+    {
+        incomeDataLength = messageLength;
+    };
+
     auto sendHelloToClient = [&](srv::ConnectionId, const srv::DataPacket& dataPacket)
     {
         incomeData.reserve(incomeData.size() + dataPacket.length);
@@ -75,6 +81,7 @@ void setupServerBehavior(Mock<srv::IEventHandler>& eventHandler,
     };
 
     Fake(Method(eventHandler, onConnect), Method(eventHandler, onDisconnect));
+    When(Method(eventHandler, onFirstDataPacket)).AlwaysDo(onFirstDataPacket);
     When(Method(eventHandler, onBinaryDataReceive)).AlwaysDo(sendHelloToClient);
     
     When(Method(actorAcceptor, acceptActor))
@@ -84,11 +91,17 @@ void setupServerBehavior(Mock<srv::IEventHandler>& eventHandler,
 void setupClientBehavior(Mock<cli::IEventHandler>& eventHandler,
                          Mock<cli::IActorAcceptor>& actorAcceptor,
                          cli::IActorPtr& actor,
-                         std::vector<char>& incomeData)
+                         std::vector<char>& incomeData,
+                         size_t& incomeDataLength)
 {
     auto sendHelloToServer = [&actor](cli::IConnectionInfoPtr)
     {
         actor->sendBinaryData(HELLO_SERVER_BINARY);
+    };
+
+    auto onFirstDataPacket = [&](size_t messageLength)
+    {
+        incomeDataLength = messageLength;
     };
 
     auto onBinaryDataReceive = [&](const cli::DataPacket& dataPacket)
@@ -99,6 +112,7 @@ void setupClientBehavior(Mock<cli::IEventHandler>& eventHandler,
 
     Fake(Method(eventHandler, onDisconnect));
     When(Method(eventHandler, onConnect)).Do(sendHelloToServer);
+    When(Method(eventHandler, onFirstDataPacket)).AlwaysDo(onFirstDataPacket);
     When(Method(eventHandler, onBinaryDataReceive)).AlwaysDo(onBinaryDataReceive);
     
     When(Method(actorAcceptor, acceptActor))
@@ -152,11 +166,14 @@ SCENARIO( "Clients sends binary data to the server", "[data_transfer]" )
     std::vector<char> actualServerIncomeData;
     std::vector<char> actualClientIncomeData;
 
+    size_t actualServerIncomeDataLength = 0;
+    size_t actualClientIncomeDataLength = 0;
+
     setupServerBehavior(srvEventHandler.mock(), srvActorAcceptor.mock(),
-                        srvActor, actualServerIncomeData);
+                        srvActor, actualServerIncomeData, actualServerIncomeDataLength);
 
     setupClientBehavior(cliEventHandler.mock(), cliActorAcceptor.mock(),
-                        cliActor, actualClientIncomeData);
+                        cliActor, actualClientIncomeData, actualClientIncomeDataLength);
 
     GIVEN( "Server and client" )
     {
@@ -175,8 +192,10 @@ SCENARIO( "Clients sends binary data to the server", "[data_transfer]" )
                 client.reset();
 
                 Verify(Method(srvEventHandler.mock(), onConnect),
+                       Method(srvEventHandler.mock(), onFirstDataPacket),
                        Method(srvEventHandler.mock(), onDisconnect)).Once();
                 Verify(Method(cliEventHandler.mock(), onConnect),
+                       Method(cliEventHandler.mock(), onFirstDataPacket),
                        Method(cliEventHandler.mock(), onDisconnect)).Once();
 
                 Verify(Method(srvEventHandler.mock(), onBinaryDataReceive)).AtLeastOnce();
@@ -185,8 +204,11 @@ SCENARIO( "Clients sends binary data to the server", "[data_transfer]" )
                 VerifyNoOtherInvocations(srvEventHandler.mock());
                 VerifyNoOtherInvocations(cliEventHandler.mock());
 
-                REQUIRE(actualServerIncomeData == HELLO_SERVER_BINARY);
-                REQUIRE(actualClientIncomeData == HELLO_CLIENT_BINARY);
+                CHECK(actualServerIncomeData == HELLO_SERVER_BINARY);
+                CHECK(actualClientIncomeData == HELLO_CLIENT_BINARY);
+
+                CHECK(actualServerIncomeDataLength == HELLO_SERVER_BINARY.size());
+                CHECK(actualClientIncomeDataLength == HELLO_CLIENT_BINARY.size());
             }
         }
     } // GIVEN

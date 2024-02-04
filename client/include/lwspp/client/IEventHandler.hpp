@@ -51,9 +51,10 @@ public:
     auto operator=(const IEventHandler&) noexcept -> IEventHandler& = delete;
 
 public:
+    // Invoked when the client receives first data packet of the message.
+    virtual void onFirstDataPacket(size_t messageLength) noexcept = 0;
     // Invoked when the client receives binary data from the server.
     virtual void onBinaryDataReceive(const DataPacket&) noexcept = 0;
-
     // Invoked when the client receives text data from the server. This method expects valid UTF-8 text.
     virtual void onTextDataReceive(const DataPacket&) noexcept = 0;
 
