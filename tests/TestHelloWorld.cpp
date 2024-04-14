@@ -179,8 +179,8 @@ SCENARIO( "Clients sends 'hello world' to the server", "[hello_world]" )
                 VerifyNoOtherInvocations(srvEventHandler.mock());
                 VerifyNoOtherInvocations(cliEventHandler.mock());
 
-                REQUIRE(actualServerIncomeMessage == HELLO_SERVER);
-                REQUIRE(actualClientIncomeMessage == HELLO_CLIENT);
+                CHECK(actualServerIncomeMessage == HELLO_SERVER);
+                CHECK(actualClientIncomeMessage == HELLO_CLIENT);
             }
         }
     } // GIVEN

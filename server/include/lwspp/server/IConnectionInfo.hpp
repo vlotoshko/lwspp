@@ -48,6 +48,7 @@ public:
 
 public:
     virtual auto getConnectionId() -> ConnectionId = 0;
+    virtual auto getIP() -> const IP& = 0;
     virtual auto getPath() -> const Path& = 0;
 };
 

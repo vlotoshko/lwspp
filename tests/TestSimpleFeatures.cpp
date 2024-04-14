@@ -88,6 +88,68 @@ void setupClientBehavior(Mock<cli::IEventHandler>& eventHandler,
 } // namespace
 
 
+SCENARIO( "IP address feature testing", "[ip_address]" )
+{
+    auto srvEventHandler = MockedPtr<srv::IEventHandler>{};
+    auto cliEventHandler = MockedPtr<cli::IEventHandler>{};
+
+    auto srvActorAcceptor = MockedPtr<srv::IActorAcceptor>{};
+    auto cliActorAcceptor = MockedPtr<cli::IActorAcceptor>{};
+
+    srv::IActorPtr srvActor;
+    cli::IActorPtr cliActor;
+
+    setupServerBehavior(srvEventHandler.mock(), srvActorAcceptor.mock(), srvActor);
+    setupClientBehavior(cliEventHandler.mock(), cliActorAcceptor.mock(), cliActor);
+
+    srv::IP expectedClientIPv4 = "127.0.0.1";
+    srv::IP expectedClientIPv6 = "::1";
+    srv::IP actualClientIP;
+    auto onConnect = [&](srv::IConnectionInfoPtr connectionInfo)
+    {
+        if (connectionInfo != nullptr)
+        {
+            actualClientIP = connectionInfo->getIP();
+        }
+    };
+
+    When(Method(srvEventHandler.mock(), onConnect)).Do(onConnect);
+
+    GIVEN( "Server and client" )
+    {
+        auto serverBuilder = srv::ServerBuilder{};
+        serverBuilder
+            .setCallbackVersion(srv::CallbackVersion::v1_Andromeda)
+            .setPort(PORT)
+            .setEventHandler(srvEventHandler.ptr())
+            .setActorAcceptor(srvActorAcceptor.ptr());
+
+        auto clientBuilder = cli::ClientBuilder{};
+        clientBuilder
+            .setCallbackVersion(cli::CallbackVersion::v1_Amsterdam)
+            .setAddress(ADDRESS)
+            .setPort(PORT)
+            .setEventHandler(cliEventHandler.ptr())
+            .setActorAcceptor(cliActorAcceptor.ptr());
+
+
+
+        WHEN( "Server uses default protocol name" )
+        {
+            auto server = serverBuilder.build();
+            auto client = clientBuilder.build();
+
+            THEN( "Client cann't connect to the server" )
+            {
+                waitForInitialization();
+                server.reset();
+                client.reset();
+                CHECK((actualClientIP == expectedClientIPv4 || actualClientIP == expectedClientIPv6));
+            }
+        }
+    }
+}
+
 SCENARIO( "Protocol name feature testing", "[protocol_name]" )
 {
     auto srvEventHandler = MockedPtr<srv::IEventHandler>{};

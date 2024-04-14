@@ -29,14 +29,20 @@ namespace lwspp
 namespace srv
 {
 
-ConnectionInfo::ConnectionInfo(ConnectionId connectionId, Path path)
+ConnectionInfo::ConnectionInfo(ConnectionId connectionId, IP ip, Path path)
     : _connectionId(connectionId)
+    , _ip(std::move(ip))
     , _path(std::move(path))
 {}
 
 auto ConnectionInfo::getConnectionId() -> ConnectionId
 {
     return _connectionId;
+}
+
+auto ConnectionInfo::getIP() -> const IP&
+{
+    return _ip;
 }
 
 auto ConnectionInfo::getPath() -> const Path&

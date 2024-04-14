@@ -34,14 +34,16 @@ namespace srv
 class ConnectionInfo : public IConnectionInfo
 {
 public:
-    ConnectionInfo(ConnectionId, Path);
+    ConnectionInfo(ConnectionId, IP, Path);
 
 public:
     auto getConnectionId() -> ConnectionId override;
+    auto getIP() -> const IP& override;
     auto getPath() -> const Path& override;
 
 private:
     ConnectionId _connectionId;
+    IP _ip;
     Path _path;
 };
 

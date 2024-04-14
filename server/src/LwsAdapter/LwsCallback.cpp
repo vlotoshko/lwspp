@@ -50,6 +50,15 @@ auto getConnectionId(lws* wsInstance) -> ConnectionId
     return lws_get_socket_fd(wsInstance);
 }
 
+auto getConnectionIP(lws* wsInstance) -> IP
+{
+    const int MAX_IP_SIZE = 40;
+    std::array<char, MAX_IP_SIZE> buffer{};
+    lws_get_peer_simple(wsInstance, buffer.data(), MAX_IP_SIZE);
+
+    return static_cast<IP>(buffer.data());
+}
+
 auto getConnectionPath(lws* wsInstance) -> Path
 {
     std::array<char, MAX_PATH_SIZE> buffer{};
@@ -91,7 +100,8 @@ auto lwsCallback_v1(
         connections->add(std::make_shared<LwsConnection>(connectionId, wsInstance));
 
         auto connectionInfo =
-            std::make_shared<ConnectionInfo>(connectionId, getConnectionPath(wsInstance));
+            std::make_shared<ConnectionInfo>(connectionId, getConnectionIP(wsInstance),
+                                             getConnectionPath(wsInstance));
         eventHandler->onConnect(connectionInfo);
         break;
     }
