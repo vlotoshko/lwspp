@@ -6,13 +6,13 @@ project(
     LANGUAGES C CXX
 )
 
-# set(CMAKE_CXX_STANDARD 14)
-# set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# set(CMAKE_CXX_FLAGS "-Wall -Wextra -Wpedantic -fPIC")
+set(CMAKE_CXX_FLAGS "-Wall -Wextra -Wpedantic -fPIC")
 
 # Adding the CXX standard value into the CMAKE_CXX_STANDARD because Clang ignores the CXX_STANDARD
-# value for a mscOS. Bug: https://gitlab.kitware.com/cmake/cmake/-/issues/15943
+# value for a macOS. Bug: https://gitlab.kitware.com/cmake/cmake/-/issues/15943
 if(APPLE)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
 endif()

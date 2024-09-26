@@ -99,7 +99,7 @@ lwspp offers a variety of compilation options to tailor the build process accord
 
 - **Install Examples Directory** (`INSTALL_EXAMPLES`): Specify the path where examples should be installed after the build. Setting this option adds the corresponding **install-'project name'** target for each example. (Default: **""**)
 
-- **Websockets Custom Directory** (`WEBSOCKETS_CUSTOM_DIR`): If set, the libwebsockets library located in the corresponding directory will be used. (Default: **""**)
+- **Websockets Search Directory** (`WEBSOCKETS_SEARCH_DIR`): If set, the libwebsockets library located in the corresponding directory will be used. (Default: **""**)
 
 - **Websockets Library Path** (`WEBSOCKETS_LIBRARY`): Shows the path to the libwebsockets library that will be linked when building the project. This variable helps you identify the version of the library currently in use.
 
