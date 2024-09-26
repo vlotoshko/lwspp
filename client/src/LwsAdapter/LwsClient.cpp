@@ -25,7 +25,10 @@
 #include <libwebsockets.h>
 #include <stdexcept>
 
+#include "lwspp/client/IActorAcceptor.hpp"
+
 #include "ClientContext.hpp"
+#include "LwsAdapter/LwsActor.hpp"
 #include "LwsAdapter/LwsCallbackContext.hpp"
 #include "LwsAdapter/LwsClient.hpp"
 #include "LwsAdapter/LwsContextDeleter.hpp"
@@ -115,8 +118,10 @@ auto setupSslConnectionFlags(const SslSettingsPtr& ssl) -> int
 LwsClient::LwsClient(const ClientContext& context)
     : _lwsConnectionInfo()
 {
-    _callbackContext = std::make_shared<LwsCallbackContext>(context.eventHandler,
-                                                            context.actorAcceptor);
+    auto actor = std::make_shared<LwsActor>();
+    context.actorAcceptor->acceptActor(actor);
+
+    _callbackContext = std::make_shared<LwsCallbackContext>(context.eventHandler, actor);
     _dataHolder = std::make_shared<LwsDataHolder>(context);
 
     setupLowLevelContext_();

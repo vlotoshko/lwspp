@@ -40,6 +40,9 @@ class ILwsConnection;
 using ILwsConnectionPtr = std::shared_ptr<ILwsConnection>;
 using ILwsConnectionWeak = std::weak_ptr<ILwsConnection>;
 
+class LwsActor;
+using LwsActorPtr = std::shared_ptr<LwsActor>;
+
 struct LwsDataHolder;
 using LwsDataHolderPtr = std::shared_ptr<LwsDataHolder>;
 

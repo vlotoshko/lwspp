@@ -24,8 +24,6 @@
 
 #include <stdexcept>
 
-#include "lwspp/client/IActorAcceptor.hpp"
-
 #include "LwsAdapter/LwsActor.hpp"
 #include "LwsAdapter/LwsCallbackContext.hpp"
 
@@ -34,9 +32,9 @@ namespace lwspp
 namespace cli
 {
 
-LwsCallbackContext::LwsCallbackContext(IEventHandlerPtr e, IActorAcceptorPtr a)
+LwsCallbackContext::LwsCallbackContext(IEventHandlerPtr e, LwsActorPtr a)
     : _eventHandler(std::move(e))
-    , _actorAcceptor(std::move(a))
+    , _actor(std::move(a))
 {}
 
 void LwsCallbackContext::setStopping()
@@ -66,9 +64,7 @@ void LwsCallbackContext::setConnection(ILwsConnectionPtr s)
         throw std::runtime_error{"unaintialized lws connection found"};
     }
     _connection = std::move(s);
-
-    auto actor = std::make_shared<LwsActor>(_connection);
-    _actorAcceptor->acceptActor(std::move(actor));
+    _actor->setConnection(_connection);
 }
 
 void LwsCallbackContext::resetConnection()

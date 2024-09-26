@@ -30,10 +30,6 @@ namespace lwspp
 namespace cli
 {
 
-LwsActor::LwsActor(const ILwsConnectionPtr& s)
-    : _connection(s)
-{}
-
 void LwsActor::sendTextData(const std::string& message)
 {
     if (auto connection = _connection.lock())
@@ -50,6 +46,11 @@ void LwsActor::sendBinaryData(const std::vector<char>& data)
         connection->addBinaryDataToSend(data);
         lws_callback_on_writable(connection->getLwsInstance());
     }
+}
+
+void lwspp::cli::LwsActor::setConnection(ILwsConnectionPtr c)
+{
+    _connection = c;
 }
 
 } // namespace cli

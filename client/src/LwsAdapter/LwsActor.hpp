@@ -36,10 +36,10 @@ namespace cli
 class LwsActor : public IActor
 {
 public:
-    explicit LwsActor(const ILwsConnectionPtr&);
-
     void sendTextData(const std::string&) override;
     void sendBinaryData(const std::vector<char>&) override;
+
+    void setConnection(ILwsConnectionPtr);
 
 private:
     ILwsConnectionWeak _connection;
