@@ -1,0 +1,105 @@
+{
+  "version": 3,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 22,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "lwspp-setup",
+      "hidden": true,
+      "cacheVariables": {
+        "CMAKE_EXPORT_COMPILE_COMMANDS": {
+          "type": "BOOL",
+          "value":"ON"
+        },
+        "CMAKE_CXX_STANDARD": {
+          "type": "STRING",
+          "value":"14"
+        },
+        "CMAKE_CXX_STANDARD_REQUIRED": {
+          "type": "BOOL",
+          "value":"ON"
+        },
+        "CMAKE_CXX_EXTENSIONS": {
+          "type": "BOOL",
+          "value":"OFF"
+        },
+        "OPTION_BUILD_CLIENT": {
+          "type": "BOOL",
+          "value":"ON"
+        },
+        "OPTION_BUILD_SERVER": {
+          "type": "BOOL",
+          "value":"ON"
+        },
+        "OPTION_BUILD_SHARED": {
+          "type": "BOOL",
+          "value":"ON"
+        },
+        "OPTION_BUILD_STATIC": {
+          "type": "BOOL",
+          "value":"ON"
+        },
+        "OPTION_BUILD_EXAMPLES": {
+          "type": "BOOL",
+          "value":"OFF"
+        },
+        "OPTION_BUILD_INTEGRATION_TESTS": {
+          "type": "BOOL",
+          "value":"OFF"
+        },
+        "TESTS_INSTALL_DIR": {
+          "type": "PATH",
+          "value": ""
+        },
+        "EXAMPLES_INSTALL_DIR": {
+          "type": "PATH",
+          "value": ""
+        },
+        "WEBSOCKETS_SEARCH_DIR": {
+          "type": "PATH",
+          "value": ""
+        }
+      }
+    },
+    {
+      "name": "debug",
+      "description": "Default configuration",
+      "inherits": "lwspp-setup",
+      "generator": "Unix Makefiles",
+      "binaryDir": "$env{HOME}/Projects/builds/lwspp-${presetName}",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_CXX_FLAGS": "-Wall -Wextra -Wpedantic -fPIC"
+      }
+    },
+    {
+      "name": "release",
+      "description": "Default configuration",
+      "inherits": "lwspp-setup",
+      "generator": "Unix Makefiles",
+      "binaryDir": "$env{HOME}/Projects/builds/lwspp-${presetName}",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_CXX_FLAGS": "-Wall -Wextra -Wpedantic -fPIC"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "debug",
+      "description": "Build with default configuration",
+      "configurePreset": "debug",
+      "jobs": 4
+    },
+    {
+      "name": "release",
+      "description": "Build with release configuration",
+      "configurePreset": "release",
+      "jobs": 4
+    }
+  ]
+}
+

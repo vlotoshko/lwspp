@@ -44,10 +44,10 @@ set_target_properties(${PROJECT_NAME}-tests PROPERTIES
     LINKER_LANGUAGE CXX
 )
 
-if(NOT "${INSTALL_TESTS}" STREQUAL "")
-    if(NOT ${WEBSOCKETS_CUSTOM_DIR} STREQUAL "")
+if(NOT "${TESTS_INSTALL_DIR}" STREQUAL "")
+    if(NOT ${WEBSOCKETS_SEARCH_DIR} STREQUAL "")
         set_target_properties(${PROJECT_NAME}-tests PROPERTIES
-            INSTALL_RPATH "${WEBSOCKETS_CUSTOM_DIR}/lib"
+            INSTALL_RPATH "${WEBSOCKETS_SEARCH_DIR}/lib"
         )
     endif()
 
@@ -62,12 +62,12 @@ if(NOT "${INSTALL_TESTS}" STREQUAL "")
     )
 
     install(TARGETS ${PROJECT_NAME}-tests
-        RUNTIME DESTINATION ${INSTALL_TESTS}
+        RUNTIME DESTINATION ${TESTS_INSTALL_DIR}
         COMPONENT ${PROJECT_NAME}
     )
 
     install(DIRECTORY ${PROJECT_SOURCE_DIR}/tests/TestData
-        DESTINATION ${INSTALL_TESTS}
+        DESTINATION ${TESTS_INSTALL_DIR}
         COMPONENT ${PROJECT_NAME}
     )
 endif()

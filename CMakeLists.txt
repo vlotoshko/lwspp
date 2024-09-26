@@ -6,10 +6,10 @@ project(
     LANGUAGES C CXX
 )
 
-set(CMAKE_CXX_STANDARD 14)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
+# set(CMAKE_CXX_STANDARD 14)
+# set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(CMAKE_CXX_FLAGS "-Wall -Wextra -Wpedantic -fPIC")
+# set(CMAKE_CXX_FLAGS "-Wall -Wextra -Wpedantic -fPIC")
 
 # Adding the CXX standard value into the CMAKE_CXX_STANDARD because Clang ignores the CXX_STANDARD
 # value for a mscOS. Bug: https://gitlab.kitware.com/cmake/cmake/-/issues/15943
@@ -23,11 +23,13 @@ option(OPTION_BUILD_SHARED "Enable or disable the build of shared lwspp librarie
 option(OPTION_BUILD_STATIC "Enable or disable the build of static lwspp libraries." ON)
 option(OPTION_BUILD_EXAMPLES "Enable or disable the build of example applications." OFF)
 option(OPTION_BUILD_INTEGRATION_TESTS  "Enable or disable the build of the integration tests application." OFF)
-set(INSTALL_TESTS "" CACHE PATH "Specify the directory where the tests should be installed.
+
+set(TESTS_INSTALL_DIR "" CACHE PATH "Specify the directory where the tests should be installed.
 If you set this option, it will add the target install-lwspp-tests.")
-set(INSTALL_EXAMPLES "" CACHE PATH "Specify the path where examples should be installed after the build.
+set(EXAMPLES_INSTALL_DIR "" CACHE PATH "Specify the path where examples should be installed after the build.
 Setting this option adds the corresponding install-'project name' target for each example.")
-set(WEBSOCKETS_CUSTOM_DIR "" CACHE PATH "The custom libwebsockets library location. Expected that the directories ./include and ./lib are exsist.")
+set(WEBSOCKETS_SEARCH_DIR "" CACHE PATH "The custom libwebsockets library location.
+Expected that the directories ./include and ./lib are exsist.")
 
 if (NOT OPTION_BUILD_CLIENT AND NOT OPTION_BUILD_SERVER)
     message(FATAL_ERROR "No libraries selected for building. Please specify 'client', 'server', or both.")
@@ -50,12 +52,12 @@ if(APPLE)
 endif()
 
 unset(WEBSOCKETS_LIBRARY CACHE)
-if(NOT "${WEBSOCKETS_CUSTOM_DIR}" STREQUAL "")
-    set(WEBSOCKETS_HEADERS ${WEBSOCKETS_CUSTOM_DIR}/include)
-    find_library(WEBSOCKETS_LIBRARY websockets PATHS "${WEBSOCKETS_CUSTOM_DIR}/lib" REQUIRED NO_DEFAULT_PATH)
-else()
-    find_library(WEBSOCKETS_LIBRARY websockets REQUIRED)
+if(NOT "${WEBSOCKETS_SEARCH_DIR}" STREQUAL "")
+    set(WEBSOCKETS_HEADERS ${WEBSOCKETS_SEARCH_DIR}/include)
+    list(APPEND CMAKE_PREFIX_PATH "${WEBSOCKETS_SEARCH_DIR}")
 endif()
+
+find_library(WEBSOCKETS_LIBRARY websockets REQUIRED)
 
 message(STATUS "Found libwebsockets library: " ${WEBSOCKETS_LIBRARY})
 
