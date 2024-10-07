@@ -34,6 +34,7 @@ using namespace lwspp;
 
 const cli::Port PORT = 9443;
 const cli::Address ADDRESS = "stream.binance.com";
+const std::string PATH = "/ws";
 const std::string SUBSCRIBE = R"({"method": "SUBSCRIBE","params":["btcusdt@trade"],"id": 3})";
 const int MESSAGES_LIMIT = 5;
 
@@ -58,6 +59,17 @@ public:
         }
     }
 
+    void onError(const std::string& errorMessage) noexcept override
+    {
+        std::cout << "Got error: " << errorMessage << std::endl;
+        _promise.set_value();
+    }
+
+    void onWarning(const std::string& warningMessage) noexcept override
+    {
+        std::cout << "Got warning: " << warningMessage << std::endl;
+    }
+
     auto getFuture() -> std::shared_future<void>
     {
         return _promise.get_future();
@@ -70,17 +82,20 @@ private:
 
 auto main() -> int
 {
+    auto sslSettingsBuilder = cli::SslSettingsBuilder{};
+    sslSettingsBuilder.allowSelfSignedServerCert();
+
     // Configure and build client
     auto clientEventHandler = std::make_shared<ClientEventHandler>();
     auto clientBuilder = cli::ClientBuilder{};
     clientBuilder
         .setAddress(ADDRESS)
-        .setPath("/ws")
+        .setPath(PATH)
         .setPort(PORT)
         .setCallbackVersion(cli::CallbackVersion::v1_Amsterdam)
         .setEventHandler(clientEventHandler)
         .setActorAcceptor(clientEventHandler)
-        .setSslSettings(cli::SslSettingsBuilder{}.build())
+        .setSslSettings(sslSettingsBuilder.build())
         .setLwsLogLevel(0)
         ;
     auto client = clientBuilder.build();
