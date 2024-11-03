@@ -27,10 +27,10 @@
 
 #include "lwspp/client/ClientBuilder.hpp"
 #include "lwspp/client/EventHandlerBase.hpp"
-#include "lwspp/client/IActor.hpp"
+#include "lwspp/client/IActor.hpp" // IWYU pragma: keep
 
 #include "lwspp/server/EventHandlerBase.hpp"
-#include "lwspp/server/IActor.hpp"
+#include "lwspp/server/IActor.hpp" // IWYU pragma: keep
 #include "lwspp/server/ServerBuilder.hpp"
 
 using namespace lwspp;

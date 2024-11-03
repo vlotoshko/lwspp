@@ -23,20 +23,20 @@
  */
 
 #include <libwebsockets.h>
-#include <thread>
+#include <stdexcept>
 
-#include "lwspp/server/IActorAcceptor.hpp"
+#include "lwspp/server/IActorAcceptor.hpp" // IWYU pragma: keep
 
 #include "LwsAdapter/ILwsCallbackNotifier.hpp"
-#include "LwsAdapter/ILwsConnection.hpp"
+#include "LwsAdapter/ILwsConnection.hpp" // IWYU pragma: keep
+#include "LwsAdapter/LwsActor.hpp"
 #include "LwsAdapter/LwsCallbackContext.hpp"
 #include "LwsAdapter/LwsConnections.hpp"
 #include "LwsAdapter/LwsContextDeleter.hpp"
 #include "LwsAdapter/LwsDataHolder.hpp"
-#include "LwsAdapter/LwsActor.hpp"
 #include "LwsAdapter/LwsServer.hpp"
 #include "ServerContext.hpp"
-#include "SslSettings.hpp"
+#include "SslSettings.hpp" // IWYU pragma: keep
 
 namespace lwspp
 {

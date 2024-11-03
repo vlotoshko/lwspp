@@ -22,10 +22,10 @@
  * IN THE SOFTWARE.
  */
 
-#include "LwsAdapter/ILwsCallbackNotifier.hpp"
-#include "LwsAdapter/ILwsConnection.hpp"
-#include "LwsAdapter/ILwsConnections.hpp"
 #include "LwsAdapter/LwsActor.hpp"
+#include "LwsAdapter/ILwsCallbackNotifier.hpp" // IWYU pragma: keep
+#include "LwsAdapter/ILwsConnection.hpp"       // IWYU pragma: keep
+#include "LwsAdapter/ILwsConnections.hpp"      // IWYU pragma: keep
 
 namespace lwspp
 {

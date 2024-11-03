@@ -24,6 +24,8 @@
 
 #pragma once
 
+#include <cstdint>
+
 namespace lwspp
 {
 namespace cli
@@ -37,7 +39,7 @@ namespace cli
  * Users of the library can continue to use the previous callback to maintain the
  * same behavior as before.
  */
-enum class CallbackVersion
+enum class CallbackVersion : std::uint8_t
 {
     v1_Amsterdam,
 

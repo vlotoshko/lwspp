@@ -22,8 +22,8 @@
  * IN THE SOFTWARE.
  */
 
-#include "LwsAdapter/ILwsConnection.hpp"
 #include "LwsAdapter/LwsConnections.hpp"
+#include "LwsAdapter/ILwsConnection.hpp" // IWYU pragma: keep
 
 namespace lwspp
 {

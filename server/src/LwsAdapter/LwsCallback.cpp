@@ -22,13 +22,15 @@
  * IN THE SOFTWARE.
  */
 
+#include <array>
+
 #include "ConnectionInfo.hpp"
 #include "Consts.hpp"
 #include "LwsAdapter/ILwsCallbackContext.hpp"
-#include "LwsAdapter/ILwsConnections.hpp"
+#include "LwsAdapter/ILwsConnections.hpp" // IWYU pragma: keep
 #include "LwsAdapter/LwsCallback.hpp"
 #include "LwsAdapter/LwsConnection.hpp"
-#include "lwspp/server/IEventHandler.hpp"
+#include "lwspp/server/IEventHandler.hpp" // IWYU pragma: keep
 
 namespace lwspp
 {

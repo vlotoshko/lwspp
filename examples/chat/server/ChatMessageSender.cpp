@@ -22,7 +22,7 @@
  * IN THE SOFTWARE.
  */
 
-#include "lwspp/server/IActor.hpp"
+#include "lwspp/server/IActor.hpp" // IWYU pragma: keep
 
 #include "ChatMessageSender.hpp"
 

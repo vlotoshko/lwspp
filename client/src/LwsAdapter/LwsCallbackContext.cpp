@@ -24,7 +24,7 @@
 
 #include <stdexcept>
 
-#include "LwsAdapter/LwsActor.hpp"
+#include "LwsAdapter/LwsActor.hpp" // IWYU pragma: keep
 #include "LwsAdapter/LwsCallbackContext.hpp"
 
 namespace lwspp

@@ -31,7 +31,7 @@ namespace lwspp
 namespace cli
 {
 
-enum class DataType
+enum class DataType : std::uint8_t
 {
     Text,
     Binary

@@ -57,7 +57,7 @@ private:
     void waitForClientStopping_();
 
 private:
-    enum class State
+    enum class State : std::uint8_t
     {
         Initial,
         Started,

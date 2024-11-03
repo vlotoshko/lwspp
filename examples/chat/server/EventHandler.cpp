@@ -23,7 +23,7 @@
  */
 
 #include "lwspp/server/Consts.hpp"
-#include "lwspp/server/IConnectionInfo.hpp"
+#include "lwspp/server/IConnectionInfo.hpp" // IWYU pragma: keep
 
 #include "EventHandler.hpp"
 
@@ -36,7 +36,7 @@ namespace
 {
 
 // Incoming message types
-enum class DataType
+enum class DataType : std::uint8_t
 {
     HELLO,
     MSG,

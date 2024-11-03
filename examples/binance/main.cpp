@@ -27,15 +27,17 @@
 
 #include "lwspp/client/ClientBuilder.hpp"
 #include "lwspp/client/EventHandlerBase.hpp"
-#include "lwspp/client/IActor.hpp"
+#include "lwspp/client/IActor.hpp" // IWYU pragma: keep
 #include "lwspp/client/SslSettingsBuilder.hpp"
 
 using namespace lwspp;
 
-const cli::Port PORT = 9443;
-const cli::Address ADDRESS = "stream.binance.com";
-const std::string PATH = "/ws";
+const cli::Address ADDRESS = "ws-api.testnet.binance.vision";
+const cli::Port PORT = 443;
+const std::string PATH = "/ws-api/v3";
 const std::string SUBSCRIBE = R"({"method": "SUBSCRIBE","params":["btcusdt@trade"],"id": 3})";
+const std::string PING = R"({"id": "922bcc6e-9de8-440d-9e84-7c80933a8d0d","method": "ping"})";
+
 const int MESSAGES_LIMIT = 5;
 
 class ClientEventHandler : public cli::EventHandlerBase
@@ -43,7 +45,7 @@ class ClientEventHandler : public cli::EventHandlerBase
 public:
     void onConnect(cli::IConnectionInfoPtr) noexcept override
     {
-        _actor->sendTextData(SUBSCRIBE);
+        _actor->sendTextData(PING);
     }
 
     void onTextDataReceive(const cli::DataPacket& dataPacket) noexcept override
@@ -83,7 +85,7 @@ private:
 auto main() -> int
 {
     auto sslSettingsBuilder = cli::SslSettingsBuilder{};
-    sslSettingsBuilder.allowSelfSignedServerCert();
+    sslSettingsBuilder.allowSelfSignedServerCert().ignoreServerCaSert();
 
     // Configure and build client
     auto clientEventHandler = std::make_shared<ClientEventHandler>();

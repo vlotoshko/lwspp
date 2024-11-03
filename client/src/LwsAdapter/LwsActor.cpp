@@ -22,7 +22,7 @@
  * IN THE SOFTWARE.
  */
 
-#include "LwsAdapter/ILwsConnection.hpp"
+#include "LwsAdapter/ILwsConnection.hpp" // IWYU pragma: keep
 #include "LwsAdapter/LwsActor.hpp"
 
 namespace lwspp
@@ -50,7 +50,7 @@ void LwsActor::sendBinaryData(const std::vector<char>& data)
 
 void lwspp::cli::LwsActor::setConnection(ILwsConnectionPtr c)
 {
-    _connection = c;
+    _connection = std::move(c);
 }
 
 } // namespace cli

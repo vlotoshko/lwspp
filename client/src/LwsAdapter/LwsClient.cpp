@@ -25,7 +25,7 @@
 #include <libwebsockets.h>
 #include <stdexcept>
 
-#include "lwspp/client/IActorAcceptor.hpp"
+#include "lwspp/client/IActorAcceptor.hpp" // IWYU pragma: keep
 
 #include "ClientContext.hpp"
 #include "LwsAdapter/LwsActor.hpp"
@@ -33,7 +33,7 @@
 #include "LwsAdapter/LwsClient.hpp"
 #include "LwsAdapter/LwsContextDeleter.hpp"
 #include "LwsAdapter/LwsDataHolder.hpp"
-#include "SslSettings.hpp"
+#include "SslSettings.hpp" // IWYU pragma: keep
 
 namespace lwspp
 {

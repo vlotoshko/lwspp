@@ -26,7 +26,7 @@
 
 #include "Server.hpp"
 #include "ServerContext.hpp"
-#include "SslSettings.hpp"
+#include "SslSettings.hpp" // IWYU pragma: keep
 #include "lwspp/server/ServerBuilder.hpp"
 
 namespace lwspp
