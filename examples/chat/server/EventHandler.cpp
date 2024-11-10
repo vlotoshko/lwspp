@@ -22,6 +22,8 @@
  * IN THE SOFTWARE.
  */
 
+#include <cstdint>
+
 #include "lwspp/server/Consts.hpp"
 #include "lwspp/server/IConnectionInfo.hpp" // IWYU pragma: keep
 
@@ -36,7 +38,7 @@ namespace
 {
 
 // Incoming message types
-enum class DataType : std::uint8_t
+enum class DataType : uint8_t
 {
     HELLO,
     MSG,

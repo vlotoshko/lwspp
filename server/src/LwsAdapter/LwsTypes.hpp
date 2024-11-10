@@ -24,6 +24,7 @@
 
 #pragma once
 
+#include <cstdint>
 #include <string>
 
 namespace lwspp
@@ -31,7 +32,7 @@ namespace lwspp
 namespace srv
 {
 
-enum class DataType : std::uint8_t
+enum class DataType : uint8_t
 {
     Text,
     Binary

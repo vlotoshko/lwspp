@@ -25,6 +25,7 @@
 #pragma once
 
 #include <condition_variable>
+#include <cstdint>
 #include <mutex>
 
 #include "LwsAdapter/LwsTypesFwd.hpp"
@@ -55,7 +56,7 @@ private:
     void waitForServerStopped_();
 
 private:
-    enum class State : std::uint8_t
+    enum class State : uint8_t
     {
         Initial,
         Started,

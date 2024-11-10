@@ -39,7 +39,7 @@ namespace srv
  * Users of the library can continue to use the previous callback to maintain the
  * same behavior as before.
  */
-enum class CallbackVersion : std::uint8_t
+enum class CallbackVersion : uint8_t
 {
     v1_Andromeda,
 
