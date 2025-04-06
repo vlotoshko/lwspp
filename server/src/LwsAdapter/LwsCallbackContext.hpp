@@ -34,16 +34,16 @@ namespace srv
 class LwsCallbackContext : public ILwsCallbackContext
 {
 public:
-    LwsCallbackContext(IServerLogicPtr, ILwsConnectionsPtr);
+    LwsCallbackContext(contract::IServerLogicPtr, ILwsConnectionsPtr);
 
     void setStopping() override;
     auto isStopping() const -> bool override;
     auto getConnections() -> ILwsConnectionsPtr override;
 
-    auto getServerLogic() -> IServerLogicPtr override;
+    auto getServerLogic() -> contract::IServerLogicPtr override;
 
 private:
-    IServerLogicPtr _serverLogic;
+    contract::IServerLogicPtr _serverLogic;
     ILwsConnectionsPtr _connections;
 
     bool _isStopping = false;

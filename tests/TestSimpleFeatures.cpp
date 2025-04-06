@@ -29,13 +29,13 @@
 #include "MockedPtr.hpp"
 
 #include "lwspp/client/ClientBuilder.hpp"
-#include "lwspp/client/IClientControlAcceptor.hpp"
-#include "lwspp/client/IClientLogic.hpp"
+#include "lwspp/client/contract/IClientControlAcceptor.hpp"
+#include "lwspp/client/contract/IClientLogic.hpp"
 
-#include "lwspp/server/IConnectionInfo.hpp"
-#include "lwspp/server/IServerControlAcceptor.hpp"
-#include "lwspp/server/IServerLogic.hpp"
+#include "lwspp/server/IConnectionInfo.hpp" // IWYU pragma: keep
 #include "lwspp/server/ServerBuilder.hpp"
+#include "lwspp/server/contract/IServerControlAcceptor.hpp"
+#include "lwspp/server/contract/IServerLogic.hpp"
 
 // NOLINTBEGIN (readability-function-cognitive-complexity)
 namespace lwspp
@@ -64,8 +64,8 @@ void waitForInitialization()
     std::this_thread::sleep_for(std::chrono::milliseconds(timeout));
 }
 
-void setupServerBehavior(Mock<srv::IServerLogic>& serverLogic,
-                         Mock<srv::IServerControlAcceptor>& serverControlAcceptor,
+void setupServerBehavior(Mock<srv::contract::IServerLogic>& serverLogic,
+                         Mock<srv::contract::IServerControlAcceptor>& serverControlAcceptor,
                          srv::IServerControlPtr& serverControl)
 {
     Fake(Method(serverLogic, onConnect), Method(serverLogic, onDisconnect));
@@ -74,8 +74,8 @@ void setupServerBehavior(Mock<srv::IServerLogic>& serverLogic,
         .Do([&serverControl](srv::IServerControlPtr ms){ serverControl = ms; });
 }
 
-void setupClientBehavior(Mock<cli::IClientLogic>& clientLogic,
-                         Mock<cli::IClientControlAcceptor>& clientControlAcceptor,
+void setupClientBehavior(Mock<cli::contract::IClientLogic>& clientLogic,
+                         Mock<cli::contract::IClientControlAcceptor>& clientControlAcceptor,
                          cli::IClientControlPtr& clientControl)
 {
     Fake(Method(clientLogic, onConnect), Method(clientLogic, onError),
@@ -90,11 +90,11 @@ void setupClientBehavior(Mock<cli::IClientLogic>& clientLogic,
 
 SCENARIO( "IP address feature testing", "[ip_address]" )
 {
-    auto srvLogic = MockedPtr<srv::IServerLogic>{};
-    auto cliLogic = MockedPtr<cli::IClientLogic>{};
+    auto srvLogic = MockedPtr<srv::contract::IServerLogic>{};
+    auto cliLogic = MockedPtr<cli::contract::IClientLogic>{};
 
-    auto srvControlAcceptor = MockedPtr<srv::IServerControlAcceptor>{};
-    auto cliControlAcceptor = MockedPtr<cli::IClientControlAcceptor>{};
+    auto srvControlAcceptor = MockedPtr<srv::contract::IServerControlAcceptor>{};
+    auto cliControlAcceptor = MockedPtr<cli::contract::IClientControlAcceptor>{};
 
     srv::IServerControlPtr srvControl;
     cli::IClientControlPtr cliControl;
@@ -152,11 +152,11 @@ SCENARIO( "IP address feature testing", "[ip_address]" )
 
 SCENARIO( "Protocol name feature testing", "[protocol_name]" )
 {
-    auto srvLogic = MockedPtr<srv::IServerLogic>{};
-    auto cliLogic = MockedPtr<cli::IClientLogic>{};
+    auto srvLogic = MockedPtr<srv::contract::IServerLogic>{};
+    auto cliLogic = MockedPtr<cli::contract::IClientLogic>{};
     
-    auto srvControlAcceptor = MockedPtr<srv::IServerControlAcceptor>{};
-    auto cliControlAcceptor = MockedPtr<cli::IClientControlAcceptor>{};
+    auto srvControlAcceptor = MockedPtr<srv::contract::IServerControlAcceptor>{};
+    auto cliControlAcceptor = MockedPtr<cli::contract::IClientControlAcceptor>{};
 
     srv::IServerControlPtr srvControl;
     cli::IClientControlPtr cliControl;
@@ -285,11 +285,11 @@ SCENARIO( "Protocol name feature testing", "[protocol_name]" )
 
 SCENARIO( "Path feature testing", "[path]" )
 {
-    auto srvLogic = MockedPtr<srv::IServerLogic>{};
-    auto cliLogic = MockedPtr<cli::IClientLogic>{};
+    auto srvLogic = MockedPtr<srv::contract::IServerLogic>{};
+    auto cliLogic = MockedPtr<cli::contract::IClientLogic>{};
     
-    auto srvControlAcceptor = MockedPtr<srv::IServerControlAcceptor>{};
-    auto cliControlAcceptor = MockedPtr<cli::IClientControlAcceptor>{};
+    auto srvControlAcceptor = MockedPtr<srv::contract::IServerControlAcceptor>{};
+    auto cliControlAcceptor = MockedPtr<cli::contract::IClientControlAcceptor>{};
 
     srv::IServerControlPtr srvControl;
     cli::IClientControlPtr cliControl;
@@ -402,8 +402,8 @@ SCENARIO( "Path feature testing", "[path]" )
 // on the VM with the server.
 SCENARIO( "Keep alive feature testing", "[.keep_alive]" )
 {
-    auto cliLogic = MockedPtr<cli::IClientLogic>{};
-    auto cliControlAcceptor = MockedPtr<cli::IClientControlAcceptor>{};
+    auto cliLogic = MockedPtr<cli::contract::IClientLogic>{};
+    auto cliControlAcceptor = MockedPtr<cli::contract::IClientControlAcceptor>{};
     cli::IClientControlPtr cliControl;
 
     std::mutex mutex;

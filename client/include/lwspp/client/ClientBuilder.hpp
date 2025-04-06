@@ -58,8 +58,8 @@ public:
     auto setCallbackVersion(CallbackVersion) -> ClientBuilder&;
     auto setAddress(Address) -> ClientBuilder&;
     auto setPort(Port) -> ClientBuilder&;
-    auto setClientLogic(IClientLogicPtr) -> ClientBuilder&;
-    auto setClientControlAcceptor(IClientControlAcceptorPtr) -> ClientBuilder&;
+    auto setClientLogic(contract::IClientLogicPtr) -> ClientBuilder&;
+    auto setClientControlAcceptor(contract::IClientControlAcceptorPtr) -> ClientBuilder&;
 
     // Non mandatory options
     auto setProtocolName(std::string) -> ClientBuilder&;

@@ -127,13 +127,13 @@ auto ServerBuilder::setPort(Port port) -> ServerBuilder&
     return *this;
 }
 
-auto ServerBuilder::setServerLogic(IServerLogicPtr e) -> ServerBuilder&
+auto ServerBuilder::setServerLogic(contract::IServerLogicPtr e) -> ServerBuilder&
 {
     _context->serverLogic = std::move(e);
     return *this;
 }
 
-auto ServerBuilder::setServerControlAcceptor(IServerControlAcceptorPtr a) -> ServerBuilder&
+auto ServerBuilder::setServerControlAcceptor(contract::IServerControlAcceptorPtr a) -> ServerBuilder&
 {
     _context->serverControlAcceptor = std::move(a);
     return *this;

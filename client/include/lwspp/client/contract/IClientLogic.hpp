@@ -33,6 +33,8 @@ namespace lwspp
 {
 namespace cli
 {
+namespace contract
+{
 
 /**
  * @brief The IClientLogic class defines an interface for implementing client behavior.
@@ -64,5 +66,6 @@ public:
     virtual void onWarning(const std::string& errorMessage) noexcept = 0;
 };
 
+} // namespace contract
 } // namespace cli
 } // namespace lwspp

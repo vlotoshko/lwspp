@@ -30,7 +30,7 @@
 #include "LwsAdapter/ILwsConnections.hpp" // IWYU pragma: keep
 #include "LwsAdapter/LwsCallback.hpp"
 #include "LwsAdapter/LwsConnection.hpp"
-#include "lwspp/server/IServerLogic.hpp" // IWYU pragma: keep
+#include "lwspp/server/contract/IServerLogic.hpp" // IWYU pragma: keep
 
 namespace lwspp
 {

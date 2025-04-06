@@ -27,14 +27,14 @@
 #include <thread>
 
 #include "lwspp/client/ClientBuilder.hpp"
-#include "lwspp/client/IClientControlAcceptor.hpp"
-#include "lwspp/client/IClientLogic.hpp"
 #include "lwspp/client/SslSettingsBuilder.hpp"
+#include "lwspp/client/contract/IClientControlAcceptor.hpp"
+#include "lwspp/client/contract/IClientLogic.hpp"
 
-#include "lwspp/server/IServerControlAcceptor.hpp"
-#include "lwspp/server/IServerLogic.hpp"
 #include "lwspp/server/ServerBuilder.hpp"
 #include "lwspp/server/SslSettingsBuilder.hpp"
+#include "lwspp/server/contract/IServerControlAcceptor.hpp"
+#include "lwspp/server/contract/IServerLogic.hpp"
 
 #include "MockedPtr.hpp"
 #include "Utils.hpp"
@@ -86,8 +86,8 @@ void waitForInitialization()
     std::this_thread::sleep_for(std::chrono::milliseconds(timeout));
 }
 
-void setupServerBehavior(Mock<srv::IServerLogic>& serverLogic,
-                         Mock<srv::IServerControlAcceptor>& serverControlAcceptor,
+void setupServerBehavior(Mock<srv::contract::IServerLogic>& serverLogic,
+                         Mock<srv::contract::IServerControlAcceptor>& serverControlAcceptor,
                          srv::IServerControlPtr& serverControl)
 {
     Fake(Method(serverLogic, onConnect), Method(serverLogic, onDisconnect));
@@ -96,8 +96,8 @@ void setupServerBehavior(Mock<srv::IServerLogic>& serverLogic,
         .Do([&serverControl](srv::IServerControlPtr c){ serverControl = c; });
 }
 
-void setupClientBehavior(Mock<cli::IClientLogic>& clientLogic,
-                         Mock<cli::IClientControlAcceptor>& clientControlAcceptor,
+void setupClientBehavior(Mock<cli::contract::IClientLogic>& clientLogic,
+                         Mock<cli::contract::IClientControlAcceptor>& clientControlAcceptor,
                          cli::IClientControlPtr& clientControl)
 {
     Fake(Method(clientLogic, onConnect), Method(clientLogic, onError),
@@ -109,8 +109,8 @@ void setupClientBehavior(Mock<cli::IClientLogic>& clientLogic,
         .Do([&clientControl](cli::IClientControlPtr c){ clientControl = c; });
 }
 
-srv::ServerBuilder setupServerBuilder(srv::IServerLogicPtr serverLogic,
-                                      srv::IServerControlAcceptorPtr serverControlAcceptor)
+srv::ServerBuilder setupServerBuilder(srv::contract::IServerLogicPtr serverLogic,
+                                      srv::contract::IServerControlAcceptorPtr serverControlAcceptor)
 {
     auto serverBuilder = srv::ServerBuilder{};
     serverBuilder
@@ -123,8 +123,8 @@ srv::ServerBuilder setupServerBuilder(srv::IServerLogicPtr serverLogic,
     return serverBuilder;
 }
 
-cli::ClientBuilder setupClientBuilder(cli::IClientLogicPtr clientLogic,
-                                      cli::IClientControlAcceptorPtr clientControlAcceptor)
+cli::ClientBuilder setupClientBuilder(cli::contract::IClientLogicPtr clientLogic,
+                                      cli::contract::IClientControlAcceptorPtr clientControlAcceptor)
 {
     auto builder = cli::ClientBuilder{};
     builder
@@ -142,11 +142,11 @@ cli::ClientBuilder setupClientBuilder(cli::IClientLogicPtr clientLogic,
 
 SCENARIO( "Test ssl enabling for server and client", "[ssl]" )
 {
-    auto srvLogic = MockedPtr<srv::IServerLogic>{};
-    auto cliLogic = MockedPtr<cli::IClientLogic>{};
+    auto srvLogic = MockedPtr<srv::contract::IServerLogic>{};
+    auto cliLogic = MockedPtr<cli::contract::IClientLogic>{};
     
-    auto srvclientControlAcceptor = MockedPtr<srv::IServerControlAcceptor>{};
-    auto cliclientControlAcceptor = MockedPtr<cli::IClientControlAcceptor>{};
+    auto srvclientControlAcceptor = MockedPtr<srv::contract::IServerControlAcceptor>{};
+    auto cliclientControlAcceptor = MockedPtr<cli::contract::IClientControlAcceptor>{};
 
     srv::IServerControlPtr srvclientControl;
     cli::IClientControlPtr cliclientControl;
@@ -238,11 +238,11 @@ SCENARIO( "Test ssl enabling for server and client", "[ssl]" )
 
 SCENARIO( "Test client ssl features", "[ssl]" )
 {
-    auto srvLogic = MockedPtr<srv::IServerLogic>{};
-    auto cliLogic = MockedPtr<cli::IClientLogic>{};
+    auto srvLogic = MockedPtr<srv::contract::IServerLogic>{};
+    auto cliLogic = MockedPtr<cli::contract::IClientLogic>{};
     
-    auto srvclientControlAcceptor = MockedPtr<srv::IServerControlAcceptor>{};
-    auto cliclientControlAcceptor = MockedPtr<cli::IClientControlAcceptor>{};
+    auto srvclientControlAcceptor = MockedPtr<srv::contract::IServerControlAcceptor>{};
+    auto cliclientControlAcceptor = MockedPtr<cli::contract::IClientControlAcceptor>{};
 
     srv::IServerControlPtr srvclientControl;
     cli::IClientControlPtr cliclientControl;
@@ -519,11 +519,11 @@ SCENARIO( "Test client ssl features", "[ssl]" )
 
 SCENARIO( "Test server ssl features", "[ssl]" )
 {
-    auto srvLogic = MockedPtr<srv::IServerLogic>{};
-    auto cliLogic = MockedPtr<cli::IClientLogic>{};
+    auto srvLogic = MockedPtr<srv::contract::IServerLogic>{};
+    auto cliLogic = MockedPtr<cli::contract::IClientLogic>{};
     
-    auto srvclientControlAcceptor = MockedPtr<srv::IServerControlAcceptor>{};
-    auto cliclientControlAcceptor = MockedPtr<cli::IClientControlAcceptor>{};
+    auto srvclientControlAcceptor = MockedPtr<srv::contract::IServerControlAcceptor>{};
+    auto cliclientControlAcceptor = MockedPtr<cli::contract::IClientControlAcceptor>{};
 
     srv::IServerControlPtr srvclientControl;
     cli::IClientControlPtr cliclientControl;
@@ -643,11 +643,11 @@ SCENARIO( "Test server ssl features", "[ssl]" )
 // they have no common ciphers set, the server's cipher is chosen
 SCENARIO( "Test ssl ciphers list feature", "[.ssl]" )
 {
-    auto srvLogic = MockedPtr<srv::IServerLogic>{};
-    auto cliLogic = MockedPtr<cli::IClientLogic>{};
+    auto srvLogic = MockedPtr<srv::contract::IServerLogic>{};
+    auto cliLogic = MockedPtr<cli::contract::IClientLogic>{};
     
-    auto srvclientControlAcceptor = MockedPtr<srv::IServerControlAcceptor>{};
-    auto cliclientControlAcceptor = MockedPtr<cli::IClientControlAcceptor>{};
+    auto srvclientControlAcceptor = MockedPtr<srv::contract::IServerControlAcceptor>{};
+    auto cliclientControlAcceptor = MockedPtr<cli::contract::IClientControlAcceptor>{};
 
     srv::IServerControlPtr srvclientControl;
     cli::IClientControlPtr cliclientControl;

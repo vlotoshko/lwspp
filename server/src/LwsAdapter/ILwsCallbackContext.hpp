@@ -24,8 +24,8 @@
 
 #pragma once
 
-#include "lwspp/server/TypesFwd.hpp"
 #include "LwsAdapter/LwsTypesFwd.hpp"
+#include "lwspp/server/TypesFwd.hpp"
 
 namespace lwspp
 {
@@ -52,7 +52,7 @@ public:
     virtual auto isStopping() const -> bool = 0;
     virtual auto getConnections() -> ILwsConnectionsPtr = 0;
 
-    virtual auto getServerLogic() -> IServerLogicPtr = 0;
+    virtual auto getServerLogic() -> contract::IServerLogicPtr = 0;
 };
 
 } // namespace srv

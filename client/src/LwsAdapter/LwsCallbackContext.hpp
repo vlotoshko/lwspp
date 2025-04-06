@@ -34,7 +34,7 @@ namespace cli
 class LwsCallbackContext : public ILwsCallbackContext
 {
 public:
-    LwsCallbackContext(IClientLogicPtr, LwsClientControlPtr);
+    LwsCallbackContext(contract::IClientLogicPtr, LwsClientControlPtr);
 
     void setStopping() override;
     auto isStopping() const -> bool override;
@@ -43,10 +43,10 @@ public:
     void setConnection(ILwsConnectionPtr) override;
     void resetConnection() override;
 
-    auto getClientLogic() -> IClientLogicPtr override;
+    auto getClientLogic() -> contract::IClientLogicPtr override;
 
 private:
-    IClientLogicPtr _clientLogic;
+    contract::IClientLogicPtr _clientLogic;
     ILwsConnectionPtr _connection;
     LwsClientControlPtr _clientControl;
 

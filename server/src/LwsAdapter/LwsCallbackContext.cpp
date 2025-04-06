@@ -29,7 +29,7 @@ namespace lwspp
 namespace srv
 {
 
-LwsCallbackContext::LwsCallbackContext(IServerLogicPtr e, ILwsConnectionsPtr s)
+LwsCallbackContext::LwsCallbackContext(contract::IServerLogicPtr e, ILwsConnectionsPtr s)
     : _serverLogic(std::move(e))
     , _connections(std::move(s))
 {}
@@ -49,7 +49,7 @@ auto LwsCallbackContext::getConnections() -> ILwsConnectionsPtr
     return _connections;
 }
 
-auto LwsCallbackContext::getServerLogic() -> IServerLogicPtr
+auto LwsCallbackContext::getServerLogic() -> contract::IServerLogicPtr
 {
     return _serverLogic;
 }

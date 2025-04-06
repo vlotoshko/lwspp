@@ -34,14 +34,8 @@ namespace cli
 class IClientControl;
 using IClientControlPtr = std::shared_ptr<IClientControl>;
 
-class IClientControlAcceptor;
-using IClientControlAcceptorPtr = std::shared_ptr<IClientControlAcceptor>;
-
 class IClient;
 using IClientPtr = std::shared_ptr<IClient>;
-
-class IClientLogic;
-using IClientLogicPtr = std::shared_ptr<IClientLogic>;
 
 class IConnectionInfo;
 using IConnectionInfoPtr = std::shared_ptr<IConnectionInfo>;
@@ -49,5 +43,15 @@ using IConnectionInfoPtr = std::shared_ptr<IConnectionInfo>;
 class SslSettings;
 using SslSettingsPtr = std::shared_ptr<SslSettings>;
 
+namespace contract
+{
+
+class IClientControlAcceptor;
+using IClientControlAcceptorPtr = std::shared_ptr<IClientControlAcceptor>;
+
+class IClientLogic;
+using IClientLogicPtr = std::shared_ptr<IClientLogic>;
+
+} // namespace contract
 } // namespace cli
 } // namespace lwspp

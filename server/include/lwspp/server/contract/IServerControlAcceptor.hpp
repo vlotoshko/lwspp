@@ -24,45 +24,39 @@
 
 #pragma once
 
-#include <string>
-
-#include "lwspp/server/Types.hpp"
 #include "lwspp/server/TypesFwd.hpp"
 
 namespace lwspp
 {
 namespace srv
 {
+namespace contract
+{
 
 /**
- * @brief The IServerLogic class defines an interface for implementing server behavior.
+ * @brief Accepts an IServerControl instance from the server builder.
+ *
+ * The server builder provides an IServerControl instance when constructing the server.
+ * To utilize the IServerControl, set your instance of IServerControlAcceptor to the server builder
+ * and obtain the IServerControl to perform actions defined by the IServerControl interface.
  * Users of the library must implement this interface themselves.
  */
-class IServerLogic
+class IServerControlAcceptor
 {
 public:
-    IServerLogic() = default;
-    virtual ~IServerLogic() = default;
+    IServerControlAcceptor() = default;
+    virtual ~IServerControlAcceptor() = default;
 
-    IServerLogic(IServerLogic&&) = default;
-    auto operator=(IServerLogic&&) noexcept -> IServerLogic& = default;
+    IServerControlAcceptor(const IServerControlAcceptor&) = default;
+    auto operator=(const IServerControlAcceptor&) noexcept -> IServerControlAcceptor& = default;
 
-    IServerLogic(const IServerLogic&) = delete;
-    auto operator=(const IServerLogic&) noexcept -> IServerLogic& = delete;
+    IServerControlAcceptor(IServerControlAcceptor&&) = default;
+    auto operator=(IServerControlAcceptor&&) noexcept -> IServerControlAcceptor& = default;
 
 public:
-    // Invoked when the server receives first data packet of the message.
-    virtual void onFirstDataPacket(ConnectionId, size_t messageLength) noexcept = 0;
-    // Invoked when the server receives binary data from the client.
-    virtual void onBinaryDataReceive(ConnectionId, const DataPacket&) noexcept = 0;
-    // Invoked when the server receives text data from the client. This method expects valid UTF-8 text.
-    virtual void onTextDataReceive(ConnectionId, const DataPacket&) noexcept = 0;
-
-    virtual void onConnect(IConnectionInfoPtr) noexcept = 0;
-    virtual void onDisconnect(ConnectionId) noexcept = 0;
-    virtual void onError(ConnectionId, const std::string& errorMessage) noexcept = 0;
-    virtual void onWarning(ConnectionId, const std::string& errorMessage) noexcept = 0;
+    virtual void acceptServerControl(IServerControlPtr) noexcept = 0;
 };
 
+} // namespace contract
 } // namespace srv
 } // namespace lwspp

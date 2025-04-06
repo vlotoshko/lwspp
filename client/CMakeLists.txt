@@ -11,13 +11,13 @@ set(MINOR_VERSION 0)
 set(PATCH_VERSION 0)
 
 set(${PROJECT_NAME}_SRC_FILES
+    include/lwspp/client/contract/IClientControlAcceptor.hpp
+    include/lwspp/client/contract/IClientLogic.hpp
     include/lwspp/client/CallbackVersions.hpp
     include/lwspp/client/ClientBuilder.hpp
     include/lwspp/client/ClientLogicBase.hpp
-    include/lwspp/client/IClientControlAcceptor.hpp
     include/lwspp/client/IClient.hpp
     include/lwspp/client/IClientControl.hpp
-    include/lwspp/client/IClientLogic.hpp
     include/lwspp/client/IConnectionInfo.hpp
     include/lwspp/client/SslSettingsBuilder.hpp
     include/lwspp/client/Types.hpp

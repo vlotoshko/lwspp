@@ -32,7 +32,7 @@ namespace lwspp
 namespace cli
 {
 
-LwsCallbackContext::LwsCallbackContext(IClientLogicPtr e, LwsClientControlPtr a)
+LwsCallbackContext::LwsCallbackContext(contract::IClientLogicPtr e, LwsClientControlPtr a)
     : _clientLogic(std::move(e))
     , _clientControl(std::move(a))
 {}
@@ -47,7 +47,7 @@ auto LwsCallbackContext::isStopping() const -> bool
     return _isStopping;
 }
 
-auto LwsCallbackContext::getClientLogic() -> IClientLogicPtr
+auto LwsCallbackContext::getClientLogic() -> contract::IClientLogicPtr
 {
     return _clientLogic;
 }

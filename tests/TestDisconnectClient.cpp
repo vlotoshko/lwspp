@@ -29,14 +29,14 @@
 
 #include "lwspp/client/ClientBuilder.hpp"
 #include "lwspp/client/IClientControl.hpp" // IWYU pragma: keep
-#include "lwspp/client/IClientControlAcceptor.hpp"
-#include "lwspp/client/IClientLogic.hpp"
+#include "lwspp/client/contract/IClientControlAcceptor.hpp"
+#include "lwspp/client/contract/IClientLogic.hpp"
 
 #include "lwspp/server/IConnectionInfo.hpp" // IWYU pragma: keep
 #include "lwspp/server/IServerControl.hpp"  // IWYU pragma: keep
-#include "lwspp/server/IServerControlAcceptor.hpp"
-#include "lwspp/server/IServerLogic.hpp"
 #include "lwspp/server/ServerBuilder.hpp"
+#include "lwspp/server/contract/IServerControlAcceptor.hpp"
+#include "lwspp/server/contract/IServerLogic.hpp"
 
 // NOLINTBEGIN (readability-function-cognitive-complexity)
 namespace lwspp
@@ -54,7 +54,7 @@ const cli::Address ADDRESS = "localhost";
 const int DISABLE_LOG = 0;
 const std::chrono::seconds TIMEOUT{1};
 
-void setupServerBehavior(Mock<srv::IServerLogic>& servreLogic,
+void setupServerBehavior(Mock<srv::contract::IServerLogic>& servreLogic,
                          std::promise<srv::ConnectionId>& promiseConnected,
                          std::promise<void>& promiseDisconnected)
 {
@@ -72,8 +72,8 @@ void setupServerBehavior(Mock<srv::IServerLogic>& servreLogic,
     When(Method(servreLogic, onDisconnect)).Do(onDisconnect);
 }
 
-srv::IServerPtr setupServer(srv::IServerLogicPtr serverLogic,
-                            srv::IServerControlAcceptorPtr serverControlAcceptor)
+srv::IServerPtr setupServer(srv::contract::IServerLogicPtr serverLogic,
+                            srv::contract::IServerControlAcceptorPtr serverControlAcceptor)
 {
     auto serverBuilder = srv::ServerBuilder{};
     serverBuilder
@@ -86,8 +86,8 @@ srv::IServerPtr setupServer(srv::IServerLogicPtr serverLogic,
     return serverBuilder.build();
 }
 
-cli::IClientPtr setupClient(cli::IClientLogicPtr clientLogic,
-                            cli::IClientControlAcceptorPtr clientControlAcceptor)
+cli::IClientPtr setupClient(cli::contract::IClientLogicPtr clientLogic,
+                            cli::contract::IClientControlAcceptorPtr clientControlAcceptor)
 {
     auto clientBuilder = cli::ClientBuilder{};
     clientBuilder
@@ -113,11 +113,11 @@ SCENARIO( "Server disconnects client", "[disconnect_client]" )
     std::promise<void> promiseDisconnected;
     auto waitForDisconnection = promiseDisconnected.get_future();
 
-    auto srvLogic = MockedPtr<srv::IServerLogic>{};
-    auto cliLogic = MockedPtr<cli::IClientLogic>{};
+    auto srvLogic = MockedPtr<srv::contract::IServerLogic>{};
+    auto cliLogic = MockedPtr<cli::contract::IClientLogic>{};
     
-    auto srvControlAcceptor = MockedPtr<srv::IServerControlAcceptor>{};
-    auto cliControlAcceptor = MockedPtr<cli::IClientControlAcceptor>{};
+    auto srvControlAcceptor = MockedPtr<srv::contract::IServerControlAcceptor>{};
+    auto cliControlAcceptor = MockedPtr<cli::contract::IClientControlAcceptor>{};
 
     srv::IServerControlPtr srvControl;
 

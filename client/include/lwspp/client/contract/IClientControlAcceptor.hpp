@@ -30,6 +30,8 @@ namespace lwspp
 {
 namespace cli
 {
+namespace contract
+{
 
 /**
  * @brief Accepts an IClientControl instance from the client builder.
@@ -55,5 +57,6 @@ public:
     virtual void acceptClientControl(IClientControlPtr) noexcept = 0;
 };
 
+} // namespace contract
 } // namespace cli
 } // namespace lwspp

@@ -25,7 +25,7 @@
 #include <libwebsockets.h>
 #include <stdexcept>
 
-#include "lwspp/client/IClientControlAcceptor.hpp" // IWYU pragma: keep
+#include "lwspp/client/contract/IClientControlAcceptor.hpp" // IWYU pragma: keep
 
 #include "ClientContext.hpp"
 #include "LwsAdapter/LwsCallbackContext.hpp"

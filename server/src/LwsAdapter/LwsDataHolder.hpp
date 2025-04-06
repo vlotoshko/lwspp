@@ -26,9 +26,9 @@
 
 #include <string>
 
-#include "lwspp/server/Types.hpp"
 #include "LwsAdapter/LwsTypesFwd.hpp"
 #include "TypesFwd.hpp"
+#include "lwspp/server/Types.hpp"
 
 namespace lwspp
 {

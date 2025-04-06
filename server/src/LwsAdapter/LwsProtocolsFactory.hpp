@@ -24,8 +24,8 @@
 
 #pragma once
 
-#include "lwspp/server/CallbackVersions.hpp"
 #include "LwsAdapter/LwsTypesFwd.hpp"
+#include "lwspp/server/CallbackVersions.hpp"
 
 namespace lwspp
 {

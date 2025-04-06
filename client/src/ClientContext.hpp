@@ -26,8 +26,8 @@
 
 #include <string>
 
-#include "lwspp/client/TypesFwd.hpp"
 #include "Consts.hpp"
+#include "lwspp/client/TypesFwd.hpp"
 
 namespace lwspp
 {
@@ -42,8 +42,9 @@ class ClientContext
 {
 public:
     CallbackVersion callbackVersion = UNDEFINED_CALLBACK_VERSION;
-    IClientLogicPtr clientLogic;
-    IClientControlAcceptorPtr clientControlAcceptor;
+    contract::IClientLogicPtr clientLogic;
+    contract::IClientControlAcceptorPtr clientControlAcceptor;
+
     Address address = UNDEFINED_ADDRESS;
     Port port = UNDEFINED_PORT;
 

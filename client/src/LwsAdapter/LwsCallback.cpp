@@ -22,7 +22,7 @@
  * IN THE SOFTWARE.
  */
 
-#include "lwspp/client/IClientLogic.hpp" // IWYU pragma: keep
+#include "lwspp/client/contract/IClientLogic.hpp" // IWYU pragma: keep
 
 #include "ConnectionInfo.hpp"
 #include "LwsAdapter/ILwsCallbackContext.hpp"

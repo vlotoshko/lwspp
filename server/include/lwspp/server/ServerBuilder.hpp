@@ -57,8 +57,8 @@ public:
     // Mandatory options
     auto setCallbackVersion(CallbackVersion) -> ServerBuilder&;
     auto setPort(Port) -> ServerBuilder&;
-    auto setServerLogic(IServerLogicPtr) -> ServerBuilder&;
-    auto setServerControlAcceptor(IServerControlAcceptorPtr) -> ServerBuilder&;
+    auto setServerLogic(contract::IServerLogicPtr) -> ServerBuilder&;
+    auto setServerControlAcceptor(contract::IServerControlAcceptorPtr) -> ServerBuilder&;
 
     // Non mandatory options
     auto setProtocolName(std::string) -> ServerBuilder&;

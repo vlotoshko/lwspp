@@ -11,15 +11,15 @@ set(MINOR_VERSION 0)
 set(PATCH_VERSION 0)
 
 set(${PROJECT_NAME}_SRC_FILES
+    include/lwspp/server/contract/IServerControlAcceptor.hpp
+    include/lwspp/server/contract/IServerLogic.hpp
     include/lwspp/server/CallbackVersions.hpp
     include/lwspp/server/Consts.hpp
-    include/lwspp/server/ServerLogicBase.hpp
-    include/lwspp/server/IServerControl.hpp
-    include/lwspp/server/IServerControlAcceptor.hpp
     include/lwspp/server/IConnectionInfo.hpp
-    include/lwspp/server/IServerLogic.hpp
     include/lwspp/server/IServer.hpp
+    include/lwspp/server/IServerControl.hpp
     include/lwspp/server/ServerBuilder.hpp
+    include/lwspp/server/ServerLogicBase.hpp
     include/lwspp/server/SslSettingsBuilder.hpp
     include/lwspp/server/Types.hpp
     include/lwspp/server/TypesFwd.hpp

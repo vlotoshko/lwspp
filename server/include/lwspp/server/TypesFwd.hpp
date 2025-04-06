@@ -31,14 +31,8 @@ namespace lwspp
 namespace srv
 {
 
-class IServerLogic;
-using IServerLogicPtr = std::shared_ptr<IServerLogic>;
-
 class IServerControl;
 using IServerControlPtr = std::shared_ptr<IServerControl>;
-
-class IServerControlAcceptor;
-using IServerControlAcceptorPtr = std::shared_ptr<IServerControlAcceptor>;
 
 class IServer;
 using IServerPtr = std::shared_ptr<IServer>;
@@ -49,5 +43,15 @@ using IConnectionInfoPtr = std::shared_ptr<IConnectionInfo>;
 class SslSettings;
 using SslSettingsPtr = std::shared_ptr<SslSettings>;
 
+namespace contract
+{
+
+class IServerControlAcceptor;
+using IServerControlAcceptorPtr = std::shared_ptr<IServerControlAcceptor>;
+
+class IServerLogic;
+using IServerLogicPtr = std::shared_ptr<IServerLogic>;
+
+} // namespace contract
 } // namespace srv
 } // namespace lwspp

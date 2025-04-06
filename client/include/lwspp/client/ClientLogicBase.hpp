@@ -24,8 +24,8 @@
 
 #pragma once
 
-#include "lwspp/client/IClientControlAcceptor.hpp"
-#include "lwspp/client/IClientLogic.hpp"
+#include "lwspp/client/contract/IClientControlAcceptor.hpp"
+#include "lwspp/client/contract/IClientLogic.hpp"
 
 namespace lwspp
 {
@@ -37,7 +37,7 @@ namespace cli
  * It provides stubs for all overridden methods in the IClientLogic interface and also implements
  * the IClientControlAcceptor to obtain the IClientControl.
  */
-class ClientLogicBase : public IClientLogic, public IClientControlAcceptor
+class ClientLogicBase : public contract::IClientLogic, public contract::IClientControlAcceptor
 {
 public:
     void onConnect(IConnectionInfoPtr) noexcept override;

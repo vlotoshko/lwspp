@@ -41,9 +41,10 @@ namespace srv
 class ServerContext
 {
 public:
-    IServerLogicPtr serverLogic;
-    IServerControlAcceptorPtr serverControlAcceptor;
     CallbackVersion callbackVersion = UNDEFINED_CALLBACK_VERSION;
+    contract::IServerLogicPtr serverLogic;
+    contract::IServerControlAcceptorPtr serverControlAcceptor;
+
     Port port = UNDEFINED_PORT;
 
     std::string protocolName = DEFAULT_PROTOCOL_NAME;

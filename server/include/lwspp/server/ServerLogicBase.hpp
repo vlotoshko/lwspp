@@ -24,8 +24,8 @@
 
 #pragma once
 
-#include "lwspp/server/IServerLogic.hpp"
-#include "lwspp/server/IServerControlAcceptor.hpp"
+#include "lwspp/server/contract/IServerControlAcceptor.hpp"
+#include "lwspp/server/contract/IServerLogic.hpp"
 
 namespace lwspp
 {
@@ -36,7 +36,7 @@ namespace srv
  * It provides stubs for all overridden methods in the IServerLogic interface and also implements
  * the IServerControlAcceptor to obtain the IServerControl.
  */
-class ServerLogicBase : public IServerLogic, public IServerControlAcceptor
+class ServerLogicBase : public contract::IServerLogic, public contract::IServerControlAcceptor
 {
 public:
     void onConnect(IConnectionInfoPtr) noexcept override;

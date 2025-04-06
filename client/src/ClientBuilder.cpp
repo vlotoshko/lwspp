@@ -26,7 +26,7 @@
 
 #include "Client.hpp"
 #include "ClientContext.hpp"
-#include "SslSettings.hpp"
+#include "SslSettings.hpp" // IWYU pragma: keep
 #include "lwspp/client/ClientBuilder.hpp"
 
 namespace lwspp
@@ -121,13 +121,13 @@ auto ClientBuilder::build() const -> IClientPtr
     return std::make_shared<Client>(context);
 }
 
-auto ClientBuilder::setClientLogic(IClientLogicPtr e) -> ClientBuilder&
+auto ClientBuilder::setClientLogic(contract::IClientLogicPtr e) -> ClientBuilder&
 {
     _context->clientLogic = std::move(e);
     return *this;
 }
 
-auto ClientBuilder::setClientControlAcceptor(IClientControlAcceptorPtr c) -> ClientBuilder&
+auto ClientBuilder::setClientControlAcceptor(contract::IClientControlAcceptorPtr c) -> ClientBuilder&
 {
     _context->clientControlAcceptor = std::move(c);
     return *this;

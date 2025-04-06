@@ -29,13 +29,13 @@
 
 #include "lwspp/client/ClientBuilder.hpp"
 #include "lwspp/client/IClientControl.hpp" // IWYU pragma: keep
-#include "lwspp/client/IClientControlAcceptor.hpp"
-#include "lwspp/client/IClientLogic.hpp"
+#include "lwspp/client/contract/IClientControlAcceptor.hpp"
+#include "lwspp/client/contract/IClientLogic.hpp"
 
 #include "lwspp/server/IServerControl.hpp" // IWYU pragma: keep
-#include "lwspp/server/IServerControlAcceptor.hpp"
-#include "lwspp/server/IServerLogic.hpp"
 #include "lwspp/server/ServerBuilder.hpp"
+#include "lwspp/server/contract/IServerControlAcceptor.hpp"
+#include "lwspp/server/contract/IServerLogic.hpp"
 
 // NOLINTBEGIN (readability-function-cognitive-complexity)
 namespace lwspp
@@ -56,8 +56,8 @@ const std::chrono::milliseconds TIMEOUT{100};
 const std::string HELLO_SERVER = "hello server!";
 const std::string HELLO_CLIENT = "hello client!";
 
-void setupServerBehavior(Mock<srv::IServerLogic>& serverLogci,
-                         Mock<srv::IServerControlAcceptor>& serverControlAcceptor,
+void setupServerBehavior(Mock<srv::contract::IServerLogic>& serverLogci,
+                         Mock<srv::contract::IServerControlAcceptor>& serverControlAcceptor,
                          srv::IServerControlPtr& serverControl,
                          std::string& incomeMessage)
 {
@@ -75,8 +75,8 @@ void setupServerBehavior(Mock<srv::IServerLogic>& serverLogci,
         .Do([&serverControl](srv::IServerControlPtr c){ serverControl = c; });
 }
 
-void setupClientBehavior(Mock<cli::IClientLogic>& clientLogic,
-                         Mock<cli::IClientControlAcceptor>& clientControlAcceptor,
+void setupClientBehavior(Mock<cli::contract::IClientLogic>& clientLogic,
+                         Mock<cli::contract::IClientControlAcceptor>& clientControlAcceptor,
                          cli::IClientControlPtr& clientControl,
                          std::promise<std::string>& incomeMessage)
 {
@@ -98,8 +98,8 @@ void setupClientBehavior(Mock<cli::IClientLogic>& clientLogic,
         .Do([&clientControl](cli::IClientControlPtr c){ clientControl = c; });
 }
 
-srv::IServerPtr setupServer(srv::IServerLogicPtr serverLogic,
-                            srv::IServerControlAcceptorPtr serveControlAcceptor)
+srv::IServerPtr setupServer(srv::contract::IServerLogicPtr serverLogic,
+                            srv::contract::IServerControlAcceptorPtr serveControlAcceptor)
 {
     auto serverBuilder = srv::ServerBuilder{};
     serverBuilder
@@ -112,8 +112,8 @@ srv::IServerPtr setupServer(srv::IServerLogicPtr serverLogic,
     return serverBuilder.build();
 }
 
-cli::IClientPtr setupClient(cli::IClientLogicPtr clientLogic,
-                            cli::IClientControlAcceptorPtr clientControlAcceptor)
+cli::IClientPtr setupClient(cli::contract::IClientLogicPtr clientLogic,
+                            cli::contract::IClientControlAcceptorPtr clientControlAcceptor)
 {
     auto clientBuilder = cli::ClientBuilder{};
     clientBuilder
@@ -136,11 +136,11 @@ SCENARIO( "Clients sends 'hello world' to the server", "[hello_world]" )
     std::promise<std::string> incomeMessage;
     auto waitForMessage = incomeMessage.get_future();
 
-    auto srvLogic = MockedPtr<srv::IServerLogic>{};
-    auto cliLogic = MockedPtr<cli::IClientLogic>{};
+    auto srvLogic = MockedPtr<srv::contract::IServerLogic>{};
+    auto cliLogic = MockedPtr<cli::contract::IClientLogic>{};
     
-    auto srvControlAcceptor = MockedPtr<srv::IServerControlAcceptor>{};
-    auto cliControlAcceptor = MockedPtr<cli::IClientControlAcceptor>{};
+    auto srvControlAcceptor = MockedPtr<srv::contract::IServerControlAcceptor>{};
+    auto cliControlAcceptor = MockedPtr<cli::contract::IClientControlAcceptor>{};
 
     srv::IServerControlPtr srvControl;
     cli::IClientControlPtr cliControl;
