@@ -30,7 +30,7 @@
 #include "LwsAdapter/ILwsConnections.hpp" // IWYU pragma: keep
 #include "LwsAdapter/LwsCallback.hpp"
 #include "LwsAdapter/LwsConnection.hpp"
-#include "lwspp/server/IEventHandler.hpp" // IWYU pragma: keep
+#include "lwspp/server/IServerLogic.hpp" // IWYU pragma: keep
 
 namespace lwspp
 {
@@ -91,7 +91,7 @@ auto lwsCallback_v1(
 -> int
 {
     auto& callbackContext = getCallbackContext(wsInstance);
-    auto eventHandler = callbackContext.getEventHandler();
+    auto serverLogic = callbackContext.getServerLogic();
     auto connectionId = getConnectionId(wsInstance);
 
     switch(reason)
@@ -104,7 +104,7 @@ auto lwsCallback_v1(
         auto connectionInfo =
             std::make_shared<ConnectionInfo>(connectionId, getConnectionIP(wsInstance),
                                              getConnectionPath(wsInstance));
-        eventHandler->onConnect(connectionInfo);
+        serverLogic->onConnect(connectionInfo);
         break;
     }
     case LWS_CALLBACK_SERVER_WRITEABLE:
@@ -132,14 +132,14 @@ auto lwsCallback_v1(
                 }
                 else
                 {
-                    eventHandler->onError(connectionId, "Error writing data to socket");
+                    serverLogic->onError(connectionId, "Error writing data to socket");
                 }
             }
         }
         else
         {
             // Never should be here
-            eventHandler->onWarning(connectionId, "Referring to unknown or deleted connection. "
+            serverLogic->onWarning(connectionId, "Referring to unknown or deleted connection. "
                                                   "Dropping this connection");
             return CLOSE_SESSION;
         }
@@ -148,20 +148,20 @@ auto lwsCallback_v1(
     case LWS_CALLBACK_RECEIVE:
     {
         const auto* inAsChar = reinterpret_cast<const char *>(in);
-        const auto remains = static_cast<size_t>(lws_remaining_packet_payload(wsInstance));
+        const size_t remains = lws_remaining_packet_payload(wsInstance);
 
         if (lws_is_first_fragment(wsInstance) != 0)
         {
-            eventHandler->onFirstDataPacket(connectionId, len + remains);
+            serverLogic->onFirstDataPacket(connectionId, len + remains);
         }
 
         if (lws_frame_is_binary(wsInstance) == 1)
         {
-            eventHandler->onBinaryDataReceive(connectionId, DataPacket{inAsChar, len, remains});
+            serverLogic->onBinaryDataReceive(connectionId, DataPacket{inAsChar, len, remains});
         }
         else
         {
-            eventHandler->onTextDataReceive(connectionId, DataPacket{inAsChar, len, remains});
+            serverLogic->onTextDataReceive(connectionId, DataPacket{inAsChar, len, remains});
         }
         break;
     }
@@ -169,7 +169,7 @@ auto lwsCallback_v1(
     {
         auto connections = callbackContext.getConnections();
         connections->remove(connectionId);
-        eventHandler->onDisconnect(connectionId);
+        serverLogic->onDisconnect(connectionId);
         break;
     }
     default:

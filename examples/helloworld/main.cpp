@@ -26,21 +26,21 @@
 #include <thread>
 
 #include "lwspp/client/ClientBuilder.hpp"
-#include "lwspp/client/EventHandlerBase.hpp"
-#include "lwspp/client/IActor.hpp" // IWYU pragma: keep
+#include "lwspp/client/ClientLogicBase.hpp"
+#include "lwspp/client/IClientControl.hpp" // IWYU pragma: keep
 
-#include "lwspp/server/EventHandlerBase.hpp"
-#include "lwspp/server/IActor.hpp" // IWYU pragma: keep
+#include "lwspp/server/IServerControl.hpp" // IWYU pragma: keep
 #include "lwspp/server/ServerBuilder.hpp"
+#include "lwspp/server/ServerLogicBase.hpp"
 
 using namespace lwspp;
 
-class ClientEventHandler : public cli::EventHandlerBase
+class ClientLogic : public cli::ClientLogicBase
 {
 public:
     void onConnect(cli::IConnectionInfoPtr) noexcept override
     {
-        _actor->sendTextData("hello server!");
+        _clientControl->sendTextData("hello server!");
     }
 
     void onTextDataReceive(const cli::DataPacket& dataPacket) noexcept override
@@ -49,13 +49,13 @@ public:
     }
 };
 
-class ServerEventHandler : public srv::EventHandlerBase
+class ServerLogic : public srv::ServerLogicBase
 {
 public:
     void onTextDataReceive(srv::ConnectionId, const srv::DataPacket& dataPacket) noexcept override
     {
         std::cout << "server received the message: " << std::string{dataPacket.data, dataPacket.length}  << std::endl;
-        _actor->sendTextData("hello client!");
+        _serverControl->sendTextData("hello client!");
     }
 };
 
@@ -64,26 +64,26 @@ auto main() -> int
     const srv::Port PORT = 9000;
 
     // Configure and build server
-    auto serverEventHandler = std::make_shared<ServerEventHandler>();
+    auto serverLogic = std::make_shared<ServerLogic>();
     auto serverBuilder = srv::ServerBuilder{};
     serverBuilder
         .setPort(PORT)
         .setCallbackVersion(srv::CallbackVersion::v1_Andromeda)
-        .setEventHandler(serverEventHandler)
-        .setActorAcceptor(serverEventHandler)
+        .setServerLogic(serverLogic)
+        .setServerControlAcceptor(serverLogic)
         .setLwsLogLevel(0)
         ;
     auto server = serverBuilder.build();
 
     // Configure and build client
-    auto clientEventHandler = std::make_shared<ClientEventHandler>();
+    auto clientLogic = std::make_shared<ClientLogic>();
     auto clientBuilder = cli::ClientBuilder{};
     clientBuilder
         .setAddress("localhost")
         .setPort(PORT)
         .setCallbackVersion(cli::CallbackVersion::v1_Amsterdam)
-        .setEventHandler(clientEventHandler)
-        .setActorAcceptor(clientEventHandler)
+        .setClientLogic(clientLogic)
+        .setClientControlAcceptor(clientLogic)
         .setLwsLogLevel(0)
         ;
     auto client = clientBuilder.build();

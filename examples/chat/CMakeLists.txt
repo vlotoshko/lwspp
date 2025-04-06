@@ -16,8 +16,8 @@ project(
 set(${PROJECT_NAME}_SRC_FILES
     server/ChatMessageSender.cpp
     server/ChatMessageSender.hpp
-    server/EventHandler.cpp
-    server/EventHandler.hpp
+    server/ServerLogic.cpp
+    server/ServerLogic.hpp
     server/main.cpp
     server/Types.hpp
 )

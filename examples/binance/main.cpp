@@ -26,8 +26,8 @@
 #include <iostream>
 
 #include "lwspp/client/ClientBuilder.hpp"
-#include "lwspp/client/EventHandlerBase.hpp"
-#include "lwspp/client/IActor.hpp" // IWYU pragma: keep
+#include "lwspp/client/ClientLogicBase.hpp"
+#include "lwspp/client/IClientControl.hpp" // IWYU pragma: keep
 #include "lwspp/client/SslSettingsBuilder.hpp"
 
 using namespace lwspp;
@@ -40,12 +40,12 @@ const std::string PING = R"({"id": "922bcc6e-9de8-440d-9e84-7c80933a8d0d","metho
 
 const int MESSAGES_LIMIT = 5;
 
-class ClientEventHandler : public cli::EventHandlerBase
+class ClientLogic : public cli::ClientLogicBase
 {
 public:
     void onConnect(cli::IConnectionInfoPtr) noexcept override
     {
-        _actor->sendTextData(PING);
+        _clientControl->sendTextData(PING);
     }
 
     void onTextDataReceive(const cli::DataPacket& dataPacket) noexcept override
@@ -88,21 +88,21 @@ auto main() -> int
     sslSettingsBuilder.allowSelfSignedServerCert().ignoreServerCaSert();
 
     // Configure and build client
-    auto clientEventHandler = std::make_shared<ClientEventHandler>();
+    auto clientLogic = std::make_shared<ClientLogic>();
     auto clientBuilder = cli::ClientBuilder{};
     clientBuilder
         .setAddress(ADDRESS)
         .setPath(PATH)
         .setPort(PORT)
         .setCallbackVersion(cli::CallbackVersion::v1_Amsterdam)
-        .setEventHandler(clientEventHandler)
-        .setActorAcceptor(clientEventHandler)
+        .setClientLogic(clientLogic)
+        .setClientControlAcceptor(clientLogic)
         .setSslSettings(sslSettingsBuilder.build())
         .setLwsLogLevel(0)
         ;
     auto client = clientBuilder.build();
 
-    auto waitForMessages = clientEventHandler->getFuture();
+    auto waitForMessages = clientLogic->getFuture();
     waitForMessages.wait();
 
     return 0;

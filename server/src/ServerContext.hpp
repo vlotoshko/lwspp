@@ -41,8 +41,8 @@ namespace srv
 class ServerContext
 {
 public:
-    IEventHandlerPtr eventHandler;
-    IActorAcceptorPtr actorAcceptor;
+    IServerLogicPtr serverLogic;
+    IServerControlAcceptorPtr serverControlAcceptor;
     CallbackVersion callbackVersion = UNDEFINED_CALLBACK_VERSION;
     Port port = UNDEFINED_PORT;
 

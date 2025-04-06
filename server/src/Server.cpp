@@ -33,7 +33,7 @@ namespace srv
 Server::Server(const ServerContext& context)
     : _lwsServer(std::make_shared<LwsServer>(context))
 {
-    std::weak_ptr<LwsServer> weakLwsServer = _lwsServer;
+    const std::weak_ptr<LwsServer> weakLwsServer = _lwsServer;
 
     auto asyncStartListening = [weakLwsServer]
     {

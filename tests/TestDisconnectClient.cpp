@@ -28,14 +28,14 @@
 #include "MockedPtr.hpp"
 
 #include "lwspp/client/ClientBuilder.hpp"
-#include "lwspp/client/IActor.hpp"
-#include "lwspp/client/IActorAcceptor.hpp"
-#include "lwspp/client/IEventHandler.hpp"
+#include "lwspp/client/IClientControl.hpp" // IWYU pragma: keep
+#include "lwspp/client/IClientControlAcceptor.hpp"
+#include "lwspp/client/IClientLogic.hpp"
 
-#include "lwspp/server/IActor.hpp"
-#include "lwspp/server/IActorAcceptor.hpp"
-#include "lwspp/server/IConnectionInfo.hpp"
-#include "lwspp/server/IEventHandler.hpp"
+#include "lwspp/server/IConnectionInfo.hpp" // IWYU pragma: keep
+#include "lwspp/server/IServerControl.hpp"  // IWYU pragma: keep
+#include "lwspp/server/IServerControlAcceptor.hpp"
+#include "lwspp/server/IServerLogic.hpp"
 #include "lwspp/server/ServerBuilder.hpp"
 
 // NOLINTBEGIN (readability-function-cognitive-complexity)
@@ -54,7 +54,7 @@ const cli::Address ADDRESS = "localhost";
 const int DISABLE_LOG = 0;
 const std::chrono::seconds TIMEOUT{1};
 
-void setupServerBehavior(Mock<srv::IEventHandler>& eventHandler,
+void setupServerBehavior(Mock<srv::IServerLogic>& servreLogic,
                          std::promise<srv::ConnectionId>& promiseConnected,
                          std::promise<void>& promiseDisconnected)
 {
@@ -68,34 +68,34 @@ void setupServerBehavior(Mock<srv::IEventHandler>& eventHandler,
         promiseDisconnected.set_value();
     };
 
-    When(Method(eventHandler, onConnect)).Do(onConnect);
-    When(Method(eventHandler, onDisconnect)).Do(onDisconnect);
+    When(Method(servreLogic, onConnect)).Do(onConnect);
+    When(Method(servreLogic, onDisconnect)).Do(onDisconnect);
 }
 
-srv::IServerPtr setupServer(srv::IEventHandlerPtr eventHandler,
-                            srv::IActorAcceptorPtr actorAcceptor)
+srv::IServerPtr setupServer(srv::IServerLogicPtr serverLogic,
+                            srv::IServerControlAcceptorPtr serverControlAcceptor)
 {
     auto serverBuilder = srv::ServerBuilder{};
     serverBuilder
         .setCallbackVersion(srv::CallbackVersion::v1_Andromeda)
         .setPort(PORT)
-        .setEventHandler(eventHandler)
-        .setActorAcceptor(actorAcceptor)
+        .setServerLogic(serverLogic)
+        .setServerControlAcceptor(serverControlAcceptor)
         .setLwsLogLevel(DISABLE_LOG);
 
     return serverBuilder.build();
 }
 
-cli::IClientPtr setupClient(cli::IEventHandlerPtr eventHandler,
-                            cli::IActorAcceptorPtr actorAcceptor)
+cli::IClientPtr setupClient(cli::IClientLogicPtr clientLogic,
+                            cli::IClientControlAcceptorPtr clientControlAcceptor)
 {
     auto clientBuilder = cli::ClientBuilder{};
     clientBuilder
         .setCallbackVersion(cli::CallbackVersion::v1_Amsterdam)
         .setAddress(ADDRESS)
         .setPort(PORT)
-        .setEventHandler(eventHandler)
-        .setActorAcceptor(actorAcceptor)
+        .setClientLogic(clientLogic)
+        .setClientControlAcceptor(clientControlAcceptor)
         .setLwsLogLevel(DISABLE_LOG);
 
     return clientBuilder.build();
@@ -113,50 +113,55 @@ SCENARIO( "Server disconnects client", "[disconnect_client]" )
     std::promise<void> promiseDisconnected;
     auto waitForDisconnection = promiseDisconnected.get_future();
 
-    auto srvEventHandler = MockedPtr<srv::IEventHandler>{};
-    auto cliEventHandler = MockedPtr<cli::IEventHandler>{};
+    auto srvLogic = MockedPtr<srv::IServerLogic>{};
+    auto cliLogic = MockedPtr<cli::IClientLogic>{};
     
-    auto srvActorAcceptor = MockedPtr<srv::IActorAcceptor>{};
-    auto cliActorAcceptor = MockedPtr<cli::IActorAcceptor>{};
+    auto srvControlAcceptor = MockedPtr<srv::IServerControlAcceptor>{};
+    auto cliControlAcceptor = MockedPtr<cli::IClientControlAcceptor>{};
 
-    srv::IActorPtr srvActor;
+    srv::IServerControlPtr srvControl;
 
-    setupServerBehavior(srvEventHandler.mock(), promiseConnected, promiseDisconnected);
-    When(Method(srvActorAcceptor.mock(), acceptActor)).Do([&srvActor](srv::IActorPtr a){ srvActor = a; });
+    setupServerBehavior(srvLogic.mock(), promiseConnected, promiseDisconnected);
+    When(Method(srvControlAcceptor.mock(), acceptServerControl))
+        .Do(
+            [&srvControl](srv::IServerControlPtr a)
+            {
+                srvControl = a;
+            });
 
-    Fake(Method(cliEventHandler.mock(), onConnect), Method(cliEventHandler.mock(), onDisconnect),
-         Method(cliEventHandler.mock(), onWarning),  Method(cliEventHandler.mock(), onError));
+    Fake(Method(cliLogic.mock(), onConnect), Method(cliLogic.mock(), onDisconnect),
+         Method(cliLogic.mock(), onWarning),  Method(cliLogic.mock(), onError));
 
-    Fake(Method(cliActorAcceptor.mock(), acceptActor));
+    Fake(Method(cliControlAcceptor.mock(), acceptClientControl));
 
     GIVEN( "Server and client are connected" )
     {
-        auto server = setupServer(srvEventHandler.ptr(), srvActorAcceptor.ptr());
-        auto client = setupClient(cliEventHandler.ptr(), cliActorAcceptor.ptr());
+        auto server = setupServer(srvLogic.ptr(), srvControlAcceptor.ptr());
+        auto client = setupClient(cliLogic.ptr(), cliControlAcceptor.ptr());
 
         REQUIRE(waitForConnection.wait_for(TIMEOUT) == std::future_status::ready);
         auto connectionId = waitForConnection.get();
 
-        VerifyNoOtherInvocations(Method(srvEventHandler.mock(), onDisconnect));
+        VerifyNoOtherInvocations(Method(srvLogic.mock(), onDisconnect));
 
         WHEN( "Server closes the connection with the client" )
         {
-            srvActor->closeConnection(connectionId);
+            srvControl->closeConnection(connectionId);
 
             THEN( "The connection is closed" )
             {
                 REQUIRE(waitForDisconnection.wait_for(TIMEOUT*10) == std::future_status::ready);
-                Verify(Method(srvEventHandler.mock(), onDisconnect)).Once();
+                Verify(Method(srvLogic.mock(), onDisconnect)).Once();
 
                 server.reset();
                 client.reset();
 
-                Verify(Method(srvEventHandler.mock(), onConnect)).Once();
-                VerifyNoOtherInvocations(srvEventHandler.mock());
+                Verify(Method(srvLogic.mock(), onConnect)).Once();
+                VerifyNoOtherInvocations(srvLogic.mock());
 
-                Verify(Method(cliEventHandler.mock(), onConnect)).Once();
-                Verify(Method(cliEventHandler.mock(), onDisconnect)).Once();
-                VerifyNoOtherInvocations(cliEventHandler.mock());
+                Verify(Method(cliLogic.mock(), onConnect)).Once();
+                Verify(Method(cliLogic.mock(), onDisconnect)).Once();
+                VerifyNoOtherInvocations(cliLogic.mock());
             }
         }
     } // GIVEN

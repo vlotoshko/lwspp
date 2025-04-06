@@ -28,13 +28,13 @@
 #include "MockedPtr.hpp"
 
 #include "lwspp/client/ClientBuilder.hpp"
-#include "lwspp/client/IActor.hpp"
-#include "lwspp/client/IActorAcceptor.hpp"
-#include "lwspp/client/IEventHandler.hpp"
+#include "lwspp/client/IClientControl.hpp"
+#include "lwspp/client/IClientControlAcceptor.hpp"
+#include "lwspp/client/IClientLogic.hpp"
 
-#include "lwspp/server/IActor.hpp"
-#include "lwspp/server/IActorAcceptor.hpp"
-#include "lwspp/server/IEventHandler.hpp"
+#include "lwspp/server/IServerControl.hpp"
+#include "lwspp/server/IServerControlAcceptor.hpp"
+#include "lwspp/server/IServerLogic.hpp"
 #include "lwspp/server/ServerBuilder.hpp"
 
 // NOLINTBEGIN (readability-function-cognitive-complexity)
@@ -59,9 +59,9 @@ const std::vector<char> HELLO_SERVER_BINARY(DEFAULT_LWS_BUFFER_SIZE + 1024, BYTE
 const std::vector<char> HELLO_CLIENT_BINARY(DEFAULT_LWS_BUFFER_SIZE*2 + 1024, BYTE);
 
 
-void setupServerBehavior(Mock<srv::IEventHandler>& eventHandler,
-                         Mock<srv::IActorAcceptor>& actorAcceptor,
-                         srv::IActorPtr& actor,
+void setupServerBehavior(Mock<srv::IServerLogic>& serverLogic,
+                         Mock<srv::IServerControlAcceptor>& serverControlAcceptor,
+                         srv::IServerControlPtr& serverControl,
                          std::vector<char>& incomeData,
                          size_t& incomeDataLength)
 {
@@ -76,27 +76,27 @@ void setupServerBehavior(Mock<srv::IEventHandler>& eventHandler,
         incomeData.insert(incomeData.end(), dataPacket.data, dataPacket.data + dataPacket.length);
         if (dataPacket.remains == 0)
         {
-            actor->sendBinaryData(HELLO_CLIENT_BINARY);
+            serverControl->sendBinaryData(HELLO_CLIENT_BINARY);
         }
     };
 
-    Fake(Method(eventHandler, onConnect), Method(eventHandler, onDisconnect));
-    When(Method(eventHandler, onFirstDataPacket)).AlwaysDo(onFirstDataPacket);
-    When(Method(eventHandler, onBinaryDataReceive)).AlwaysDo(sendHelloToClient);
+    Fake(Method(serverLogic, onConnect), Method(serverLogic, onDisconnect));
+    When(Method(serverLogic, onFirstDataPacket)).AlwaysDo(onFirstDataPacket);
+    When(Method(serverLogic, onBinaryDataReceive)).AlwaysDo(sendHelloToClient);
     
-    When(Method(actorAcceptor, acceptActor))
-        .Do([&actor](srv::IActorPtr ms){ actor = ms; });
+    When(Method(serverControlAcceptor, acceptServerControl))
+        .Do([&serverControl](srv::IServerControlPtr c){ serverControl = c; });
 }
 
-void setupClientBehavior(Mock<cli::IEventHandler>& eventHandler,
-                         Mock<cli::IActorAcceptor>& actorAcceptor,
-                         cli::IActorPtr& actor,
+void setupClientBehavior(Mock<cli::IClientLogic>& clientLogic,
+                         Mock<cli::IClientControlAcceptor>& clientControlAcceptor,
+                         cli::IClientControlPtr& clientControl,
                          std::vector<char>& incomeData,
                          size_t& incomeDataLength)
 {
-    auto sendHelloToServer = [&actor](cli::IConnectionInfoPtr)
+    auto sendHelloToServer = [&clientControl](cli::IConnectionInfoPtr)
     {
-        actor->sendBinaryData(HELLO_SERVER_BINARY);
+        clientControl->sendBinaryData(HELLO_SERVER_BINARY);
     };
 
     auto onFirstDataPacket = [&](size_t messageLength)
@@ -110,40 +110,40 @@ void setupClientBehavior(Mock<cli::IEventHandler>& eventHandler,
         incomeData.insert(incomeData.end(), dataPacket.data, dataPacket.data + dataPacket.length);
     };
 
-    Fake(Method(eventHandler, onDisconnect));
-    When(Method(eventHandler, onConnect)).Do(sendHelloToServer);
-    When(Method(eventHandler, onFirstDataPacket)).AlwaysDo(onFirstDataPacket);
-    When(Method(eventHandler, onBinaryDataReceive)).AlwaysDo(onBinaryDataReceive);
+    Fake(Method(clientLogic, onDisconnect));
+    When(Method(clientLogic, onConnect)).Do(sendHelloToServer);
+    When(Method(clientLogic, onFirstDataPacket)).AlwaysDo(onFirstDataPacket);
+    When(Method(clientLogic, onBinaryDataReceive)).AlwaysDo(onBinaryDataReceive);
     
-    When(Method(actorAcceptor, acceptActor))
-        .Do([&actor](cli::IActorPtr ms){ actor = ms; });
+    When(Method(clientControlAcceptor, acceptClientControl))
+        .Do([&clientControl](cli::IClientControlPtr c){ clientControl = c; });
 }
 
-srv::IServerPtr setupServer(srv::IEventHandlerPtr eventHandler,
-                            srv::IActorAcceptorPtr actorAcceptor)
+srv::IServerPtr setupServer(srv::IServerLogicPtr serverLogic,
+                            srv::IServerControlAcceptorPtr serverControlAcceptor)
 {
     auto serverBuilder = srv::ServerBuilder{};
     serverBuilder
         .setCallbackVersion(srv::CallbackVersion::v1_Andromeda)
         .setPort(PORT)
-        .setEventHandler(eventHandler)
-        .setActorAcceptor(actorAcceptor)
+        .setServerLogic(serverLogic)
+        .setServerControlAcceptor(serverControlAcceptor)
         .setLwsLogLevel(DISABLE_LOG)
         ;
 
     return serverBuilder.build();
 }
 
-cli::IClientPtr setupClient(cli::IEventHandlerPtr eventHandler,
-                            cli::IActorAcceptorPtr actorAcceptor)
+cli::IClientPtr setupClient(cli::IClientLogicPtr clientLogic,
+                            cli::IClientControlAcceptorPtr clientControlAcceptor)
 {
     auto clientBuilder = cli::ClientBuilder{};
     clientBuilder
         .setCallbackVersion(cli::CallbackVersion::v1_Amsterdam)
         .setAddress(ADDRESS)
         .setPort(PORT)
-        .setEventHandler(eventHandler)
-        .setActorAcceptor(actorAcceptor)
+        .setClientLogic(clientLogic)
+        .setClientControlAcceptor(clientControlAcceptor)
         .setLwsLogLevel(DISABLE_LOG)
         ;
 
@@ -154,14 +154,14 @@ cli::IClientPtr setupClient(cli::IEventHandlerPtr eventHandler,
 
 SCENARIO( "Clients sends binary data to the server", "[data_transfer]" )
 {
-    auto srvEventHandler = MockedPtr<srv::IEventHandler>{};
-    auto cliEventHandler = MockedPtr<cli::IEventHandler>{};
+    auto srvLogic = MockedPtr<srv::IServerLogic>{};
+    auto cliLogic = MockedPtr<cli::IClientLogic>{};
     
-    auto srvActorAcceptor = MockedPtr<srv::IActorAcceptor>{};
-    auto cliActorAcceptor = MockedPtr<cli::IActorAcceptor>{};
+    auto srvControlAcceptor = MockedPtr<srv::IServerControlAcceptor>{};
+    auto cliControlAcceptor = MockedPtr<cli::IClientControlAcceptor>{};
 
-    srv::IActorPtr srvActor;
-    cli::IActorPtr cliActor;
+    srv::IServerControlPtr srvControl;
+    cli::IClientControlPtr cliControl;
 
     std::vector<char> actualServerIncomeData;
     std::vector<char> actualClientIncomeData;
@@ -169,16 +169,16 @@ SCENARIO( "Clients sends binary data to the server", "[data_transfer]" )
     size_t actualServerIncomeDataLength = 0;
     size_t actualClientIncomeDataLength = 0;
 
-    setupServerBehavior(srvEventHandler.mock(), srvActorAcceptor.mock(),
-                        srvActor, actualServerIncomeData, actualServerIncomeDataLength);
+    setupServerBehavior(srvLogic.mock(), srvControlAcceptor.mock(),
+                        srvControl, actualServerIncomeData, actualServerIncomeDataLength);
 
-    setupClientBehavior(cliEventHandler.mock(), cliActorAcceptor.mock(),
-                        cliActor, actualClientIncomeData, actualClientIncomeDataLength);
+    setupClientBehavior(cliLogic.mock(), cliControlAcceptor.mock(),
+                        cliControl, actualClientIncomeData, actualClientIncomeDataLength);
 
     GIVEN( "Server and client" )
     {
-        auto server = setupServer(srvEventHandler.ptr(), srvActorAcceptor.ptr());
-        auto client = setupClient(cliEventHandler.ptr(), cliActorAcceptor.ptr());
+        auto server = setupServer(srvLogic.ptr(), srvControlAcceptor.ptr());
+        auto client = setupClient(cliLogic.ptr(), cliControlAcceptor.ptr());
 
         WHEN( "Client sends binary data to the  server" )
         {
@@ -191,18 +191,18 @@ SCENARIO( "Clients sends binary data to the server", "[data_transfer]" )
                 server.reset();
                 client.reset();
 
-                Verify(Method(srvEventHandler.mock(), onConnect),
-                       Method(srvEventHandler.mock(), onFirstDataPacket),
-                       Method(srvEventHandler.mock(), onDisconnect)).Once();
-                Verify(Method(cliEventHandler.mock(), onConnect),
-                       Method(cliEventHandler.mock(), onFirstDataPacket),
-                       Method(cliEventHandler.mock(), onDisconnect)).Once();
+                Verify(Method(srvLogic.mock(), onConnect),
+                       Method(srvLogic.mock(), onFirstDataPacket),
+                       Method(srvLogic.mock(), onDisconnect)).Once();
+                Verify(Method(cliLogic.mock(), onConnect),
+                       Method(cliLogic.mock(), onFirstDataPacket),
+                       Method(cliLogic.mock(), onDisconnect)).Once();
 
-                Verify(Method(srvEventHandler.mock(), onBinaryDataReceive)).AtLeastOnce();
-                Verify(Method(cliEventHandler.mock(), onBinaryDataReceive)).AtLeastOnce();
+                Verify(Method(srvLogic.mock(), onBinaryDataReceive)).AtLeastOnce();
+                Verify(Method(cliLogic.mock(), onBinaryDataReceive)).AtLeastOnce();
 
-                VerifyNoOtherInvocations(srvEventHandler.mock());
-                VerifyNoOtherInvocations(cliEventHandler.mock());
+                VerifyNoOtherInvocations(srvLogic.mock());
+                VerifyNoOtherInvocations(cliLogic.mock());
 
                 CHECK(actualServerIncomeData == HELLO_SERVER_BINARY);
                 CHECK(actualClientIncomeData == HELLO_CLIENT_BINARY);

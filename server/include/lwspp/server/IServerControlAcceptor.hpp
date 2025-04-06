@@ -24,10 +24,7 @@
 
 #pragma once
 
-#include <string>
-#include <vector>
-
-#include "lwspp/server/Types.hpp"
+#include "lwspp/server/TypesFwd.hpp"
 
 namespace lwspp
 {
@@ -35,38 +32,27 @@ namespace srv
 {
 
 /**
- * @brief The IActor class defines an interface to perform actions with the server.
- * The instance of IActor can be obtained using IActorAcceptor when building the server.
+ * @brief Accepts an IServerControl instance from the server builder.
+ *
+ * The server builder provides an IServerControl instance when constructing the server.
+ * To utilize the IServerControl, set your instance of IServerControlAcceptor to the server builder
+ * and obtain the IServerControl to perform actions defined by the IServerControl interface.
+ * Users of the library must implement this interface themselves.
  */
-class IActor
+class IServerControlAcceptor
 {
 public:
-    IActor() = default;
-    virtual ~IActor() = default;
+    IServerControlAcceptor() = default;
+    virtual ~IServerControlAcceptor() = default;
 
-    IActor(const IActor&) = default;
-    auto operator=(const IActor&) -> IActor& = default;
+    IServerControlAcceptor(const IServerControlAcceptor&) = default;
+    auto operator=(const IServerControlAcceptor&) noexcept -> IServerControlAcceptor& = default;
 
-    IActor(IActor&&) noexcept = default;
-    auto operator=(IActor&&) noexcept -> IActor& = default;
+    IServerControlAcceptor(IServerControlAcceptor&&) = default;
+    auto operator=(IServerControlAcceptor&&) noexcept -> IServerControlAcceptor& = default;
 
 public:
-    // Sends text data to the specified client identified by ConnectionId.
-    // The provided text data should be valid UTF-8 text.
-    virtual void sendTextData(ConnectionId, const std::string&) = 0;
-
-    // Sends binary data to the specified client identified by ConnectionId.
-    virtual void sendBinaryData(ConnectionId, const std::vector<char>&) = 0;
-
-    // Sends text data to all connected clients.
-    //The provided text data should be valid UTF-8 text.
-    virtual void sendTextData(const std::string&) = 0;
-
-    // Sends binary data to all connected clients.
-    virtual void sendBinaryData(const std::vector<char>&) = 0;
-
-    // Closes the specified client connection.
-    virtual void closeConnection(ConnectionId) = 0;
+    virtual void acceptServerControl(IServerControlPtr) noexcept = 0;
 };
 
 } // namespace srv

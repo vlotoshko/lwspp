@@ -25,16 +25,16 @@
 #include <libwebsockets.h>
 #include <stdexcept>
 
-#include "lwspp/server/IActorAcceptor.hpp" // IWYU pragma: keep
+#include "lwspp/server/IServerControlAcceptor.hpp" // IWYU pragma: keep
 
 #include "LwsAdapter/ILwsCallbackNotifier.hpp"
 #include "LwsAdapter/ILwsConnection.hpp" // IWYU pragma: keep
-#include "LwsAdapter/LwsActor.hpp"
 #include "LwsAdapter/LwsCallbackContext.hpp"
 #include "LwsAdapter/LwsConnections.hpp"
 #include "LwsAdapter/LwsContextDeleter.hpp"
 #include "LwsAdapter/LwsDataHolder.hpp"
 #include "LwsAdapter/LwsServer.hpp"
+#include "LwsAdapter/LwsServerControl.hpp"
 #include "ServerContext.hpp"
 #include "SslSettings.hpp" // IWYU pragma: keep
 
@@ -89,7 +89,7 @@ void setupSslSettings(lws_context_creation_info& lwsContextInfo, const SslSettin
 
         if (ssl->privateKeyPath != UNDEFINED_FILE_PATH)
         {
-            options = options | LWS_SERVER_OPTION_DO_SSL_GLOBAL_INIT;
+            options = options | static_cast<uint64_t>(LWS_SERVER_OPTION_DO_SSL_GLOBAL_INIT);
             lwsContextInfo.ssl_private_key_filepath = ssl->privateKeyPath.c_str();
         }
 
@@ -100,7 +100,7 @@ void setupSslSettings(lws_context_creation_info& lwsContextInfo, const SslSettin
 
         if (ssl->caCertPath != UNDEFINED_FILE_PATH)
         {
-            options = options | LWS_SERVER_OPTION_DO_SSL_GLOBAL_INIT;
+            options = options | static_cast<uint64_t>(LWS_SERVER_OPTION_DO_SSL_GLOBAL_INIT);
             lwsContextInfo.ssl_ca_filepath = ssl->caCertPath.c_str();
         }
 
@@ -121,14 +121,14 @@ void setupSslSettings(lws_context_creation_info& lwsContextInfo, const SslSettin
 
         if (ssl->requireValidClientCert)
         {
-            options = options | LWS_SERVER_OPTION_REQUIRE_VALID_OPENSSL_CLIENT_CERT;
+            options = options | static_cast<uint64_t>(LWS_SERVER_OPTION_REQUIRE_VALID_OPENSSL_CLIENT_CERT);
         }
         lwsContextInfo.options = lwsContextInfo.options | options;
     }
 }
 
-auto setupLowLeverContext(const ILwsCallbackContextPtr& callbackContext, const LwsDataHolderPtr& dataHolder)
-    -> LowLevelContextPtr
+auto setupLowLeverContext(const ILwsCallbackContextPtr& callbackContext,
+                          const LwsDataHolderPtr& dataHolder) -> LowLevelContextPtr
 {
     auto lwsContextInfo = lws_context_creation_info{};
 
@@ -173,13 +173,13 @@ auto setupLowLeverContext(const ILwsCallbackContextPtr& callbackContext, const L
 LwsServer::LwsServer(const ServerContext& context)
 {
     auto connections = std::make_shared<LwsConnections>();
-    _callbackContext = std::make_shared<LwsCallbackContext>(context.eventHandler, connections);
+    _callbackContext = std::make_shared<LwsCallbackContext>(context.serverLogic, connections);
     _dataHolder = std::make_shared<LwsDataHolder>(context);
     _lowLevelContext = setupLowLeverContext(_callbackContext, _dataHolder);
 
     auto notifier = std::make_shared<LwsCallbackNotifier>(_dataHolder, _lowLevelContext);
-    auto sender = std::make_shared<LwsActor>(connections, std::move(notifier));
-    context.actorAcceptor->acceptActor(std::move(sender));
+    auto sender = std::make_shared<LwsServerControl>(connections, std::move(notifier));
+    context.serverControlAcceptor->acceptServerControl(std::move(sender));
 }
 
 LwsServer::~LwsServer()

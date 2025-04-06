@@ -1,0 +1,27 @@
+Checks: '
+    bugprone-*,
+    clang-*,
+    concurrency-*,
+    cppcoreguidelines-*,
+    hicpp-*,
+    llvm-*,
+    misc-*,
+    modernize-*,
+    performance-*,
+    readability-*,
+    -hicpp-named-parameter,
+    -llvm-header-guard,
+    -misc-include-cleaner,
+    -modernize-use-nodiscard,
+    -readability-named-parameter,
+    -readability-identifier-length,
+    -readability-redundant-access-specifiers
+'
+CheckOptions:
+  - key: cppcoreguidelines-avoid-do-while.IgnoreMacros
+    value: true
+  - key: readability-function-cognitive-complexity.IgnoreMacros
+    value: true
+  - key: misc-non-private-member-variables-in-classes.IgnoreClassesWithAllMemberVariablesBeingPublic
+    value: true
+    

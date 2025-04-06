@@ -25,12 +25,12 @@
 #include <libwebsockets.h>
 #include <stdexcept>
 
-#include "lwspp/client/IActorAcceptor.hpp" // IWYU pragma: keep
+#include "lwspp/client/IClientControlAcceptor.hpp" // IWYU pragma: keep
 
 #include "ClientContext.hpp"
-#include "LwsAdapter/LwsActor.hpp"
 #include "LwsAdapter/LwsCallbackContext.hpp"
 #include "LwsAdapter/LwsClient.hpp"
+#include "LwsAdapter/LwsClientControl.hpp"
 #include "LwsAdapter/LwsContextDeleter.hpp"
 #include "LwsAdapter/LwsDataHolder.hpp"
 #include "SslSettings.hpp" // IWYU pragma: keep
@@ -46,7 +46,7 @@ void setupSslSettings(lws_context_creation_info& lwsContextInfo, const SslSettin
 {
     if (ssl != nullptr)
     {
-        uint64_t options = LWS_SERVER_OPTION_DO_SSL_GLOBAL_INIT;
+        const auto options = static_cast<uint64_t>(LWS_SERVER_OPTION_DO_SSL_GLOBAL_INIT);
 
         if (ssl->privateKeyPath != UNDEFINED_FILE_PATH)
         {
@@ -118,10 +118,10 @@ auto setupSslConnectionFlags(const SslSettingsPtr& ssl) -> int
 LwsClient::LwsClient(const ClientContext& context)
     : _lwsConnectionInfo()
 {
-    auto actor = std::make_shared<LwsActor>();
-    context.actorAcceptor->acceptActor(actor);
+    auto clientControl = std::make_shared<LwsClientControl>();
+    context.clientControlAcceptor->acceptClientControl(clientControl);
 
-    _callbackContext = std::make_shared<LwsCallbackContext>(context.eventHandler, actor);
+    _callbackContext = std::make_shared<LwsCallbackContext>(context.clientLogic, clientControl);
     _dataHolder = std::make_shared<LwsDataHolder>(context);
 
     setupLowLevelContext_();

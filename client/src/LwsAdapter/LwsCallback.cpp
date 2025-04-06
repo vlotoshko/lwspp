@@ -22,11 +22,11 @@
  * IN THE SOFTWARE.
  */
 
-#include "lwspp/client/IEventHandler.hpp" // IWYU pragma: keep
+#include "lwspp/client/IClientLogic.hpp" // IWYU pragma: keep
 
-#include "LwsAdapter/LwsCallback.hpp"
 #include "ConnectionInfo.hpp"
 #include "LwsAdapter/ILwsCallbackContext.hpp"
+#include "LwsAdapter/LwsCallback.hpp"
 #include "LwsAdapter/LwsConnection.hpp"
 
 namespace lwspp
@@ -66,7 +66,7 @@ auto lwsCallback_v1(
 -> int
 {
     auto& callbackContext = getCallbackContext(wsInstance);
-    auto eventHandler = callbackContext.getEventHandler();
+    auto clientLogic = callbackContext.getClientLogic();
 
     switch(reason)
     {
@@ -77,13 +77,13 @@ auto lwsCallback_v1(
                             std::string{reinterpret_cast<const char *>(in), len} : "(null)");
 
         lwsl_err("%s\n", errorMessage.c_str());
-        eventHandler->onError(errorMessage);
+        clientLogic->onError(errorMessage);
         break;
     }
     case LWS_CALLBACK_CLIENT_ESTABLISHED:
     {
         callbackContext.setConnection(std::make_shared<LwsConnection>(wsInstance));
-        eventHandler->onConnect(std::make_shared<ConnectionInfo>());
+        clientLogic->onConnect(std::make_shared<ConnectionInfo>());
         break;
     }
     case LWS_CALLBACK_CLIENT_WRITEABLE:
@@ -104,14 +104,14 @@ auto lwsCallback_v1(
                 }
                 else
                 {
-                    eventHandler->onError("Error writing data to socket");
+                    clientLogic->onError("Error writing data to socket");
                 }
             }
         }
         else
         {
             // Never should be here
-            eventHandler->onWarning("Referring to unknown or deleted connection. "
+            clientLogic->onWarning("Referring to unknown or deleted connection. "
                                     "Dropping this connection");
             return CLOSE_SESSION;
         }
@@ -120,27 +120,27 @@ auto lwsCallback_v1(
     case LWS_CALLBACK_CLIENT_RECEIVE:
     {
         const auto* inAsChar = reinterpret_cast<const char *>(in);
-        const auto remains = static_cast<size_t>(lws_remaining_packet_payload(wsInstance));
+        const size_t remains = lws_remaining_packet_payload(wsInstance);
 
         if (lws_is_first_fragment(wsInstance) != 0)
         {
-            eventHandler->onFirstDataPacket(len + remains);
+            clientLogic->onFirstDataPacket(len + remains);
         }
 
         if (lws_frame_is_binary(wsInstance) == 1)
         {
-            eventHandler->onBinaryDataReceive(DataPacket{inAsChar, len, remains});
+            clientLogic->onBinaryDataReceive(DataPacket{inAsChar, len, remains});
         }
         else
         {
-            eventHandler->onTextDataReceive(DataPacket{inAsChar, len, remains});
+            clientLogic->onTextDataReceive(DataPacket{inAsChar, len, remains});
         }
         break;
     }
     case LWS_CALLBACK_CLIENT_CLOSED:
     {
         callbackContext.resetConnection();
-        eventHandler->onDisconnect();
+        clientLogic->onDisconnect();
         break;
     }
     default:

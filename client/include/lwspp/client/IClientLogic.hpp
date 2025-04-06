@@ -24,36 +24,45 @@
 
 #pragma once
 
-#include "lwspp/server/TypesFwd.hpp"
+#include <string>
+
+#include "lwspp/client/Types.hpp"
+#include "lwspp/client/TypesFwd.hpp"
 
 namespace lwspp
 {
-namespace srv
+namespace cli
 {
 
 /**
- * @brief Accepts an IActor instance from the server builder.
- *
- * The server builder provides an IActor instance when constructing the server.
- * To utilize the IActor, set your instance of IActorAcceptor to the server builder
- * and obtain the IActor to perform actions defined by the IActor interface.
+ * @brief The IClientLogic class defines an interface for implementing client behavior.
  * Users of the library must implement this interface themselves.
  */
-class IActorAcceptor
+class IClientLogic
 {
 public:
-    IActorAcceptor() = default;
-    virtual ~IActorAcceptor() = default;
+    IClientLogic() = default;
+    virtual ~IClientLogic() = default;
 
-    IActorAcceptor(const IActorAcceptor&) = default;
-    auto operator=(const IActorAcceptor&) noexcept -> IActorAcceptor& = default;
+    IClientLogic(IClientLogic&&) = default;
+    auto operator=(IClientLogic&&) noexcept -> IClientLogic& = default;
 
-    IActorAcceptor(IActorAcceptor&&) = default;
-    auto operator=(IActorAcceptor&&) noexcept -> IActorAcceptor& = default;
+    IClientLogic(const IClientLogic&) = delete;
+    auto operator=(const IClientLogic&) noexcept -> IClientLogic& = delete;
 
 public:
-    virtual void acceptActor(IActorPtr) noexcept = 0;
+    // Invoked when the client receives first data packet of the message.
+    virtual void onFirstDataPacket(size_t messageLength) noexcept = 0;
+    // Invoked when the client receives binary data from the server.
+    virtual void onBinaryDataReceive(const DataPacket&) noexcept = 0;
+    // Invoked when the client receives text data from the server. This method expects valid UTF-8 text.
+    virtual void onTextDataReceive(const DataPacket&) noexcept = 0;
+
+    virtual void onConnect(IConnectionInfoPtr) noexcept = 0;
+    virtual void onDisconnect() noexcept = 0;
+    virtual void onError(const std::string& errorMessage) noexcept = 0;
+    virtual void onWarning(const std::string& errorMessage) noexcept = 0;
 };
 
-} // namespace srv
+} // namespace cli
 } // namespace lwspp

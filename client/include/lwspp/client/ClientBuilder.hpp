@@ -58,8 +58,8 @@ public:
     auto setCallbackVersion(CallbackVersion) -> ClientBuilder&;
     auto setAddress(Address) -> ClientBuilder&;
     auto setPort(Port) -> ClientBuilder&;
-    auto setEventHandler(IEventHandlerPtr) -> ClientBuilder&;
-    auto setActorAcceptor(IActorAcceptorPtr) -> ClientBuilder&;
+    auto setClientLogic(IClientLogicPtr) -> ClientBuilder&;
+    auto setClientControlAcceptor(IClientControlAcceptorPtr) -> ClientBuilder&;
 
     // Non mandatory options
     auto setProtocolName(std::string) -> ClientBuilder&;

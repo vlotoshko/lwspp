@@ -13,11 +13,11 @@ set(PATCH_VERSION 0)
 set(${PROJECT_NAME}_SRC_FILES
     include/lwspp/server/CallbackVersions.hpp
     include/lwspp/server/Consts.hpp
-    include/lwspp/server/EventHandlerBase.hpp
-    include/lwspp/server/IActor.hpp
-    include/lwspp/server/IActorAcceptor.hpp
+    include/lwspp/server/ServerLogicBase.hpp
+    include/lwspp/server/IServerControl.hpp
+    include/lwspp/server/IServerControlAcceptor.hpp
     include/lwspp/server/IConnectionInfo.hpp
-    include/lwspp/server/IEventHandler.hpp
+    include/lwspp/server/IServerLogic.hpp
     include/lwspp/server/IServer.hpp
     include/lwspp/server/ServerBuilder.hpp
     include/lwspp/server/SslSettingsBuilder.hpp
@@ -28,8 +28,6 @@ set(${PROJECT_NAME}_SRC_FILES
     src/LwsAdapter/ILwsCallbackNotifier.hpp
     src/LwsAdapter/ILwsConnection.hpp
     src/LwsAdapter/ILwsConnections.hpp
-    src/LwsAdapter/LwsActor.cpp
-    src/LwsAdapter/LwsActor.hpp
     src/LwsAdapter/LwsCallback.cpp
     src/LwsAdapter/LwsCallback.hpp
     src/LwsAdapter/LwsCallbackContext.cpp
@@ -45,13 +43,15 @@ set(${PROJECT_NAME}_SRC_FILES
     src/LwsAdapter/LwsProtocolsFactory.hpp
     src/LwsAdapter/LwsServer.cpp
     src/LwsAdapter/LwsServer.hpp
+    src/LwsAdapter/LwsServerControl.cpp
+    src/LwsAdapter/LwsServerControl.hpp
     src/LwsAdapter/LwsTypes.hpp
     src/LwsAdapter/LwsTypesFwd.hpp
 
     src/ConnectionInfo.cpp
     src/ConnectionInfo.hpp
     src/Consts.hpp
-    src/EventHandlerBase.cpp
+    src/ServerLogicBase.cpp
     src/Server.cpp
     src/Server.hpp
     src/ServerContext.hpp

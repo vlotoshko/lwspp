@@ -26,43 +26,43 @@
 
 #include <string>
 
-#include "lwspp/client/Types.hpp"
-#include "lwspp/client/TypesFwd.hpp"
+#include "lwspp/server/Types.hpp"
+#include "lwspp/server/TypesFwd.hpp"
 
 namespace lwspp
 {
-namespace cli
+namespace srv
 {
 
 /**
- * @brief The IEventHandler class defines an interface for implementing client behavior.
+ * @brief The IServerLogic class defines an interface for implementing server behavior.
  * Users of the library must implement this interface themselves.
  */
-class IEventHandler
+class IServerLogic
 {
 public:
-    IEventHandler() = default;
-    virtual ~IEventHandler() = default;
+    IServerLogic() = default;
+    virtual ~IServerLogic() = default;
 
-    IEventHandler(IEventHandler&&) = default;
-    auto operator=(IEventHandler&&) noexcept -> IEventHandler& = default;
+    IServerLogic(IServerLogic&&) = default;
+    auto operator=(IServerLogic&&) noexcept -> IServerLogic& = default;
 
-    IEventHandler(const IEventHandler&) = delete;
-    auto operator=(const IEventHandler&) noexcept -> IEventHandler& = delete;
+    IServerLogic(const IServerLogic&) = delete;
+    auto operator=(const IServerLogic&) noexcept -> IServerLogic& = delete;
 
 public:
-    // Invoked when the client receives first data packet of the message.
-    virtual void onFirstDataPacket(size_t messageLength) noexcept = 0;
-    // Invoked when the client receives binary data from the server.
-    virtual void onBinaryDataReceive(const DataPacket&) noexcept = 0;
-    // Invoked when the client receives text data from the server. This method expects valid UTF-8 text.
-    virtual void onTextDataReceive(const DataPacket&) noexcept = 0;
+    // Invoked when the server receives first data packet of the message.
+    virtual void onFirstDataPacket(ConnectionId, size_t messageLength) noexcept = 0;
+    // Invoked when the server receives binary data from the client.
+    virtual void onBinaryDataReceive(ConnectionId, const DataPacket&) noexcept = 0;
+    // Invoked when the server receives text data from the client. This method expects valid UTF-8 text.
+    virtual void onTextDataReceive(ConnectionId, const DataPacket&) noexcept = 0;
 
     virtual void onConnect(IConnectionInfoPtr) noexcept = 0;
-    virtual void onDisconnect() noexcept = 0;
-    virtual void onError(const std::string& errorMessage) noexcept = 0;
-    virtual void onWarning(const std::string& errorMessage) noexcept = 0;
+    virtual void onDisconnect(ConnectionId) noexcept = 0;
+    virtual void onError(ConnectionId, const std::string& errorMessage) noexcept = 0;
+    virtual void onWarning(ConnectionId, const std::string& errorMessage) noexcept = 0;
 };
 
-} // namespace cli
+} // namespace srv
 } // namespace lwspp

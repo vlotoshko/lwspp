@@ -24,40 +24,35 @@
 
 #pragma once
 
-#include <map>
-#include <vector>
-
-#include "lwspp/server/EventHandlerBase.hpp"
-
-#include "ChatMessageSender.hpp"
-#include "Types.hpp"
+#include "lwspp/server/IServerLogic.hpp"
+#include "lwspp/server/IServerControlAcceptor.hpp"
 
 namespace lwspp
 {
-namespace chat
+namespace srv
 {
-
-class EventHandler : public srv::EventHandlerBase
+/**
+ * @brief The ServerLogicBase class serves as a convenient base class for implementing the IServerLogic interface.
+ * It provides stubs for all overridden methods in the IServerLogic interface and also implements
+ * the IServerControlAcceptor to obtain the IServerControl.
+ */
+class ServerLogicBase : public IServerLogic, public IServerControlAcceptor
 {
 public:
-    EventHandler();
-    
-    void onConnect(srv::IConnectionInfoPtr) noexcept override;
-    void onDisconnect(srv::ConnectionId) noexcept override;
-    void onTextDataReceive(srv::ConnectionId, const srv::DataPacket&) noexcept override;
-    
-    void acceptActor(srv::IActorPtr) noexcept override;
+    void onConnect(IConnectionInfoPtr) noexcept override;
+    void onDisconnect(ConnectionId) noexcept override;
 
-private:
-    void processHelloMessage_(srv::ConnectionId, const std::string& message);
-    void processUserMessage_(srv::ConnectionId, const std::string& message);
-
-private:
-    ChatMessageSender _chatMessageSender;
-    std::vector<Message> _history;
+    void onFirstDataPacket(ConnectionId, size_t messageLength) noexcept override;
+    void onBinaryDataReceive(ConnectionId, const DataPacket&) noexcept override;
+    void onTextDataReceive(ConnectionId, const DataPacket&) noexcept override;
+    void onError(ConnectionId, const std::string& errorMessage) noexcept override;
+    void onWarning(ConnectionId, const std::string& warningMessage) noexcept override;
     
-    std::map<srv::ConnectionId, User> _users;
+    void acceptServerControl(IServerControlPtr) noexcept override;
+
+protected:
+    IServerControlPtr _serverControl = nullptr; // NOLINT(*-non-private-member-variables-in-classes)
 };
 
-} // namespace chat
+} // namespace srv
 } // namespace lwspp

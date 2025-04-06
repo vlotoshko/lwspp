@@ -23,24 +23,28 @@
  */
 
 #include <csignal>
-#include <future>
+#include <thread>
 
 #include "lwspp/server/ServerBuilder.hpp"
 #include "lwspp/server/Types.hpp"
 #include "lwspp/server/TypesFwd.hpp"
 
-#include "EventHandler.hpp"
+#include "ServerLogic.hpp"
 
-std::promise<void> promise;
+volatile std::sig_atomic_t stopRequested = 0;
 
-void signalHandler(int)
+extern "C" void signalHandler(int)
 {
-    promise.set_value();
+     stopRequested = 1;
 }
 
 void waitForSignal()
 {
-    promise.get_future().wait();
+    while (stopRequested == 0)
+    {
+        const int sleepTimeout = 100;
+        std::this_thread::sleep_for(std::chrono::milliseconds(sleepTimeout));
+    }
 }
 
 auto main() -> int
@@ -50,13 +54,13 @@ auto main() -> int
     using namespace lwspp;
     const srv::Port PORT = 9000;
 
-    auto eventHandler = std::make_shared<chat::EventHandler>();
+    auto serverLogic = std::make_shared<chat::ServerLogic>();
     auto serverBuilder = srv::ServerBuilder{};
     serverBuilder
         .setPort(PORT)
         .setCallbackVersion(srv::CallbackVersion::v1_Andromeda)
-        .setEventHandler(eventHandler)
-        .setActorAcceptor(eventHandler)
+        .setServerLogic(serverLogic)
+        .setServerControlAcceptor(serverLogic)
         ;
     auto server = serverBuilder.build();
 

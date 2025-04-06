@@ -28,7 +28,7 @@
 #include "ClientContext.hpp"
 #include "SslSettings.hpp"
 #include "lwspp/client/ClientBuilder.hpp"
-#include "lwspp/client/EventHandlerBase.hpp"
+#include "lwspp/client/ClientLogicBase.hpp"
 #include "lwspp/client/SslSettingsBuilder.hpp"
 
 namespace lwspp
@@ -98,7 +98,7 @@ void compareClientContexts(const ClientContext& actual, const ClientContext& exp
 {
     // Mandatory parameters
     REQUIRE(toString(actual.callbackVersion) == toString(expected.callbackVersion));
-    REQUIRE(actual.eventHandler == expected.eventHandler);
+    REQUIRE(actual.clientLogic == expected.clientLogic);
     REQUIRE(actual.address == expected.address);
     REQUIRE(actual.port == expected.port);
 
@@ -138,7 +138,7 @@ SCENARIO( "ClientContext setup", "[client_builder]" )
 
         WHEN( "All parameters are set" )
         {
-            auto handler = std::make_shared<EventHandlerBase>();
+            auto handler = std::make_shared<ClientLogicBase>();
             auto sslSettings = SslSettingsBuilder{}
                                    .setPrivateKeyFilepath(CLIENT_KEY_PATH)
                                    .setCertFilepath(CLIENT_CERT_PATH)
@@ -155,8 +155,8 @@ SCENARIO( "ClientContext setup", "[client_builder]" )
                 .setCallbackVersion(CallbackVersion::v1_Amsterdam)
                 .setAddress(ADDRESS)
                 .setPort(PORT)
-                .setEventHandler(handler)
-                .setActorAcceptor(handler)
+                .setClientLogic(handler)
+                .setClientControlAcceptor(handler)
                 .setProtocolName(PROTOCOL_NAME)
                 .setPath(PATH)
                 .setKeepAliveTimeout(KEEPALIVE_TIMEOUT)
@@ -173,7 +173,7 @@ SCENARIO( "ClientContext setup", "[client_builder]" )
                 expected.callbackVersion = CallbackVersion::v1_Amsterdam;
                 expected.address = ADDRESS;
                 expected.port = PORT;
-                expected.eventHandler = handler;
+                expected.clientLogic = handler;
                 expected.protocolName = PROTOCOL_NAME;
                 expected.path = PATH;
                 expected.ssl = std::make_shared<SslSettings>();
@@ -254,31 +254,31 @@ SCENARIO( "Client construction", "[client_builder]" )
             }
         }
 
-        WHEN( "ActorAcceptor is not set" )
+        WHEN( "ClientControlAcceptor is not set" )
         {
-            auto handler = std::make_shared<EventHandlerBase>();
+            auto handler = std::make_shared<ClientLogicBase>();
             clientBuilder
                 .setCallbackVersion(CallbackVersion::v1_Amsterdam)
                 .setAddress(ADDRESS)
                 .setPort(PORT)
-                .setEventHandler(handler);
+                .setClientLogic(handler);
 
             THEN( "Exception is thrown on client build" )
             {
                 REQUIRE_THROWS_WITH(clientBuilder.build(),
-                                    "Required parameter is undefined: data sender acceptor");
+                                    "Required parameter is undefined: client control acceptor");
             }
         }
 
         WHEN( "All mandatory parameters are set" )
         {
-            auto handler = std::make_shared<EventHandlerBase>();
+            auto handler = std::make_shared<ClientLogicBase>();
             clientBuilder
                 .setCallbackVersion(CallbackVersion::v1_Amsterdam)
                 .setAddress(ADDRESS)
                 .setPort(PORT)
-                .setEventHandler(handler)
-                .setActorAcceptor(handler);
+                .setClientLogic(handler)
+                .setClientControlAcceptor(handler);
 
             auto expression = [&clientBuilder] {clientBuilder.build();};
 

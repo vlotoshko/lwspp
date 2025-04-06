@@ -28,13 +28,13 @@
 #include "MockedPtr.hpp"
 
 #include "lwspp/client/ClientBuilder.hpp"
-#include "lwspp/client/IActor.hpp"
-#include "lwspp/client/IActorAcceptor.hpp"
-#include "lwspp/client/IEventHandler.hpp"
+#include "lwspp/client/IClientControl.hpp" // IWYU pragma: keep
+#include "lwspp/client/IClientControlAcceptor.hpp"
+#include "lwspp/client/IClientLogic.hpp"
 
-#include "lwspp/server/IActor.hpp"
-#include "lwspp/server/IActorAcceptor.hpp"
-#include "lwspp/server/IEventHandler.hpp"
+#include "lwspp/server/IServerControl.hpp" // IWYU pragma: keep
+#include "lwspp/server/IServerControlAcceptor.hpp"
+#include "lwspp/server/IServerLogic.hpp"
 #include "lwspp/server/ServerBuilder.hpp"
 
 // NOLINTBEGIN (readability-function-cognitive-complexity)
@@ -56,32 +56,33 @@ const std::chrono::milliseconds TIMEOUT{100};
 const std::string HELLO_SERVER = "hello server!";
 const std::string HELLO_CLIENT = "hello client!";
 
-void setupServerBehavior(Mock<srv::IEventHandler>& eventHandler,
-                         Mock<srv::IActorAcceptor>& actorAcceptor,
-                         srv::IActorPtr& actor,
+void setupServerBehavior(Mock<srv::IServerLogic>& serverLogci,
+                         Mock<srv::IServerControlAcceptor>& serverControlAcceptor,
+                         srv::IServerControlPtr& serverControl,
                          std::string& incomeMessage)
 {
     auto sendHelloToClient = [&](srv::ConnectionId, const srv::DataPacket& dataPacket)
     {
         incomeMessage = std::string{dataPacket.data, dataPacket.length};
-        actor->sendTextData(HELLO_CLIENT);
+        serverControl->sendTextData(HELLO_CLIENT);
     };
 
-    Fake(Method(eventHandler, onConnect), Method(eventHandler, onFirstDataPacket),
-         Method(eventHandler, onDisconnect));
-    When(Method(eventHandler, onTextDataReceive)).Do(sendHelloToClient);
+    Fake(Method(serverLogci, onConnect), Method(serverLogci, onFirstDataPacket),
+         Method(serverLogci, onDisconnect));
+    When(Method(serverLogci, onTextDataReceive)).Do(sendHelloToClient);
     
-    When(Method(actorAcceptor, acceptActor)).Do([&actor](srv::IActorPtr a){ actor = a; });
+    When(Method(serverControlAcceptor, acceptServerControl))
+        .Do([&serverControl](srv::IServerControlPtr c){ serverControl = c; });
 }
 
-void setupClientBehavior(Mock<cli::IEventHandler>& eventHandler,
-                         Mock<cli::IActorAcceptor>& actorAcceptor,
-                         cli::IActorPtr& actor,
+void setupClientBehavior(Mock<cli::IClientLogic>& clientLogic,
+                         Mock<cli::IClientControlAcceptor>& clientControlAcceptor,
+                         cli::IClientControlPtr& clientControl,
                          std::promise<std::string>& incomeMessage)
 {
-    auto sendHelloToServer = [&actor](cli::IConnectionInfoPtr)
+    auto sendHelloToServer = [&clientControl](cli::IConnectionInfoPtr)
     {
-        actor->sendTextData(HELLO_SERVER);
+        clientControl->sendTextData(HELLO_SERVER);
     };
 
     auto onTextDataReceive = [&](const cli::DataPacket& dataPacket)
@@ -89,38 +90,38 @@ void setupClientBehavior(Mock<cli::IEventHandler>& eventHandler,
         incomeMessage.set_value(std::string{dataPacket.data, dataPacket.length});
     };
 
-    Fake(Method(eventHandler, onFirstDataPacket), Method(eventHandler, onDisconnect));
-    When(Method(eventHandler, onConnect)).Do(sendHelloToServer);
-    When(Method(eventHandler, onTextDataReceive)).Do(onTextDataReceive);
+    Fake(Method(clientLogic, onFirstDataPacket), Method(clientLogic, onDisconnect));
+    When(Method(clientLogic, onConnect)).Do(sendHelloToServer);
+    When(Method(clientLogic, onTextDataReceive)).Do(onTextDataReceive);
     
-    When(Method(actorAcceptor, acceptActor))
-        .Do([&actor](cli::IActorPtr a){ actor = a; });
+    When(Method(clientControlAcceptor, acceptClientControl))
+        .Do([&clientControl](cli::IClientControlPtr c){ clientControl = c; });
 }
 
-srv::IServerPtr setupServer(srv::IEventHandlerPtr eventHandler,
-                            srv::IActorAcceptorPtr actorAcceptor)
+srv::IServerPtr setupServer(srv::IServerLogicPtr serverLogic,
+                            srv::IServerControlAcceptorPtr serveControlAcceptor)
 {
     auto serverBuilder = srv::ServerBuilder{};
     serverBuilder
         .setCallbackVersion(srv::CallbackVersion::v1_Andromeda)
         .setPort(PORT)
-        .setEventHandler(eventHandler)
-        .setActorAcceptor(actorAcceptor)
+        .setServerLogic(serverLogic)
+        .setServerControlAcceptor(serveControlAcceptor)
         .setLwsLogLevel(DISABLE_LOG);
 
     return serverBuilder.build();
 }
 
-cli::IClientPtr setupClient(cli::IEventHandlerPtr eventHandler,
-                            cli::IActorAcceptorPtr actorAcceptor)
+cli::IClientPtr setupClient(cli::IClientLogicPtr clientLogic,
+                            cli::IClientControlAcceptorPtr clientControlAcceptor)
 {
     auto clientBuilder = cli::ClientBuilder{};
     clientBuilder
         .setCallbackVersion(cli::CallbackVersion::v1_Amsterdam)
         .setAddress(ADDRESS)
         .setPort(PORT)
-        .setEventHandler(eventHandler)
-        .setActorAcceptor(actorAcceptor)
+        .setClientLogic(clientLogic)
+        .setClientControlAcceptor(clientControlAcceptor)
         .setLwsLogLevel(DISABLE_LOG);
 
     return clientBuilder.build();
@@ -135,28 +136,28 @@ SCENARIO( "Clients sends 'hello world' to the server", "[hello_world]" )
     std::promise<std::string> incomeMessage;
     auto waitForMessage = incomeMessage.get_future();
 
-    auto srvEventHandler = MockedPtr<srv::IEventHandler>{};
-    auto cliEventHandler = MockedPtr<cli::IEventHandler>{};
+    auto srvLogic = MockedPtr<srv::IServerLogic>{};
+    auto cliLogic = MockedPtr<cli::IClientLogic>{};
     
-    auto srvActorAcceptor = MockedPtr<srv::IActorAcceptor>{};
-    auto cliActorAcceptor = MockedPtr<cli::IActorAcceptor>{};
+    auto srvControlAcceptor = MockedPtr<srv::IServerControlAcceptor>{};
+    auto cliControlAcceptor = MockedPtr<cli::IClientControlAcceptor>{};
 
-    srv::IActorPtr srvActor;
-    cli::IActorPtr cliActor;
+    srv::IServerControlPtr srvControl;
+    cli::IClientControlPtr cliControl;
 
     std::string actualServerIncomeMessage;
     std::string actualClientIncomeMessage;
 
-    setupServerBehavior(srvEventHandler.mock(), srvActorAcceptor.mock(),
-                        srvActor, actualServerIncomeMessage);
+    setupServerBehavior(srvLogic.mock(), srvControlAcceptor.mock(),
+                        srvControl, actualServerIncomeMessage);
 
-    setupClientBehavior(cliEventHandler.mock(), cliActorAcceptor.mock(),
-                        cliActor, incomeMessage);
+    setupClientBehavior(cliLogic.mock(), cliControlAcceptor.mock(),
+                        cliControl, incomeMessage);
 
     GIVEN( "Server and client" )
     {
-        auto server = setupServer(srvEventHandler.ptr(), srvActorAcceptor.ptr());
-        auto client = setupClient(cliEventHandler.ptr(), cliActorAcceptor.ptr());
+        auto server = setupServer(srvLogic.ptr(), srvControlAcceptor.ptr());
+        auto client = setupClient(cliLogic.ptr(), cliControlAcceptor.ptr());
 
         WHEN( "Client sends message to server" )
         {
@@ -168,16 +169,16 @@ SCENARIO( "Clients sends 'hello world' to the server", "[hello_world]" )
                 server.reset();
                 client.reset();
 
-                Verify(Method(srvEventHandler.mock(), onConnect),
-                       Method(srvEventHandler.mock(), onFirstDataPacket),
-                       Method(srvEventHandler.mock(), onTextDataReceive),
-                       Method(srvEventHandler.mock(), onDisconnect)).Once();
-                Verify(Method(cliEventHandler.mock(), onConnect),
-                       Method(cliEventHandler.mock(), onFirstDataPacket),
-                       Method(cliEventHandler.mock(), onTextDataReceive),
-                       Method(cliEventHandler.mock(), onDisconnect)).Once();
-                VerifyNoOtherInvocations(srvEventHandler.mock());
-                VerifyNoOtherInvocations(cliEventHandler.mock());
+                Verify(Method(srvLogic.mock(), onConnect),
+                       Method(srvLogic.mock(), onFirstDataPacket),
+                       Method(srvLogic.mock(), onTextDataReceive),
+                       Method(srvLogic.mock(), onDisconnect)).Once();
+                Verify(Method(cliLogic.mock(), onConnect),
+                       Method(cliLogic.mock(), onFirstDataPacket),
+                       Method(cliLogic.mock(), onTextDataReceive),
+                       Method(cliLogic.mock(), onDisconnect)).Once();
+                VerifyNoOtherInvocations(srvLogic.mock());
+                VerifyNoOtherInvocations(cliLogic.mock());
 
                 CHECK(actualServerIncomeMessage == HELLO_SERVER);
                 CHECK(actualClientIncomeMessage == HELLO_CLIENT);

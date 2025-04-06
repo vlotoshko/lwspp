@@ -22,36 +22,34 @@
  * IN THE SOFTWARE.
  */
 
-#include "LwsAdapter/ILwsConnection.hpp" // IWYU pragma: keep
-#include "LwsAdapter/LwsActor.hpp"
+#pragma once
+
+#include "lwspp/server/IServerControl.hpp"
+
+#include "LwsAdapter/LwsTypesFwd.hpp"
 
 namespace lwspp
 {
-namespace cli
+namespace srv
 {
 
-void LwsActor::sendTextData(const std::string& message)
+class LwsServerControl : public IServerControl
 {
-    if (auto connection = _connection.lock())
-    {
-        connection->addTextDataToSend(message);
-        lws_callback_on_writable(connection->getLwsInstance());
-    }
-}
+public:
+    LwsServerControl(ILwsConnectionsPtr s, ILwsCallbackNotifierPtr n);
 
-void LwsActor::sendBinaryData(const std::vector<char>& data)
-{
-    if (auto connection = _connection.lock())
-    {
-        connection->addBinaryDataToSend(data);
-        lws_callback_on_writable(connection->getLwsInstance());
-    }
-}
+    void sendTextData(ConnectionId, const std::string&) override;
+    void sendBinaryData(ConnectionId, const std::vector<char>&) override;
 
-void lwspp::cli::LwsActor::setConnection(ILwsConnectionPtr c)
-{
-    _connection = std::move(c);
-}
+    void sendTextData(const std::string&) override;
+    void sendBinaryData(const std::vector<char>&) override;
 
-} // namespace cli
+    void closeConnection(ConnectionId) override;
+
+private:
+    ILwsConnectionsPtr _connections;
+    ILwsCallbackNotifierPtr _notifier;
+};
+
+} // namespace srv
 } // namespace lwspp

@@ -24,35 +24,36 @@
 
 #pragma once
 
-#include "lwspp/server/IEventHandler.hpp"
-#include "lwspp/server/IActorAcceptor.hpp"
+#include "lwspp/client/TypesFwd.hpp"
 
 namespace lwspp
 {
-namespace srv
+namespace cli
 {
+
 /**
- * @brief The EventHandlerBase class serves as a convenient base class for implementing the IEventHandler interface.
- * It provides stubs for all overridden methods in the IEventHandler interface and also implements
- * the IActorAcceptor to obtain the IActor.
+ * @brief Accepts an IClientControl instance from the client builder.
+ *
+ * The client builder provides an IClientControl instance when constructing the client.
+ * To utilize the IClientControl, set your instance of IClientControlAcceptor to the client builder
+ * and obtain the IClientControl to perform actions defined by the IClientControl interface.
+ * Users of the library must implement this interface themselves.
  */
-class EventHandlerBase : public IEventHandler, public IActorAcceptor
+class IClientControlAcceptor
 {
 public:
-    void onConnect(IConnectionInfoPtr) noexcept override;
-    void onDisconnect(ConnectionId) noexcept override;
+    IClientControlAcceptor() = default;
+    virtual ~IClientControlAcceptor() = default;
 
-    void onFirstDataPacket(ConnectionId, size_t messageLength) noexcept override;
-    void onBinaryDataReceive(ConnectionId, const DataPacket&) noexcept override;
-    void onTextDataReceive(ConnectionId, const DataPacket&) noexcept override;
-    void onError(ConnectionId, const std::string& errorMessage) noexcept override;
-    void onWarning(ConnectionId, const std::string& warningMessage) noexcept override;
-    
-    void acceptActor(IActorPtr) noexcept override;
+    IClientControlAcceptor(const IClientControlAcceptor&) = default;
+    auto operator=(const IClientControlAcceptor&) noexcept -> IClientControlAcceptor& = default;
 
-protected:
-    IActorPtr _actor = nullptr;
+    IClientControlAcceptor(IClientControlAcceptor&&) = default;
+    auto operator=(IClientControlAcceptor&&) noexcept -> IClientControlAcceptor& = default;
+
+public:
+    virtual void acceptClientControl(IClientControlPtr) noexcept = 0;
 };
 
-} // namespace srv
+} // namespace cli
 } // namespace lwspp

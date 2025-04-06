@@ -55,7 +55,7 @@ auto getDirectoryFromFilePath(const std::string& filePath) -> std::string;
 auto getExecDirectory() -> std::string
 {
     std::array<char, PATH_MAX> path{};
-    size_t count = readlink( "/proc/self/exe", path.data(), PATH_MAX );
+    const size_t count = readlink( "/proc/self/exe", path.data(), PATH_MAX );
     auto execPath = std::string {path.data(), ((count > 0) ? count : 0)};
 
     return getDirectoryFromFilePath(execPath);

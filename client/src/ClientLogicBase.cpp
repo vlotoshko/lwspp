@@ -22,37 +22,37 @@
  * IN THE SOFTWARE.
  */
 
-#include "lwspp/client/EventHandlerBase.hpp"
+#include "lwspp/client/ClientLogicBase.hpp"
 
 namespace lwspp
 {
 namespace cli
 {
 
-void EventHandlerBase::onConnect(IConnectionInfoPtr) noexcept
+void ClientLogicBase::onConnect(IConnectionInfoPtr) noexcept
 {}
 
-void EventHandlerBase::onDisconnect() noexcept
+void ClientLogicBase::onDisconnect() noexcept
 {}
 
-void EventHandlerBase::onFirstDataPacket(size_t) noexcept
+void ClientLogicBase::onFirstDataPacket(size_t) noexcept
 {}
 
-void EventHandlerBase::onBinaryDataReceive(const DataPacket&) noexcept
+void ClientLogicBase::onBinaryDataReceive(const DataPacket&) noexcept
 {}
 
-void EventHandlerBase::onTextDataReceive(const DataPacket&) noexcept
+void ClientLogicBase::onTextDataReceive(const DataPacket&) noexcept
 {}
 
-void EventHandlerBase::onError(const std::string& /*errorMessage*/) noexcept
+void ClientLogicBase::onError(const std::string& /*errorMessage*/) noexcept
 {}
 
-void EventHandlerBase::onWarning(const std::string& /*warningMessage*/) noexcept
+void ClientLogicBase::onWarning(const std::string& /*warningMessage*/) noexcept
 {}
 
-void EventHandlerBase::acceptActor(IActorPtr actor) noexcept
+void ClientLogicBase::acceptClientControl(IClientControlPtr clientControl) noexcept
 {
-    _actor = std::move(actor);
+    _clientControl = std::move(clientControl);
 }
 
 } // namespace cli

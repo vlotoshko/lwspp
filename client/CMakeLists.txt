@@ -13,26 +13,26 @@ set(PATCH_VERSION 0)
 set(${PROJECT_NAME}_SRC_FILES
     include/lwspp/client/CallbackVersions.hpp
     include/lwspp/client/ClientBuilder.hpp
-    include/lwspp/client/EventHandlerBase.hpp
-    include/lwspp/client/IActor.hpp
-    include/lwspp/client/IActorAcceptor.hpp
+    include/lwspp/client/ClientLogicBase.hpp
+    include/lwspp/client/IClientControlAcceptor.hpp
     include/lwspp/client/IClient.hpp
+    include/lwspp/client/IClientControl.hpp
+    include/lwspp/client/IClientLogic.hpp
     include/lwspp/client/IConnectionInfo.hpp
-    include/lwspp/client/IEventHandler.hpp
     include/lwspp/client/SslSettingsBuilder.hpp
     include/lwspp/client/Types.hpp
     include/lwspp/client/TypesFwd.hpp
 
     src/LwsAdapter/ILwsCallbackContext.hpp
     src/LwsAdapter/ILwsConnection.hpp
-    src/LwsAdapter/LwsActor.cpp
-    src/LwsAdapter/LwsActor.hpp
     src/LwsAdapter/LwsCallback.cpp
     src/LwsAdapter/LwsCallback.hpp
     src/LwsAdapter/LwsCallbackContext.cpp
     src/LwsAdapter/LwsCallbackContext.hpp
     src/LwsAdapter/LwsClient.cpp
     src/LwsAdapter/LwsClient.hpp
+    src/LwsAdapter/LwsClientControl.cpp
+    src/LwsAdapter/LwsClientControl.hpp
     src/LwsAdapter/LwsConnection.cpp
     src/LwsAdapter/LwsConnection.hpp
     src/LwsAdapter/LwsContextDeleter.hpp
@@ -49,7 +49,7 @@ set(${PROJECT_NAME}_SRC_FILES
     src/ClientBuilder.cpp
     src/ConnectionInfo.hpp
     src/Consts.hpp
-    src/EventHandlerBase.cpp
+    src/ClientLogicBase.cpp
     src/SslSettings.hpp
     src/SslSettingsBuilder.cpp
     src/TypesFwd.hpp

@@ -33,7 +33,7 @@ namespace cli
 Client::Client(const ClientContext& context)
     : _lwsClient(std::make_shared<LwsClient>(context))
 {
-    std::weak_ptr<LwsClient> weakLwsClient = _lwsClient;
+    const std::weak_ptr<LwsClient> weakLwsClient = _lwsClient;
 
     auto asyncConnect = [weakLwsClient]
     {

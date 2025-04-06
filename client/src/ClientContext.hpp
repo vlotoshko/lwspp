@@ -42,8 +42,8 @@ class ClientContext
 {
 public:
     CallbackVersion callbackVersion = UNDEFINED_CALLBACK_VERSION;
-    IEventHandlerPtr eventHandler;
-    IActorAcceptorPtr actorAcceptor;
+    IClientLogicPtr clientLogic;
+    IClientControlAcceptorPtr clientControlAcceptor;
     Address address = UNDEFINED_ADDRESS;
     Port port = UNDEFINED_PORT;
 

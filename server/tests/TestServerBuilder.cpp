@@ -27,8 +27,8 @@
 
 #include "ServerContext.hpp"
 #include "SslSettings.hpp"
-#include "lwspp/server/EventHandlerBase.hpp"
 #include "lwspp/server/ServerBuilder.hpp"
+#include "lwspp/server/ServerLogicBase.hpp"
 #include "lwspp/server/SslSettingsBuilder.hpp"
 
 namespace lwspp
@@ -98,7 +98,7 @@ void compareServerContexts(const ServerContext& actual, const ServerContext& exp
 {
     // Mandatory parameters
     REQUIRE(toString(actual.callbackVersion) == toString(expected.callbackVersion));
-    REQUIRE(actual.eventHandler == expected.eventHandler);
+    REQUIRE(actual.serverLogic == expected.serverLogic);
     REQUIRE(actual.port == expected.port);
 
     // Non-mandatory parameters
@@ -134,7 +134,7 @@ SCENARIO( "ServerContext setup", "[server_builder]" )
 
         WHEN( "All parameters are set" )
         {
-            auto handler = std::make_shared<EventHandlerBase>();
+            auto handler = std::make_shared<ServerLogicBase>();
             auto sslSettings = SslSettingsBuilder{}
                                    .setPrivateKeyFilepath(SERVER_KEY_PATH)
                                    .setCertFilepath(SERVER_CERT_PATH)
@@ -148,8 +148,8 @@ SCENARIO( "ServerContext setup", "[server_builder]" )
             serverBuilder
                 .setCallbackVersion(CallbackVersion::v1_Andromeda)
                 .setPort(PORT)
-                .setEventHandler(handler)
-                .setActorAcceptor(handler)
+                .setServerLogic(handler)
+                .setServerControlAcceptor(handler)
                 .setProtocolName(PROTOCOL_NAME)
                 .setKeepAliveTimeout(KEEPALIVE_TIMEOUT)
                 .setKeepAliveProbes(KEEPALIVE_PROBES)
@@ -165,7 +165,7 @@ SCENARIO( "ServerContext setup", "[server_builder]" )
             {
                 ServerContext expected;
                 expected.callbackVersion = CallbackVersion::v1_Andromeda;
-                expected.eventHandler = handler;
+                expected.serverLogic = handler;
                 expected.port = PORT;
                 expected.protocolName = PROTOCOL_NAME;
                 expected.ssl = std::make_shared<SslSettings>();
@@ -229,13 +229,13 @@ SCENARIO( "Server construction", "[server_builder]" )
             }
         }
 
-        WHEN( "ActorAcceptor is not set" )
+        WHEN( "ServerControlAcceptor is not set" )
         {
-            auto handler = std::make_shared<EventHandlerBase>();
+            auto handler = std::make_shared<ServerLogicBase>();
             serverBuilder
                 .setCallbackVersion(CallbackVersion::v1_Andromeda)
                 .setPort(PORT)
-                .setEventHandler(handler);
+                .setServerLogic(handler);
 
             THEN( "Exception is thrown on server build" )
             {
@@ -246,12 +246,12 @@ SCENARIO( "Server construction", "[server_builder]" )
 
         WHEN( "All mandatory parameters are set" )
         {
-            auto handler = std::make_shared<EventHandlerBase>();
+            auto handler = std::make_shared<ServerLogicBase>();
             serverBuilder
                 .setCallbackVersion(CallbackVersion::v1_Andromeda)
                 .setPort(PORT)
-                .setEventHandler(handler)
-                .setActorAcceptor(handler);
+                .setServerLogic(handler)
+                .setServerControlAcceptor(handler);
 
             auto expression = [&serverBuilder] {serverBuilder.build();};
 

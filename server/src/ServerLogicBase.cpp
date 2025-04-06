@@ -22,38 +22,38 @@
  * IN THE SOFTWARE.
  */
 
-#pragma once
-
-#include <string>
-#include <vector>
+#include "lwspp/server/ServerLogicBase.hpp"
 
 namespace lwspp
 {
-namespace cli
+namespace srv
 {
-/**
- * @brief The IActor class defines an interface to perform actions with the client.
- * The instance of IActor can be obtained using IActorAcceptor when building the client.
- */
-class IActor
+
+void ServerLogicBase::onConnect(IConnectionInfoPtr) noexcept
+{}
+
+void ServerLogicBase::onDisconnect(ConnectionId) noexcept
+{}
+
+void ServerLogicBase::onFirstDataPacket(ConnectionId, size_t) noexcept
+{}
+
+void ServerLogicBase::onBinaryDataReceive(ConnectionId, const DataPacket&) noexcept
+{}
+
+void ServerLogicBase::onTextDataReceive(ConnectionId, const DataPacket&) noexcept
+{}
+
+void ServerLogicBase::onError(ConnectionId, const std::string& /*errorMessage*/) noexcept
+{}
+
+void ServerLogicBase::onWarning(ConnectionId, const std::string& /*warningMessage*/) noexcept
+{}
+
+void ServerLogicBase::acceptServerControl(IServerControlPtr c) noexcept
 {
-public:
-    IActor() = default;
-    virtual ~IActor() = default;
+    _serverControl = std::move(c);
+}
 
-    IActor(const IActor&) = default;
-    auto operator=(const IActor&) -> IActor& = default;
-
-    IActor(IActor&&) noexcept = default;
-    auto operator=(IActor&&) noexcept -> IActor& = default;
-
-public:
-    // Sends text data to the server. The provided text data should be valid UTF-8 text.
-    virtual void sendTextData(const std::string&) = 0;
-
-    // Sends binary data to the server
-    virtual void sendBinaryData(const std::vector<char>&) = 0;
-};
-
-} // namespace cli
+} // namespace srv
 } // namespace lwspp

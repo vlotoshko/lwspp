@@ -22,28 +22,36 @@
  * IN THE SOFTWARE.
  */
 
-#pragma once
-
-#include "lwspp/client/IActor.hpp"
-
-#include "LwsAdapter/LwsTypesFwd.hpp"
+#include "LwsAdapter/ILwsConnection.hpp" // IWYU pragma: keep
+#include "LwsAdapter/LwsClientControl.hpp"
 
 namespace lwspp
 {
 namespace cli
 {
 
-class LwsActor : public IActor
+void LwsClientControl::sendTextData(const std::string& message)
 {
-public:
-    void sendTextData(const std::string&) override;
-    void sendBinaryData(const std::vector<char>&) override;
+    if (auto connection = _connection.lock())
+    {
+        connection->addTextDataToSend(message);
+        lws_callback_on_writable(connection->getLwsInstance());
+    }
+}
 
-    void setConnection(ILwsConnectionPtr);
+void LwsClientControl::sendBinaryData(const std::vector<char>& data)
+{
+    if (auto connection = _connection.lock())
+    {
+        connection->addBinaryDataToSend(data);
+        lws_callback_on_writable(connection->getLwsInstance());
+    }
+}
 
-private:
-    ILwsConnectionWeak _connection;
-};
+void lwspp::cli::LwsClientControl::setConnection(const ILwsConnectionPtr& c)
+{
+    _connection = c;
+}
 
 } // namespace cli
 } // namespace lwspp

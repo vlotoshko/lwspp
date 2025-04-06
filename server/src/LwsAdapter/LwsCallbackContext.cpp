@@ -29,8 +29,8 @@ namespace lwspp
 namespace srv
 {
 
-LwsCallbackContext::LwsCallbackContext(IEventHandlerPtr e, ILwsConnectionsPtr s)
-    : _eventHandler(std::move(e))
+LwsCallbackContext::LwsCallbackContext(IServerLogicPtr e, ILwsConnectionsPtr s)
+    : _serverLogic(std::move(e))
     , _connections(std::move(s))
 {}
 
@@ -49,9 +49,9 @@ auto LwsCallbackContext::getConnections() -> ILwsConnectionsPtr
     return _connections;
 }
 
-auto LwsCallbackContext::getEventHandler() -> IEventHandlerPtr
+auto LwsCallbackContext::getServerLogic() -> IServerLogicPtr
 {
-    return _eventHandler;
+    return _serverLogic;
 }
 
 } // namespace srv

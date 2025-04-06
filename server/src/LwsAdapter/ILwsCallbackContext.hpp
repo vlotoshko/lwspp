@@ -52,7 +52,7 @@ public:
     virtual auto isStopping() const -> bool = 0;
     virtual auto getConnections() -> ILwsConnectionsPtr = 0;
 
-    virtual auto getEventHandler() -> IEventHandlerPtr = 0;
+    virtual auto getServerLogic() -> IServerLogicPtr = 0;
 };
 
 } // namespace srv

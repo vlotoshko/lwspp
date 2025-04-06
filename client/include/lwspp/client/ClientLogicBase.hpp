@@ -24,7 +24,8 @@
 
 #pragma once
 
-#include "lwspp/client/TypesFwd.hpp"
+#include "lwspp/client/IClientControlAcceptor.hpp"
+#include "lwspp/client/IClientLogic.hpp"
 
 namespace lwspp
 {
@@ -32,27 +33,26 @@ namespace cli
 {
 
 /**
- * @brief Accepts an IActor instance from the client builder.
- *
- * The client builder provides an IActor instance when constructing the client.
- * To utilize the IActor, set your instance of IActorAcceptor to the client builder
- * and obtain the IActor to perform actions defined by the IActor interface.
- * Users of the library must implement this interface themselves.
+ * @brief The ClientLogicBase class serves as a convenient base class for implementing the IClientLogic interface.
+ * It provides stubs for all overridden methods in the IClientLogic interface and also implements
+ * the IClientControlAcceptor to obtain the IClientControl.
  */
-class IActorAcceptor
+class ClientLogicBase : public IClientLogic, public IClientControlAcceptor
 {
 public:
-    IActorAcceptor() = default;
-    virtual ~IActorAcceptor() = default;
+    void onConnect(IConnectionInfoPtr) noexcept override;
+    void onDisconnect() noexcept override;
 
-    IActorAcceptor(const IActorAcceptor&) = default;
-    auto operator=(const IActorAcceptor&) noexcept -> IActorAcceptor& = default;
+    void onFirstDataPacket(size_t messageLength) noexcept override;
+    void onBinaryDataReceive(const DataPacket&) noexcept override;
+    void onTextDataReceive(const DataPacket&) noexcept override;
+    void onError(const std::string& errorMessage) noexcept override;
+    void onWarning(const std::string& warningMessage) noexcept override;
+    
+    void acceptClientControl(IClientControlPtr) noexcept override;
 
-    IActorAcceptor(IActorAcceptor&&) = default;
-    auto operator=(IActorAcceptor&&) noexcept -> IActorAcceptor& = default;
-
-public:
-    virtual void acceptActor(IActorPtr) noexcept = 0;
+protected:
+    IClientControlPtr _clientControl = nullptr; // NOLINT(*-non-private-member-variables-in-classes)
 };
 
 } // namespace cli

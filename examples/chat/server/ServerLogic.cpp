@@ -27,7 +27,7 @@
 #include "lwspp/server/Consts.hpp"
 #include "lwspp/server/IConnectionInfo.hpp" // IWYU pragma: keep
 
-#include "EventHandler.hpp"
+#include "ServerLogic.hpp"
 
 namespace lwspp
 {
@@ -142,22 +142,22 @@ auto getUserNameFromHello(const std::string& message) -> std::string
 
 } // namespace
 
-EventHandler::EventHandler() : _chatMessageSender(srv::IActorPtr{})
+ServerLogic::ServerLogic() : _chatMessageSender(srv::IServerControlPtr{})
 {}
 
-void EventHandler::onConnect(lwspp::srv::IConnectionInfoPtr connectionInfo) noexcept
+void ServerLogic::onConnect(lwspp::srv::IConnectionInfoPtr connectionInfo) noexcept
 {
     const User user = {connectionInfo->getConnectionId(), UNKNOWN_USERN_NAME};
     _users[connectionInfo->getConnectionId()] = user;
 }
 
-void EventHandler::onDisconnect(lwspp::srv::ConnectionId connectionId) noexcept
+void ServerLogic::onDisconnect(lwspp::srv::ConnectionId connectionId) noexcept
 {
     _users.erase(connectionId);
     _chatMessageSender.updateUsers(_users);
 }
 
-void EventHandler::onTextDataReceive(srv::ConnectionId connectionId, const srv::DataPacket& dataPacket) noexcept
+void ServerLogic::onTextDataReceive(srv::ConnectionId connectionId, const srv::DataPacket& dataPacket) noexcept
 {
     // Expected messages:
     //   hello message, format: "HELLO:<Nickname>"
@@ -184,13 +184,13 @@ void EventHandler::onTextDataReceive(srv::ConnectionId connectionId, const srv::
     }
 }
 
-void EventHandler::acceptActor(srv::IActorPtr messageSender) noexcept
+void ServerLogic::acceptServerControl(srv::IServerControlPtr messageSender) noexcept
 {
-    srv::EventHandlerBase::acceptActor(messageSender);
-    _chatMessageSender = ChatMessageSender{_actor};
+    srv::ServerLogicBase::acceptServerControl(messageSender);
+    _chatMessageSender = ChatMessageSender{_serverControl};
 }
 
-void EventHandler::processHelloMessage_(srv::ConnectionId connectionId, const std::string& messageText)
+void ServerLogic::processHelloMessage_(srv::ConnectionId connectionId, const std::string& messageText)
 {
     auto userName = getUserNameFromHello(messageText);
     if (!userName.empty())
@@ -218,7 +218,7 @@ void EventHandler::processHelloMessage_(srv::ConnectionId connectionId, const st
     }
 }
 
-void EventHandler::processUserMessage_(srv::ConnectionId connectionId, const std::string& messageText)
+void ServerLogic::processUserMessage_(srv::ConnectionId connectionId, const std::string& messageText)
 {
     User recipient;
     std::string rawMessage;

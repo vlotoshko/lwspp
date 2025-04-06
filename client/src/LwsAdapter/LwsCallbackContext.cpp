@@ -24,17 +24,17 @@
 
 #include <stdexcept>
 
-#include "LwsAdapter/LwsActor.hpp" // IWYU pragma: keep
 #include "LwsAdapter/LwsCallbackContext.hpp"
+#include "LwsAdapter/LwsClientControl.hpp" // IWYU pragma: keep
 
 namespace lwspp
 {
 namespace cli
 {
 
-LwsCallbackContext::LwsCallbackContext(IEventHandlerPtr e, LwsActorPtr a)
-    : _eventHandler(std::move(e))
-    , _actor(std::move(a))
+LwsCallbackContext::LwsCallbackContext(IClientLogicPtr e, LwsClientControlPtr a)
+    : _clientLogic(std::move(e))
+    , _clientControl(std::move(a))
 {}
 
 void LwsCallbackContext::setStopping()
@@ -47,9 +47,9 @@ auto LwsCallbackContext::isStopping() const -> bool
     return _isStopping;
 }
 
-auto LwsCallbackContext::getEventHandler() -> IEventHandlerPtr
+auto LwsCallbackContext::getClientLogic() -> IClientLogicPtr
 {
-    return _eventHandler;
+    return _clientLogic;
 }
 
 auto LwsCallbackContext::getConnection() -> ILwsConnectionPtr
@@ -64,7 +64,7 @@ void LwsCallbackContext::setConnection(ILwsConnectionPtr s)
         throw std::runtime_error{"unaintialized lws connection found"};
     }
     _connection = std::move(s);
-    _actor->setConnection(_connection);
+    _clientControl->setConnection(_connection);
 }
 
 void LwsCallbackContext::resetConnection()

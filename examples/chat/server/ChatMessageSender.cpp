@@ -22,7 +22,7 @@
  * IN THE SOFTWARE.
  */
 
-#include "lwspp/server/IActor.hpp" // IWYU pragma: keep
+#include "lwspp/server/IServerControl.hpp" // IWYU pragma: keep
 
 #include "ChatMessageSender.hpp"
 
@@ -41,14 +41,14 @@ auto isPublicMessage(const Message& message) -> bool
     return message.to.connectionId == srv::ALL_CONNECTIONS;
 }
 
-ChatMessageSender::ChatMessageSender(srv::IActorPtr s)
-    : _actor(std::move(s))
+ChatMessageSender::ChatMessageSender(srv::IServerControlPtr s)
+    : _serverControl(std::move(s))
 {}
 
 void ChatMessageSender::sendUserMessage(const Message& message)
 {
     // Message format: "MSG:<From>:<To>:MessageText"
-    if (_actor != nullptr)
+    if (_serverControl != nullptr)
     {
         std::string messageToSend{"MSG:<"};
         messageToSend
@@ -59,15 +59,15 @@ void ChatMessageSender::sendUserMessage(const Message& message)
                 ;
         if (message.to.connectionId == srv::ALL_CONNECTIONS)
         {
-            _actor->sendTextData(messageToSend);
+            _serverControl->sendTextData(messageToSend);
         }
         else
         {
-            _actor->sendTextData(message.to.connectionId, messageToSend);
+            _serverControl->sendTextData(message.to.connectionId, messageToSend);
             if (message.to.connectionId != message.from.connectionId &&
                 message.from.connectionId != srv::UNDEFINED_CONNECTION_ID)
             {
-                _actor->sendTextData(message.from.connectionId, messageToSend);
+                _serverControl->sendTextData(message.from.connectionId, messageToSend);
             }
         }
     }
@@ -76,13 +76,13 @@ void ChatMessageSender::sendUserMessage(const Message& message)
 void ChatMessageSender::sendChatHistory(const User& user, const std::vector<Message>& history)
 {
     // Message format: "HIST:<From>:<To>:MessageText"
-    if (_actor != nullptr)
+    if (_serverControl != nullptr)
     {
         for (const auto& message : history)
         {
             if (isPublicMessage(message) || isPrivateMessage(user, message))
             {
-                _actor->sendTextData(user.connectionId, std::string{"HIST:<"}
+                _serverControl->sendTextData(user.connectionId, std::string{"HIST:<"}
                                             .append(message.from.userName).append(">:<")
                                             .append(message.to.userName).append(">:")
                                             .append(message.text));
@@ -94,14 +94,14 @@ void ChatMessageSender::sendChatHistory(const User& user, const std::vector<Mess
 void ChatMessageSender::updateUsers(const std::map<srv::ConnectionId, User>& users)
 {
     // Message format: "USRUPD:User1,User2,User3,"
-    if (_actor != nullptr)
+    if (_serverControl != nullptr)
     {
         std::string message{"USRUPD:"};
         for (const auto& entry : users)
         {
             message.append(entry.second.userName).append(",");
         }
-        _actor->sendTextData(message);
+        _serverControl->sendTextData(message);
     }
 }
 

@@ -24,35 +24,25 @@
 
 #pragma once
 
-#include "lwspp/client/IActorAcceptor.hpp"
-#include "lwspp/client/IEventHandler.hpp"
+#include "lwspp/client/IClientControl.hpp"
+
+#include "LwsAdapter/LwsTypesFwd.hpp"
 
 namespace lwspp
 {
 namespace cli
 {
 
-/**
- * @brief The EventHandlerBase class serves as a convenient base class for implementing the IEventHandler interface.
- * It provides stubs for all overridden methods in the IEventHandler interface and also implements
- * the IActorAcceptor to obtain the IActor.
- */
-class EventHandlerBase : public IEventHandler, public IActorAcceptor
+class LwsClientControl : public IClientControl
 {
 public:
-    void onConnect(IConnectionInfoPtr) noexcept override;
-    void onDisconnect() noexcept override;
+    void sendTextData(const std::string&) override;
+    void sendBinaryData(const std::vector<char>&) override;
 
-    void onFirstDataPacket(size_t messageLength) noexcept override;
-    void onBinaryDataReceive(const DataPacket&) noexcept override;
-    void onTextDataReceive(const DataPacket&) noexcept override;
-    void onError(const std::string& errorMessage) noexcept override;
-    void onWarning(const std::string& warningMessage) noexcept override;
-    
-    void acceptActor(IActorPtr) noexcept override;
+    void setConnection(const ILwsConnectionPtr&);
 
-protected:
-    IActorPtr _actor = nullptr;
+private:
+    ILwsConnectionWeak _connection;
 };
 
 } // namespace cli

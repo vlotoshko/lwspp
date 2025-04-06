@@ -31,14 +31,14 @@ namespace lwspp
 namespace srv
 {
 
-class IEventHandler;
-using IEventHandlerPtr = std::shared_ptr<IEventHandler>;
+class IServerLogic;
+using IServerLogicPtr = std::shared_ptr<IServerLogic>;
 
-class IActor;
-using IActorPtr = std::shared_ptr<IActor>;
+class IServerControl;
+using IServerControlPtr = std::shared_ptr<IServerControl>;
 
-class IActorAcceptor;
-using IActorAcceptorPtr = std::shared_ptr<IActorAcceptor>;
+class IServerControlAcceptor;
+using IServerControlAcceptorPtr = std::shared_ptr<IServerControlAcceptor>;
 
 class IServer;
 using IServerPtr = std::shared_ptr<IServer>;

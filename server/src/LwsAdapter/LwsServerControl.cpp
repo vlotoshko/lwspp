@@ -22,7 +22,7 @@
  * IN THE SOFTWARE.
  */
 
-#include "LwsAdapter/LwsActor.hpp"
+#include "LwsAdapter/LwsServerControl.hpp"
 #include "LwsAdapter/ILwsCallbackNotifier.hpp" // IWYU pragma: keep
 #include "LwsAdapter/ILwsConnection.hpp"       // IWYU pragma: keep
 #include "LwsAdapter/ILwsConnections.hpp"      // IWYU pragma: keep
@@ -32,12 +32,12 @@ namespace lwspp
 namespace srv
 {
 
-LwsActor::LwsActor(ILwsConnectionsPtr s, ILwsCallbackNotifierPtr n)
+LwsServerControl::LwsServerControl(ILwsConnectionsPtr s, ILwsCallbackNotifierPtr n)
     : _connections(std::move(s))
     , _notifier(std::move(n))
 {}
 
-void LwsActor::sendTextData(ConnectionId connectionId, const std::string& message)
+void LwsServerControl::sendTextData(ConnectionId connectionId, const std::string& message)
 {
     if (auto connection = _connections->get(connectionId))
     {
@@ -46,7 +46,7 @@ void LwsActor::sendTextData(ConnectionId connectionId, const std::string& messag
     }
 }
 
-void LwsActor::sendBinaryData(ConnectionId connectionId, const std::vector<char>& data)
+void LwsServerControl::sendBinaryData(ConnectionId connectionId, const std::vector<char>& data)
 {
     if (auto connection = _connections->get(connectionId))
     {
@@ -55,7 +55,7 @@ void LwsActor::sendBinaryData(ConnectionId connectionId, const std::vector<char>
     }
 }
 
-void LwsActor::sendTextData(const std::string& message)
+void LwsServerControl::sendTextData(const std::string& message)
 {
     for(auto& entry : _connections->getAllConnections())
     {
@@ -71,7 +71,7 @@ void LwsActor::sendTextData(const std::string& message)
     _notifier->notifyPendingDataAdded();
 }
 
-void LwsActor::sendBinaryData(const std::vector<char>& data)
+void LwsServerControl::sendBinaryData(const std::vector<char>& data)
 {
     for(auto& entry : _connections->getAllConnections())
     {
@@ -87,7 +87,7 @@ void LwsActor::sendBinaryData(const std::vector<char>& data)
     _notifier->notifyPendingDataAdded();
 }
 
-void LwsActor::closeConnection(ConnectionId connectionId)
+void LwsServerControl::closeConnection(ConnectionId connectionId)
 {
     if (auto connection = _connections->get(connectionId))
     {

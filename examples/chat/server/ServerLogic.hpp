@@ -22,38 +22,42 @@
  * IN THE SOFTWARE.
  */
 
-#include "lwspp/server/EventHandlerBase.hpp"
+#pragma once
+
+#include <map>
+#include <vector>
+
+#include "lwspp/server/ServerLogicBase.hpp"
+
+#include "ChatMessageSender.hpp"
+#include "Types.hpp"
 
 namespace lwspp
 {
-namespace srv
+namespace chat
 {
 
-void EventHandlerBase::onConnect(IConnectionInfoPtr) noexcept
-{}
-
-void EventHandlerBase::onDisconnect(ConnectionId) noexcept
-{}
-
-void EventHandlerBase::onFirstDataPacket(ConnectionId, size_t) noexcept
-{}
-
-void EventHandlerBase::onBinaryDataReceive(ConnectionId, const DataPacket&) noexcept
-{}
-
-void EventHandlerBase::onTextDataReceive(ConnectionId, const DataPacket&) noexcept
-{}
-
-void EventHandlerBase::onError(ConnectionId, const std::string& /*errorMessage*/) noexcept
-{}
-
-void EventHandlerBase::onWarning(ConnectionId, const std::string& /*warningMessage*/) noexcept
-{}
-
-void EventHandlerBase::acceptActor(IActorPtr actor) noexcept
+class ServerLogic : public srv::ServerLogicBase
 {
-    _actor = std::move(actor);
-}
+public:
+    ServerLogic();
+    
+    void onConnect(srv::IConnectionInfoPtr) noexcept override;
+    void onDisconnect(srv::ConnectionId) noexcept override;
+    void onTextDataReceive(srv::ConnectionId, const srv::DataPacket&) noexcept override;
+    
+    void acceptServerControl(srv::IServerControlPtr) noexcept override;
 
-} // namespace srv
+private:
+    void processHelloMessage_(srv::ConnectionId, const std::string& message);
+    void processUserMessage_(srv::ConnectionId, const std::string& message);
+
+private:
+    ChatMessageSender _chatMessageSender;
+    std::vector<Message> _history;
+    
+    std::map<srv::ConnectionId, User> _users;
+};
+
+} // namespace chat
 } // namespace lwspp

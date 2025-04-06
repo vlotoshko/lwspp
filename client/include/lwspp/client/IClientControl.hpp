@@ -24,32 +24,36 @@
 
 #pragma once
 
-#include "lwspp/server/IActor.hpp"
-
-#include "LwsAdapter/LwsTypesFwd.hpp"
+#include <string>
+#include <vector>
 
 namespace lwspp
 {
-namespace srv
+namespace cli
 {
-
-class LwsActor : public IActor
+/**
+ * @brief The IClientControl class defines an interface to perform actions with the client.
+ * The instance of IClientControl can be obtained using IClientControlAcceptor when building the client.
+ */
+class IClientControl
 {
 public:
-    LwsActor(ILwsConnectionsPtr s, ILwsCallbackNotifierPtr n);
+    IClientControl() = default;
+    virtual ~IClientControl() = default;
 
-    void sendTextData(ConnectionId, const std::string&) override;
-    void sendBinaryData(ConnectionId, const std::vector<char>&) override;
+    IClientControl(const IClientControl&) = default;
+    auto operator=(const IClientControl&) -> IClientControl& = default;
 
-    void sendTextData(const std::string&) override;
-    void sendBinaryData(const std::vector<char>&) override;
+    IClientControl(IClientControl&&) noexcept = default;
+    auto operator=(IClientControl&&) noexcept -> IClientControl& = default;
 
-    void closeConnection(ConnectionId) override;
+public:
+    // Sends text data to the server. The provided text data should be valid UTF-8 text.
+    virtual void sendTextData(const std::string&) = 0;
 
-private:
-    ILwsConnectionsPtr _connections;
-    ILwsCallbackNotifierPtr _notifier;
+    // Sends binary data to the server
+    virtual void sendBinaryData(const std::vector<char>&) = 0;
 };
 
-} // namespace srv
+} // namespace cli
 } // namespace lwspp

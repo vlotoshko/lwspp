@@ -55,7 +55,7 @@ public:
     virtual void setConnection(ILwsConnectionPtr) = 0;
     virtual void resetConnection() = 0;
 
-    virtual auto getEventHandler() -> IEventHandlerPtr = 0;
+    virtual auto getClientLogic() -> IClientLogicPtr = 0;
 };
 
 } // namespace cli

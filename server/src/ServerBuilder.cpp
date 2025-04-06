@@ -56,12 +56,12 @@ void checkContext(const ServerContext& context)
         throw UndefinedRequiredParameterException{"port"};
     }
 
-    if (context.eventHandler == nullptr)
+    if (context.serverLogic == nullptr)
     {
         throw UndefinedRequiredParameterException{"event handler"};
     }
 
-    if (context.actorAcceptor == nullptr)
+    if (context.serverControlAcceptor == nullptr)
     {
         throw UndefinedRequiredParameterException{"data sender acceptor"};
     }
@@ -127,15 +127,15 @@ auto ServerBuilder::setPort(Port port) -> ServerBuilder&
     return *this;
 }
 
-auto ServerBuilder::setEventHandler(IEventHandlerPtr e) -> ServerBuilder&
+auto ServerBuilder::setServerLogic(IServerLogicPtr e) -> ServerBuilder&
 {
-    _context->eventHandler = std::move(e);
+    _context->serverLogic = std::move(e);
     return *this;
 }
 
-auto ServerBuilder::setActorAcceptor(IActorAcceptorPtr a) -> ServerBuilder&
+auto ServerBuilder::setServerControlAcceptor(IServerControlAcceptorPtr a) -> ServerBuilder&
 {
-    _context->actorAcceptor = std::move(a);
+    _context->serverControlAcceptor = std::move(a);
     return *this;
 }
 

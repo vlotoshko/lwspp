@@ -62,14 +62,14 @@ void checkContext(const ClientContext& context)
         throw UndefinedRequiredParameterException{"port"};
     }
 
-    if (context.eventHandler == nullptr)
+    if (context.clientLogic == nullptr)
     {
         throw UndefinedRequiredParameterException{"event handler"};
     }
 
-    if (context.actorAcceptor == nullptr)
+    if (context.clientControlAcceptor == nullptr)
     {
-        throw UndefinedRequiredParameterException{"data sender acceptor"};
+        throw UndefinedRequiredParameterException{"client control acceptor"};
     }
 
     if (context.ssl != nullptr &&
@@ -121,15 +121,15 @@ auto ClientBuilder::build() const -> IClientPtr
     return std::make_shared<Client>(context);
 }
 
-auto ClientBuilder::setEventHandler(IEventHandlerPtr e) -> ClientBuilder&
+auto ClientBuilder::setClientLogic(IClientLogicPtr e) -> ClientBuilder&
 {
-    _context->eventHandler = std::move(e);
+    _context->clientLogic = std::move(e);
     return *this;
 }
 
-auto ClientBuilder::setActorAcceptor(IActorAcceptorPtr a) -> ClientBuilder&
+auto ClientBuilder::setClientControlAcceptor(IClientControlAcceptorPtr c) -> ClientBuilder&
 {
-    _context->actorAcceptor = std::move(a);
+    _context->clientControlAcceptor = std::move(c);
     return *this;
 }
 

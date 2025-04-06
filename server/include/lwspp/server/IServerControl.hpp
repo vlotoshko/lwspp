@@ -25,9 +25,9 @@
 #pragma once
 
 #include <string>
+#include <vector>
 
 #include "lwspp/server/Types.hpp"
-#include "lwspp/server/TypesFwd.hpp"
 
 namespace lwspp
 {
@@ -35,33 +35,38 @@ namespace srv
 {
 
 /**
- * @brief The IEventHandler class defines an interface for implementing server behavior.
- * Users of the library must implement this interface themselves.
+ * @brief The IServerControl class defines an interface to perform actions with the server.
+ * The instance of IServerControl can be obtained using IServerControlAcceptor when building the server.
  */
-class IEventHandler
+class IServerControl
 {
 public:
-    IEventHandler() = default;
-    virtual ~IEventHandler() = default;
+    IServerControl() = default;
+    virtual ~IServerControl() = default;
 
-    IEventHandler(IEventHandler&&) = default;
-    auto operator=(IEventHandler&&) noexcept -> IEventHandler& = default;
+    IServerControl(const IServerControl&) = default;
+    auto operator=(const IServerControl&) -> IServerControl& = default;
 
-    IEventHandler(const IEventHandler&) = delete;
-    auto operator=(const IEventHandler&) noexcept -> IEventHandler& = delete;
+    IServerControl(IServerControl&&) noexcept = default;
+    auto operator=(IServerControl&&) noexcept -> IServerControl& = default;
 
 public:
-    // Invoked when the server receives first data packet of the message.
-    virtual void onFirstDataPacket(ConnectionId, size_t messageLength) noexcept = 0;
-    // Invoked when the server receives binary data from the client.
-    virtual void onBinaryDataReceive(ConnectionId, const DataPacket&) noexcept = 0;
-    // Invoked when the server receives text data from the client. This method expects valid UTF-8 text.
-    virtual void onTextDataReceive(ConnectionId, const DataPacket&) noexcept = 0;
+    // Sends text data to the specified client identified by ConnectionId.
+    // The provided text data should be valid UTF-8 text.
+    virtual void sendTextData(ConnectionId, const std::string&) = 0;
 
-    virtual void onConnect(IConnectionInfoPtr) noexcept = 0;
-    virtual void onDisconnect(ConnectionId) noexcept = 0;
-    virtual void onError(ConnectionId, const std::string& errorMessage) noexcept = 0;
-    virtual void onWarning(ConnectionId, const std::string& errorMessage) noexcept = 0;
+    // Sends binary data to the specified client identified by ConnectionId.
+    virtual void sendBinaryData(ConnectionId, const std::vector<char>&) = 0;
+
+    // Sends text data to all connected clients.
+    //The provided text data should be valid UTF-8 text.
+    virtual void sendTextData(const std::string&) = 0;
+
+    // Sends binary data to all connected clients.
+    virtual void sendBinaryData(const std::vector<char>&) = 0;
+
+    // Closes the specified client connection.
+    virtual void closeConnection(ConnectionId) = 0;
 };
 
 } // namespace srv
