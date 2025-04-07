@@ -95,9 +95,9 @@ lwspp offers a variety of compilation options to tailor the build process accord
 
 - **Build Integration Tests Application** (`OPTION_BUILD_INTEGRATION_TESTS`): Enable or disable the build of the integration tests application. (Default: **OFF**)
 
-- **Install Tests Directory** (`INSTALL_TESTS`): Specify the directory where the tests should be installed. If you set this option, it will add the target  **install-lwspp-tests**. (Default: **""**)
+- **Install Tests Directory** (`TESTS_INSTALL_DIR`): Specify the directory where the tests should be installed. If you set this option, it will add the target  **install-lwspp-tests**. (Default: **""**)
 
-- **Install Examples Directory** (`INSTALL_EXAMPLES`): Specify the path where examples should be installed after the build. Setting this option adds the corresponding **install-'project name'** target for each example. (Default: **""**)
+- **Install Examples Directory** (`EXAMPLES_INSTALL_DIR`): Specify the path where examples should be installed after the build. Setting this option adds the corresponding **install-'project name'** target for each example. (Default: **""**)
 
 - **Websockets Search Directory** (`WEBSOCKETS_SEARCH_DIR`): If set, the libwebsockets library located in the corresponding directory will be used. (Default: **""**)
 
@@ -105,7 +105,7 @@ lwspp offers a variety of compilation options to tailor the build process accord
 
 You can configure these options using CMake's -D flag when generating your project's build system. For example, to enable the building and installing of example applications, you can use:
    ```bash
-   cmake -D OPTION_BUILD_EXAMPLES=ON -D INSTALL_EXAMPLES=./bin ..
+   cmake -D OPTION_BUILD_EXAMPLES=ON -D EXAMPLES_INSTALL_DIR=./bin ..
    make install-lwspp-binance install-lwspp-chat install-lwspp-helloworld
    ```
 After running the _'make'_ command, the example applications will be built and installed in the _'./bin'_ directory.
@@ -124,12 +124,12 @@ The mandatory options for the server builder include:
 
 1. **Port**: Specify the port on which the server will listen.
 2. **Callback Version**: The libwebsockets library requires a specific callback to handle events and data. lwspp provides this callback. To ensure backward compatibility, you can set the previous callback to maintain the same behavior.
-3. **Actor Acceptor**: When constructing the server, the server builder provides an IActor instance. IActor is used to perform actions defined by the the IActor interface, for example sending data from server to a client. To obtain this IActor, implement the IActorAcceptor interface. Users of the library should implement this interface to manage data sent from the server to clients.
-4. **Event Handler**: The Event Handler defines the server's behavior. You should implement the desired server behavior using the IEventHandler interface.
+3. **ServerControl Acceptor**: When constructing the server, the server builder provides an IServerControl instance. IServerControl is used to perform actions defined by the the IServerControl interface, for example sending data from server to a client. To obtain this IServerControl, implement the IServerControlAcceptor interface. Users of the library should implement this interface to manage data sent from the server to clients.
+4. **ServerLogic**: The ServerLogic defines the server's behavior. You should implement the desired server behavior using the IServerLogic interface.
 
-For most use cases, the **EvenHandlerBase** class can be a convenient starting point for implementing your event handler. This class not only implements the _IEventHandler_ interface, which includes stubs for all its methods but also implements the _IActorAcceptor_ interface. This means you can easily obtain the Actor required for performing actions defined by the IActor interface.
+For most use cases, the **ServerLogicBase** class can be a convenient starting point for implementing your event ServerLogic. This class not only implements the _IServerLogic_ interface, which includes stubs for all its methods but also implements the _IServerControlAcceptor_ interface. This means you can easily obtain the ServerControl required for performing actions defined by the IServerControl interface.
 
-The **EvenHandlerBase** class provides a basic framework for event handling and data transmission. You can extend and customize its behavior to suit your specific server requirements. This approach saves you time and effort when developing WebSocket server functionality.
+The **ServerLogicBase** class provides a basic framework for event handling and data transmission. You can extend and customize its behavior to suit your specific server requirements. This approach saves you time and effort when developing WebSocket server functionality.
 
 ### Client Configuration
 
@@ -143,27 +143,27 @@ For more detailed usage instructions and insights, refer to the [examples](examp
 
 ### The Hello World example
 
-In this straightforward example, both the client and server are configured and constructed. The client's behavior involves sending the message 'hello server' upon connection, while the server's behavior includes sending the message 'hello client' upon receiving a message from a client. 
+In this straightforward example, both the client and server are configured and constructed. The client's behavior involves sending the message 'hello server' upon connection, while the server's behavior includes sending the message 'hello client' upon receiving a message from a client.
 ```cpp
 #include <iostream>
 #include <thread>
 
 #include "lwspp/client/ClientBuilder.hpp"
-#include "lwspp/client/EventHandlerBase.hpp"
-#include "lwspp/client/IActor.hpp"
+#include "lwspp/client/ClientLogicBase.hpp"
+#include "lwspp/client/IClientControl.hpp" // IWYU pragma: keep
 
-#include "lwspp/server/EventHandlerBase.hpp"
-#include "lwspp/server/IActor.hpp"
+#include "lwspp/server/IServerControl.hpp" // IWYU pragma: keep
 #include "lwspp/server/ServerBuilder.hpp"
+#include "lwspp/server/ServerLogicBase.hpp"
 
 using namespace lwspp;
 
-class ClientEventHandler : public cli::EventHandlerBase
+class ClientLogic : public cli::ClientLogicBase
 {
 public:
     void onConnect(cli::IConnectionInfoPtr) noexcept override
     {
-        _actor->sendTextData("hello server!");
+        _clientControl->sendTextData("hello server!");
     }
 
     void onTextDataReceive(const cli::DataPacket& dataPacket) noexcept override
@@ -172,13 +172,13 @@ public:
     }
 };
 
-class ServerEventHandler : public srv::EventHandlerBase
+class ServerLogic : public srv::ServerLogicBase
 {
 public:
     void onTextDataReceive(srv::ConnectionId, const srv::DataPacket& dataPacket) noexcept override
     {
         std::cout << "server received the message: " << std::string{dataPacket.data, dataPacket.length}  << std::endl;
-        _actor->sendTextData("hello client!");
+        _serverControl->sendTextData("hello client!");
     }
 };
 
@@ -187,26 +187,26 @@ auto main() -> int
     const srv::Port PORT = 9000;
 
     // Configure and build server
-    auto serverEventHandler = std::make_shared<ServerEventHandler>();
+    auto serverLogic = std::make_shared<ServerLogic>();
     auto serverBuilder = srv::ServerBuilder{};
     serverBuilder
         .setPort(PORT)
         .setCallbackVersion(srv::CallbackVersion::v1_Andromeda)
-        .setEventHandler(serverEventHandler)
-        .setActorAcceptor(serverEventHandler)
+        .setServerLogic(serverLogic)
+        .setServerControlAcceptor(serverLogic)
         .setLwsLogLevel(0)
         ;
     auto server = serverBuilder.build();
 
     // Configure and build client
-    auto clientEventHandler = std::make_shared<ClientEventHandler>();
+    auto clientLogic = std::make_shared<ClientLogic>();
     auto clientBuilder = cli::ClientBuilder{};
     clientBuilder
         .setAddress("localhost")
         .setPort(PORT)
         .setCallbackVersion(cli::CallbackVersion::v1_Amsterdam)
-        .setEventHandler(clientEventHandler)
-        .setActorAcceptor(clientEventHandler)
+        .setClientLogic(clientLogic)
+        .setClientControlAcceptor(clientLogic)
         .setLwsLogLevel(0)
         ;
     auto client = clientBuilder.build();
@@ -232,7 +232,7 @@ In the [examples](examples) directory, you can find the source code for some sam
 ## Operating Systems
 
 The lwspp project was built and tested on the following operating systems up to _September 29, 2023_:
-  - [x] Ubuntu 22.04 LTS
+  - [x] Ubuntu 24.04 LTS
   - [x] Red Hat Enterprise Linux (RHEL) 9.2 
     - The path '/usr/local/lib' was appended to the LD_LIBRARY_PATH to enable the system to locate the lwspp library.
   - [x] openSUSE Leap 15.4
@@ -243,17 +243,7 @@ Please note that compatibility with newer operating system versions or different
 
 ## Contributing
 
-Contributions are welcome and essential to improving the lwspp project. Whether you have a suggestion for improvement, want to fix a bug, or add a new feature, your contributions are **greatly appreciated**.
-
-Here's how you can contribute:
-
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-Thank you for being part of the open-source community!
+All contributions are **greatly appreciated**.
 
 ## License
 
