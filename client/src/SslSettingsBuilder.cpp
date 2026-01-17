@@ -108,7 +108,7 @@ auto SslSettingsBuilder::skipServerCertHostnameCheck() -> SslSettingsBuilder&
     return *this;
 }
 
-auto SslSettingsBuilder::ignoreServerCaSert() -> SslSettingsBuilder&
+auto SslSettingsBuilder::ignoreServerCaCert() -> SslSettingsBuilder&
 {
     _settings->ignoreServerCaSert = true;
     return *this;

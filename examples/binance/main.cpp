@@ -32,11 +32,10 @@
 
 using namespace lwspp;
 
-const cli::Address ADDRESS = "ws-api.testnet.binance.vision";
+const cli::Address ADDRESS = "stream.testnet.binance.vision";
 const cli::Port PORT = 443;
-const std::string PATH = "/ws-api/v3";
+const std::string PATH = "/ws";
 const std::string SUBSCRIBE = R"({"method": "SUBSCRIBE","params":["btcusdt@trade"],"id": 3})";
-const std::string PING = R"({"id": "922bcc6e-9de8-440d-9e84-7c80933a8d0d","method": "ping"})";
 
 const int MESSAGES_LIMIT = 5;
 
@@ -45,7 +44,7 @@ class ClientLogic : public cli::ClientLogicBase
 public:
     void onConnect(cli::IConnectionInfoPtr) noexcept override
     {
-        _clientControl->sendTextData(PING);
+        _clientControl->sendTextData(SUBSCRIBE);
     }
 
     void onTextDataReceive(const cli::DataPacket& dataPacket) noexcept override
@@ -85,7 +84,7 @@ private:
 auto main() -> int
 {
     auto sslSettingsBuilder = cli::SslSettingsBuilder{};
-    sslSettingsBuilder.allowSelfSignedServerCert().ignoreServerCaSert();
+    sslSettingsBuilder.allowSelfSignedServerCert().ignoreServerCaCert();
 
     // Configure and build client
     auto clientLogic = std::make_shared<ClientLogic>();

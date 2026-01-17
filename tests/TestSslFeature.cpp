@@ -39,8 +39,9 @@
 #include "MockedPtr.hpp"
 #include "Utils.hpp"
 
-
+// clazy:excludeall=non-pod-global-static
 // NOLINTBEGIN (readability-function-cognitive-complexity)
+
 namespace lwspp
 {
 namespace tests
@@ -446,7 +447,7 @@ SCENARIO( "Test client ssl features", "[ssl]" )
 
             AND_WHEN( "Client ignores the CA certificate from server" )
             {
-                cliSslSettingsBuilder.ignoreServerCaSert();
+                cliSslSettingsBuilder.ignoreServerCaCert();
                 auto client = clientBuilder.setSslSettings(cliSslSettingsBuilder.build()).build();
 
                 THEN( "Client connects to the server successfully" )

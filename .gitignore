@@ -1,3 +1,6 @@
+# ---> Qt Creator
+.qtcreator/
+
 # ---> CMake
 CMakeLists.txt.user
 CMakeCache.txt

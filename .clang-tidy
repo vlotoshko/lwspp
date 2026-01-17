@@ -24,4 +24,7 @@ CheckOptions:
     value: true
   - key: misc-non-private-member-variables-in-classes.IgnoreClassesWithAllMemberVariablesBeingPublic
     value: true
-    
+  - key: cppcoreguidelines-rvalue-reference-param-not-moved.AllowPartialMove
+    value: true
+  - key: cppcoreguidelines-rvalue-reference-param-not-moved.IgnoreUnnamedParams
+    value: true

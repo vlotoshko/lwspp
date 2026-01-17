@@ -66,7 +66,7 @@ public:
     auto allowSelfSignedServerCert() -> SslSettingsBuilder&;
     auto allowExpiredServerCert() -> SslSettingsBuilder&;
     auto skipServerCertHostnameCheck() -> SslSettingsBuilder&;
-    auto ignoreServerCaSert() -> SslSettingsBuilder&;
+    auto ignoreServerCaCert() -> SslSettingsBuilder&;
 
 private:
     std::unique_ptr<SslSettings> _settings;

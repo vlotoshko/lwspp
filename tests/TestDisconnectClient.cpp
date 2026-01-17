@@ -38,7 +38,9 @@
 #include "lwspp/server/contract/IServerControlAcceptor.hpp"
 #include "lwspp/server/contract/IServerLogic.hpp"
 
+// clazy:excludeall=non-pod-global-static
 // NOLINTBEGIN (readability-function-cognitive-complexity)
+
 namespace lwspp
 {
 namespace tests

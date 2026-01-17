@@ -55,7 +55,9 @@ private:
 } // namespace cli
 } // namespace lwspp
 
+// clazy:excludeall=non-pod-global-static
 // NOLINTBEGIN (readability-function-cognitive-complexity)
+
 namespace lwspp
 {
 namespace tests
@@ -149,7 +151,7 @@ SCENARIO( "ClientContext setup", "[client_builder]" )
                                    .allowSelfSignedServerCert()
                                    .allowExpiredServerCert()
                                    .skipServerCertHostnameCheck()
-                                   .ignoreServerCaSert()
+                                   .ignoreServerCaCert()
                                    .build();
             clientBuilder
                 .setCallbackVersion(CallbackVersion::v1_Amsterdam)
