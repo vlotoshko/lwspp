@@ -10,31 +10,20 @@ target_include_directories(${PROJECT_NAME}-tests PRIVATE
     ${PROJECT_SOURCE_DIR}/src
 )
 
-if(OPTION_BUILD_STATIC)
-    set(TARGET_LWSPP_SERVER ${TARGET_LWSPP_SERVER_STATIC})
-else()
-    set(TARGET_LWSPP_SERVER ${TARGET_LWSPP_SERVER_SHARED})
-endif()
+lwspp_apply_target_defaults(${PROJECT_NAME}-tests)
 
 find_package(Catch2 REQUIRED)
 
 target_link_libraries(${PROJECT_NAME}-tests
     PRIVATE Catch2::Catch2WithMain
     PRIVATE ${TARGET_LWSPP_SERVER}
-    PRIVATE websockets
+    PRIVATE ${LWSPP_WEBSOCKETS_TARGET}
 )
 
-set_target_properties(${PROJECT_NAME}-tests PROPERTIES
-    CXX_STANDARD 14
-    CXX_STANDARD_REQUIRED ON
-    CXX_EXTENSIONS OFF
-    LINKER_LANGUAGE CXX
-)
-
-if(NOT "${TESTS_INSTALL_DIR}" STREQUAL "")
-    if(NOT ${WEBSOCKETS_SEARCH_DIR} STREQUAL "")
+if(NOT "${LWSPP_TESTS_INSTALL_DIR}" STREQUAL "")
+    if(NOT ${LWSPP_LIBWEBSOCKETS_ROOT} STREQUAL "")
         set_target_properties(${PROJECT_NAME}-tests PROPERTIES
-            INSTALL_RPATH "${WEBSOCKETS_SEARCH_DIR}/lib"
+            INSTALL_RPATH "${LWSPP_LIBWEBSOCKETS_ROOT}/lib"
         )
     endif()
 
@@ -42,6 +31,7 @@ if(NOT "${TESTS_INSTALL_DIR}" STREQUAL "")
 
     add_custom_command(
         TARGET install-${PROJECT_NAME}-tests
+        POST_BUILD
         COMMAND "${CMAKE_COMMAND}"
         --install "${CMAKE_BINARY_DIR}"
         --component ${PROJECT_NAME}
@@ -49,7 +39,7 @@ if(NOT "${TESTS_INSTALL_DIR}" STREQUAL "")
     )
 
     install(TARGETS ${PROJECT_NAME}-tests
-        RUNTIME DESTINATION ${TESTS_INSTALL_DIR}
+        RUNTIME DESTINATION ${LWSPP_TESTS_INSTALL_DIR}
         COMPONENT ${PROJECT_NAME}
     )
 endif()

@@ -22,7 +22,10 @@
  * IN THE SOFTWARE.
  */
 
+#include <atomic>
+#include <condition_variable>
 #include <iostream>
+#include <mutex>
 #include <thread>
 
 #include "lwspp/client/ClientBuilder.hpp"
@@ -38,6 +41,10 @@ using namespace lwspp;
 class ClientLogic : public cli::ClientLogicBase
 {
 public:
+    explicit ClientLogic(std::atomic<int>& received, std::condition_variable& cv, std::mutex& mutex)
+        : _received(received), _cv(cv), _mutex(mutex)
+    {}
+
     void onConnect(cli::IConnectionInfoPtr) noexcept override
     {
         _clientControl->sendTextData("hello server!");
@@ -46,29 +53,53 @@ public:
     void onTextDataReceive(const cli::DataPacket& dataPacket) noexcept override
     {
         std::cout << "client received the message: " << std::string{dataPacket.data, dataPacket.length} << std::endl;
+        _received.fetch_add(1);
+        _cv.notify_all();
     }
+
+
+private:
+    std::atomic<int>& _received;
+    std::condition_variable& _cv;
+    std::mutex& _mutex;
 };
 
 class ServerLogic : public srv::ServerLogicBase
 {
 public:
+    explicit ServerLogic(std::atomic<int>& received, std::condition_variable& cv, std::mutex& mutex)
+        : _received(received), _cv(cv), _mutex(mutex)
+    {}
+
     void onTextDataReceive(srv::ConnectionId, const srv::DataPacket& dataPacket) noexcept override
     {
         std::cout << "server received the message: " << std::string{dataPacket.data, dataPacket.length}  << std::endl;
         _serverControl->sendTextData("hello client!");
+        _received.fetch_add(1);
+        _cv.notify_all();
     }
+
+private:
+    std::atomic<int>& _received;
+    std::condition_variable& _cv;
+    std::mutex& _mutex;
 };
 
 auto main() -> int
 {
     const srv::Port PORT = 9000;
+    const std::string protocolName = "lwspp";
+    std::atomic<int> messagesReceived{0};
+    std::mutex mutex;
+    std::condition_variable cv;
 
     // Configure and build server
-    auto serverLogic = std::make_shared<ServerLogic>();
+    auto serverLogic = std::make_shared<ServerLogic>(messagesReceived, cv, mutex);
     auto serverBuilder = srv::ServerBuilder{};
     serverBuilder
         .setPort(PORT)
         .setCallbackVersion(srv::CallbackVersion::v1_Andromeda)
+        .setProtocolName(protocolName)
         .setServerLogic(serverLogic)
         .setServerControlAcceptor(serverLogic)
         .setLwsLogLevel(0)
@@ -76,21 +107,25 @@ auto main() -> int
     auto server = serverBuilder.build();
 
     // Configure and build client
-    auto clientLogic = std::make_shared<ClientLogic>();
+    auto clientLogic = std::make_shared<ClientLogic>(messagesReceived, cv, mutex);
     auto clientBuilder = cli::ClientBuilder{};
     clientBuilder
         .setAddress("localhost")
         .setPort(PORT)
         .setCallbackVersion(cli::CallbackVersion::v1_Amsterdam)
+        .setProtocolName(protocolName)
         .setClientLogic(clientLogic)
         .setClientControlAcceptor(clientLogic)
         .setLwsLogLevel(0)
         ;
     auto client = clientBuilder.build();
 
-    // Give some time for the client and server to exchange messages.
-    const auto timeout = 100U;
-    std::this_thread::sleep_for(std::chrono::milliseconds(timeout));
+    // Wait for both messages (server + client) or time out.
+    const auto timeout = std::chrono::seconds(5);
+    {
+        std::unique_lock<std::mutex> lock(mutex);
+        cv.wait_for(lock, timeout, [&messagesReceived] { return messagesReceived.load() >= 2; });
+    }
 
     return 0;
 }

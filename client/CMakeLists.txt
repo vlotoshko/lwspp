@@ -55,51 +55,26 @@ set(${PROJECT_NAME}_SRC_FILES
     src/TypesFwd.hpp
 )
 
-add_library(${PROJECT_NAME}_object OBJECT ${${PROJECT_NAME}_SRC_FILES})
+add_library(${PROJECT_NAME} ${${PROJECT_NAME}_SRC_FILES})
 
-target_include_directories(${PROJECT_NAME}_object PRIVATE
+target_include_directories(${PROJECT_NAME} PRIVATE
     ${PROJECT_SOURCE_DIR}/include
     ${PROJECT_SOURCE_DIR}/src
-    ${WEBSOCKETS_HEADERS}
 )
 
-if(OPTION_BUILD_STATIC)
-    set(TARGET_LWSPP_CLIENT_STATIC "${PROJECT_NAME}-static" CACHE INTERNAL STRING)
-    add_library(${TARGET_LWSPP_CLIENT_STATIC} STATIC $<TARGET_OBJECTS:${PROJECT_NAME}_object>)
-else()
-    unset(TARGET_LWSPP_CLIENT_STATIC CACHE)
-endif()
+lwspp_apply_target_defaults(${PROJECT_NAME})
 
-if(OPTION_BUILD_SHARED)
-    set(TARGET_LWSPP_CLIENT_SHARED "${PROJECT_NAME}-shared" CACHE INTERNAL STRING)
-    add_library(${TARGET_LWSPP_CLIENT_SHARED} SHARED $<TARGET_OBJECTS:${PROJECT_NAME}_object>)
-else()
-    unset(TARGET_LWSPP_CLIENT_SHARED CACHE)
-endif()
+target_link_libraries(${PROJECT_NAME}
+    PRIVATE ${LWSPP_WEBSOCKETS_TARGET}
+)
 
-if(APPLE)
-    if(OPTION_BUILD_STATIC)
-        target_link_libraries(${TARGET_LWSPP_CLIENT_STATIC}
-            PRIVATE websockets
-        )
-    endif()
-
-    if(OPTION_BUILD_SHARED)
-        target_link_libraries(${TARGET_LWSPP_CLIENT_SHARED}
-            PRIVATE websockets
-        )
-    endif()
-endif()
-
-set_target_properties(${TARGET_LWSPP_CLIENT_STATIC} ${TARGET_LWSPP_CLIENT_SHARED} PROPERTIES
-    CXX_STANDARD 14
-    CXX_STANDARD_REQUIRED ON
-    CXX_EXTENSIONS OFF
-    LINKER_LANGUAGE CXX
+set_target_properties(${PROJECT_NAME} PROPERTIES
     SOVERSION ${MAJOR_VERSION}
     VERSION ${MAJOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION}
     OUTPUT_NAME ${PROJECT_NAME}
 )
+
+set(TARGET_LWSPP_CLIENT "${PROJECT_NAME}" CACHE INTERNAL STRING)
 
 include(cmake/install.cmake)
 

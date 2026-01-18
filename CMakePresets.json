@@ -26,39 +26,43 @@
           "type": "BOOL",
           "value":"OFF"
         },
-        "OPTION_BUILD_CLIENT": {
+        "LWSPP_BUILD_CLIENT": {
           "type": "BOOL",
           "value":"ON"
         },
-        "OPTION_BUILD_SERVER": {
+        "LWSPP_BUILD_SERVER": {
           "type": "BOOL",
           "value":"ON"
         },
-        "OPTION_BUILD_SHARED": {
-          "type": "BOOL",
-          "value":"ON"
-        },
-        "OPTION_BUILD_STATIC": {
-          "type": "BOOL",
-          "value":"ON"
-        },
-        "OPTION_BUILD_EXAMPLES": {
+        "BUILD_SHARED_LIBS": {
           "type": "BOOL",
           "value":"OFF"
         },
-        "OPTION_BUILD_INTEGRATION_TESTS": {
+        "LWSPP_BUILD_EXAMPLES": {
           "type": "BOOL",
           "value":"OFF"
         },
-        "TESTS_INSTALL_DIR": {
+        "LWSPP_BUILD_INTEGRATION_TESTS": {
+          "type": "BOOL",
+          "value":"OFF"
+        },
+        "LWSPP_TESTS_INSTALL_DIR": {
           "type": "PATH",
           "value": ""
         },
-        "EXAMPLES_INSTALL_DIR": {
+        "LWSPP_EXAMPLES_INSTALL_DIR": {
           "type": "PATH",
           "value": ""
         },
-        "WEBSOCKETS_SEARCH_DIR": {
+        "LWSPP_LIBWEBSOCKETS_ROOT": {
+          "type": "PATH",
+          "value": ""
+        },
+        "LWSPP_OPENSSL_ROOT": {
+          "type": "PATH",
+          "value": ""
+        },
+        "LWSPP_CATCH2_ROOT": {
           "type": "PATH",
           "value": ""
         }
@@ -85,6 +89,18 @@
         "CMAKE_BUILD_TYPE": "Release",
         "CMAKE_CXX_FLAGS": "-Wall -Wextra -Wpedantic -fPIC"
       }
+    },
+    {
+      "name": "tests-examples",
+      "description": "Build tests and examples",
+      "inherits": "lwspp-setup",
+      "generator": "Unix Makefiles",
+      "binaryDir": "$env{HOME}/Projects/builds/lwspp-${presetName}",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "LWSPP_BUILD_INTEGRATION_TESTS": "ON",
+        "LWSPP_BUILD_EXAMPLES": "ON"
+      }
     }
   ],
   "buildPresets": [
@@ -99,7 +115,12 @@
       "description": "Build with release configuration",
       "configurePreset": "release",
       "jobs": 4
+    },
+    {
+      "name": "tests-examples",
+      "description": "Build tests and examples",
+      "configurePreset": "tests-examples",
+      "jobs": 4
     }
   ]
 }
-

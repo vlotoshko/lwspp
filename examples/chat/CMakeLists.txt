@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.9)
+cmake_minimum_required(VERSION 3.20)
 
 if("${PROJECT_NAME}" STREQUAL "")
     set(PROJECT_NAME lwspp)
@@ -13,6 +13,10 @@ project(
     LANGUAGES C CXX
 )
 
+if(NOT COMMAND lwspp_apply_target_defaults)
+    include(${CMAKE_CURRENT_LIST_DIR}/../../cmake/lwspp-targets.cmake)
+endif()
+
 set(${PROJECT_NAME}_SRC_FILES
     server/ChatMessageSender.cpp
     server/ChatMessageSender.hpp
@@ -24,40 +28,32 @@ set(${PROJECT_NAME}_SRC_FILES
 
 add_executable(${PROJECT_NAME} ${${PROJECT_NAME}_SRC_FILES})
 
-set(WebsocketServer_INCLUDE_DIR
-    ${PROJECT_SOURCE_DIR}/../../server/include
-)
+if(STANDALONE_PROJECT)
+    set(WebsocketServer_INCLUDE_DIR
+        ${PROJECT_SOURCE_DIR}/../../server/include
+    )
 
-target_include_directories(${PROJECT_NAME} PRIVATE
-    ${WebsocketServer_INCLUDE_DIR}
-)
+    target_include_directories(${PROJECT_NAME} PRIVATE
+        ${WebsocketServer_INCLUDE_DIR}
+    )
+endif()
 
 if(STANDALONE_PROJECT)
     set(TARGET_LWSPP_SERVER lwspp-server)
-else()
-    if(OPTION_BUILD_STATIC)
-        set(TARGET_LWSPP_SERVER ${TARGET_LWSPP_SERVER_STATIC})
-    else()
-        set(TARGET_LWSPP_SERVER ${TARGET_LWSPP_SERVER_SHARED})
-    endif()
 endif()
 
 target_link_libraries(${PROJECT_NAME}
     PRIVATE ${TARGET_LWSPP_SERVER}
-    PRIVATE websockets
+    PRIVATE ${LWSPP_WEBSOCKETS_TARGET}
+    PRIVATE lwspp_common_includes
 )
 
-set_target_properties(${PROJECT_NAME} PROPERTIES
-    CXX_STANDARD 14
-    CXX_STANDARD_REQUIRED ON
-    CXX_EXTENSIONS OFF
-    LINKER_LANGUAGE CXX
-)
+lwspp_apply_target_defaults(${PROJECT_NAME})
 
-if(NOT "${EXAMPLES_INSTALL_DIR}" STREQUAL "")
-    if(NOT ${WEBSOCKETS_SEARCH_DIR} STREQUAL "")
+if(NOT "${LWSPP_EXAMPLES_INSTALL_DIR}" STREQUAL "")
+    if(NOT ${LWSPP_LIBWEBSOCKETS_ROOT} STREQUAL "")
         set_target_properties(${PROJECT_NAME} PROPERTIES
-            INSTALL_RPATH "${WEBSOCKETS_SEARCH_DIR}/lib"
+            INSTALL_RPATH "${LWSPP_LIBWEBSOCKETS_ROOT}/lib"
         )
     endif()
 
@@ -65,6 +61,7 @@ if(NOT "${EXAMPLES_INSTALL_DIR}" STREQUAL "")
 
     add_custom_command(
         TARGET install-${PROJECT_NAME}
+        POST_BUILD
         COMMAND "${CMAKE_COMMAND}"
         --install "${CMAKE_BINARY_DIR}"
         --component ${PROJECT_NAME}
@@ -72,12 +69,12 @@ if(NOT "${EXAMPLES_INSTALL_DIR}" STREQUAL "")
     )
 
     install(TARGETS ${PROJECT_NAME}
-        RUNTIME DESTINATION ${EXAMPLES_INSTALL_DIR}
+        RUNTIME DESTINATION ${LWSPP_EXAMPLES_INSTALL_DIR}
         COMPONENT ${PROJECT_NAME}
     )
 
     install(FILES ${PROJECT_SOURCE_DIR}/client.html
-        DESTINATION ${EXAMPLES_INSTALL_DIR}
+        DESTINATION ${LWSPP_EXAMPLES_INSTALL_DIR}
         COMPONENT ${PROJECT_NAME}
     )
 endif()

@@ -83,32 +83,38 @@ These steps should help you integrate lwspp into your C++ project successfully.
 
 lwspp offers a variety of compilation options to tailor the build process according to your specific requirements. You can configure these options using CMake when generating the build system for your project. Below are the available compilation options:
 
-- **Build lwspp Client Library** (`OPTION_BUILD_CLIENT`): Enable or disable the build of the lwspp client library. (Default: **ON**)
+- **Build lwspp Client Library** (`LWSPP_BUILD_CLIENT`): Enable or disable the build of the lwspp client library. (Default: **ON**)
 
-- **Build lwspp Server Library** (`OPTION_BUILD_SERVER`): Enable or disable the build of the lwspp server library. (Default: **ON**)
+- **Build lwspp Server Library** (`LWSPP_BUILD_SERVER`): Enable or disable the build of the lwspp server library. (Default: **ON**)
 
-- **Build Shared Libraries** (`OPTION_BUILD_SHARED`): Enable or disable the build of shared lwspp libraries. (Default: **ON**)
+- **Build Shared Libraries** (`BUILD_SHARED_LIBS`): Build lwspp libraries as shared libraries. (Default: **OFF**)
 
-- **Build Static Libraries** (`OPTION_BUILD_STATIC`): Enable or disable the build of static lwspp libraries. (Default: **ON**)
+- **Build Example Applications** (`LWSPP_BUILD_EXAMPLES`): Enable or disable the build of example applications. (Default: **OFF**)
 
-- **Build Example Applications** (`OPTION_BUILD_EXAMPLES`): Enable or disable the build of example applications. (Default: **OFF**)
+- **Build Integration Tests Application** (`LWSPP_BUILD_INTEGRATION_TESTS`): Enable or disable the build of the integration tests application. (Default: **OFF**)
 
-- **Build Integration Tests Application** (`OPTION_BUILD_INTEGRATION_TESTS`): Enable or disable the build of the integration tests application. (Default: **OFF**)
+- **Install Tests Directory** (`LWSPP_TESTS_INSTALL_DIR`): Specify the directory where the tests should be installed. If you set this option, it will add the target  **install-lwspp-tests**. (Default: **""**)
 
-- **Install Tests Directory** (`TESTS_INSTALL_DIR`): Specify the directory where the tests should be installed. If you set this option, it will add the target  **install-lwspp-tests**. (Default: **""**)
+- **Install Examples Directory** (`LWSPP_EXAMPLES_INSTALL_DIR`): Specify the path where examples should be installed after the build. Setting this option adds the corresponding **install-'project name'** target for each example. (Default: **""**)
 
-- **Install Examples Directory** (`EXAMPLES_INSTALL_DIR`): Specify the path where examples should be installed after the build. Setting this option adds the corresponding **install-'project name'** target for each example. (Default: **""**)
-
-- **Websockets Search Directory** (`WEBSOCKETS_SEARCH_DIR`): If set, the libwebsockets library located in the corresponding directory will be used. (Default: **""**)
+- **Libwebsockets Root** (`LWSPP_LIBWEBSOCKETS_ROOT`): If set, the libwebsockets CMake package will be found from this root. (Default: **""**)
+- **OpenSSL Root** (`LWSPP_OPENSSL_ROOT`): If set, the OpenSSL headers and libraries from this root will be used. (Default: **""**)
+- **Catch2 Root** (`LWSPP_CATCH2_ROOT`): If set, Catch2 will be found from this root for tests. (Default: **""**)
 
 - **Websockets Library Path** (`WEBSOCKETS_LIBRARY`): Shows the path to the libwebsockets library that will be linked when building the project. This variable helps you identify the version of the library currently in use.
 
-You can configure these options using CMake's -D flag when generating your project's build system. For example, to enable the building and installing of example applications, you can use:
+You can configure these options using CMake's -D flag when generating your project's build system. For example, to build shared libraries and enable the building and installing of example applications, you can use:
    ```bash
-   cmake -D OPTION_BUILD_EXAMPLES=ON -D EXAMPLES_INSTALL_DIR=./bin ..
+   cmake -D BUILD_SHARED_LIBS=ON -D LWSPP_BUILD_EXAMPLES=ON -D LWSPP_EXAMPLES_INSTALL_DIR=./bin ..
    make install-lwspp-binance install-lwspp-chat install-lwspp-helloworld
    ```
 After running the _'make'_ command, the example applications will be built and installed in the _'./bin'_ directory.
+
+If you use CMake presets, the `tests-examples` preset enables both integration tests and examples:
+   ```bash
+   cmake --preset tests-examples
+   cmake --build --preset tests-examples
+   ```
 
 Please be aware that the installed binaries of the example applications and tests depend on the lwspp libraries being installed in your system (as outlined in step 5 of the installation guide).
 
